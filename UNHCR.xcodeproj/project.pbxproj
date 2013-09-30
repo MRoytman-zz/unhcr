@@ -14,24 +14,11 @@
 		4F866ACF17F9E022000350E4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866ACE17F9E022000350E4 /* main.m */; };
 		4F866AD317F9E022000350E4 /* HCRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866AD217F9E022000350E4 /* HCRAppDelegate.m */; };
 		4F866AD517F9E022000350E4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F866AD417F9E022000350E4 /* Images.xcassets */; };
-		4F866ADC17F9E022000350E4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866ADB17F9E022000350E4 /* XCTest.framework */; };
-		4F866ADD17F9E022000350E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC217F9E022000350E4 /* Foundation.framework */; };
-		4F866ADE17F9E022000350E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC617F9E022000350E4 /* UIKit.framework */; };
-		4F866AE617F9E022000350E4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F866AE417F9E022000350E4 /* InfoPlist.strings */; };
-		4F866AE817F9E022000350E4 /* UNHCRTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866AE717F9E022000350E4 /* UNHCRTests.m */; };
+		C1FCCA2A37DE44BABAAEC9EC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04773A9AD17C462187CA1561 /* libPods.a */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		4F866ADF17F9E022000350E4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4F866AB717F9E022000350E4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4F866ABE17F9E022000350E4;
-			remoteInfo = UNHCR;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
+		04773A9AD17C462187CA1561 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F866ABF17F9E022000350E4 /* UNHCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UNHCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F866AC217F9E022000350E4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4F866AC417F9E022000350E4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -43,11 +30,8 @@
 		4F866AD117F9E022000350E4 /* HCRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HCRAppDelegate.h; sourceTree = "<group>"; };
 		4F866AD217F9E022000350E4 /* HCRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HCRAppDelegate.m; sourceTree = "<group>"; };
 		4F866AD417F9E022000350E4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		4F866ADA17F9E022000350E4 /* UNHCRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UNHCRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F866ADB17F9E022000350E4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		4F866AE317F9E022000350E4 /* UNHCRTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UNHCRTests-Info.plist"; sourceTree = "<group>"; };
-		4F866AE517F9E022000350E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		4F866AE717F9E022000350E4 /* UNHCRTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UNHCRTests.m; sourceTree = "<group>"; };
+		D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,16 +42,7 @@
 				4F866AC517F9E022000350E4 /* CoreGraphics.framework in Frameworks */,
 				4F866AC717F9E022000350E4 /* UIKit.framework in Frameworks */,
 				4F866AC317F9E022000350E4 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4F866AD717F9E022000350E4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4F866ADC17F9E022000350E4 /* XCTest.framework in Frameworks */,
-				4F866ADE17F9E022000350E4 /* UIKit.framework in Frameworks */,
-				4F866ADD17F9E022000350E4 /* Foundation.framework in Frameworks */,
+				C1FCCA2A37DE44BABAAEC9EC /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,9 +53,9 @@
 			isa = PBXGroup;
 			children = (
 				4F866AC817F9E022000350E4 /* UNHCR */,
-				4F866AE117F9E022000350E4 /* UNHCRTests */,
 				4F866AC117F9E022000350E4 /* Frameworks */,
 				4F866AC017F9E022000350E4 /* Products */,
+				D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -88,7 +63,6 @@
 			isa = PBXGroup;
 			children = (
 				4F866ABF17F9E022000350E4 /* UNHCR.app */,
-				4F866ADA17F9E022000350E4 /* UNHCRTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -100,6 +74,7 @@
 				4F866AC417F9E022000350E4 /* CoreGraphics.framework */,
 				4F866AC617F9E022000350E4 /* UIKit.framework */,
 				4F866ADB17F9E022000350E4 /* XCTest.framework */,
+				04773A9AD17C462187CA1561 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -126,24 +101,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		4F866AE117F9E022000350E4 /* UNHCRTests */ = {
-			isa = PBXGroup;
-			children = (
-				4F866AE717F9E022000350E4 /* UNHCRTests.m */,
-				4F866AE217F9E022000350E4 /* Supporting Files */,
-			);
-			path = UNHCRTests;
-			sourceTree = "<group>";
-		};
-		4F866AE217F9E022000350E4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4F866AE317F9E022000350E4 /* UNHCRTests-Info.plist */,
-				4F866AE417F9E022000350E4 /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -151,9 +108,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4F866AEB17F9E022000350E4 /* Build configuration list for PBXNativeTarget "UNHCR" */;
 			buildPhases = (
+				CD4E84F9376F4BB4B72AC98E /* Check Pods Manifest.lock */,
 				4F866ABB17F9E022000350E4 /* Sources */,
 				4F866ABC17F9E022000350E4 /* Frameworks */,
 				4F866ABD17F9E022000350E4 /* Resources */,
+				7EFF60285E564EE8B964DDF4 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -163,24 +122,6 @@
 			productName = UNHCR;
 			productReference = 4F866ABF17F9E022000350E4 /* UNHCR.app */;
 			productType = "com.apple.product-type.application";
-		};
-		4F866AD917F9E022000350E4 /* UNHCRTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4F866AEE17F9E022000350E4 /* Build configuration list for PBXNativeTarget "UNHCRTests" */;
-			buildPhases = (
-				4F866AD617F9E022000350E4 /* Sources */,
-				4F866AD717F9E022000350E4 /* Frameworks */,
-				4F866AD817F9E022000350E4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4F866AE017F9E022000350E4 /* PBXTargetDependency */,
-			);
-			name = UNHCRTests;
-			productName = UNHCRTests;
-			productReference = 4F866ADA17F9E022000350E4 /* UNHCRTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -192,8 +133,8 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Sean Conrad";
 				TargetAttributes = {
-					4F866AD917F9E022000350E4 = {
-						TestTargetID = 4F866ABE17F9E022000350E4;
+					4F866ABE17F9E022000350E4 = {
+						DevelopmentTeam = ZBR4CWAWXC;
 					};
 				};
 			};
@@ -210,7 +151,6 @@
 			projectRoot = "";
 			targets = (
 				4F866ABE17F9E022000350E4 /* UNHCR */,
-				4F866AD917F9E022000350E4 /* UNHCRTests */,
 			);
 		};
 /* End PBXProject section */
@@ -225,15 +165,40 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4F866AD817F9E022000350E4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7EFF60285E564EE8B964DDF4 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F866AE617F9E022000350E4 /* InfoPlist.strings in Resources */,
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
-/* End PBXResourcesBuildPhase section */
+		CD4E84F9376F4BB4B72AC98E /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4F866ABB17F9E022000350E4 /* Sources */ = {
@@ -245,37 +210,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4F866AD617F9E022000350E4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4F866AE817F9E022000350E4 /* UNHCRTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		4F866AE017F9E022000350E4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4F866ABE17F9E022000350E4 /* UNHCR */;
-			targetProxy = 4F866ADF17F9E022000350E4 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4F866ACB17F9E022000350E4 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4F866ACC17F9E022000350E4 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		4F866AE417F9E022000350E4 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4F866AE517F9E022000350E4 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -316,7 +257,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -350,7 +291,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -359,12 +300,15 @@
 		};
 		4F866AEC17F9E022000350E4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UNHCR/UNHCR-Prefix.pch";
 				INFOPLIST_FILE = "UNHCR/UNHCR-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -372,56 +316,17 @@
 		};
 		4F866AED17F9E022000350E4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UNHCR/UNHCR-Prefix.pch";
 				INFOPLIST_FILE = "UNHCR/UNHCR-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		4F866AEF17F9E022000350E4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/UNHCR.app/UNHCR";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "UNHCR/UNHCR-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "UNHCRTests/UNHCRTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		4F866AF017F9E022000350E4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/UNHCR.app/UNHCR";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "UNHCR/UNHCR-Prefix.pch";
-				INFOPLIST_FILE = "UNHCRTests/UNHCRTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -444,14 +349,7 @@
 				4F866AED17F9E022000350E4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-		};
-		4F866AEE17F9E022000350E4 /* Build configuration list for PBXNativeTarget "UNHCRTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4F866AEF17F9E022000350E4 /* Debug */,
-				4F866AF017F9E022000350E4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
