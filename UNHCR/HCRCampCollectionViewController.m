@@ -68,7 +68,7 @@ NSString *const kCampCellIdentifier = @"kCampCellIdentifier";
                                               @"Longitude": @101.5,
                                               @"Span": @1500000,
                                               @"Camps": @[
-                                                      @{@"Name": @"Umpiem Mar",
+                                                      @{@"Name": @"Umpiem Mai",
                                                         @"Latitude": @16.6047072,
                                                         @"Longitude": @98.6652615,
                                                         @"Span": @20000}]}};
