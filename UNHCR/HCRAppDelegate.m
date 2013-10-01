@@ -7,6 +7,8 @@
 //
 
 #import "HCRAppDelegate.h"
+#import "HCRCountryCollectionViewController.h"
+#import "HCRTableFlowLayout.h"
 
 @implementation HCRAppDelegate
 
@@ -14,6 +16,13 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+    
+    HCRTableFlowLayout *tableLayout = [[HCRTableFlowLayout alloc] init];
+    HCRCountryCollectionViewController *countryCollection = [[HCRCountryCollectionViewController alloc] initWithCollectionViewLayout:tableLayout];
+    
+    UINavigationController *rootNavigationController = [[UINavigationController alloc] initWithRootViewController:countryCollection];
+    
+    self.window.rootViewController = rootNavigationController;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;

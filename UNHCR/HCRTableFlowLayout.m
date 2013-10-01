@@ -1,0 +1,90 @@
+//
+//  HCRTableFlowLayout.m
+//  UNHCR
+//
+//  Created by Sean Conrad on 9/30/13.
+//  Copyright (c) 2013 Sean Conrad. All rights reserved.
+//
+
+#import "HCRTableFlowLayout.h"
+
+////////////////////////////////////////////////////////////////////////////////
+
+CGFloat const kTableCellHeight = 44;
+
+////////////////////////////////////////////////////////////////////////////////
+
+@interface HCRTableFlowLayout ()
+
+//@property UIDynamicAnimator *dynamicAnimator;
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////
+
+@implementation HCRTableFlowLayout
+
+- (void)prepareLayout {
+    
+    // set initial values of stuff
+    
+    [super prepareLayout];
+    
+    self.itemSize = CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
+                               kTableCellHeight);
+    
+    self.minimumInteritemSpacing = 0;
+    self.minimumLineSpacing = 0;
+    
+//    if ( !self.dynamicAnimator ) {
+//        self.dynamicAnimator = [[UIDynamicAnimator alloc] initWithCollectionViewLayout:self];
+//        
+//        // grab all items in collection - NOTE: may be lots of items
+//        CGSize contentSize = [self collectionViewContentSize];
+//        NSArray *items = [super layoutAttributesForElementsInRect:CGRectMake(0, 0, contentSize.width, contentSize.height)];
+//        
+//        for (UICollectionViewLayoutAttributes *item in items) {
+//            
+//            UIAttachmentBehavior *spring = [[UIAttachmentBehavior alloc] initWithItem:item attachedToAnchor:item.center];
+//            spring.length = 0;
+//            spring.damping = 0.5;
+//            spring.frequency = 0.8;
+//            
+//            [self.dynamicAnimator addBehavior:spring];
+//        }
+//        
+//    }
+    
+}
+
+//- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
+//    return [self.dynamicAnimator itemsInRect:rect];
+//}
+//
+//- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
+//    return [self.dynamicAnimator layoutAttributesForCellAtIndexPath:indexPath];
+//}
+//
+//- (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
+//    UIScrollView *scrollView = self.collectionView;
+//    CGFloat scrollDelta = newBounds.origin.y - scrollView.bounds.origin.y;
+//    CGPoint touchLocation = [scrollView.panGestureRecognizer locationInView:scrollView];
+//    
+//    for (UIAttachmentBehavior *spring in self.dynamicAnimator.behaviors) {
+//        CGPoint anchorPoint = spring.anchorPoint;
+//        CGFloat distanceFromTouch = fabsf(touchLocation.y - anchorPoint.y);
+//        CGFloat scrollResistance = distanceFromTouch / 500;
+//        
+//        UICollectionViewLayoutAttributes *item = [spring.items firstObject];
+//        CGPoint center = item.center;
+//        center.y += MIN(scrollDelta, scrollDelta * scrollResistance);
+//        item.center = center;
+//        
+//        [self.dynamicAnimator updateItemUsingCurrentState:item];
+//    }
+//    
+//    return NO;
+//    
+//}
+
+@end
