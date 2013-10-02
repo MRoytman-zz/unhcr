@@ -10,6 +10,6 @@
 
 @interface HCRCountryCollectionCell : UICollectionViewCell
 
-@property (nonatomic, strong) NSString *countryName;
+@property (nonatomic, strong) NSDictionary *countryDictionary;
 
 @end

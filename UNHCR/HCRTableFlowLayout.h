@@ -10,4 +10,10 @@
 
 @interface HCRTableFlowLayout : UICollectionViewFlowLayout
 
+@property (nonatomic, readonly) BOOL displayHeader;
+
++ (CGFloat)preferredCellHeight;
+
+- (void)setDisplayHeader:(BOOL)displayHeader withSize:(CGSize)size;
+
 @end

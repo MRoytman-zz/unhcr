@@ -31,32 +31,83 @@
 }
 
 - (void)prepareForReuse {
-    self.countryName = nil;
+    self.countryDictionary = nil;
+    
+    [self.countryNameLabel removeFromSuperview];
     self.countryNameLabel = nil;
 }
 
 #pragma mark - Getters & Setters
 
-- (void)setCountryName:(NSString *)countryName {
+- (void)setCountryDictionary:(NSDictionary *)countryDictionary {
     
-    _countryName = countryName;
+    _countryDictionary = countryDictionary;
     
-    if ( !self.countryNameLabel && countryName ) {
+    if ( countryDictionary == nil ) {
+        return;
+    }
+    
+    if ( !self.countryNameLabel && countryDictionary ) {
         
         CGFloat xPadding = 8;
-        CGFloat yPadding = 8;
         CGRect countryLabelFrame = CGRectMake(xPadding,
-                                              yPadding,
+                                              0,
                                               CGRectGetWidth(self.bounds) - 2 * xPadding,
-                                              CGRectGetHeight(self.bounds) - 2 * yPadding);
+                                              CGRectGetHeight(self.bounds));
         
         self.countryNameLabel = [[UILabel alloc] initWithFrame:countryLabelFrame];
         [self addSubview:self.countryNameLabel];
         
-        self.countryNameLabel.font = [UIFont boldSystemFontOfSize:18];
     }
     
-    self.countryNameLabel.text = countryName;
+    NSString *countryName = [countryDictionary objectForKey:@"Name"];
+    NSParameterAssert([countryName isKindOfClass:[NSString class]]);
+    
+    NSDictionary *titleAttributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18]};
+    NSMutableAttributedString *countryLabelString = [[NSMutableAttributedString alloc] initWithString:countryName
+                                                                                           attributes:titleAttributes];
+    
+    NSDictionary *subtitleAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:15],
+                                         NSForegroundColorAttributeName: [UIColor darkGrayColor]};
+    
+    NSNumber *persons = [countryDictionary objectForKey:@"Persons"];
+    if (persons) {
+        
+        self.countryNameLabel.numberOfLines = 2;
+        
+        // format number
+        NSNumberFormatter *commaFormatter = [[NSNumberFormatter alloc] init];
+        commaFormatter.usesGroupingSeparator = YES;
+        commaFormatter.groupingSeparator = [[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator];
+        commaFormatter.groupingSize = 3;
+        
+        NSString *personString = [NSString stringWithFormat:@"\n%@ displaced persons",
+                                  [commaFormatter stringFromNumber:persons]];
+        
+        NSAttributedString *personAttributedString = [[NSAttributedString alloc] initWithString:personString
+                                                                                     attributes:subtitleAttributes];
+        [countryLabelString appendAttributedString:personAttributedString];
+        
+    }
+    
+//    NSNumber *funding = [countryDictionary objectForKey:@"Funding"];
+//    if (funding) {
+//        
+//        self.countryNameLabel.numberOfLines = 2;
+//        
+//        // format number
+//        NSNumberFormatter *percentFormatter = [[NSNumberFormatter alloc] init];
+//        percentFormatter.numberStyle = NSNumberFormatterPercentStyle;
+//        
+//        NSString *personString = [NSString stringWithFormat:@" - %@ funding coverage",
+//                                  [percentFormatter stringFromNumber:funding]];
+//        
+//        NSAttributedString *personAttributedString = [[NSAttributedString alloc] initWithString:personString
+//                                                                                     attributes:subtitleAttributes];
+//        [countryLabelString appendAttributedString:personAttributedString];
+//    }
+    
+    self.countryNameLabel.attributedText = countryLabelString;
     
 }
 

@@ -32,6 +32,8 @@
 
 - (void)prepareForReuse {
     self.campDictionary = nil;
+    
+    [self.campNameLabel removeFromSuperview];
     self.campNameLabel = nil;
 }
 
@@ -41,22 +43,52 @@
     
     _campDictionary = campDictionary;
     
+    if ( campDictionary == nil ) {
+        return;
+    }
+    
     if ( !self.campNameLabel && campDictionary ) {
         
         CGFloat xPadding = 8;
-        CGFloat yPadding = 8;
         CGRect campLabelFrame = CGRectMake(xPadding,
-                                           yPadding,
+                                           0,
                                            CGRectGetWidth(self.bounds) - 2 * xPadding,
-                                           CGRectGetHeight(self.bounds) - 2 * yPadding);
+                                           CGRectGetHeight(self.bounds));
         
         self.campNameLabel = [[UILabel alloc] initWithFrame:campLabelFrame];
         [self addSubview:self.campNameLabel];
         
-        self.campNameLabel.font = [UIFont boldSystemFontOfSize:18];
     }
     
-    self.campNameLabel.text = [campDictionary objectForKey:@"Name"];
+    NSString *name = [campDictionary objectForKey:@"Name"];
+    
+    NSDictionary *titleAttributes = @{NSFontAttributeName: [UIFont boldSystemFontOfSize:18]};
+    NSMutableAttributedString *campLabelString = [[NSMutableAttributedString alloc] initWithString:name
+                                                                                        attributes:titleAttributes];
+    
+    NSNumber *persons = [campDictionary objectForKey:@"Persons"];
+    if (persons) {
+        
+        self.campNameLabel.numberOfLines = 2;
+
+        // format number
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+        formatter.usesGroupingSeparator = YES;
+        formatter.groupingSeparator = [[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator];
+        formatter.groupingSize = 3;
+        
+        NSString *personString = [NSString stringWithFormat:@"\n%@ displaced persons",
+                                  [formatter stringFromNumber:persons]];
+        
+        NSDictionary *subtitleAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:15],
+                                             NSForegroundColorAttributeName: [UIColor darkGrayColor]};
+        NSAttributedString *personAttributedString = [[NSAttributedString alloc] initWithString:personString
+                                                                                     attributes:subtitleAttributes];
+        [campLabelString appendAttributedString:personAttributedString];
+        
+    }
+    
+    self.campNameLabel.attributedText = campLabelString;
     
 }
 

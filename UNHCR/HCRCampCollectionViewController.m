@@ -12,17 +12,16 @@
 #import "HCRCampCollectionCell.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRCampDetailController.h"
+#import "HCRDataSource.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kCampCellIdentifier = @"kCampCellIdentifier";
+NSString *const kCampHeaderReuseIdentifier = @"kCampHeaderReuseIdentifier";
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRCampCollectionViewController ()
-
-@property NSDictionary *globalCampsDictionary;
-@property NSDictionary *targetCountryDictionary;
 
 @end
 
@@ -35,43 +34,6 @@ NSString *const kCampCellIdentifier = @"kCampCellIdentifier";
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
-        self.globalCampsDictionary = @{@"Iraq":
-                                           @{ @"Latitude": @34,
-                                              @"Longitude": @44,
-                                              @"Span": @1750000,
-                                              @"Camps": @[
-                                                      @{@"Name": @"Domiz",
-                                                        @"Latitude": @35.3923733,
-                                                        @"Longitude": @44.3757963,
-                                                        @"Span": @20000},
-                                                      @{@"Name": @"Erbil",
-                                                        @"Latitude": @36.1995815,
-                                                        @"Longitude": @44.0226888,
-                                                        @"Span": @20000},
-                                                      @{@"Name": @"Sulaimaniya",
-                                                        @"Latitude": @35.5626992,
-                                                        @"Longitude": @45.4365392,
-                                                        @"Span": @20000}]},
-                                       
-                                       @"Uganda":
-                                           @{ @"Latitude": @1,
-                                              @"Longitude": @32,
-                                              @"Span": @1000000,
-                                              @"Camps": @[
-                                                      @{@"Name": @"Nakivale",
-                                                        @"Latitude": @-0.6041135,
-                                                        @"Longitude": @30.6517214,
-                                                        @"Span": @10000}]},
-                                       
-                                       @"Thailand":
-                                           @{ @"Latitude": @15,
-                                              @"Longitude": @101.5,
-                                              @"Span": @1500000,
-                                              @"Camps": @[
-                                                      @{@"Name": @"Umpiem Mai",
-                                                        @"Latitude": @16.6047072,
-                                                        @"Longitude": @98.6652615,
-                                                        @"Span": @20000}]}};
         
     }
     
@@ -83,22 +45,31 @@ NSString *const kCampCellIdentifier = @"kCampCellIdentifier";
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    NSParameterAssert(self.country);
+    NSParameterAssert(self.countryDictionary);
     
-    self.title = self.country;
+    self.title = [self.countryDictionary objectForKey:@"Name"];
     self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.85];
+    
+    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
+    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
+    [tableLayout setDisplayHeader:YES withSize:CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
+                                                          [HCRTableFlowLayout preferredCellHeight])];
     
     [self.collectionView registerClass:[HCRCampCollectionCell class]
             forCellWithReuseIdentifier:kCampCellIdentifier];
+    
+    [self.collectionView registerClass:[UICollectionReusableView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                   withReuseIdentifier:kCampHeaderReuseIdentifier];
 
     // TODO: weird; not sure why self.view.frame is necessary instead of self.view.bounds..?
     MKMapView *mapView = [[MKMapView alloc] initWithFrame:self.view.frame];
     
     mapView.mapType = MKMapTypeHybrid;
     
-    CGFloat latitude = [[self.targetCountryDictionary objectForKey:@"Latitude"] floatValue];
-    CGFloat longitude = [[self.targetCountryDictionary objectForKey:@"Longitude"] floatValue];
-    CGFloat span = [[self.targetCountryDictionary objectForKey:@"Span"] floatValue];
+    CGFloat latitude = [[self.countryDictionary objectForKey:@"Latitude"] floatValue];
+    CGFloat longitude = [[self.countryDictionary objectForKey:@"Longitude"] floatValue];
+    CGFloat span = [[self.countryDictionary objectForKey:@"Span"] floatValue];
     
     CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
     CLLocationDistance latitudinalMeters = span;
@@ -118,7 +89,7 @@ NSString *const kCampCellIdentifier = @"kCampCellIdentifier";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSArray *campsArray = [self.targetCountryDictionary objectForKey:@"Camps"];
+    NSArray *campsArray = [self.countryDictionary objectForKey:@"Camps"];
     return campsArray.count;
 }
 
@@ -126,10 +97,43 @@ NSString *const kCampCellIdentifier = @"kCampCellIdentifier";
     
     HCRCampCollectionCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kCampCellIdentifier forIndexPath:indexPath];
     
-    NSArray *campsArray = [self.targetCountryDictionary objectForKey:@"Camps"];
+    NSArray *campsArray = [self.countryDictionary objectForKey:@"Camps"];
     cell.campDictionary = [campsArray objectAtIndex:indexPath.row];
     
     return cell;
+    
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        
+        UICollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                              withReuseIdentifier:kCampHeaderReuseIdentifier
+                                                                                     forIndexPath:indexPath];
+        
+        if (header.subviews) {
+            NSArray *subviews = [NSArray arrayWithArray:header.subviews];
+            for (UIView *subview in subviews) {
+                [subview removeFromSuperview];
+            }
+        }
+        
+        UILabel *headerLabel = [[UILabel alloc] initWithFrame:header.bounds];
+        [header addSubview:headerLabel];
+        
+        headerLabel.text = @"Refugee Camps";
+        headerLabel.font = [UIFont boldSystemFontOfSize:18];
+        
+        headerLabel.textColor = [UIColor whiteColor];
+        headerLabel.backgroundColor = [[UIColor UNHCRBlue] colorWithAlphaComponent:0.7];
+        headerLabel.textAlignment = NSTextAlignmentCenter;
+        
+        return header;
+        
+    }
+    
+    return nil;
     
 }
 
@@ -146,15 +150,6 @@ NSString *const kCampCellIdentifier = @"kCampCellIdentifier";
     
     [self.navigationController pushViewController:campDetail animated:YES];
     
-}
-
-#pragma mark - Getters & Setters
-
-- (void)setCountry:(NSString *)country {
-    
-    _country = country;
-    
-    self.targetCountryDictionary = [self.globalCampsDictionary objectForKey:country];
 }
 
 @end

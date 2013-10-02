@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F1C93F617FBF6EB0003AA21 /* HCRDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */; };
 		4F866AC317F9E022000350E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC217F9E022000350E4 /* Foundation.framework */; };
 		4F866AC517F9E022000350E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC417F9E022000350E4 /* CoreGraphics.framework */; };
 		4F866AC717F9E022000350E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC617F9E022000350E4 /* UIKit.framework */; };
@@ -27,6 +28,8 @@
 
 /* Begin PBXFileReference section */
 		04773A9AD17C462187CA1561 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F1C93F417FBF6EB0003AA21 /* HCRDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRDataSource.h; sourceTree = "<group>"; };
+		4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDataSource.m; sourceTree = "<group>"; };
 		4F866ABF17F9E022000350E4 /* UNHCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UNHCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F866AC217F9E022000350E4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4F866AC417F9E022000350E4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -109,6 +112,8 @@
 			children = (
 				4F866AD117F9E022000350E4 /* HCRAppDelegate.h */,
 				4F866AD217F9E022000350E4 /* HCRAppDelegate.m */,
+				4F1C93F417FBF6EB0003AA21 /* HCRDataSource.h */,
+				4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */,
 				4F866AFB17FA7D0D000350E4 /* Images.xcassets */,
 				4F866B0C17FAA5FE000350E4 /* Categories */,
 				4F866B0117FA9F8B000350E4 /* Shared UI */,
@@ -288,6 +293,7 @@
 				4F866B1117FAB83B000350E4 /* HCRCampDetailController.m in Sources */,
 				4F866B0017FA8350000350E4 /* HCRCountryCollectionCell.m in Sources */,
 				4F866AF317F9EB8C000350E4 /* HCRCountryCollectionViewController.m in Sources */,
+				4F1C93F617FBF6EB0003AA21 /* HCRDataSource.m in Sources */,
 				4F866AF617F9EC0C000350E4 /* HCRTableFlowLayout.m in Sources */,
 				4F866ACF17F9E022000350E4 /* main.m in Sources */,
 				4F866B0B17FAA5F7000350E4 /* UIColor+HCRColors.m in Sources */,

@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface HCRCountryCollectionViewController : UICollectionViewController
+<UICollectionViewDelegateFlowLayout>
 
 @end

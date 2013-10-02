@@ -10,16 +10,16 @@
 #import "HCRCountryCollectionCell.h"
 #import "HCRCampCollectionViewController.h"
 #import "HCRTableFlowLayout.h"
+#import "HCRDataSource.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kCountryCellIdentifier = @"kCountryCellIdentifier";
+NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRCountryCollectionViewController ()
-
-@property NSArray *countriesArray;
 
 @end
 
@@ -32,28 +32,6 @@ NSString *const kCountryCellIdentifier = @"kCountryCellIdentifier";
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
-        self.countriesArray = @[
-                                @"Iraq",
-                                @"Uganda",
-                                @"Thailand",
-                                @"Iraq",
-                                @"Uganda",
-                                @"Thailand",
-                                @"Iraq",
-                                @"Uganda",
-                                @"Thailand",
-                                @"Iraq",
-                                @"Uganda",
-                                @"Thailand",
-                                @"Iraq",
-                                @"Uganda",
-                                @"Thailand",
-                                @"Iraq",
-                                @"Uganda",
-                                @"Thailand"
-                                ];
-        
-        
         
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
         
@@ -67,10 +45,19 @@ NSString *const kCountryCellIdentifier = @"kCountryCellIdentifier";
 	// Do any additional setup after loading the view.
     
     self.title = @"Countries";
-    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
+    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.85];
+    
+    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
+    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
+    [tableLayout setDisplayHeader:YES withSize:CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
+                                                          [HCRTableFlowLayout preferredCellHeight])];
     
     [self.collectionView registerClass:[HCRCountryCollectionCell class]
             forCellWithReuseIdentifier:kCountryCellIdentifier];
+    
+    [self.collectionView registerClass:[UICollectionReusableView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                   withReuseIdentifier:kCountryHeaderIdentifier];
     
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     NSString *imagePath = (screenBounds.size.height == 568) ? @"main-background-4in" : @"main-background";
@@ -84,20 +71,53 @@ NSString *const kCountryCellIdentifier = @"kCountryCellIdentifier";
 #pragma mark - UICollectionViewController Data Source
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+    return [HCRDataSource globalDataArray].count;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.countriesArray.count;
+    NSArray *countriesArray = [[[HCRDataSource globalDataArray] objectAtIndex:section] objectForKey:@"Countries"];
+    return countriesArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     HCRCountryCollectionCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kCountryCellIdentifier forIndexPath:indexPath];
     
-    cell.countryName = [self.countriesArray objectAtIndex:indexPath.row];
+    NSDictionary *categoryDictionary = [[HCRDataSource globalDataArray] objectAtIndex:indexPath.section];
+    cell.countryDictionary = [[categoryDictionary objectForKey:@"Countries"] objectAtIndex:indexPath.row];
     
     return cell;
+    
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        UICollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                              withReuseIdentifier:kCountryHeaderIdentifier
+                                                                                     forIndexPath:indexPath];
+        
+        if (header.subviews.count > 0) {
+            NSArray *subviews = [NSArray arrayWithArray:header.subviews];
+            for (UIView *subview in subviews) {
+                [subview removeFromSuperview];
+            }
+        }
+        
+        UILabel *headerLabel = [[UILabel alloc] initWithFrame:header.bounds];
+        [header addSubview:headerLabel];
+        
+        headerLabel.text = [[[HCRDataSource globalDataArray] objectAtIndex:indexPath.section] objectForKey:@"Category"];
+        headerLabel.font = [UIFont boldSystemFontOfSize:18];
+        
+        headerLabel.textColor = [UIColor whiteColor];
+        headerLabel.backgroundColor = [[UIColor UNHCRBlue] colorWithAlphaComponent:0.7];
+        headerLabel.textAlignment = NSTextAlignmentCenter;
+        
+        return header;
+    }
+    
+    return nil;
     
 }
 
@@ -125,7 +145,7 @@ NSString *const kCountryCellIdentifier = @"kCountryCellIdentifier";
     
     HCRTableFlowLayout *tableLayout = [[HCRTableFlowLayout alloc] init];
     HCRCampCollectionViewController *campCollection = [[HCRCampCollectionViewController alloc] initWithCollectionViewLayout:tableLayout];
-    campCollection.country = cell.countryName;
+    campCollection.countryDictionary = cell.countryDictionary;
     
     [self.navigationController pushViewController:campCollection animated:YES];
     

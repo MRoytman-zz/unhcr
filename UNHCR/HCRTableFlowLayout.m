@@ -17,6 +17,7 @@ CGFloat const kTableCellHeight = 44;
 @interface HCRTableFlowLayout ()
 
 //@property UIDynamicAnimator *dynamicAnimator;
+@property (nonatomic, readwrite) BOOL displayHeader;
 
 @end
 
@@ -30,11 +31,14 @@ CGFloat const kTableCellHeight = 44;
     
     [super prepareLayout];
     
-    self.itemSize = CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
-                               kTableCellHeight);
+    // set vars only if not set by owner
+    if ( CGSizeEqualToSize(self.itemSize, CGSizeMake(50.0, 50.0)) ) {
+        self.itemSize = CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
+                                   kTableCellHeight);
+    }
     
-    self.minimumInteritemSpacing = 0;
-    self.minimumLineSpacing = 0;
+    self.minimumInteritemSpacing = (self.minimumInteritemSpacing != 0) ? self.minimumInteritemSpacing :  0;
+    self.minimumLineSpacing = (self.minimumLineSpacing != 0) ? self.minimumLineSpacing :  0;
     
 //    if ( !self.dynamicAnimator ) {
 //        self.dynamicAnimator = [[UIDynamicAnimator alloc] initWithCollectionViewLayout:self];
@@ -77,7 +81,11 @@ CGFloat const kTableCellHeight = 44;
 //        
 //        UICollectionViewLayoutAttributes *item = [spring.items firstObject];
 //        CGPoint center = item.center;
-//        center.y += MIN(scrollDelta, scrollDelta * scrollResistance);
+//        if (scrollDelta < 0) {
+//            center.y += MAX(scrollDelta, scrollDelta * scrollResistance);
+//        } else {
+//            center.y += MIN(scrollDelta, scrollDelta * scrollResistance);
+//        }
 //        item.center = center;
 //        
 //        [self.dynamicAnimator updateItemUsingCurrentState:item];
@@ -86,5 +94,23 @@ CGFloat const kTableCellHeight = 44;
 //    return NO;
 //    
 //}
+
+#pragma mark - Public Methods
+
++ (CGFloat)preferredCellHeight {
+    return kTableCellHeight;
+}
+
+- (void)setDisplayHeader:(BOOL)displayHeader withSize:(CGSize)size {
+    
+    _displayHeader = displayHeader;
+    
+    if (displayHeader) {
+        self.headerReferenceSize = size;
+    } else {
+        self.headerReferenceSize = CGSizeZero;
+    }
+    
+}
 
 @end
