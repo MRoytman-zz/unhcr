@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4F1C93F617FBF6EB0003AA21 /* HCRDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */; };
+		4F1C93F917FC06D00003AA21 /* HCRClusterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93F817FC06D00003AA21 /* HCRClusterFlowLayout.m */; };
+		4F1C93FC17FC09190003AA21 /* HCRFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93FB17FC09190003AA21 /* HCRFlowLayout.m */; };
+		4F1C93FF17FC0B150003AA21 /* HCRClusterCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93FE17FC0B150003AA21 /* HCRClusterCollectionCell.m */; };
 		4F866AC317F9E022000350E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC217F9E022000350E4 /* Foundation.framework */; };
 		4F866AC517F9E022000350E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC417F9E022000350E4 /* CoreGraphics.framework */; };
 		4F866AC717F9E022000350E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC617F9E022000350E4 /* UIKit.framework */; };
@@ -22,7 +25,7 @@
 		4F866B0817FAA09B000350E4 /* HCRCampCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866B0717FAA09B000350E4 /* HCRCampCollectionCell.m */; };
 		4F866B0B17FAA5F7000350E4 /* UIColor+HCRColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866B0A17FAA5F7000350E4 /* UIColor+HCRColors.m */; };
 		4F866B0E17FAAD1F000350E4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866B0D17FAAD1F000350E4 /* MapKit.framework */; };
-		4F866B1117FAB83B000350E4 /* HCRCampDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866B1017FAB83B000350E4 /* HCRCampDetailController.m */; };
+		4F866B1117FAB83B000350E4 /* HCRClusterCollectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866B1017FAB83B000350E4 /* HCRClusterCollectionController.m */; };
 		C1FCCA2A37DE44BABAAEC9EC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04773A9AD17C462187CA1561 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +33,12 @@
 		04773A9AD17C462187CA1561 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F1C93F417FBF6EB0003AA21 /* HCRDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRDataSource.h; sourceTree = "<group>"; };
 		4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDataSource.m; sourceTree = "<group>"; };
+		4F1C93F717FC06D00003AA21 /* HCRClusterFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRClusterFlowLayout.h; sourceTree = "<group>"; };
+		4F1C93F817FC06D00003AA21 /* HCRClusterFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRClusterFlowLayout.m; sourceTree = "<group>"; };
+		4F1C93FA17FC09190003AA21 /* HCRFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRFlowLayout.h; sourceTree = "<group>"; };
+		4F1C93FB17FC09190003AA21 /* HCRFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRFlowLayout.m; sourceTree = "<group>"; };
+		4F1C93FD17FC0B150003AA21 /* HCRClusterCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRClusterCollectionCell.h; sourceTree = "<group>"; };
+		4F1C93FE17FC0B150003AA21 /* HCRClusterCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRClusterCollectionCell.m; sourceTree = "<group>"; };
 		4F866ABF17F9E022000350E4 /* UNHCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UNHCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F866AC217F9E022000350E4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4F866AC417F9E022000350E4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -55,8 +64,8 @@
 		4F866B0917FAA5F7000350E4 /* UIColor+HCRColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+HCRColors.h"; sourceTree = "<group>"; };
 		4F866B0A17FAA5F7000350E4 /* UIColor+HCRColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+HCRColors.m"; sourceTree = "<group>"; };
 		4F866B0D17FAAD1F000350E4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		4F866B0F17FAB83B000350E4 /* HCRCampDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCampDetailController.h; sourceTree = "<group>"; };
-		4F866B1017FAB83B000350E4 /* HCRCampDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCampDetailController.m; sourceTree = "<group>"; };
+		4F866B0F17FAB83B000350E4 /* HCRClusterCollectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRClusterCollectionController.h; sourceTree = "<group>"; };
+		4F866B1017FAB83B000350E4 /* HCRClusterCollectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRClusterCollectionController.m; sourceTree = "<group>"; };
 		D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -119,7 +128,7 @@
 				4F866B0117FA9F8B000350E4 /* Shared UI */,
 				4F866AFD17FA8324000350E4 /* Country Selection */,
 				4F866B0517FAA083000350E4 /* Camp Selection */,
-				4F866B1217FAB840000350E4 /* Camp Detail */,
+				4F866B1217FAB840000350E4 /* Cluster Detail */,
 				4F866AC917F9E022000350E4 /* Supporting Files */,
 			);
 			path = UNHCR;
@@ -150,8 +159,12 @@
 		4F866B0117FA9F8B000350E4 /* Shared UI */ = {
 			isa = PBXGroup;
 			children = (
+				4F1C93FA17FC09190003AA21 /* HCRFlowLayout.h */,
+				4F1C93FB17FC09190003AA21 /* HCRFlowLayout.m */,
 				4F866AF417F9EC0C000350E4 /* HCRTableFlowLayout.h */,
 				4F866AF517F9EC0C000350E4 /* HCRTableFlowLayout.m */,
+				4F1C93F717FC06D00003AA21 /* HCRClusterFlowLayout.h */,
+				4F1C93F817FC06D00003AA21 /* HCRClusterFlowLayout.m */,
 			);
 			name = "Shared UI";
 			sourceTree = "<group>";
@@ -176,13 +189,15 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
-		4F866B1217FAB840000350E4 /* Camp Detail */ = {
+		4F866B1217FAB840000350E4 /* Cluster Detail */ = {
 			isa = PBXGroup;
 			children = (
-				4F866B0F17FAB83B000350E4 /* HCRCampDetailController.h */,
-				4F866B1017FAB83B000350E4 /* HCRCampDetailController.m */,
+				4F866B0F17FAB83B000350E4 /* HCRClusterCollectionController.h */,
+				4F866B1017FAB83B000350E4 /* HCRClusterCollectionController.m */,
+				4F1C93FD17FC0B150003AA21 /* HCRClusterCollectionCell.h */,
+				4F1C93FE17FC0B150003AA21 /* HCRClusterCollectionCell.m */,
 			);
-			name = "Camp Detail";
+			name = "Cluster Detail";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -290,14 +305,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F866AD317F9E022000350E4 /* HCRAppDelegate.m in Sources */,
-				4F866B1117FAB83B000350E4 /* HCRCampDetailController.m in Sources */,
+				4F1C93FC17FC09190003AA21 /* HCRFlowLayout.m in Sources */,
+				4F866B1117FAB83B000350E4 /* HCRClusterCollectionController.m in Sources */,
 				4F866B0017FA8350000350E4 /* HCRCountryCollectionCell.m in Sources */,
 				4F866AF317F9EB8C000350E4 /* HCRCountryCollectionViewController.m in Sources */,
 				4F1C93F617FBF6EB0003AA21 /* HCRDataSource.m in Sources */,
 				4F866AF617F9EC0C000350E4 /* HCRTableFlowLayout.m in Sources */,
 				4F866ACF17F9E022000350E4 /* main.m in Sources */,
 				4F866B0B17FAA5F7000350E4 /* UIColor+HCRColors.m in Sources */,
+				4F1C93F917FC06D00003AA21 /* HCRClusterFlowLayout.m in Sources */,
 				4F866B0817FAA09B000350E4 /* HCRCampCollectionCell.m in Sources */,
+				4F1C93FF17FC0B150003AA21 /* HCRClusterCollectionCell.m in Sources */,
 				4F866B0417FAA07D000350E4 /* HCRCampCollectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

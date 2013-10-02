@@ -102,4 +102,36 @@
              
 }
 
++ (NSArray *)clustersArray {
+    
+    // https://clusters.humanitarianresponse.info/sites/clusters.humanitarianresponse.info/files/clusterapproach.png
+    // http://business.un.org/en/documents/249
+    // http://www.unocha.org/what-we-do/coordination-tools/cluster-coordination
+    
+    return @[
+             @{@"Name": @"Camp Coordination",
+               @"Image": @""},
+             @{@"Name": @"Early Recovery",
+               @"Image": @""},
+             @{@"Name": @"Education",
+               @"Image": @""},
+             @{@"Name": @"Emergency Telecoms",
+               @"Image": @""},
+             @{@"Name": @"Food Security",
+               @"Image": @""},
+             @{@"Name": @"Health",
+               @"Image": @""},
+             @{@"Name": @"Logistics",
+               @"Image": @""},
+             @{@"Name": @"Nutrition",
+               @"Image": @""},
+             @{@"Name": @"Protection",
+               @"Image": @""},
+             @{@"Name": @"Shelter",
+               @"Image": @""},
+             @{@"Name": @"Water/Sanitation",
+               @"Image": @""},
+             ];
+}
+
 @end

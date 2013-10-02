@@ -11,5 +11,6 @@
 @interface HCRDataSource : NSObject
 
 + (NSArray *)globalDataArray;
++ (NSArray *)clustersArray;
 
 @end

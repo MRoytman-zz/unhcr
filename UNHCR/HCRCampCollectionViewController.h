@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface HCRCampCollectionViewController : UICollectionViewController
-<UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) NSDictionary *countryDictionary;
 

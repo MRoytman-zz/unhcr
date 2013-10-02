@@ -17,7 +17,6 @@ CGFloat const kTableCellHeight = 44;
 @interface HCRTableFlowLayout ()
 
 //@property UIDynamicAnimator *dynamicAnimator;
-@property (nonatomic, readwrite) BOOL displayHeader;
 
 @end
 
@@ -94,23 +93,5 @@ CGFloat const kTableCellHeight = 44;
 //    return NO;
 //    
 //}
-
-#pragma mark - Public Methods
-
-+ (CGFloat)preferredCellHeight {
-    return kTableCellHeight;
-}
-
-- (void)setDisplayHeader:(BOOL)displayHeader withSize:(CGSize)size {
-    
-    _displayHeader = displayHeader;
-    
-    if (displayHeader) {
-        self.headerReferenceSize = size;
-    } else {
-        self.headerReferenceSize = CGSizeZero;
-    }
-    
-}
 
 @end

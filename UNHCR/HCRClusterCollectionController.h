@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HCRCampDetailController : UICollectionViewController
+@interface HCRClusterCollectionController : UICollectionViewController
 
 @property (nonatomic, strong) NSDictionary *campDictionary;
 

@@ -50,7 +50,7 @@ NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     [tableLayout setDisplayHeader:YES withSize:CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
-                                                          [HCRTableFlowLayout preferredCellHeight])];
+                                                          [HCRTableFlowLayout preferredHeaderHeight])];
     
     [self.collectionView registerClass:[HCRCountryCollectionCell class]
             forCellWithReuseIdentifier:kCountryCellIdentifier];
