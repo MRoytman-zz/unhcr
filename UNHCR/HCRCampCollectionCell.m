@@ -26,6 +26,14 @@
     if (self) {
         // Initialization code
         self.backgroundColor = [UIColor clearColor];
+        
+        UIButton *disclosureButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        [self addSubview:disclosureButton];
+        
+        disclosureButton.userInteractionEnabled = NO;
+        disclosureButton.center = CGPointMake(CGRectGetMaxX(self.bounds) - CGRectGetMidX(disclosureButton.bounds) - 8,
+                                              CGRectGetMidY(self.bounds));
+        
     }
     return self;
 }

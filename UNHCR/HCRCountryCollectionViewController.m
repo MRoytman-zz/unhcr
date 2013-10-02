@@ -68,6 +68,10 @@ NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
     
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
 #pragma mark - UICollectionViewController Data Source
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
