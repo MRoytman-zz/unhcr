@@ -32,6 +32,7 @@
     NSParameterAssert(self.campDictionary);
     
     self.title = [self.clusterDictionary objectForKey:@"Name"];
+    self.view.backgroundColor = [UIColor whiteColor];
     self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.85];
     
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
