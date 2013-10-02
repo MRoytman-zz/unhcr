@@ -11,9 +11,12 @@
 @interface HCRFlowLayout : UICollectionViewFlowLayout
 
 @property (nonatomic, readonly) BOOL displayHeader;
+@property (nonatomic, readonly) BOOL displayFooter;
 
 + (CGFloat)preferredHeaderHeight;
++ (CGFloat)preferredFooterHeight;
 
 - (void)setDisplayHeader:(BOOL)displayHeader withSize:(CGSize)size;
+- (void)setDisplayFooter:(BOOL)displayFooter withSize:(CGSize)size;
 
 @end

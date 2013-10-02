@@ -16,3 +16,4 @@
 #endif
 
 #import "UIColor+HCRColors.h"
+#import "UIImage+RMImageManipulation.h"

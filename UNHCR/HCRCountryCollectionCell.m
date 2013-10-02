@@ -32,9 +32,6 @@
 
 - (void)prepareForReuse {
     self.countryDictionary = nil;
-    
-    [self.countryNameLabel removeFromSuperview];
-    self.countryNameLabel = nil;
 }
 
 #pragma mark - Getters & Setters
@@ -44,6 +41,8 @@
     _countryDictionary = countryDictionary;
     
     if ( countryDictionary == nil ) {
+        [self.countryNameLabel removeFromSuperview];
+        self.countryNameLabel = nil;
         return;
     }
     

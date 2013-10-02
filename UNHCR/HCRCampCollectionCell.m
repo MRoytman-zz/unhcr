@@ -32,9 +32,6 @@
 
 - (void)prepareForReuse {
     self.campDictionary = nil;
-    
-    [self.campNameLabel removeFromSuperview];
-    self.campNameLabel = nil;
 }
 
 #pragma mark - Getters & Setters
@@ -44,6 +41,8 @@
     _campDictionary = campDictionary;
     
     if ( campDictionary == nil ) {
+        [self.campNameLabel removeFromSuperview];
+        self.campNameLabel = nil;
         return;
     }
     

@@ -113,7 +113,7 @@ NSString *const kCampHeaderReuseIdentifier = @"kCampHeaderReuseIdentifier";
                                                                               withReuseIdentifier:kCampHeaderReuseIdentifier
                                                                                      forIndexPath:indexPath];
         
-        if (header.subviews) {
+        if (header.subviews.count > 0) {
             NSArray *subviews = [NSArray arrayWithArray:header.subviews];
             for (UIView *subview in subviews) {
                 [subview removeFromSuperview];

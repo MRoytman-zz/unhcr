@@ -8,6 +8,21 @@
 
 #import "HCRClusterCollectionCell.h"
 
+////////////////////////////////////////////////////////////////////////////////
+
+static const CGFloat kImageToTextRatio = 0.6;
+
+////////////////////////////////////////////////////////////////////////////////
+
+@interface HCRClusterCollectionCell ()
+
+@property UILabel *clusterLabel;
+@property UIImageView *clusterImageView;
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////
+
 @implementation HCRClusterCollectionCell
 
 - (id)initWithFrame:(CGRect)frame
@@ -15,8 +30,78 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+//        self.backgroundColor = [[UIColor UNHCRBlue] colorWithAlphaComponent:0.5];
     }
     return self;
+}
+
+- (void)prepareForReuse {
+    self.clusterDictionary = nil;
+}
+
+#pragma mark - Getters & Setters
+
+- (void)setClusterDictionary:(NSDictionary *)clusterDictionary {
+    
+    _clusterDictionary = clusterDictionary;
+    
+    if ( clusterDictionary == nil ) {
+        [self.clusterImageView removeFromSuperview];
+        self.clusterImageView = nil;
+        [self.clusterLabel removeFromSuperview];
+        self.clusterLabel = nil;
+        return;
+    }
+    
+    // cluster image
+    NSString *clusterImagePath = [clusterDictionary objectForKey:@"Image"];
+    if ( !self.clusterImageView && clusterImagePath ) {
+        
+        CGRect clusterImageViewFrame = CGRectMake(0,
+                                                  0,
+                                                  CGRectGetWidth(self.bounds),
+                                                  CGRectGetHeight(self.bounds) * kImageToTextRatio);
+        
+        self.clusterImageView = [[UIImageView alloc] initWithFrame:clusterImageViewFrame];
+        [self addSubview:self.clusterImageView];
+        
+        self.clusterImageView.contentMode = UIViewContentModeScaleAspectFit;
+        
+    }
+    
+    self.clusterImageView.image = [[UIImage imageNamed:clusterImagePath] colorImage:[UIColor UNHCRBlue]
+                                                                      withBlendMode:kCGBlendModeNormal
+                                                                   withTransparency:YES];
+    
+    // cluster name
+    NSString *clusterName = [clusterDictionary objectForKey:@"Name"];
+    if ( !self.clusterLabel && clusterName ) {
+        
+        CGFloat xPadding = 4;
+        CGRect clusterLabelFrame = CGRectMake(xPadding,
+                                              CGRectGetHeight(self.bounds) * kImageToTextRatio,
+                                              CGRectGetWidth(self.bounds) - 2 * xPadding,
+                                              CGRectGetHeight(self.bounds) * (1 - kImageToTextRatio));
+        
+        self.clusterLabel = [[UILabel alloc] initWithFrame:clusterLabelFrame];
+        [self addSubview:self.clusterLabel];
+        
+        self.clusterLabel.font = [UIFont systemFontOfSize:13];
+        
+        self.clusterLabel.textColor = [UIColor darkGrayColor];
+        self.clusterLabel.backgroundColor = [UIColor clearColor];
+        
+        self.clusterLabel.numberOfLines = 2;
+        self.clusterLabel.textAlignment = NSTextAlignmentCenter;
+        
+    }
+    
+    self.clusterLabel.text = clusterName;
+    
+    [self.clusterLabel sizeToFit];
+    self.clusterLabel.center = CGPointMake(CGRectGetMidX(self.bounds),
+                                           CGRectGetHeight(self.bounds) * kImageToTextRatio + CGRectGetMidY(self.clusterLabel.bounds) + 4);
+    
 }
 
 @end

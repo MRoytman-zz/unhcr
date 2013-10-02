@@ -12,6 +12,7 @@
 #import "HCRClusterFlowLayout.h"
 #import "HCRClusterCollectionCell.h"
 #import "HCRDataSource.h"
+#import "HCRCampClusterDetailViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -52,6 +53,8 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
     NSParameterAssert([clusterLayout isKindOfClass:[HCRClusterFlowLayout class]]);
     [clusterLayout setDisplayHeader:YES withSize:CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
                                                             [HCRClusterFlowLayout preferredHeaderHeight])];
+    [clusterLayout setDisplayFooter:YES withSize:CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
+                                                            [HCRClusterFlowLayout preferredFooterHeight])];
     
     [self.collectionView registerClass:[HCRClusterCollectionCell class]
             forCellWithReuseIdentifier:kClusterCellIdentifier];
@@ -98,8 +101,7 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
     HCRClusterCollectionCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kClusterCellIdentifier forIndexPath:indexPath];
     
     NSArray *clustersArray = [HCRDataSource clustersArray];
-    cell.clusterName = [[clustersArray objectAtIndex:indexPath.row] objectForKey:@"Name"];
-    cell.clusterImagePath = [[clustersArray objectAtIndex:indexPath.row] objectForKey:@"Image"];
+    cell.clusterDictionary = [clustersArray objectAtIndex:indexPath.row];
     
     return cell;
     
@@ -113,7 +115,7 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
                                                                               withReuseIdentifier:kClusterHeaderIdentifier
                                                                                      forIndexPath:indexPath];
         
-        if (header.subviews) {
+        if (header.subviews.count > 0) {
             NSArray *subviews = [NSArray arrayWithArray:header.subviews];
             for (UIView *subview in subviews) {
                 [subview removeFromSuperview];
@@ -133,7 +135,34 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
         return header;
         
     } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
-        // TODO: add 'snapshot' button/link/whatever
+        
+        UICollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                              withReuseIdentifier:kClusterFooterIdentifier
+                                                                                     forIndexPath:indexPath];
+        
+        if (footer.subviews.count > 0) {
+            NSArray *subviews = [NSArray arrayWithArray:footer.subviews];
+            for (UIView *subview in subviews) {
+                [subview removeFromSuperview];
+            }
+        }
+        
+        UIButton *footerButton = [[UIButton alloc] initWithFrame:footer.bounds];
+        [footer addSubview:footerButton];
+        
+        [footerButton setTitle:@"Compare All Clusters" forState:UIControlStateNormal];
+        
+        [footerButton setTitleColor:[UIColor UNHCRBlue] forState:UIControlStateNormal];
+        [footerButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateSelected];
+        
+        footerButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        
+        [footerButton addTarget:self
+                         action:@selector(_footerButtonPressed)
+               forControlEvents:UIControlEventTouchUpInside];
+        
+        return footer;
+        
     }
     
     return nil;
@@ -141,5 +170,28 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
 }
 
 #pragma mark - UICollectionView Delegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    HCRClusterCollectionCell *cell = (HCRClusterCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    NSParameterAssert([cell isKindOfClass:[HCRClusterCollectionCell class]]);
+    
+    HCRFlowLayout *flowLayout = [[HCRFlowLayout alloc] init];
+    HCRCampClusterDetailViewController *campClusterDetail = [[HCRCampClusterDetailViewController alloc] initWithCollectionViewLayout:flowLayout];
+    
+    campClusterDetail.campDictionary = self.campDictionary;
+    campClusterDetail.clusterDictionary = cell.clusterDictionary;
+    
+    [self.navigationController pushViewController:campClusterDetail animated:YES];
+    
+}
+
+#pragma mark - Private Methods
+
+- (void)_footerButtonPressed {
+    
+    // TODO: push special controller with everything
+    
+}
 
 @end

@@ -1,5 +1,5 @@
 //
-//  HCRClusterCollectionCell.h
+//  HCRCampClusterDetailViewController.h
 //  UNHCR
 //
 //  Created by Sean Conrad on 10/2/13.
@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HCRClusterCollectionCell : UICollectionViewCell
+@interface HCRCampClusterDetailViewController : UICollectionViewController
 
+@property (nonatomic, strong) NSDictionary *campDictionary;
 @property (nonatomic, strong) NSDictionary *clusterDictionary;
 
 @end

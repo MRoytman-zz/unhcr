@@ -24,12 +24,18 @@ const CGFloat kClusterHeaderHeight = 44;
     
     // set vars only if not set by owner
     if ( CGSizeEqualToSize(self.itemSize, CGSizeMake(50.0, 50.0)) ) {
-        CGFloat itemSize = 70.0;
+        CGFloat itemSize = 93.0; // for 3 items per row
+//        CGFloat itemSize = 145.0; // for 2 items per row
         self.itemSize = CGSizeMake(itemSize, itemSize);
     }
     
-    self.minimumInteritemSpacing = (self.minimumInteritemSpacing != 0) ? self.minimumInteritemSpacing :  0;
-    self.minimumLineSpacing = (self.minimumLineSpacing != 0) ? self.minimumLineSpacing :  0;
+    if ( UIEdgeInsetsEqualToEdgeInsets(self.sectionInset, UIEdgeInsetsZero)) {
+        CGFloat edgeInset = 10.0;
+        self.sectionInset = UIEdgeInsetsMake(edgeInset, edgeInset, edgeInset, edgeInset);
+    }
+    
+    self.minimumInteritemSpacing = (self.minimumInteritemSpacing != 0) ? self.minimumInteritemSpacing : 10.0;
+    self.minimumLineSpacing = (self.minimumLineSpacing != 0) ? self.minimumLineSpacing : 10.0;
     
 }
 

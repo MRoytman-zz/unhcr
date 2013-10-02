@@ -11,6 +11,8 @@
 		4F1C93F917FC06D00003AA21 /* HCRClusterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93F817FC06D00003AA21 /* HCRClusterFlowLayout.m */; };
 		4F1C93FC17FC09190003AA21 /* HCRFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93FB17FC09190003AA21 /* HCRFlowLayout.m */; };
 		4F1C93FF17FC0B150003AA21 /* HCRClusterCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93FE17FC0B150003AA21 /* HCRClusterCollectionCell.m */; };
+		4F1C940217FC17770003AA21 /* UIImage+RMImageManipulation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940117FC17770003AA21 /* UIImage+RMImageManipulation.m */; };
+		4F1C940517FC28C40003AA21 /* HCRCampClusterDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940417FC28C40003AA21 /* HCRCampClusterDetailViewController.m */; };
 		4F866AC317F9E022000350E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC217F9E022000350E4 /* Foundation.framework */; };
 		4F866AC517F9E022000350E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC417F9E022000350E4 /* CoreGraphics.framework */; };
 		4F866AC717F9E022000350E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC617F9E022000350E4 /* UIKit.framework */; };
@@ -39,6 +41,10 @@
 		4F1C93FB17FC09190003AA21 /* HCRFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRFlowLayout.m; sourceTree = "<group>"; };
 		4F1C93FD17FC0B150003AA21 /* HCRClusterCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRClusterCollectionCell.h; sourceTree = "<group>"; };
 		4F1C93FE17FC0B150003AA21 /* HCRClusterCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRClusterCollectionCell.m; sourceTree = "<group>"; };
+		4F1C940017FC17770003AA21 /* UIImage+RMImageManipulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RMImageManipulation.h"; sourceTree = "<group>"; };
+		4F1C940117FC17770003AA21 /* UIImage+RMImageManipulation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RMImageManipulation.m"; sourceTree = "<group>"; };
+		4F1C940317FC28C40003AA21 /* HCRCampClusterDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCampClusterDetailViewController.h; sourceTree = "<group>"; };
+		4F1C940417FC28C40003AA21 /* HCRCampClusterDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCampClusterDetailViewController.m; sourceTree = "<group>"; };
 		4F866ABF17F9E022000350E4 /* UNHCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UNHCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F866AC217F9E022000350E4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4F866AC417F9E022000350E4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -85,6 +91,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F1C940617FC28C80003AA21 /* Camp-Cluster Detail */ = {
+			isa = PBXGroup;
+			children = (
+				4F1C940317FC28C40003AA21 /* HCRCampClusterDetailViewController.h */,
+				4F1C940417FC28C40003AA21 /* HCRCampClusterDetailViewController.m */,
+			);
+			name = "Camp-Cluster Detail";
+			sourceTree = "<group>";
+		};
 		4F866AB617F9E022000350E4 = {
 			isa = PBXGroup;
 			children = (
@@ -128,7 +143,8 @@
 				4F866B0117FA9F8B000350E4 /* Shared UI */,
 				4F866AFD17FA8324000350E4 /* Country Selection */,
 				4F866B0517FAA083000350E4 /* Camp Selection */,
-				4F866B1217FAB840000350E4 /* Cluster Detail */,
+				4F866B1217FAB840000350E4 /* Cluster Selection */,
+				4F1C940617FC28C80003AA21 /* Camp-Cluster Detail */,
 				4F866AC917F9E022000350E4 /* Supporting Files */,
 			);
 			path = UNHCR;
@@ -185,11 +201,13 @@
 			children = (
 				4F866B0917FAA5F7000350E4 /* UIColor+HCRColors.h */,
 				4F866B0A17FAA5F7000350E4 /* UIColor+HCRColors.m */,
+				4F1C940017FC17770003AA21 /* UIImage+RMImageManipulation.h */,
+				4F1C940117FC17770003AA21 /* UIImage+RMImageManipulation.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
 		};
-		4F866B1217FAB840000350E4 /* Cluster Detail */ = {
+		4F866B1217FAB840000350E4 /* Cluster Selection */ = {
 			isa = PBXGroup;
 			children = (
 				4F866B0F17FAB83B000350E4 /* HCRClusterCollectionController.h */,
@@ -197,7 +215,7 @@
 				4F1C93FD17FC0B150003AA21 /* HCRClusterCollectionCell.h */,
 				4F1C93FE17FC0B150003AA21 /* HCRClusterCollectionCell.m */,
 			);
-			name = "Cluster Detail";
+			name = "Cluster Selection";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -305,6 +323,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F866AD317F9E022000350E4 /* HCRAppDelegate.m in Sources */,
+				4F1C940217FC17770003AA21 /* UIImage+RMImageManipulation.m in Sources */,
 				4F1C93FC17FC09190003AA21 /* HCRFlowLayout.m in Sources */,
 				4F866B1117FAB83B000350E4 /* HCRClusterCollectionController.m in Sources */,
 				4F866B0017FA8350000350E4 /* HCRCountryCollectionCell.m in Sources */,
@@ -312,6 +331,7 @@
 				4F1C93F617FBF6EB0003AA21 /* HCRDataSource.m in Sources */,
 				4F866AF617F9EC0C000350E4 /* HCRTableFlowLayout.m in Sources */,
 				4F866ACF17F9E022000350E4 /* main.m in Sources */,
+				4F1C940517FC28C40003AA21 /* HCRCampClusterDetailViewController.m in Sources */,
 				4F866B0B17FAA5F7000350E4 /* UIColor+HCRColors.m in Sources */,
 				4F1C93F917FC06D00003AA21 /* HCRClusterFlowLayout.m in Sources */,
 				4F866B0817FAA09B000350E4 /* HCRCampCollectionCell.m in Sources */,
