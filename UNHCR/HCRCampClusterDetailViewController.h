@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "HCRCollectionViewController.h"
 
-@interface HCRCampClusterDetailViewController : UICollectionViewController
+@interface HCRCampClusterDetailViewController : HCRCollectionViewController
 
 @property (nonatomic, strong) NSDictionary *campDictionary;
 @property (nonatomic, strong) NSDictionary *clusterDictionary;

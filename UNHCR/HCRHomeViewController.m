@@ -171,8 +171,7 @@
 
 - (void)_countryButtonPressed {
     
-    HCRTableFlowLayout *tableLayout = [[HCRTableFlowLayout alloc] init];
-    HCRCountryCollectionViewController *countryCollection = [[HCRCountryCollectionViewController alloc] initWithCollectionViewLayout:tableLayout];
+    HCRCountryCollectionViewController *countryCollection = [[HCRCountryCollectionViewController alloc] initWithCollectionViewLayout:[HCRCountryCollectionViewController preferredLayout]];
     
     [self.navigationController pushViewController:countryCollection animated:YES];
     

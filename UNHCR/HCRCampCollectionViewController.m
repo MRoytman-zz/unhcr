@@ -11,7 +11,6 @@
 #import "HCRCampCollectionViewController.h"
 #import "HCRCampCollectionCell.h"
 #import "HCRTableFlowLayout.h"
-#import "HCRClusterFlowLayout.h"
 #import "HCRClusterCollectionController.h"
 #import "HCRDataSource.h"
 
@@ -64,23 +63,19 @@ NSString *const kCampHeaderReuseIdentifier = @"kCampHeaderReuseIdentifier";
                    withReuseIdentifier:kCampHeaderReuseIdentifier];
 
     // TODO: weird; not sure why self.view.frame is necessary instead of self.view.bounds..?
-    MKMapView *mapView = [[MKMapView alloc] initWithFrame:self.view.frame];
+    MKMapView *mapView = [MKMapView mapViewWithFrame:self.view.frame
+                                            latitude:[[self.countryDictionary objectForKey:@"Latitude"] floatValue]
+                                           longitude:[[self.countryDictionary objectForKey:@"Longitude"] floatValue]
+                                                span:[[self.countryDictionary objectForKey:@"Span"] floatValue]];
     
-    mapView.mapType = MKMapTypeHybrid;
+    [self.view insertSubview:mapView atIndex:0];
     
-    CGFloat latitude = [[self.countryDictionary objectForKey:@"Latitude"] floatValue];
-    CGFloat longitude = [[self.countryDictionary objectForKey:@"Longitude"] floatValue];
-    CGFloat span = [[self.countryDictionary objectForKey:@"Span"] floatValue];
-    
-    CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
-    CLLocationDistance latitudinalMeters = span;
-    CLLocationDistance longitudinalMeters = span;
-    MKCoordinateRegion mapRegion = MKCoordinateRegionMakeWithDistance(centerCoordinate, latitudinalMeters, longitudinalMeters);
-    mapView.region = mapRegion;
-    
-    [self.view addSubview:mapView];
-    [self.view sendSubviewToBack:mapView];
-    
+}
+
+#pragma mark - Class Methods
+
++ (UICollectionViewLayout *)preferredLayout {
+    return [[HCRTableFlowLayout alloc] init];
 }
 
 #pragma mark - UICollectionViewController Data Source
@@ -145,8 +140,7 @@ NSString *const kCampHeaderReuseIdentifier = @"kCampHeaderReuseIdentifier";
     HCRCampCollectionCell *cell = (HCRCampCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
     NSParameterAssert([cell isKindOfClass:[HCRCampCollectionCell class]]);
     
-    HCRClusterFlowLayout *clusterLayout = [[HCRClusterFlowLayout alloc] init];
-    HCRClusterCollectionController *campDetail = [[HCRClusterCollectionController alloc] initWithCollectionViewLayout:clusterLayout];
+    HCRClusterCollectionController *campDetail = [[HCRClusterCollectionController alloc] initWithCollectionViewLayout:[HCRClusterCollectionController preferredLayout]];
     campDetail.campDictionary = cell.campDictionary;
     
     [self.navigationController pushViewController:campDetail animated:YES];

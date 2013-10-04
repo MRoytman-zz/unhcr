@@ -15,5 +15,7 @@
     #import <Foundation/Foundation.h>
 #endif
 
+#import "AssertionCategories.h"
 #import "UIColor+HCRColors.h"
 #import "UIImage+RMImageManipulation.h"
+#import "MKMapView+HCRMapView.h"

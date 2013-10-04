@@ -68,22 +68,19 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
                    withReuseIdentifier:kClusterFooterIdentifier];
     
     // TODO: weird; not sure why self.view.frame is necessary instead of self.view.bounds..?
-    MKMapView *mapView = [[MKMapView alloc] initWithFrame:self.view.frame];
+    MKMapView *mapView = [MKMapView mapViewWithFrame:self.view.frame
+                                            latitude:[[self.campDictionary objectForKey:@"Latitude"] floatValue]
+                                           longitude:[[self.campDictionary objectForKey:@"Longitude"] floatValue]
+                                                span:[[self.campDictionary objectForKey:@"Span"] floatValue]];
     
-    mapView.mapType = MKMapTypeHybrid;
+    [self.view insertSubview:mapView atIndex:0];
     
-    CGFloat latitude = [[self.campDictionary objectForKey:@"Latitude"] floatValue];
-    CGFloat longitude = [[self.campDictionary objectForKey:@"Longitude"] floatValue];
-    CGFloat span = [[self.campDictionary objectForKey:@"Span"] floatValue];
-    
-    CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(latitude, longitude);
-    CLLocationDistance latitudinalMeters = span;
-    CLLocationDistance longitudinalMeters = span;
-    MKCoordinateRegion mapRegion = MKCoordinateRegionMakeWithDistance(centerCoordinate, latitudinalMeters, longitudinalMeters);
-    mapView.region = mapRegion;
-    
-    [self.view addSubview:mapView];
-    [self.view sendSubviewToBack:mapView];
+}
+
+#pragma mark - Class Methods
+
++ (UICollectionViewLayout *)preferredLayout {
+    return [[HCRClusterFlowLayout alloc] init];
 }
 
 #pragma mark - UICollectionView Data Source
@@ -147,14 +144,13 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
             }
         }
         
-        UIButton *footerButton = [[UIButton alloc] initWithFrame:footer.bounds];
+        UIButton *footerButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [footer addSubview:footerButton];
         
+        footerButton.frame = footer.bounds;
+        footerButton.tintColor = [UIColor UNHCRBlue];
+        
         [footerButton setTitle:@"Compare All Clusters" forState:UIControlStateNormal];
-        
-        [footerButton setTitleColor:[UIColor UNHCRBlue] forState:UIControlStateNormal];
-        [footerButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateSelected];
-        
         footerButton.titleLabel.font = [UIFont systemFontOfSize:16];
         
         [footerButton addTarget:self
@@ -176,8 +172,7 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
     HCRClusterCollectionCell *cell = (HCRClusterCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
     NSParameterAssert([cell isKindOfClass:[HCRClusterCollectionCell class]]);
     
-    HCRFlowLayout *flowLayout = [[HCRFlowLayout alloc] init];
-    HCRCampClusterDetailViewController *campClusterDetail = [[HCRCampClusterDetailViewController alloc] initWithCollectionViewLayout:flowLayout];
+    HCRCampClusterDetailViewController *campClusterDetail = [[HCRCampClusterDetailViewController alloc] initWithCollectionViewLayout:[HCRCampClusterDetailViewController preferredLayout]];
     
     campClusterDetail.campDictionary = self.campDictionary;
     campClusterDetail.clusterDictionary = cell.clusterDictionary;

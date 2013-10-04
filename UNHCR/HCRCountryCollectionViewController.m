@@ -45,7 +45,7 @@ NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
 	// Do any additional setup after loading the view.
     
     self.title = @"Countries";
-    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.85];
+    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
     
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
@@ -59,17 +59,30 @@ NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                    withReuseIdentifier:kCountryHeaderIdentifier];
     
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    NSString *imagePath = (screenBounds.size.height == 568) ? @"main-background-4in" : @"main-background";
-    UIImage *launchImage = [UIImage imageNamed:imagePath];
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:launchImage];
-    [self.view addSubview:backgroundImageView];
-    [self.view sendSubviewToBack:backgroundImageView];
+//    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+//    NSString *imagePath = (screenBounds.size.height == 568) ? @"main-background-4in" : @"main-background";
+//    UIImage *launchImage = [UIImage imageNamed:imagePath];
+//    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:launchImage];
+//    [self.view addSubview:backgroundImageView];
+//    [self.view sendSubviewToBack:backgroundImageView];
+    
+    MKMapView *mapView = [MKMapView mapViewWithFrame:self.view.frame
+                                            latitude:0
+                                           longitude:0
+                                                span:0];
+    
+    [self.view insertSubview:mapView atIndex:0];
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
+#pragma mark - Class Methods
+
++ (UICollectionViewLayout *)preferredLayout {
+    return [[HCRTableFlowLayout alloc] init];
 }
 
 #pragma mark - UICollectionViewController Data Source
@@ -147,8 +160,7 @@ NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
     HCRCountryCollectionCell *cell = (HCRCountryCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
     NSParameterAssert([cell isKindOfClass:[HCRCountryCollectionCell class]]);
     
-    HCRTableFlowLayout *tableLayout = [[HCRTableFlowLayout alloc] init];
-    HCRCampCollectionViewController *campCollection = [[HCRCampCollectionViewController alloc] initWithCollectionViewLayout:tableLayout];
+    HCRCampCollectionViewController *campCollection = [[HCRCampCollectionViewController alloc] initWithCollectionViewLayout:[HCRCampCollectionViewController preferredLayout]];
     campCollection.countryDictionary = cell.countryDictionary;
     
     [self.navigationController pushViewController:campCollection animated:YES];
