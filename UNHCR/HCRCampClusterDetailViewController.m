@@ -25,6 +25,7 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
 @interface HCRCampClusterDetailViewController ()
 
 @property NSArray *campClusterDataArray;
+@property (nonatomic, readonly) BOOL isHealthCluster;
 
 @end
 
@@ -137,7 +138,7 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
     } else if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
         HCRCampClusterResourcesCell *resourcesCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier forIndexPath:indexPath];
         
-        
+        resourcesCell.showTallySheetsButton = self.isHealthCluster;
         
         return resourcesCell;
     } else if ([cellType isEqualToString:kCampClusterAgenciesCellIdentifier]) {
@@ -199,10 +200,24 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
     if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
         return CGSizeMake(CGRectGetWidth(collectionView.bounds),
                           200);
+    } else if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
+        
+        CGFloat baseCellHeight = 150.0;
+        CGFloat extraCellHeight = 60.0;
+        
+        return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                          (self.isHealthCluster) ? baseCellHeight + extraCellHeight : baseCellHeight);
+        
     } else {
         return flowLayout.itemSize;
     }
     
+}
+
+#pragma mark - Getters & Setters
+
+- (BOOL)isHealthCluster {
+    return [[self.clusterDictionary objectForKey:@"Name" ofClass:@"NSString"] isEqualToString:@"Health"];
 }
 
 @end

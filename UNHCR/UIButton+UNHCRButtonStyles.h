@@ -11,7 +11,11 @@
 @interface UIButton (UNHCRButtonStyles)
 
 + (CGFloat)preferredHeightForUNHCRButtonWithWidth:(CGFloat)width;
++ (NSString *)preferredFontNameForUNHCRButton;
 
-+ (UIButton *)buttonWithUNHCRStyleWithSize:(CGSize)buttonSize;
++ (UIButton *)buttonWithUNHCRStandardStyleWithSize:(CGSize)buttonSize;
++ (UIButton *)buttonWithUNHCRTextStyleWithString:(NSString *)titleString
+                             horizontalAlignment:(UIControlContentHorizontalAlignment)horizontalAlignment
+                                            size:(CGSize)buttonSize;
 
 @end

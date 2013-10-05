@@ -110,37 +110,31 @@
     bodyLabel.attributedText = attributedBodyString;
     
     // country button
-    CGFloat buttonPadding = 10;
-    CGFloat buttonWidth = 190.0;
-    CGSize buttonSize = CGSizeMake(buttonWidth,
-                                   [UIButton preferredHeightForUNHCRButtonWithWidth:buttonWidth]);
+    CGFloat buttonPadding = 6;
+    CGFloat buttonHeight = 50;
     
-    CGFloat yButtonOffset = (self.view.bounds.size.height - CGRectGetMaxY(bodyLabel.frame) - (buttonSize.height * 2 + buttonPadding)) * 0.5;
+    CGFloat yButtonOffset = (self.view.bounds.size.height - CGRectGetMaxY(bodyLabel.frame) - (buttonHeight * 2 + buttonPadding)) * 0.5;
     
-    UIButton *countryButton = [UIButton buttonWithUNHCRStyleWithSize:buttonSize];
+    UIButton *countryButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Countries"
+                                                       horizontalAlignment:UIControlContentHorizontalAlignmentCenter
+                                                                      size:CGSizeMake(200, buttonHeight)];
     [self.view addSubview:countryButton];
     
-    countryButton.frame = CGRectMake(CGRectGetMidX(self.view.bounds) - buttonSize.width * 0.5,
-                                     CGRectGetMaxY(bodyLabel.frame) + MIN(yButtonOffset,30),
-                                     buttonSize.width,
-                                     buttonSize.height);
-    
-    [countryButton setTitle:@"Countries" forState:UIControlStateNormal];
+    countryButton.center = CGPointMake(CGRectGetMidX(self.view.bounds),
+                                       CGRectGetMaxY(bodyLabel.frame) + MIN(yButtonOffset,30) + CGRectGetMidY(countryButton.bounds));
     
     [countryButton addTarget:self
                       action:@selector(_countryButtonPressed)
             forControlEvents:UIControlEventTouchUpInside];
     
     // camps button
-    UIButton *campsButton = [UIButton buttonWithUNHCRStyleWithSize:buttonSize];
+    UIButton *campsButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Camps"
+                                                     horizontalAlignment:UIControlContentHorizontalAlignmentCenter
+                                                                    size:CGSizeMake(170, buttonHeight)];
     [self.view addSubview:campsButton];
     
-    campsButton.frame = CGRectMake(CGRectGetMidX(self.view.bounds) - buttonSize.width * 0.5,
-                                   CGRectGetMaxY(countryButton.frame) + buttonPadding,
-                                   buttonSize.width,
-                                   buttonSize.height);
-    
-    [campsButton setTitle:@"Camps" forState:UIControlStateNormal];
+    campsButton.center = CGPointMake(CGRectGetMidX(self.view.bounds),
+                                     CGRectGetMaxY(countryButton.frame) + buttonPadding + CGRectGetMidY(campsButton.bounds));
     
     [campsButton addTarget:self
                     action:@selector(_campsButtonPressed)
