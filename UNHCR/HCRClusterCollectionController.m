@@ -30,9 +30,9 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
 
 @implementation HCRClusterCollectionController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
     }
@@ -90,14 +90,14 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [HCRDataSource clustersArray].count;
+    return [HCRDataSource clusterImagesArray].count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     HCRClusterCollectionCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kClusterCellIdentifier forIndexPath:indexPath];
     
-    NSArray *clustersArray = [HCRDataSource clustersArray];
+    NSArray *clustersArray = [HCRDataSource clusterImagesArray];
     cell.clusterDictionary = [clustersArray objectAtIndex:indexPath.row];
     
     return cell;

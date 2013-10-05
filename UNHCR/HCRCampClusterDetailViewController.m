@@ -38,21 +38,13 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
     if (self) {
         // Custom initialization
         
-        NSArray *agencyArray = @[
-                                 @{@"Name": @"WHO"},
-                                 @{@"Name": @"UNICEF"},
-                                 @{@"Name": @"WASH"},
-                                 @{@"Name": @"Gates Foundation"}
-                                 ];
-        
         self.campClusterDataArray = @[
                                       @{@"Section": @"Refugee Requests",
                                         @"Cell": kCampClusterGraphCellIdentifier},
                                       @{@"Section": @"Resources",
                                         @"Cell": kCampClusterResourcesCellIdentifier},
                                       @{@"Section": @"Local Agencies",
-                                        @"Cell": kCampClusterAgenciesCellIdentifier,
-                                        @"Agencies": agencyArray}
+                                        @"Cell": kCampClusterAgenciesCellIdentifier}
                                       ];
     }
     return self;
@@ -192,6 +184,24 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
     }
     
     return nil;
+    
+}
+
+#pragma mark - UICollectionView Delegate Flow Layout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)collectionViewLayout;
+    
+    NSDictionary *sectionData = [self.campClusterDataArray objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
+    NSString *cellType = [sectionData objectForKey:@"Cell" ofClass:@"NSString"];
+    
+    if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
+        return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                          200);
+    } else {
+        return flowLayout.itemSize;
+    }
     
 }
 

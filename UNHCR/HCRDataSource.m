@@ -30,11 +30,7 @@
                           @"Persons": @193631,
                           @"Funding": @0.36,
                           @"Camps": @[
-                                  @{@"Name": @"Domiz",
-                                    @"Latitude": @35.3923733,
-                                    @"Longitude": @44.3757963,
-                                    @"Span": @20000,
-                                    @"Persons": @96272},
+                                  [HCRDataSource _domizData],
                                   @{@"Name": @"Erbil",
                                     @"Latitude": @36.1995815,
                                     @"Longitude": @44.0226888,
@@ -102,7 +98,7 @@
              
 }
 
-+ (NSArray *)clustersArray {
++ (NSArray *)clusterImagesArray {
     
     // https://clusters.humanitarianresponse.info/sites/clusters.humanitarianresponse.info/files/clusterapproach.png
     // http://business.un.org/en/documents/249
@@ -132,6 +128,49 @@
              @{@"Name": @"Logistics",
                @"Image": @"cluster-logistics"}
              ];
+}
+
++ (NSDictionary *)_domizData {
+    
+    // http://data.unhcr.org/
+    
+    return @{@"Name": @"Domiz",
+             @"Latitude": @35.3923733,
+             @"Longitude": @44.3757963,
+             @"Span": @20000,
+             @"Persons": @96272,
+             @"Clusters": @{
+                     @"Camp Coordination": @[
+                             [HCRDataSource _ddmData],
+                             [HCRDataSource _modmData],
+                             [HCRDataSource _unhcrIraqData],
+                             ]
+                     }
+             
+             };
+}
+
+#pragma mark - Agencies
+
++ (NSDictionary *)_ddmData {
+    return @{@"Agency": @"Directorate of Displacment and Migration",
+             @"Abbr": @"DDM",
+             @"About": @"Directorate of Displacment and Migration (DDM) mandate is concerned with providing basic needs of daily life, and make sure that the IDPs, Refugees, and Returnees, have access to all humanitarian needs.",
+             @"Contact": @{@"Name": @"Mohammed M. Hamo",
+                           @"Phone": @"7504502395",
+                           @"Email": @"ddm.duhok@gmail.com"}};
+}
+
++ (NSDictionary *)_modmData {
+    return @{@"Agency": @"Minsitry of Migration and Displacment",
+             @"Abbr": @"MODM",
+             @"About": @"The Minsitry of Migration and Displacment (MODM) is the official government body in Iraq that deals with the IDPs, Returnees and Refugees since it's establishment in 2004.",
+             @"Website": @"momd.gov.iq"};
+}
+
++ (NSDictionary *)_unhcrIraqData {
+    return @{@"Agency": @"United Nations High Commissioner For Refugees Iraq",
+             @"Abbr": @"UNHCR Iraq"};
 }
 
 @end

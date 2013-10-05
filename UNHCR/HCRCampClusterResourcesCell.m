@@ -8,6 +8,18 @@
 
 #import "HCRCampClusterResourcesCell.h"
 
+////////////////////////////////////////////////////////////////////////////////
+
+@interface HCRCampClusterResourcesCell ()
+
+@property (nonatomic, readwrite) UIButton *requestSuppliesButton;
+@property (nonatomic, readwrite) UIButton *sitRepsButton;
+@property (nonatomic, readwrite) UIButton *tallySheetsButton;
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////
+
 @implementation HCRCampClusterResourcesCell
 
 - (id)initWithFrame:(CGRect)frame
@@ -19,13 +31,33 @@
     return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
+- (void)layoutSubviews {
+    
 }
-*/
+
+#pragma mark - Getters & Setters
+
+- (UIButton *)tallySheetsButton {
+    
+    if ( _tallySheetsButton == nil ) {
+        
+        _tallySheetsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [_tallySheetsButton setTitle:@"Tally Sheets" forState:UIControlStateNormal];
+        
+        
+
+    }
+    
+    return _tallySheetsButton;
+    
+}
+
+- (void)setShowTallySheetsButton:(BOOL)showTallySheetsButton {
+    
+    _showTallySheetsButton = showTallySheetsButton;
+    
+    [self setNeedsLayout];
+    
+}
 
 @end

@@ -10,4 +10,10 @@
 
 @interface HCRCampClusterResourcesCell : UICollectionViewCell
 
+@property (nonatomic) BOOL showTallySheetsButton;
+
+@property (nonatomic, readonly) UIButton *requestSuppliesButton;
+@property (nonatomic, readonly) UIButton *sitRepsButton;
+@property (nonatomic, readonly) UIButton *tallySheetsButton;
+
 @end

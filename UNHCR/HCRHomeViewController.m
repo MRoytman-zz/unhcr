@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
-
 #import "HCRHomeViewController.h"
 #import "HCRCountryCollectionViewController.h"
 #import "HCRTableFlowLayout.h"
@@ -113,12 +111,13 @@
     
     // country button
     CGFloat buttonPadding = 10;
-    CGSize buttonSize = CGSizeMake(190, 60);
-    UIColor *buttonColor = [UIColor UNHCRBlue];
+    CGFloat buttonWidth = 190.0;
+    CGSize buttonSize = CGSizeMake(buttonWidth,
+                                   [UIButton preferredHeightForUNHCRButtonWithWidth:buttonWidth]);
     
     CGFloat yButtonOffset = (self.view.bounds.size.height - CGRectGetMaxY(bodyLabel.frame) - (buttonSize.height * 2 + buttonPadding)) * 0.5;
     
-    UIButton *countryButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *countryButton = [UIButton buttonWithUNHCRStyleWithSize:buttonSize];
     [self.view addSubview:countryButton];
     
     countryButton.frame = CGRectMake(CGRectGetMidX(self.view.bounds) - buttonSize.width * 0.5,
@@ -126,21 +125,14 @@
                                      buttonSize.width,
                                      buttonSize.height);
     
-    countryButton.tintColor = buttonColor;
-    
-    countryButton.layer.borderColor = buttonColor.CGColor;
-    countryButton.layer.borderWidth = 3.0;
-    countryButton.layer.cornerRadius = 10.0;
-    
     [countryButton setTitle:@"Countries" forState:UIControlStateNormal];
-    countryButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:28];
     
     [countryButton addTarget:self
                       action:@selector(_countryButtonPressed)
             forControlEvents:UIControlEventTouchUpInside];
     
     // camps button
-    UIButton *campsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *campsButton = [UIButton buttonWithUNHCRStyleWithSize:buttonSize];
     [self.view addSubview:campsButton];
     
     campsButton.frame = CGRectMake(CGRectGetMidX(self.view.bounds) - buttonSize.width * 0.5,
@@ -148,14 +140,7 @@
                                    buttonSize.width,
                                    buttonSize.height);
     
-    campsButton.tintColor = buttonColor;
-    
-    campsButton.layer.borderColor = buttonColor.CGColor;
-    campsButton.layer.borderWidth = 3.0;
-    campsButton.layer.cornerRadius = 10.0;
-    
     [campsButton setTitle:@"Camps" forState:UIControlStateNormal];
-    campsButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:28];
     
     [campsButton addTarget:self
                     action:@selector(_campsButtonPressed)

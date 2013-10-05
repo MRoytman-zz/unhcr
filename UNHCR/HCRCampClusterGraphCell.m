@@ -19,8 +19,11 @@
                                                                                     0,
                                                                                     CGRectGetWidth(self.bounds),
                                                                                     CGRectGetHeight(self.bounds))];
+        [self addSubview:graphImageView];
+        
         graphImageView.image = [UIImage imageNamed:@"campcluster-graph"];
-        graphImageView.contentMode = UIViewContentModeCenter;
+        graphImageView.contentMode = UIViewContentModeScaleAspectFit;
+        
     }
     return self;
 }
