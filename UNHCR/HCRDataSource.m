@@ -142,30 +142,126 @@
              @"Span": @20000,
              @"Persons": @96272,
              @"SitReps": @"http://data.unhcr.org/syrianrefugees/documents.php?page=1&view=list&Language%5B%5D=1&Country%5B%5D=103&Type%5B%5D=2",
-             @"Clusters": @{
-                     @"Camp Coordination": @{
-                             @"Agencies": @[
-                                     [HCRDataSource _ddmIraqData],
-                                     [HCRDataSource _modmIraqData],
-                                     [HCRDataSource _unhcrIraqData],
-                                     ]
-                             },
-                     @"Health": @{
-                             @"Agencies": @[
-                                     [HCRDataSource _icrcIraqData],
-                                     [HCRDataSource _irwIraqData],
-                                     [HCRDataSource _modmIraqData],
-                                     [HCRDataSource _quandilIraqData]
-                                     ],
-                             @"SitReps": @"http://data.unhcr.org/syrianrefugees/documents.php?page=1&view=list&Language%5B%5D=1&Country%5B%5D=103&Type%5B%5D=2&Sector%5B%5D=3",
-                             @"TallySheets": @YES
-                             },
-                     
-                     },
+             @"Clusters": [HCRDataSource _iraqAgenciesData]
              };
 }
 
 #pragma mark - Iraq Agencies
+
++ (NSDictionary *)_iraqAgenciesData {
+    return @{
+             @"Protection": @{
+                     @"Agencies": @[
+                             [HCRDataSource _actedIraqData],
+                             [HCRDataSource _harikarIraqData],
+                             [HCRDataSource _icrcIraqData],
+                             [HCRDataSource _ircIraqData],
+                             [HCRDataSource _quandilIraqData],
+                             [HCRDataSource _saveIraqData],
+                             [HCRDataSource _unhcrIraqData],
+                             [HCRDataSource _unicefIraqData]
+                             ]
+                     },
+             @"Food Security": @{
+                     @"Agencies": @[
+                             [HCRDataSource _ddmIraqData],
+                             [HCRDataSource _ircsIraqData],
+                             [HCRDataSource _irwIraqData],
+                             [HCRDataSource _modmIraqData],
+                             [HCRDataSource _wfpIraqData]
+                             ]
+                     },
+             @"Health": @{
+                     @"Agencies": @[
+                             [HCRDataSource _icrcIraqData],
+                             [HCRDataSource _irwIraqData],
+                             [HCRDataSource _modmIraqData],
+                             [HCRDataSource _quandilIraqData],
+                             [HCRDataSource _saveIraqData],
+                             [HCRDataSource _unfpaIraqData],
+                             [HCRDataSource _unhcrIraqData],
+                             [HCRDataSource _unicefIraqData],
+                             [HCRDataSource _uppIraqData],
+                             [HCRDataSource _whoIraqData]
+                             ],
+                     @"SitReps": @"http://data.unhcr.org/syrianrefugees/documents.php?page=1&view=list&Language%5B%5D=1&Country%5B%5D=103&Type%5B%5D=2&Sector%5B%5D=3",
+                     @"TallySheets": @YES
+                     },
+             @"Emergency Telecom": @{
+                     @"Agencies": @[
+                             [HCRDataSource _unhcrIraqData]
+                             ]
+                     },
+             @"Camp Coordination": @{
+                     @"Agencies": @[
+                             [HCRDataSource _actedIraqData],
+                             [HCRDataSource _ddmIraqData],
+                             [HCRDataSource _ircIraqData],
+                             [HCRDataSource _irwIraqData],
+                             [HCRDataSource _modmIraqData],
+                             [HCRDataSource _quandilIraqData],
+                             [HCRDataSource _unfpaIraqData],
+                             [HCRDataSource _unhcrIraqData],
+                             [HCRDataSource _unicefIraqData],
+                             [HCRDataSource _uppIraqData],
+                             [HCRDataSource _whoIraqData]
+                             ]
+                     },
+             @"Early Recovery": @{
+                     @"Agencies": @[
+                             [HCRDataSource _unhcrIraqData]
+                             ]
+                     },
+             @"Emergency Shelter": @{
+                     @"Agencies": @[
+                             [HCRDataSource _irwIraqData],
+                             [HCRDataSource _ishoIraqData],
+                             [HCRDataSource _modmIraqData],
+                             [HCRDataSource _rirpIraqData],
+                             [HCRDataSource _sbIraqData]
+                             ]
+                     },
+             @"Education": @{
+                     @"Agencies": @[
+                             [HCRDataSource _iomIraqData],
+                             [HCRDataSource _quandilIraqData],
+                             [HCRDataSource _reachIraqData],
+                             [HCRDataSource _unhcrIraqData],
+                             [HCRDataSource _unicefIraqData],
+                             [HCRDataSource _wfpIraqData]
+                             ]
+                     },
+             @"Nutrition": @{
+                     @"Agencies": @[
+                             [HCRDataSource _unhcrIraqData],
+                             [HCRDataSource _unicefIraqData],
+                             [HCRDataSource _wfpIraqData]
+                             ]
+                     },
+             @"Water/Sanitation": @{
+                     @"Agencies": @[
+                             [HCRDataSource _iomIraqData],
+                             [HCRDataSource _irwIraqData],
+                             [HCRDataSource _modmIraqData],
+                             [HCRDataSource _quandilIraqData],
+                             [HCRDataSource _rirpIraqData],
+                             [HCRDataSource _unhcrIraqData],
+                             [HCRDataSource _unicefIraqData]
+                             ]
+                     },
+             @"Logistics": @{
+                     @"Agencies": @[
+                             [HCRDataSource _irwIraqData],
+                             [HCRDataSource _ishoIraqData],
+                             [HCRDataSource _modmIraqData],
+                             [HCRDataSource _quandilIraqData],
+                             [HCRDataSource _unhcrIraqData],
+                             [HCRDataSource _uppIraqData],
+                             [HCRDataSource _wfpIraqData]
+                             ]
+                     },
+             };
+}
 
 + (NSDictionary *)_modmIraqData {
     return @{@"Agency": @"Minsitry of Migration and Displacment",
@@ -175,8 +271,6 @@
                            @"Email": @"Stat73mang@gmail.com"},
              @"Website": @"http://momd.gov.iq/Default.aspx"};
 }
-
-#pragma mark - Camp Coordination
 
 + (NSDictionary *)_ddmIraqData {
     return @{@"Agency": @"Directorate of Displacment and Migration",
@@ -188,11 +282,29 @@
 }
 
 + (NSDictionary *)_unhcrIraqData {
-    return @{@"Agency": @"United Nations High Commissioner For Refugees Iraq",
+    return @{@"Agency": @"United Nations High Commissioner For Refugees",
              @"Abbr": @"UNHCR Iraq"};
 }
 
-#pragma mark - Health
++ (NSDictionary *)_actedIraqData {
+    return @{@"Agency": @"Agency for Technical Cooperation and Development",
+             @"Abbr": @"ACTED Iraq",
+             @"About": @"ACTED (Agency for Technical Cooperation and Development) is a non-governmental organization with headquarters in Paris, founded in 1993. Independent, private and not-for-profit, ACTED respects a... lire la suite",
+             @"Contact": @{@"Name": @"Chelsea Moore",
+                           @"Phone": @"+964 770 919 4774",
+                           @"Email": @"chelsea.moore@acted.org"},
+             @"Website": @"http://www.acted.org"};
+}
+
++ (NSDictionary *)_ircIraqData {
+    return @{@"Agency": @"International Rescue Committee",
+             @"Abbr": @"IRC Iraq",
+             @"About": @"The International Rescue Committee, one of the worldâ€™s leading humanitarian and post-conflict development agencies, provides relief, rehabilitation and reconstruction support to communities affected by war and natural disasters in over 40 countries.",
+             @"Contact": @{@"Name": @"Emily Dakin",
+                           @"Phone": @"00964 0770 426 2375",
+                           @"Email": @"emily.dakin@rescue.org"},
+             @"Website": @"http://www.rescue.org"};
+}
 
 + (NSDictionary *)_icrcIraqData {
     return @{@"Agency": @"International Committee of the Red Cross",
@@ -220,6 +332,125 @@
              @"Contact": @{@"Name": @"Edrees Nabi Salih",
                            @"Email": @"edress.salih@qandil.org"},
              @"Website": @"http://www.Qandil.org"};
+}
+
++ (NSDictionary *)_saveIraqData {
+    return @{@"Agency": @"Save the Children",
+             @"Abbr": @"SAVE Iraq",
+             @"Contact": @{@"Name": @"Sarah Ireland",
+                           @"Phone": @"00964 07710252207",
+                           @"Email": @"sarah.ireland@savethechildren.org.au"},
+             @"Website": @"http://www.savethechildren.org"};
+}
+
++ (NSDictionary *)_unicefIraqData {
+    return @{@"Agency": @"United Nations Children's Fund",
+             @"Abbr": @"UNICEF Iraq",
+             @"Contact": @{@"Name": @"Dr Marzio Babille",
+                           @"Phone": @"00962796111946",
+                           @"Email": @"mbabille@unicef.org"},
+             @"Website": @"http://www.unicef.org"};
+}
+
++ (NSDictionary *)_uppIraqData {
+    return @{@"Agency": @"Un Ponte Per",
+             @"Abbr": @"UPP Iraq",
+             @"About": @"UPP has been working in Iraq since 20 years and is currently implementing a program for assistance to Syrian refugees residing in Domiz Camp, together with its partner PAO, started a new action to allow a free psycho-social support provided to vulnerable Syrian women, children and men through individual and family counseling (including referring to the available psychological and social services available in the camp) Also, the project involves WASH and environment awareness - including provision of hygiene kits, orientation and guidance on available services in the area - including publication and distribution of a booklet containing all needed info and DDM staff training on SPHERE standards in emergency",
+             @"Contact": @{@"Name": @"Caterina Mecozzi",
+                           @"Email": @"caterina.mecozzi@unponteper.it"},
+             @"Website": @"http://www.unponteper.it"};
+}
+
++ (NSDictionary *)_whoIraqData {
+    return @{@"Agency": @"World Health Organization",
+             @"Abbr": @"WHO Iraq",
+             @"Contact": @{@"Name": @"Dr. Jaffar Hussain",
+                           @"Email": @"hussains@irq.emro.who.int"},
+             @"Website": @"http://www.who.org"};
+}
+
++ (NSDictionary *)_unfpaIraqData {
+    return @{@"Agency": @"United Nations Population Fund",
+             @"Abbr": @"UNFPA Iraq",
+             @"About": @"UNFPA is an iternational development agency that promotes the rights of every women ,men and child to enjoy alife of health and equal apportunity .UNFPA supports countries in using population data for policies and programmes to reduce poverty and to ensure that every pregnancy is wanted, every birth is safe, every young person is free of HIV/AIDS, and every girl and woman is treated with dignity and respect.",
+             @"Contact": @{@"Name": @"Radouane belouali",
+                           @"Phone": @"009647901947439",
+                           @"Email": @"belouali@unfpa.org"},
+             @"Website": @"http://www.unfpa.org"};
+}
+
++ (NSDictionary *)_harikarIraqData {
+    return @{@"Agency": @"Harikar",
+             @"Abbr": @"Harikar",
+             @"About": @"Harikar is a neutral non-governmental humanitarian organization, which believes that in every aspect of life priority must be given to children and women. It commits itself to ensure particular protection for the very disadvantaged children and women, such as children who are born with chronic/abnormal diseases, disabled children, children with extreme poverty, victims of war and widows as well as woman headed families. Harikar assists in upgrading of the health service and promotion of technical cooperation, and â€“within the available resources- to promote/develop the infrastructure of the basic services. It also looks forward to participate- within its resources- in the process of rebuilding of the new Iraq. In close coordination with the other specialized agencies, Harikar assists in the improvement of nutrition, recreation, economic and other aspects of environmental hygiene. Harikar believes that education is a fundamental right and works towards its promotion; in this aspect, it strives towards ensuring basic education for all children irrespective of gender, religion, race and ethnicities. Harikar works with all national and international organizations as well as government bodies towards the realization of the sustainable human development objectives and contributes towards the achievement of the vision of piece and social progress.",
+             @"Contact": @{@"Name": @"Salah. Y. Majid",
+                           @"Phone": @"00964(0)7503404543",
+                           @"Email": @"harikar_harikar@yahoo.com"},
+             @"Website": @"http://www.harikar.org"};
+}
+
++ (NSDictionary *)_ircsIraqData {
+    return @{@"Agency": @"Iraqi Red Crescent Society",
+             @"Abbr": @"IRCS",
+             @"About": @"The association is humanitarian and indepndant , founded in 1932 and got an international approval in 1934 , and is bounded by all the items of the geneva conventions. Including the seven basic principles of the international movement of Red cross and Red Crescent societies.",
+             @"Contact": @{@"Name": @"Talat Nashaat M. Shareef",
+                           @"Phone": @"00964 07504471187",
+                           @"Email": @"Duhok_ircs@yahoo.com"},
+             @"Website": @"http://www.ircs.orq.iq"};
+}
+
++ (NSDictionary *)_wfpIraqData {
+    return @{@"Agency": @"World Food Programme",
+             @"Abbr": @"WFP Iraq",
+             @"About": @"WFP has been operating a range of food assistance programmes in Iraq since 1991. WFPâ€™s Syrian Refugee Emergency Operation is therefore able to capitalize on its experience assisting vulnerable populations in Iraq. In line with the interagency Regional Response Plan, WFP is providing food assistance up to 60,000 Syrian nationals in Iraq by December 2012. WFP is providing assistance in northern Iraq through the delivery of family food packages and is currently preparing to launch a voucher programme to beneficiaries in Domiz camp and to those living in local communities.",
+             @"Contact": @{@"Name": @"Taban Lakonga",
+                           @"Email": @"taban.lakonga@wfp.org"},
+             @"Website": @"http://www.wfp.org"};
+}
+
++ (NSDictionary *)_ishoIraqData {
+    return @{@"Agency": @"Iraqi Salvation Humanitarian Organization",
+             @"Abbr": @"ISHO Iraq",
+             @"About": @"ISHO is an Iraqi registered NGO based in Iraq, that was established since 2003. It is aim to respond to the poor and suffering communities and organizations of a recovery Iraq. The work of ISHO is the delivery of humanitarian services to the people of Iraq. In addition to this aim, ISHO also actively seeks to enhance its services delivery by the development of its personnel and volunteers through training and personal growth. ISHO also aim to ensure sustainability of all its project implementation through coordination and cooperation with the authorities charged with care of potential beneficiaries. Among a number of objectives, ISHO continue to be a committed to finding funding from within and without Iraq in order to fulfill its humanitarian objectives.",
+             @"Contact": @{@"Name": @"Muntajab Ibraheem Al Ruwaih",
+                           @"Phone": @"00964 7801018111",
+                           @"Email": @"muntajab_iraq@yahoo.com"}};
+}
+
++ (NSDictionary *)_rirpIraqData {
+    return @{@"Agency": @"Rebuild Iraq Reconstruction Program",
+             @"Abbr": @"RIRP Iraq",
+             @"Contact": @{@"Name": @"Nadine Flache",
+                           @"Email": @"flache@rirp.org"},
+             @"Website": @"http://www.rirp.org"};
+}
+
++ (NSDictionary *)_sbIraqData {
+    return @{@"Agency": @"ShelterBox",
+             @"Abbr": @"ShelterBox Iraq",
+             @"About": @"ShelterBox provides emergency shelter and lifesaving supplies for families around the world who are affected by disasters, at the time when they need it the most.",
+             @"Contact": @{@"Email": @"ops@shelterbox.org"},
+             @"Website": @"http://shelterbox.org"};
+}
+
++ (NSDictionary *)_iomIraqData {
+    return @{@"Agency": @"International Organization for Migration",
+             @"Abbr": @"IOM Iraq",
+             @"About": @"IOM Iraq provides emergency aid, non-food items, camp infrastructure support, and vocational training. Trained IOM teams provide psychological first aid to Syrians and migrants as needed. October 2012, IOM Rapid Response Teams (RRTs) carried out a comprehensive needs assessment of returnee and refugee populations in Iraq. With the assistance of the Slovakian Embassy IOM has also constructed a 21,000-liter water tank that provides clean water to all camp residents.. IOM Iraq’s assistance primarily concentrates in the governorates of Duhok and Anbar in addition to technical assistance in Ninewa with the development of a new camp in al Kasek.",
+             @"Contact": @{@"Name": @"Mike Pillinger",
+                           @"Phone": @"+962.797.344.430",
+                           @"Email": @"mpillinger@iom.int"},
+             @"Website": @"http://www.iomiraq.net/"};
+}
+
++ (NSDictionary *)_reachIraqData {
+    return @{@"Agency": @"Rehablitation, Education And Community's Health",
+             @"Abbr": @"REACH",
+             @"About": @"REACH is - A humanitarian, non-political and non-governmental Iraqi organization; - Independent and will remain so in order to preserve its own agenda based on its operational activities with communities in Iraq; - Working with marginalized and poor people throughout Iraq, to assist and support their efforts to make a difference to their lives.",
+             @"Contact": @{@"Name": @"Saman Ahmed Majeed",
+                           @"Phone": @"00964 0751155420",
+                           @"Email": @"samana@reach-iraq.org"},
+             @"Website": @"http://www.reach-iraq.org"};
 }
 
 @end

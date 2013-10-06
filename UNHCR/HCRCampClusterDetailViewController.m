@@ -49,15 +49,15 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
         self.campClusterCollectionLayoutData = @[
                                       @{@"Section": @"Refugee Requests",
                                         @"Cell": kCampClusterGraphCellIdentifier},
-                                      @{@"Section": @"Local Agencies",
-                                        @"Cell": kCampClusterAgenciesCellIdentifier},
                                       @{@"Section": @"Resources",
                                         @"Cell": kCampClusterResourcesCellIdentifier,
                                         @"Resources": @[
                                                 kResourceNameSupplies,
                                                 kResourceNameSitReps,
                                                 kResourceNameSitTallySheets
-                                                ]}
+                                                ]},
+                                      @{@"Section": @"Local Agencies",
+                                        @"Cell": kCampClusterAgenciesCellIdentifier}
                                       ];
     }
     return self;
