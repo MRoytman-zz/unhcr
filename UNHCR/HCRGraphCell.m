@@ -1,14 +1,14 @@
 //
-//  HCRCampClusterGraphCell.m
+//  HCRGraphCell.m
 //  UNHCR
 //
-//  Created by Sean Conrad on 10/4/13.
+//  Created by Sean Conrad on 10/5/13.
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import "HCRCampClusterGraphCell.h"
+#import "HCRGraphCell.h"
 
-@implementation HCRCampClusterGraphCell
+@implementation HCRGraphCell
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -26,6 +26,12 @@
         
     }
     return self;
+}
+
+#pragma mark - Class Methods
+
++ (CGFloat)preferredHeightForGraphCell {
+    return 200;
 }
 
 @end

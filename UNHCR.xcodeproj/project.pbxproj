@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4F0C701B17FF482B0081F201 /* AssertionCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C701A17FF482B0081F201 /* AssertionCategories.m */; };
-		4F0C701E17FF49E30081F201 /* HCRCampClusterGraphCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C701D17FF49E30081F201 /* HCRCampClusterGraphCell.m */; };
 		4F0C702A17FF4BE70081F201 /* HCRCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702917FF4BE70081F201 /* HCRCollectionViewController.m */; };
 		4F0C702D17FF56680081F201 /* MKMapView+HCRMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702C17FF56680081F201 /* MKMapView+HCRMapView.m */; };
 		4F0C703018009C850081F201 /* UIButton+UNHCRButtonStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702F18009C850081F201 /* UIButton+UNHCRButtonStyles.m */; };
@@ -38,6 +37,9 @@
 		4FD838E81800D88200B49498 /* EAEmailUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838E71800D88200B49498 /* EAEmailUtilities.m */; };
 		4FD838EB1800D95000B49498 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838EA1800D95000B49498 /* UIAlertView+Blocks.m */; };
 		4FD838EE1800DFB200B49498 /* HCRButtonListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838ED1800DFB200B49498 /* HCRButtonListCell.m */; };
+		4FD838F518011BB300B49498 /* HCRCampClusterCompareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838F418011BB300B49498 /* HCRCampClusterCompareViewController.m */; };
+		4FD838F8180121EF00B49498 /* HCRGraphCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838F7180121EF00B49498 /* HCRGraphCell.m */; };
+		4FD838FB18012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838FA18012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.m */; };
 		C1FCCA2A37DE44BABAAEC9EC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04773A9AD17C462187CA1561 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -45,8 +47,6 @@
 		04773A9AD17C462187CA1561 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F0C701917FF482B0081F201 /* AssertionCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssertionCategories.h; sourceTree = "<group>"; };
 		4F0C701A17FF482B0081F201 /* AssertionCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssertionCategories.m; sourceTree = "<group>"; };
-		4F0C701C17FF49E30081F201 /* HCRCampClusterGraphCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCampClusterGraphCell.h; sourceTree = "<group>"; };
-		4F0C701D17FF49E30081F201 /* HCRCampClusterGraphCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCampClusterGraphCell.m; sourceTree = "<group>"; };
 		4F0C702817FF4BE70081F201 /* HCRCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCollectionViewController.h; sourceTree = "<group>"; };
 		4F0C702917FF4BE70081F201 /* HCRCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCollectionViewController.m; sourceTree = "<group>"; };
 		4F0C702B17FF56680081F201 /* MKMapView+HCRMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+HCRMapView.h"; sourceTree = "<group>"; };
@@ -101,6 +101,12 @@
 		4FD838EA1800D95000B49498 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		4FD838EC1800DFB200B49498 /* HCRButtonListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRButtonListCell.h; sourceTree = "<group>"; };
 		4FD838ED1800DFB200B49498 /* HCRButtonListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRButtonListCell.m; sourceTree = "<group>"; };
+		4FD838F318011BB300B49498 /* HCRCampClusterCompareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCampClusterCompareViewController.h; sourceTree = "<group>"; };
+		4FD838F418011BB300B49498 /* HCRCampClusterCompareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCampClusterCompareViewController.m; sourceTree = "<group>"; };
+		4FD838F6180121EF00B49498 /* HCRGraphCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRGraphCell.h; sourceTree = "<group>"; };
+		4FD838F7180121EF00B49498 /* HCRGraphCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRGraphCell.m; sourceTree = "<group>"; };
+		4FD838F918012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionReusableView+HCRSupplementalViews.h"; sourceTree = "<group>"; };
+		4FD838FA18012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionReusableView+HCRSupplementalViews.m"; sourceTree = "<group>"; };
 		D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,8 +131,6 @@
 			children = (
 				4F1C940317FC28C40003AA21 /* HCRCampClusterDetailViewController.h */,
 				4F1C940417FC28C40003AA21 /* HCRCampClusterDetailViewController.m */,
-				4F0C701C17FF49E30081F201 /* HCRCampClusterGraphCell.h */,
-				4F0C701D17FF49E30081F201 /* HCRCampClusterGraphCell.m */,
 			);
 			name = "Camp-Cluster Detail";
 			sourceTree = "<group>";
@@ -186,6 +190,7 @@
 				4F866AFD17FA8324000350E4 /* Country Selection */,
 				4F866B0517FAA083000350E4 /* Camp Selection */,
 				4F866B1217FAB840000350E4 /* Cluster Selection */,
+				4FD838EF18011B5A00B49498 /* Camp-Cluster Compare */,
 				4F1C940617FC28C80003AA21 /* Camp-Cluster Detail */,
 				4F866AC917F9E022000350E4 /* Supporting Files */,
 			);
@@ -227,6 +232,8 @@
 				4F1C93F817FC06D00003AA21 /* HCRClusterFlowLayout.m */,
 				4FD838EC1800DFB200B49498 /* HCRButtonListCell.h */,
 				4FD838ED1800DFB200B49498 /* HCRButtonListCell.m */,
+				4FD838F6180121EF00B49498 /* HCRGraphCell.h */,
+				4FD838F7180121EF00B49498 /* HCRGraphCell.m */,
 			);
 			name = "Shared UI";
 			sourceTree = "<group>";
@@ -259,6 +266,8 @@
 				4FD838E71800D88200B49498 /* EAEmailUtilities.m */,
 				4FD838E91800D95000B49498 /* UIAlertView+Blocks.h */,
 				4FD838EA1800D95000B49498 /* UIAlertView+Blocks.m */,
+				4FD838F918012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.h */,
+				4FD838FA18012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -272,6 +281,15 @@
 				4F1C93FE17FC0B150003AA21 /* HCRClusterCollectionCell.m */,
 			);
 			name = "Cluster Selection";
+			sourceTree = "<group>";
+		};
+		4FD838EF18011B5A00B49498 /* Camp-Cluster Compare */ = {
+			isa = PBXGroup;
+			children = (
+				4FD838F318011BB300B49498 /* HCRCampClusterCompareViewController.h */,
+				4FD838F418011BB300B49498 /* HCRCampClusterCompareViewController.m */,
+			);
+			name = "Camp-Cluster Compare";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -379,6 +397,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FD838F518011BB300B49498 /* HCRCampClusterCompareViewController.m in Sources */,
 				4F866AD317F9E022000350E4 /* HCRAppDelegate.m in Sources */,
 				4F1C940217FC17770003AA21 /* UIImage+RMImageManipulation.m in Sources */,
 				4F1C93FC17FC09190003AA21 /* HCRFlowLayout.m in Sources */,
@@ -386,7 +405,6 @@
 				4F866B1117FAB83B000350E4 /* HCRClusterCollectionController.m in Sources */,
 				4F866B0017FA8350000350E4 /* HCRCountryCollectionCell.m in Sources */,
 				4FD838E81800D88200B49498 /* EAEmailUtilities.m in Sources */,
-				4F0C701E17FF49E30081F201 /* HCRCampClusterGraphCell.m in Sources */,
 				4F866AF317F9EB8C000350E4 /* HCRCountryCollectionViewController.m in Sources */,
 				4F1C93F617FBF6EB0003AA21 /* HCRDataSource.m in Sources */,
 				4F1C940B17FCBE640003AA21 /* HCRHomeViewController.m in Sources */,
@@ -402,6 +420,8 @@
 				4F1C93FF17FC0B150003AA21 /* HCRClusterCollectionCell.m in Sources */,
 				4F0C702A17FF4BE70081F201 /* HCRCollectionViewController.m in Sources */,
 				4F866B0417FAA07D000350E4 /* HCRCampCollectionViewController.m in Sources */,
+				4FD838F8180121EF00B49498 /* HCRGraphCell.m in Sources */,
+				4FD838FB18012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.m in Sources */,
 				4FD838EE1800DFB200B49498 /* HCRButtonListCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,7 +8,7 @@
 
 #import "HCRCampClusterDetailViewController.h"
 #import "HCRTableFlowLayout.h"
-#import "HCRCampClusterGraphCell.h"
+#import "HCRGraphCell.h"
 #import "HCRButtonListCell.h"
 
 #import "EAEmailUtilities.h"
@@ -16,6 +16,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kCampClusterHeaderIdentifier = @"kCampClusterHeaderIdentifier";
+NSString *const kCampClusterFooterIdentifier = @"kCampClusterFooterIdentifier";
 
 NSString *const kCampClusterGraphCellIdentifier = @"kCampClusterGraphCellIdentifier";
 NSString *const kCampClusterResourcesCellIdentifier = @"kCampClusterResourcesCellIdentifier";
@@ -80,13 +81,16 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
     
     HCRFlowLayout *flowLayout = (HCRFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([flowLayout isKindOfClass:[HCRFlowLayout class]]);
-    [flowLayout setDisplayHeader:YES withSize:CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
-                                                         [HCRFlowLayout preferredHeaderHeight])];
+    [flowLayout setDisplayHeader:YES withSize:[HCRFlowLayout preferredHeaderSizeForCollectionView:self.collectionView]];
     
     [self.collectionView registerClass:[UICollectionReusableView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                    withReuseIdentifier:kCampClusterHeaderIdentifier];
-    [self.collectionView registerClass:[HCRCampClusterGraphCell class]
+    [self.collectionView registerClass:[UICollectionReusableView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                   withReuseIdentifier:kCampClusterFooterIdentifier];
+    
+    [self.collectionView registerClass:[HCRGraphCell class]
             forCellWithReuseIdentifier:kCampClusterGraphCellIdentifier];
     [self.collectionView registerClass:[HCRButtonListCell class]
             forCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier];
@@ -154,7 +158,7 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
     NSString *cellType = [self _cellTypeForSection:indexPath.section];
     
     if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
-        HCRCampClusterGraphCell *graphCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterGraphCellIdentifier forIndexPath:indexPath];
+        HCRGraphCell *graphCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterGraphCellIdentifier forIndexPath:indexPath];
         
         // TODO: make this real
         
@@ -187,30 +191,31 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         
-        UICollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                              withReuseIdentifier:kCampClusterHeaderIdentifier
-                                                                                     forIndexPath:indexPath];
-        
-        if (header.subviews.count > 0) {
-            NSArray *subviews = [NSArray arrayWithArray:header.subviews];
-            for (UIView *subview in subviews) {
-                [subview removeFromSuperview];
-            }
-        }
-        
         NSDictionary *sectionData = [self.campClusterCollectionLayoutData objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
+        NSString *titleString = [sectionData objectForKey:@"Section" ofClass:@"NSString"];
         
-        UILabel *headerLabel = [[UILabel alloc] initWithFrame:header.bounds];
-        [header addSubview:headerLabel];
-        
-        headerLabel.text = [sectionData objectForKey:@"Section" ofClass:@"NSString"];
-        headerLabel.font = [UIFont boldSystemFontOfSize:18];
-        
-        headerLabel.textColor = [UIColor whiteColor];
-        headerLabel.backgroundColor = [[UIColor UNHCRBlue] colorWithAlphaComponent:0.7];
-        headerLabel.textAlignment = NSTextAlignmentCenter;
+        UICollectionReusableView *header = [UICollectionReusableView headerForUNHCRCollectionView:collectionView
+                                                                                       identifier:kCampClusterHeaderIdentifier
+                                                                                        indexPath:indexPath
+                                                                                            title:titleString];
         
         return header;
+        
+    } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        
+        NSParameterAssert(indexPath.section == 0);
+        
+        UICollectionReusableView *footer = [UICollectionReusableView footerForUNHCRGraphCellWithCollectionCollection:collectionView
+                                                                                                          identifier:kCampClusterFooterIdentifier
+                                                                                                           indexPath:indexPath];
+        
+        UIButton *footerButton = [UIButton footerButtonForUNHCRGraphCellInFooter:footer title:@"Raw Data"];
+        
+        [footerButton addTarget:self
+                         action:@selector(_footerButtonPressed)
+               forControlEvents:UIControlEventTouchUpInside];
+        
+        return footer;
         
     }
     
@@ -295,7 +300,7 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
     
     if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
         return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                          200);
+                          [HCRGraphCell preferredHeightForGraphCell]);
     } else if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
         
         return CGSizeMake(CGRectGetWidth(collectionView.bounds),
@@ -308,6 +313,16 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
         
     } else {
         return flowLayout.itemSize;
+    }
+    
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    
+    if (section == 0) {
+        return [HCRFlowLayout preferredFooterSizeForGraphCellInCollectionView:collectionView];
+    } else {
+        return CGSizeZero;
     }
     
 }
@@ -355,6 +370,10 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
     
     // TODO: push tally sheet controller
     
+}
+
+- (void)_footerButtonPressed {
+    // TODO: footer button!
 }
 
 @end

@@ -10,8 +10,9 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const CGFloat kHeaderHeight = 44;
-const CGFloat kFooterHeight = 30;
+const CGFloat kHeaderHeight = 44.0;
+const CGFloat kFooterHeight = 30.0;
+const CGFloat kFooterHeightForGraphCell = 50.0;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -28,12 +29,19 @@ const CGFloat kFooterHeight = 30;
 
 #pragma mark - Public Methods
 
-+ (CGFloat)preferredHeaderHeight {
-    return kHeaderHeight;
++ (CGSize)preferredHeaderSizeForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      kHeaderHeight);
 }
 
-+ (CGFloat)preferredFooterHeight {
-    return kFooterHeight;
++ (CGSize)preferredFooterSizeForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      kFooterHeight);
+}
+
++ (CGSize)preferredFooterSizeForGraphCellInCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      kFooterHeightForGraphCell);
 }
 
 - (void)setDisplayHeader:(BOOL)displayHeader withSize:(CGSize)size {

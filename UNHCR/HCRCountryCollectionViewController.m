@@ -49,8 +49,7 @@ NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
     
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
-    [tableLayout setDisplayHeader:YES withSize:CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
-                                                          [HCRTableFlowLayout preferredHeaderHeight])];
+    [tableLayout setDisplayHeader:YES withSize:[HCRTableFlowLayout preferredHeaderSizeForCollectionView:self.collectionView]];
     
     [self.collectionView registerClass:[HCRCountryCollectionCell class]
             forCellWithReuseIdentifier:kCountryCellIdentifier];
@@ -110,26 +109,12 @@ NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-        UICollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                              withReuseIdentifier:kCountryHeaderIdentifier
-                                                                                     forIndexPath:indexPath];
         
-        if (header.subviews.count > 0) {
-            NSArray *subviews = [NSArray arrayWithArray:header.subviews];
-            for (UIView *subview in subviews) {
-                [subview removeFromSuperview];
-            }
-        }
-        
-        UILabel *headerLabel = [[UILabel alloc] initWithFrame:header.bounds];
-        [header addSubview:headerLabel];
-        
-        headerLabel.text = [[[HCRDataSource globalDataArray] objectAtIndex:indexPath.section] objectForKey:@"Category"];
-        headerLabel.font = [UIFont boldSystemFontOfSize:18];
-        
-        headerLabel.textColor = [UIColor whiteColor];
-        headerLabel.backgroundColor = [[UIColor UNHCRBlue] colorWithAlphaComponent:0.7];
-        headerLabel.textAlignment = NSTextAlignmentCenter;
+        NSString *categoryString = [[[HCRDataSource globalDataArray] objectAtIndex:indexPath.section] objectForKey:@"Category"];
+        UICollectionReusableView *header = [UICollectionReusableView headerForUNHCRCollectionView:collectionView
+                                                                                       identifier:kCountryHeaderIdentifier
+                                                                                        indexPath:indexPath
+                                                                                            title:categoryString];
         
         return header;
     }

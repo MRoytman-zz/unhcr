@@ -12,11 +12,15 @@
 
 + (CGFloat)preferredHeightForUNHCRButtonWithWidth:(CGFloat)width;
 + (NSString *)preferredFontNameForUNHCRButton;
++ (CGSize)preferredSizeForUNHCRGraphCellFooterButton;
 
 + (UIButton *)buttonWithUNHCRStandardStyleWithSize:(CGSize)buttonSize;
 + (UIButton *)buttonWithUNHCRTextStyleWithString:(NSString *)titleString
                              horizontalAlignment:(UIControlContentHorizontalAlignment)horizontalAlignment
                                       buttonSize:(CGSize)buttonSize
                                         fontSize:(NSNumber *)fontSize;
+
++ (UIButton *)footerButtonForUNHCRGraphCellInFooter:(UICollectionReusableView *)footer
+                                              title:(NSString *)title;
 
 @end

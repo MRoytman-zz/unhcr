@@ -98,7 +98,7 @@
              
 }
 
-+ (NSArray *)clusterImagesArray {
++ (NSArray *)clusterLayoutMetaDataArray {
     
     // https://clusters.humanitarianresponse.info/sites/clusters.humanitarianresponse.info/files/clusterapproach.png
     // http://business.un.org/en/documents/249

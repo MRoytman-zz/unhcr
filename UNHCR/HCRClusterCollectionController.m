@@ -13,6 +13,7 @@
 #import "HCRClusterCollectionCell.h"
 #import "HCRDataSource.h"
 #import "HCRCampClusterDetailViewController.h"
+#import "HCRCampClusterCompareViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -51,10 +52,8 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
     
     HCRClusterFlowLayout *clusterLayout = (HCRClusterFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([clusterLayout isKindOfClass:[HCRClusterFlowLayout class]]);
-    [clusterLayout setDisplayHeader:YES withSize:CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
-                                                            [HCRClusterFlowLayout preferredHeaderHeight])];
-    [clusterLayout setDisplayFooter:YES withSize:CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
-                                                            [HCRClusterFlowLayout preferredFooterHeight])];
+    [clusterLayout setDisplayHeader:YES withSize:[HCRClusterFlowLayout preferredHeaderSizeForCollectionView:self.collectionView]];
+    [clusterLayout setDisplayFooter:YES withSize:[HCRClusterFlowLayout preferredFooterSizeForCollectionView:self.collectionView]];
     
     [self.collectionView registerClass:[HCRClusterCollectionCell class]
             forCellWithReuseIdentifier:kClusterCellIdentifier];
@@ -90,14 +89,14 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [HCRDataSource clusterImagesArray].count;
+    return [HCRDataSource clusterLayoutMetaDataArray].count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     HCRClusterCollectionCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kClusterCellIdentifier forIndexPath:indexPath];
     
-    NSArray *clustersArray = [HCRDataSource clusterImagesArray];
+    NSArray *clustersArray = [HCRDataSource clusterLayoutMetaDataArray];
     cell.clusterDictionary = [clustersArray objectAtIndex:indexPath.row];
     
     return cell;
@@ -108,41 +107,18 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         
-        UICollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                              withReuseIdentifier:kClusterHeaderIdentifier
-                                                                                     forIndexPath:indexPath];
-        
-        if (header.subviews.count > 0) {
-            NSArray *subviews = [NSArray arrayWithArray:header.subviews];
-            for (UIView *subview in subviews) {
-                [subview removeFromSuperview];
-            }
-        }
-        
-        UILabel *headerLabel = [[UILabel alloc] initWithFrame:header.bounds];
-        [header addSubview:headerLabel];
-        
-        headerLabel.text = @"Clusters";
-        headerLabel.font = [UIFont boldSystemFontOfSize:18];
-        
-        headerLabel.textColor = [UIColor whiteColor];
-        headerLabel.backgroundColor = [[UIColor UNHCRBlue] colorWithAlphaComponent:0.7];
-        headerLabel.textAlignment = NSTextAlignmentCenter;
+        UICollectionReusableView *header = [UICollectionReusableView headerForUNHCRCollectionView:collectionView
+                                                                                       identifier:kClusterHeaderIdentifier
+                                                                                        indexPath:indexPath
+                                                                                            title:@"Clusters"];
         
         return header;
         
     } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
         
-        UICollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
-                                                                              withReuseIdentifier:kClusterFooterIdentifier
-                                                                                     forIndexPath:indexPath];
-        
-        if (footer.subviews.count > 0) {
-            NSArray *subviews = [NSArray arrayWithArray:footer.subviews];
-            for (UIView *subview in subviews) {
-                [subview removeFromSuperview];
-            }
-        }
+        UICollectionReusableView *footer = [UICollectionReusableView footerForUNHCRGraphCellWithCollectionCollection:collectionView
+                                                                                                          identifier:kClusterFooterIdentifier
+                                                                                                           indexPath:indexPath];
         
         CGSize buttonSize = CGSizeMake(180, CGRectGetHeight(footer.bounds));
         UIButton *footerButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Compare All Clusters"
@@ -185,7 +161,10 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
 
 - (void)_footerButtonPressed {
     
-    // TODO: push special controller with everything
+    HCRCampClusterCompareViewController *campClusterCompareController = [[HCRCampClusterCompareViewController alloc] initWithCollectionViewLayout:[HCRCampClusterCompareViewController preferredLayout]];
+    campClusterCompareController.campDictionary = self.campDictionary;
+    
+    [self.navigationController pushViewController:campClusterCompareController animated:YES];
     
 }
 

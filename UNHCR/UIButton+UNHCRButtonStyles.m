@@ -21,6 +21,10 @@
     return @"HelveticaNeue-Light";
 }
 
++ (CGSize)preferredSizeForUNHCRGraphCellFooterButton {
+    return CGSizeMake(120, 25);
+}
+
 + (UIButton *)buttonWithUNHCRStandardStyleWithSize:(CGSize)buttonSize {
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -86,6 +90,22 @@
                                               0);
     
     return button;
+    
+}
+
++ (UIButton *)footerButtonForUNHCRGraphCellInFooter:(UICollectionReusableView *)footer title:(NSString *)title {
+    
+    UIButton *footerButton = [UIButton buttonWithUNHCRTextStyleWithString:title
+                                                      horizontalAlignment:UIControlContentHorizontalAlignmentRight
+                                                               buttonSize:[UIButton preferredSizeForUNHCRGraphCellFooterButton]
+                                                                 fontSize:nil];
+    [footer addSubview:footerButton];
+    
+    CGFloat xButtonPadding = 8;
+    footerButton.center = CGPointMake(CGRectGetWidth(footer.bounds) - CGRectGetMidX(footerButton.bounds) - xButtonPadding,
+                                      CGRectGetMidY(footerButton.bounds));
+    
+    return footerButton;
     
 }
 
