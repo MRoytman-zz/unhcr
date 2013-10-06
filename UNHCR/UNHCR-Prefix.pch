@@ -22,3 +22,4 @@
 #import "UIButton+UNHCRButtonStyles.h"
 #import "UIAlertView+Blocks.h"
 #import "UICollectionReusableView+HCRSupplementalViews.h"
+#import "UIDevice+EAAdditions.h"

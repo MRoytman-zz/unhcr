@@ -40,6 +40,8 @@
 		4FD838F518011BB300B49498 /* HCRCampClusterCompareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838F418011BB300B49498 /* HCRCampClusterCompareViewController.m */; };
 		4FD838F8180121EF00B49498 /* HCRGraphCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838F7180121EF00B49498 /* HCRGraphCell.m */; };
 		4FD838FB18012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838FA18012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.m */; };
+		4FD838FE18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838FD18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m */; };
+		4FD8390118013F5200B49498 /* UIDevice+EAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390018013F5200B49498 /* UIDevice+EAAdditions.m */; };
 		C1FCCA2A37DE44BABAAEC9EC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04773A9AD17C462187CA1561 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -107,6 +109,10 @@
 		4FD838F7180121EF00B49498 /* HCRGraphCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRGraphCell.m; sourceTree = "<group>"; };
 		4FD838F918012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionReusableView+HCRSupplementalViews.h"; sourceTree = "<group>"; };
 		4FD838FA18012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionReusableView+HCRSupplementalViews.m"; sourceTree = "<group>"; };
+		4FD838FC18013F1F00B49498 /* HCRHomeLoginMenuScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRHomeLoginMenuScrollView.h; sourceTree = "<group>"; };
+		4FD838FD18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRHomeLoginMenuScrollView.m; sourceTree = "<group>"; };
+		4FD838FF18013F5200B49498 /* UIDevice+EAAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+EAAdditions.h"; sourceTree = "<group>"; };
+		4FD8390018013F5200B49498 /* UIDevice+EAAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+EAAdditions.m"; sourceTree = "<group>"; };
 		D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -140,6 +146,8 @@
 			children = (
 				4F1C940917FCBE640003AA21 /* HCRHomeViewController.h */,
 				4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */,
+				4FD838FC18013F1F00B49498 /* HCRHomeLoginMenuScrollView.h */,
+				4FD838FD18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m */,
 			);
 			name = "Home View";
 			sourceTree = "<group>";
@@ -268,6 +276,8 @@
 				4FD838EA1800D95000B49498 /* UIAlertView+Blocks.m */,
 				4FD838F918012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.h */,
 				4FD838FA18012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.m */,
+				4FD838FF18013F5200B49498 /* UIDevice+EAAdditions.h */,
+				4FD8390018013F5200B49498 /* UIDevice+EAAdditions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -408,11 +418,13 @@
 				4F866AF317F9EB8C000350E4 /* HCRCountryCollectionViewController.m in Sources */,
 				4F1C93F617FBF6EB0003AA21 /* HCRDataSource.m in Sources */,
 				4F1C940B17FCBE640003AA21 /* HCRHomeViewController.m in Sources */,
+				4FD8390118013F5200B49498 /* UIDevice+EAAdditions.m in Sources */,
 				4FD838EB1800D95000B49498 /* UIAlertView+Blocks.m in Sources */,
 				4F866AF617F9EC0C000350E4 /* HCRTableFlowLayout.m in Sources */,
 				4F866ACF17F9E022000350E4 /* main.m in Sources */,
 				4F0C702D17FF56680081F201 /* MKMapView+HCRMapView.m in Sources */,
 				4F1C940517FC28C40003AA21 /* HCRCampClusterDetailViewController.m in Sources */,
+				4FD838FE18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m in Sources */,
 				4F0C703018009C850081F201 /* UIButton+UNHCRButtonStyles.m in Sources */,
 				4F866B0B17FAA5F7000350E4 /* UIColor+HCRColors.m in Sources */,
 				4F1C93F917FC06D00003AA21 /* HCRClusterFlowLayout.m in Sources */,

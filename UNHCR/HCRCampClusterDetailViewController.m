@@ -77,7 +77,7 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
     
     self.title = selectedCluster;
     self.view.backgroundColor = [UIColor whiteColor];
-    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.95];
+    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.925];
     
     HCRFlowLayout *flowLayout = (HCRFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([flowLayout isKindOfClass:[HCRFlowLayout class]]);
@@ -105,17 +105,10 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
     [self.view addSubview:background];
     [self.view sendSubviewToBack:background];
     
-    UIImage *clusterImage = [[UIImage imageNamed:[self.selectedClusterMetaData objectForKey:@"Image"]] colorImage:[UIColor UNHCRBlue]
-                                                                                              withBlendMode:kCGBlendModeNormal
-                                                                                           withTransparency:YES];
+    UIImage *clusterImage = [[UIImage imageNamed:[self.selectedClusterMetaData objectForKey:@"Image"]] colorImage:[UIColor lightGrayColor]
+                                                                                                    withBlendMode:kCGBlendModeNormal
+                                                                                                 withTransparency:YES];
     background.backgroundColor = [UIColor colorWithPatternImage:clusterImage];
-    
-//    backgroundImageView.image = [clusterImage colorImage:[UIColor UNHCRBlue] withBlendMode:kCGBlendModeNormal withTransparency:YES];
-//    backgroundImageView.backgroundColor = [UIColor whiteColor];
-//    backgroundImageView.alpha = 0.7;
-//    
-//    backgroundImageView.clipsToBounds = YES;
-//    backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
     
 }
 

@@ -9,10 +9,13 @@
 #import "HCRHomeViewController.h"
 #import "HCRCountryCollectionViewController.h"
 #import "HCRTableFlowLayout.h"
+#import "HCRHomeLoginMenuScrollView.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRHomeViewController ()
+
+@property HCRHomeLoginMenuScrollView *scrollView;
 
 @end
 
@@ -50,8 +53,6 @@
                                         80);
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:titleLabelFrame];
     [self.view addSubview:titleLabel];
-    
-//    titleLabel.backgroundColor = [UIColor greenColor];
     
     titleLabel.numberOfLines = 3;
     
@@ -109,38 +110,38 @@
     
     bodyLabel.attributedText = attributedBodyString;
     
-    // country button
-    CGFloat buttonPadding = 10;
-    CGFloat buttonHeight = 50;
+    CGRect scrollFrame = CGRectMake(0,
+                                    CGRectGetMaxY(bodyLabel.frame),
+                                    CGRectGetWidth(self.view.bounds),
+                                    CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(bodyLabel.frame));
+    self.scrollView = [[HCRHomeLoginMenuScrollView alloc] initWithFrame:scrollFrame];
+    [self.view addSubview:self.scrollView];
     
-    CGFloat yButtonOffset = (self.view.bounds.size.height - CGRectGetMaxY(bodyLabel.frame) - (buttonHeight * 2 + buttonPadding)) * 0.5;
+    [self.scrollView.countriesButton addTarget:self
+                                   action:@selector(_countryButtonPressed)
+                         forControlEvents:UIControlEventTouchUpInside];
     
-    UIButton *countryButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Countries"
-                                                       horizontalAlignment:UIControlContentHorizontalAlignmentCenter
-                                                                buttonSize:CGSizeMake(200, buttonHeight)
-                                                                  fontSize:nil];
-    [self.view addSubview:countryButton];
+    [self.scrollView.campsButton addTarget:self
+                               action:@selector(_campsButtonPressed)
+                     forControlEvents:UIControlEventTouchUpInside];
     
-    countryButton.center = CGPointMake(CGRectGetMidX(self.view.bounds),
-                                       CGRectGetMaxY(bodyLabel.frame) + MIN(yButtonOffset,25) + CGRectGetMidY(countryButton.bounds));
+    [self.scrollView.loginButton addTarget:self
+                                    action:@selector(_loginButtonPressed)
+                          forControlEvents:UIControlEventTouchUpInside];
     
-    [countryButton addTarget:self
-                      action:@selector(_countryButtonPressed)
-            forControlEvents:UIControlEventTouchUpInside];
+    [self.scrollView.signOutButton addTarget:self
+                                      action:@selector(_logoutButtonPressed)
+                            forControlEvents:UIControlEventTouchUpInside];
     
-    // camps button
-    UIButton *campsButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Camps"
-                                                     horizontalAlignment:UIControlContentHorizontalAlignmentCenter
-                                                              buttonSize:CGSizeMake(170, buttonHeight)
-                                                                fontSize:nil];
-    [self.view addSubview:campsButton];
+    [self.scrollView.settingsButton addTarget:self
+                                       action:@selector(_optionsButtonPressed)
+                             forControlEvents:UIControlEventTouchUpInside];
     
-    campsButton.center = CGPointMake(CGRectGetMidX(self.view.bounds),
-                                     CGRectGetMaxY(countryButton.frame) + buttonPadding + CGRectGetMidY(campsButton.bounds));
-    
-    [campsButton addTarget:self
-                    action:@selector(_campsButtonPressed)
-          forControlEvents:UIControlEventTouchUpInside];
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        self.scrollView.loginState = HCRHomeLoginMenuStateSignedIn;
+    });
     
 }
 
@@ -160,8 +161,27 @@
 
 - (void)_campsButtonPressed {
     
-    //
+    // TODO: camps button
     
+}
+
+- (void)_loginButtonPressed {
+    self.scrollView.loginState = HCRHomeLoginMenuStateSignedIn;
+}
+
+- (void)_logoutButtonPressed {
+    self.scrollView.loginState = HCRHomeLoginMenuStateNotSignedIn;
+    
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        self.scrollView.loginState = HCRHomeLoginMenuStateSignedIn;
+    });
+    
+}
+
+- (void)_optionsButtonPressed {
+    // TODO: options button
 }
 
 @end
