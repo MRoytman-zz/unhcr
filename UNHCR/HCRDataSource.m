@@ -130,6 +130,8 @@
              ];
 }
 
+#pragma mark - Camps
+
 + (NSDictionary *)_domizData {
     
     // http://data.unhcr.org/
@@ -139,20 +141,44 @@
              @"Longitude": @44.3757963,
              @"Span": @20000,
              @"Persons": @96272,
+             @"SitReps": @"http://data.unhcr.org/syrianrefugees/documents.php?page=1&view=list&Language%5B%5D=1&Country%5B%5D=103&Type%5B%5D=2",
              @"Clusters": @{
-                     @"Camp Coordination": @[
-                             [HCRDataSource _ddmData],
-                             [HCRDataSource _modmData],
-                             [HCRDataSource _unhcrIraqData],
-                             ]
-                     }
-             
+                     @"Camp Coordination": @{
+                             @"Agencies": @[
+                                     [HCRDataSource _ddmIraqData],
+                                     [HCRDataSource _modmIraqData],
+                                     [HCRDataSource _unhcrIraqData],
+                                     ]
+                             },
+                     @"Health": @{
+                             @"Agencies": @[
+                                     [HCRDataSource _icrcIraqData],
+                                     [HCRDataSource _irwIraqData],
+                                     [HCRDataSource _modmIraqData],
+                                     [HCRDataSource _quandilIraqData]
+                                     ],
+                             @"SitReps": @"http://data.unhcr.org/syrianrefugees/documents.php?page=1&view=list&Language%5B%5D=1&Country%5B%5D=103&Type%5B%5D=2&Sector%5B%5D=3",
+                             @"TallySheets": @YES
+                             },
+                     
+                     },
              };
 }
 
-#pragma mark - Agencies
+#pragma mark - Iraq Agencies
 
-+ (NSDictionary *)_ddmData {
++ (NSDictionary *)_modmIraqData {
+    return @{@"Agency": @"Minsitry of Migration and Displacment",
+             @"Abbr": @"MODM",
+             @"About": @"The Minsitry of Migration and Displacment (MODM) is the official government body in Iraq that deals with the IDPs, Returnees and Refugees since it's establishment in 2004.",
+             @"Contact": @{@"Name": @"Ammar Ali Juma'a",
+                           @"Email": @"Stat73mang@gmail.com"},
+             @"Website": @"http://momd.gov.iq/Default.aspx"};
+}
+
+#pragma mark - Camp Coordination
+
++ (NSDictionary *)_ddmIraqData {
     return @{@"Agency": @"Directorate of Displacment and Migration",
              @"Abbr": @"DDM",
              @"About": @"Directorate of Displacment and Migration (DDM) mandate is concerned with providing basic needs of daily life, and make sure that the IDPs, Refugees, and Returnees, have access to all humanitarian needs.",
@@ -161,16 +187,39 @@
                            @"Email": @"ddm.duhok@gmail.com"}};
 }
 
-+ (NSDictionary *)_modmData {
-    return @{@"Agency": @"Minsitry of Migration and Displacment",
-             @"Abbr": @"MODM",
-             @"About": @"The Minsitry of Migration and Displacment (MODM) is the official government body in Iraq that deals with the IDPs, Returnees and Refugees since it's establishment in 2004.",
-             @"Website": @"momd.gov.iq"};
-}
-
 + (NSDictionary *)_unhcrIraqData {
     return @{@"Agency": @"United Nations High Commissioner For Refugees Iraq",
              @"Abbr": @"UNHCR Iraq"};
+}
+
+#pragma mark - Health
+
++ (NSDictionary *)_icrcIraqData {
+    return @{@"Agency": @"International Committee of the Red Cross",
+             @"Abbr": @"ICRC Iraq",
+             @"About": @"The ICRC has been present in Iraq since the outbreak of the Iran-Iraq war in 1980. Protection activities focus on people detained by Iraqi authorities, including Kurdistan regional authorities. ICRC delegates visit tens of thousands of detainees throughout the country, talk to them in private, and provide the relevant authorities with confidential feedback on the detaineesâ€™ treatment and living conditions. The visits also enable detainees to keep in touch with their loved ones, through Red Cross Messages, distributed in cooperation with the Iraqi Red Crescent Society to families in Iraq and abroad. The ICRC, in close cooperation with the respective governments, is also following the fate of thousands of missing persons as a result of the several conflicts in the region, and provides support and expertise in forensic medicine as well as in conducting joint excavation missions. Assistance activities, which focus on remote and neglected areas prone to violence, involve helping IDPs and residents restore their livelihood, with a focus on households headed by women, supporting primary health care centres and physical rehabilitation centres through the provision of material and training of medical personal and repairing and upgrading water, sanitation, health and detention infrastructure. The ICRC also continues to promote IHL among weapon bearers and to support the Iraqi Red Crescent Society in building up its capacities in the field of First Aid and Disaster Management. In a nutshell, in 2012 the ICRC: - further extended its operational out-reach into remote areas prone to violence in the centre of the country and the disputed territories; - conducted 231 visits to 109 places of detention holding approximately 38'161 detainees under Iraqi central or Kurdish authorities; - contributed to progress made in clarifying the fate of people missing as a result of the 1990-91 Gulf War and the 1980-88 Iran-Iraq War, facilitating seven joint operations to exhume and transfer human remains; - assisted 11'857 women heading household, amputees and farmer in rural areas prone to violence (with 57'513 dependents) with livelihood support projects, cash assistance and income-generating projects; - improved access to water, physical rehabilitation and primary health care for 1'844'522 residents, IDPs and returnees through the rehabilitation of water and health infrastructure, material support, training and coaching; - assisted 36'264 residents, refugees, IDPs and returnees with emergency assistance (food, non-food and water). - continued to provide, along with the International Federation, institutional support to the Iraqi Red Crescent.",
+             @"Contact": @{@"Name": @"Antoine Grand",
+                           @"Phone": @"00964 770-670-0825",
+                           @"Email": @"agrand@icrc.org"},
+             @"Website": @"http://www.icrc.org"};
+}
+
++ (NSDictionary *)_irwIraqData {
+    return @{@"Agency": @"Islamic Relief Worldwide",
+             @"Abbr": @"IRW Iraq",
+             @"About": @"Islamic Relief (IR) is an international relief and development charity which envisages a caring world where people unite to respond to the suffering of others, empowering them to fulfil their potential. We are an independent Non-Governmental Organisation (NGO) founded in the UK in 1984 . IRW Working in over 25 countries, we promote sustainable economic and social development by working with local communities to eradicate poverty, illiteracy and disease. We also respond to disasters and emergencies, helping people in crisis. Islamic Relief provides support regardless of religion, ethnicity or gender and without expecting anything in return.",
+             @"Contact": @{@"Name": @"Mohammed Rafia",
+                           @"Phone": @"00964 7801 97 65 63",
+                           @"Email": @"mohammed.rafia@ir-iraq.org"},
+             @"Website": @"http://www.islamic-relief.com"};
+}
+
++ (NSDictionary *)_quandilIraqData {
+    return @{@"Agency": @"Qandil, A Swedish Humanitarian Aid and Development Organization",
+             @"Abbr": @"Quandil Iraq",
+             @"Contact": @{@"Name": @"Edrees Nabi Salih",
+                           @"Email": @"edress.salih@qandil.org"},
+             @"Website": @"http://www.Qandil.org"};
 }
 
 @end

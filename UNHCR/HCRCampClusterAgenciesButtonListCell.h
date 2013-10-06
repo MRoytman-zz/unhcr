@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "HCRCampClusterButtonListCell.h"
 
-@interface HCRCampClusterAgenciesCell : UICollectionViewCell
+@interface HCRCampClusterAgenciesButtonListCell : HCRCampClusterButtonListCell
 
 @end

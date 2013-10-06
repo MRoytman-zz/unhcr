@@ -144,14 +144,14 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
             }
         }
         
-        UIButton *footerButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        CGSize buttonSize = CGSizeMake(180, CGRectGetHeight(footer.bounds));
+        UIButton *footerButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Compare All Clusters"
+                                                          horizontalAlignment:UIControlContentHorizontalAlignmentCenter
+                                                                         buttonSize:buttonSize
+                                                                     fontSize:@16.0];
         [footer addSubview:footerButton];
         
-        footerButton.frame = footer.bounds;
-        footerButton.tintColor = [UIColor UNHCRBlue];
-        
-        [footerButton setTitle:@"Compare All Clusters" forState:UIControlStateNormal];
-        footerButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        footerButton.center = CGPointMake(CGRectGetMidX(footer.bounds), CGRectGetMidY(footer.bounds));
         
         [footerButton addTarget:self
                          action:@selector(_footerButtonPressed)
@@ -175,7 +175,7 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
     HCRCampClusterDetailViewController *campClusterDetail = [[HCRCampClusterDetailViewController alloc] initWithCollectionViewLayout:[HCRCampClusterDetailViewController preferredLayout]];
     
     campClusterDetail.campDictionary = self.campDictionary;
-    campClusterDetail.clusterDictionary = cell.clusterDictionary;
+    campClusterDetail.selectedClusterMetaData = cell.clusterDictionary;
     
     [self.navigationController pushViewController:campClusterDetail animated:YES];
     

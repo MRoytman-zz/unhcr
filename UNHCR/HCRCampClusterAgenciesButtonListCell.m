@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import "HCRCampClusterAgenciesCell.h"
+#import "HCRCampClusterAgenciesButtonListCell.h"
 
-@implementation HCRCampClusterAgenciesCell
+@implementation HCRCampClusterAgenciesButtonListCell
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -18,14 +18,5 @@
     }
     return self;
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end

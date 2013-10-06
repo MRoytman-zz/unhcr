@@ -12,6 +12,6 @@
 <UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) NSDictionary *campDictionary;
-@property (nonatomic, strong) NSDictionary *clusterDictionary;
+@property (nonatomic, strong) NSDictionary *selectedClusterMetaData;
 
 @end

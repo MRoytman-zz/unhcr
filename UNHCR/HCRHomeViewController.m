@@ -117,7 +117,8 @@
     
     UIButton *countryButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Countries"
                                                        horizontalAlignment:UIControlContentHorizontalAlignmentCenter
-                                                                      size:CGSizeMake(200, buttonHeight)];
+                                                                buttonSize:CGSizeMake(200, buttonHeight)
+                                                                  fontSize:nil];
     [self.view addSubview:countryButton];
     
     countryButton.center = CGPointMake(CGRectGetMidX(self.view.bounds),
@@ -130,7 +131,8 @@
     // camps button
     UIButton *campsButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Camps"
                                                      horizontalAlignment:UIControlContentHorizontalAlignmentCenter
-                                                                    size:CGSizeMake(170, buttonHeight)];
+                                                              buttonSize:CGSizeMake(170, buttonHeight)
+                                                                fontSize:nil];
     [self.view addSubview:campsButton];
     
     campsButton.center = CGPointMake(CGRectGetMidX(self.view.bounds),

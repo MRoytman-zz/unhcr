@@ -16,6 +16,7 @@
 + (UIButton *)buttonWithUNHCRStandardStyleWithSize:(CGSize)buttonSize;
 + (UIButton *)buttonWithUNHCRTextStyleWithString:(NSString *)titleString
                              horizontalAlignment:(UIControlContentHorizontalAlignment)horizontalAlignment
-                                            size:(CGSize)buttonSize;
+                                      buttonSize:(CGSize)buttonSize
+                                        fontSize:(NSNumber *)fontSize;
 
 @end

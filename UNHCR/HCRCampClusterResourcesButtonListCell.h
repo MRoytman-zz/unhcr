@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "HCRCampClusterButtonListCell.h"
 
-@interface HCRCampClusterResourcesCell : UICollectionViewCell
+@interface HCRCampClusterResourcesButtonListCell : HCRCampClusterButtonListCell
 
 @property (nonatomic) BOOL showTallySheetsButton;
 

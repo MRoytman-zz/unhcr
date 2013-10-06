@@ -9,8 +9,10 @@
 #import "HCRCampClusterDetailViewController.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRCampClusterGraphCell.h"
-#import "HCRCampClusterResourcesCell.h"
-#import "HCRCampClusterAgenciesCell.h"
+#import "HCRCampClusterResourcesButtonListCell.h"
+#import "HCRCampClusterAgenciesButtonListCell.h"
+
+#import "EAEmailUtilities.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -24,8 +26,10 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
 
 @interface HCRCampClusterDetailViewController ()
 
-@property NSArray *campClusterDataArray;
-@property (nonatomic, readonly) BOOL isHealthCluster;
+@property NSDictionary *campClusterData;
+@property NSArray *campClusterCollectionLayoutData;
+
+@property (nonatomic, readonly) BOOL clusterContainsTallySheets;
 
 @end
 
@@ -39,13 +43,13 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
     if (self) {
         // Custom initialization
         
-        self.campClusterDataArray = @[
+        self.campClusterCollectionLayoutData = @[
                                       @{@"Section": @"Refugee Requests",
                                         @"Cell": kCampClusterGraphCellIdentifier},
-                                      @{@"Section": @"Resources",
-                                        @"Cell": kCampClusterResourcesCellIdentifier},
                                       @{@"Section": @"Local Agencies",
-                                        @"Cell": kCampClusterAgenciesCellIdentifier}
+                                        @"Cell": kCampClusterAgenciesCellIdentifier},
+                                      @{@"Section": @"Resources",
+                                        @"Cell": kCampClusterResourcesCellIdentifier}
                                       ];
     }
     return self;
@@ -56,10 +60,13 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    NSParameterAssert(self.clusterDictionary);
+    NSParameterAssert(self.selectedClusterMetaData);
     NSParameterAssert(self.campDictionary);
     
-    self.title = [self.clusterDictionary objectForKey:@"Name"];
+    NSString *selectedCluster = [self.selectedClusterMetaData objectForKey:@"Name"];
+    self.campClusterData = [[self.campDictionary objectForKey:@"Clusters" ofClass:@"NSDictionary"] objectForKey:selectedCluster ofClass:@"NSDictionary"];
+    
+    self.title = selectedCluster;
     self.view.backgroundColor = [UIColor whiteColor];
     self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.95];
     
@@ -73,9 +80,9 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
                    withReuseIdentifier:kCampClusterHeaderIdentifier];
     [self.collectionView registerClass:[HCRCampClusterGraphCell class]
             forCellWithReuseIdentifier:kCampClusterGraphCellIdentifier];
-    [self.collectionView registerClass:[HCRCampClusterResourcesCell class]
+    [self.collectionView registerClass:[HCRCampClusterResourcesButtonListCell class]
             forCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier];
-    [self.collectionView registerClass:[HCRCampClusterAgenciesCell class]
+    [self.collectionView registerClass:[HCRCampClusterAgenciesButtonListCell class]
             forCellWithReuseIdentifier:kCampClusterAgenciesCellIdentifier];
     
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
@@ -86,7 +93,7 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
     [self.view addSubview:background];
     [self.view sendSubviewToBack:background];
     
-    UIImage *clusterImage = [[UIImage imageNamed:[self.clusterDictionary objectForKey:@"Image"]] colorImage:[UIColor UNHCRBlue]
+    UIImage *clusterImage = [[UIImage imageNamed:[self.selectedClusterMetaData objectForKey:@"Image"]] colorImage:[UIColor UNHCRBlue]
                                                                                               withBlendMode:kCGBlendModeNormal
                                                                                            withTransparency:YES];
     background.backgroundColor = [UIColor colorWithPatternImage:clusterImage];
@@ -109,12 +116,12 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
 #pragma mark - UICollectionView Data Source
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return self.campClusterDataArray.count;
+    return self.campClusterCollectionLayoutData.count;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     
-    NSDictionary *sectionData = [self.campClusterDataArray objectAtIndex:section ofClass:@"NSDictionary"];
+    NSDictionary *sectionData = [self.campClusterCollectionLayoutData objectAtIndex:section ofClass:@"NSDictionary"];
     NSArray *agencyArray = [sectionData objectForKey:@"Agencies" ofClass:@"NSArray" mustExist:NO];
     
     if (agencyArray) {
@@ -126,25 +133,39 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSDictionary *sectionData = [self.campClusterDataArray objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
+    NSDictionary *sectionData = [self.campClusterCollectionLayoutData objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
     NSString *cellType = [sectionData objectForKey:@"Cell" ofClass:@"NSString"];
     
     if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
         HCRCampClusterGraphCell *graphCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterGraphCellIdentifier forIndexPath:indexPath];
         
-        
+        // TODO: make this real
         
         return graphCell;
     } else if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
-        HCRCampClusterResourcesCell *resourcesCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier forIndexPath:indexPath];
+        HCRCampClusterResourcesButtonListCell *resourcesCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier forIndexPath:indexPath];
         
-        resourcesCell.showTallySheetsButton = self.isHealthCluster;
+        resourcesCell.showTallySheetsButton = self.clusterContainsTallySheets;
+        
+        [resourcesCell.requestSuppliesButton addTarget:self
+                                                action:@selector(_requestSuppliesButtonPressed)
+                                      forControlEvents:UIControlEventTouchUpInside];
+        
+        [resourcesCell.sitRepsButton addTarget:self
+                                        action:@selector(_sitRepsButtonPressed)
+                              forControlEvents:UIControlEventTouchUpInside];
+        
+        if (self.clusterContainsTallySheets) {
+            [resourcesCell.tallySheetsButton addTarget:self
+                                                action:@selector(_tallySheetsButtonPressed)
+                                      forControlEvents:UIControlEventTouchUpInside];
+        }
         
         return resourcesCell;
     } else if ([cellType isEqualToString:kCampClusterAgenciesCellIdentifier]) {
         HCRCampClusterGraphCell *agencyCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterAgenciesCellIdentifier forIndexPath:indexPath];
         
-        
+        // TODO: agencies!! :D
         
         return agencyCell;
     }
@@ -168,7 +189,7 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
             }
         }
         
-        NSDictionary *sectionData = [self.campClusterDataArray objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
+        NSDictionary *sectionData = [self.campClusterCollectionLayoutData objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
         
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:header.bounds];
         [header addSubview:headerLabel];
@@ -194,7 +215,7 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
     
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)collectionViewLayout;
     
-    NSDictionary *sectionData = [self.campClusterDataArray objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
+    NSDictionary *sectionData = [self.campClusterCollectionLayoutData objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
     NSString *cellType = [sectionData objectForKey:@"Cell" ofClass:@"NSString"];
     
     if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
@@ -202,11 +223,10 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
                           200);
     } else if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
         
-        CGFloat baseCellHeight = 150.0;
-        CGFloat extraCellHeight = 60.0;
+        NSInteger numberOfButtons = (self.clusterContainsTallySheets) ? 3 : 2;
         
         return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                          (self.isHealthCluster) ? baseCellHeight + extraCellHeight : baseCellHeight);
+                          [HCRCampClusterResourcesButtonListCell preferredCellHeightForNumberOfButtons:numberOfButtons]);
         
     } else {
         return flowLayout.itemSize;
@@ -216,8 +236,40 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
 
 #pragma mark - Getters & Setters
 
-- (BOOL)isHealthCluster {
-    return [[self.clusterDictionary objectForKey:@"Name" ofClass:@"NSString"] isEqualToString:@"Health"];
+- (BOOL)clusterContainsTallySheets {
+    return ([self.campClusterData objectForKey:@"TallySheets" ofClass:@"NSNumber" mustExist:NO] != nil);
+}
+
+#pragma mark - Private Methods
+
+- (void)_requestSuppliesButtonPressed {
+    
+    NSString *clusterName = [self.selectedClusterMetaData objectForKey:@"Name"];
+    NSString *toString = [NSString stringWithFormat:@"%@@unhcr.org", [[clusterName stringByReplacingOccurrencesOfString:@" " withString:@"."] lowercaseString]];
+    NSString *subjectString = [NSString stringWithFormat:@"%@ Supply Request", clusterName];
+    
+    [[EAEmailUtilities sharedUtilities] emailFromViewController:self
+                                               withToRecipients:@[toString]
+                                                withSubjectText:subjectString
+                                                   withBodyText:nil
+                                                 withCompletion:nil];
+    
+}
+
+- (void)_sitRepsButtonPressed {
+    
+    NSString *sitRepString = [self.campClusterData objectForKey:@"SitReps" ofClass:@"NSString" mustExist:NO];
+    
+    NSURL *targetURL = [NSURL URLWithString:(sitRepString) ? sitRepString : [self.campDictionary objectForKey:@"SitReps" ofClass:@"NSString"]];
+    
+    [[UIApplication sharedApplication] openURL:targetURL];
+    
+}
+
+- (void)_tallySheetsButtonPressed {
+    
+    // TODO: push tally sheet controller
+    
 }
 
 @end
