@@ -10,6 +10,7 @@
 
 @interface HCRClusterCollectionController : HCRCollectionViewController
 
+@property (nonatomic, strong) NSString *countryName;
 @property (nonatomic, strong) NSDictionary *campDictionary;
 
 @end

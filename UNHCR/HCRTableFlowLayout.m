@@ -11,6 +11,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 CGFloat const kTableCellHeight = 44;
+CGFloat const kTableCellSingleLineHeight = 34;
+CGFloat const kTableCellDoubleLineHeight = 54;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -93,5 +95,22 @@ CGFloat const kTableCellHeight = 44;
 //    return NO;
 //    
 //}
+
+#pragma mark - Class Methods
+
++ (CGSize)preferredTableFlowCellSizeForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      kTableCellHeight);
+}
+
++ (CGSize)preferredTableFlowSingleLineCellSizeForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      kTableCellSingleLineHeight);
+}
+
++ (CGSize)preferredTableFlowDoubleLineCellSizeForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      kTableCellDoubleLineHeight);
+}
 
 @end

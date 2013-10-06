@@ -11,6 +11,7 @@
 @interface HCRCampClusterCompareViewController : HCRCollectionViewController
 <UICollectionViewDelegateFlowLayout>
 
+@property (nonatomic, strong) NSString *countryName;
 @property (nonatomic, strong) NSDictionary *campDictionary;
 
 @end

@@ -124,6 +124,8 @@ NSString *const kCampHeaderReuseIdentifier = @"kCampHeaderReuseIdentifier";
     NSParameterAssert([cell isKindOfClass:[HCRCampCollectionCell class]]);
     
     HCRClusterCollectionController *campDetail = [[HCRClusterCollectionController alloc] initWithCollectionViewLayout:[HCRClusterCollectionController preferredLayout]];
+    
+    campDetail.countryName = [self.countryDictionary objectForKey:@"Name" ofClass:@"NSString"];
     campDetail.campDictionary = cell.campDictionary;
     
     [self.navigationController pushViewController:campDetail animated:YES];

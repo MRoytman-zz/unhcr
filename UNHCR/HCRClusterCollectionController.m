@@ -150,6 +150,7 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
     
     HCRCampClusterDetailViewController *campClusterDetail = [[HCRCampClusterDetailViewController alloc] initWithCollectionViewLayout:[HCRCampClusterDetailViewController preferredLayout]];
     
+    campClusterDetail.countryName = self.countryName;
     campClusterDetail.campDictionary = self.campDictionary;
     campClusterDetail.selectedClusterMetaData = cell.clusterDictionary;
     

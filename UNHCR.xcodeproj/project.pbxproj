@@ -42,6 +42,11 @@
 		4FD838FB18012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838FA18012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.m */; };
 		4FD838FE18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838FD18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m */; };
 		4FD8390118013F5200B49498 /* UIDevice+EAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390018013F5200B49498 /* UIDevice+EAAdditions.m */; };
+		4FD839051801DF8900B49498 /* HCRTallySheetPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839041801DF8900B49498 /* HCRTallySheetPickerViewController.m */; };
+		4FD839081801E59500B49498 /* HCRTallySheetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839071801E59500B49498 /* HCRTallySheetDetailViewController.m */; };
+		4FD8390B1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390A1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m */; };
+		4FD8390E1801EB5F00B49498 /* HCRDataEntryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */; };
+		4FD8391118020D4E00B49498 /* UIFont+HCRCommonFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */; };
 		C1FCCA2A37DE44BABAAEC9EC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04773A9AD17C462187CA1561 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -113,6 +118,16 @@
 		4FD838FD18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRHomeLoginMenuScrollView.m; sourceTree = "<group>"; };
 		4FD838FF18013F5200B49498 /* UIDevice+EAAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+EAAdditions.h"; sourceTree = "<group>"; };
 		4FD8390018013F5200B49498 /* UIDevice+EAAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+EAAdditions.m"; sourceTree = "<group>"; };
+		4FD839031801DF8900B49498 /* HCRTallySheetPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTallySheetPickerViewController.h; sourceTree = "<group>"; };
+		4FD839041801DF8900B49498 /* HCRTallySheetPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTallySheetPickerViewController.m; sourceTree = "<group>"; };
+		4FD839061801E59500B49498 /* HCRTallySheetDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTallySheetDetailViewController.h; sourceTree = "<group>"; };
+		4FD839071801E59500B49498 /* HCRTallySheetDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTallySheetDetailViewController.m; sourceTree = "<group>"; };
+		4FD839091801E5B200B49498 /* HCRTallySheetDetailInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTallySheetDetailInputViewController.h; sourceTree = "<group>"; };
+		4FD8390A1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTallySheetDetailInputViewController.m; sourceTree = "<group>"; };
+		4FD8390C1801EB5F00B49498 /* HCRDataEntryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRDataEntryCell.h; sourceTree = "<group>"; };
+		4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDataEntryCell.m; sourceTree = "<group>"; };
+		4FD8390F18020D4E00B49498 /* UIFont+HCRCommonFonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+HCRCommonFonts.h"; sourceTree = "<group>"; };
+		4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+HCRCommonFonts.m"; sourceTree = "<group>"; };
 		D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -200,6 +215,7 @@
 				4F866B1217FAB840000350E4 /* Cluster Selection */,
 				4FD838EF18011B5A00B49498 /* Camp-Cluster Compare */,
 				4F1C940617FC28C80003AA21 /* Camp-Cluster Detail */,
+				4FD839021801DF6200B49498 /* Tally Sheets */,
 				4F866AC917F9E022000350E4 /* Supporting Files */,
 			);
 			path = UNHCR;
@@ -242,6 +258,8 @@
 				4FD838ED1800DFB200B49498 /* HCRButtonListCell.m */,
 				4FD838F6180121EF00B49498 /* HCRGraphCell.h */,
 				4FD838F7180121EF00B49498 /* HCRGraphCell.m */,
+				4FD8390C1801EB5F00B49498 /* HCRDataEntryCell.h */,
+				4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */,
 			);
 			name = "Shared UI";
 			sourceTree = "<group>";
@@ -278,6 +296,8 @@
 				4FD838FA18012F8D00B49498 /* UICollectionReusableView+HCRSupplementalViews.m */,
 				4FD838FF18013F5200B49498 /* UIDevice+EAAdditions.h */,
 				4FD8390018013F5200B49498 /* UIDevice+EAAdditions.m */,
+				4FD8390F18020D4E00B49498 /* UIFont+HCRCommonFonts.h */,
+				4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -300,6 +320,19 @@
 				4FD838F418011BB300B49498 /* HCRCampClusterCompareViewController.m */,
 			);
 			name = "Camp-Cluster Compare";
+			sourceTree = "<group>";
+		};
+		4FD839021801DF6200B49498 /* Tally Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				4FD839031801DF8900B49498 /* HCRTallySheetPickerViewController.h */,
+				4FD839041801DF8900B49498 /* HCRTallySheetPickerViewController.m */,
+				4FD839061801E59500B49498 /* HCRTallySheetDetailViewController.h */,
+				4FD839071801E59500B49498 /* HCRTallySheetDetailViewController.m */,
+				4FD839091801E5B200B49498 /* HCRTallySheetDetailInputViewController.h */,
+				4FD8390A1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m */,
+			);
+			name = "Tally Sheets";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -407,6 +440,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FD839051801DF8900B49498 /* HCRTallySheetPickerViewController.m in Sources */,
 				4FD838F518011BB300B49498 /* HCRCampClusterCompareViewController.m in Sources */,
 				4F866AD317F9E022000350E4 /* HCRAppDelegate.m in Sources */,
 				4F1C940217FC17770003AA21 /* UIImage+RMImageManipulation.m in Sources */,
@@ -424,12 +458,16 @@
 				4F866ACF17F9E022000350E4 /* main.m in Sources */,
 				4F0C702D17FF56680081F201 /* MKMapView+HCRMapView.m in Sources */,
 				4F1C940517FC28C40003AA21 /* HCRCampClusterDetailViewController.m in Sources */,
+				4FD8390B1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m in Sources */,
 				4FD838FE18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m in Sources */,
 				4F0C703018009C850081F201 /* UIButton+UNHCRButtonStyles.m in Sources */,
 				4F866B0B17FAA5F7000350E4 /* UIColor+HCRColors.m in Sources */,
+				4FD8390E1801EB5F00B49498 /* HCRDataEntryCell.m in Sources */,
 				4F1C93F917FC06D00003AA21 /* HCRClusterFlowLayout.m in Sources */,
 				4F866B0817FAA09B000350E4 /* HCRCampCollectionCell.m in Sources */,
 				4F1C93FF17FC0B150003AA21 /* HCRClusterCollectionCell.m in Sources */,
+				4FD8391118020D4E00B49498 /* UIFont+HCRCommonFonts.m in Sources */,
+				4FD839081801E59500B49498 /* HCRTallySheetDetailViewController.m in Sources */,
 				4F0C702A17FF4BE70081F201 /* HCRCollectionViewController.m in Sources */,
 				4F866B0417FAA07D000350E4 /* HCRCampCollectionViewController.m in Sources */,
 				4FD838F8180121EF00B49498 /* HCRGraphCell.m in Sources */,

@@ -10,6 +10,14 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+NSString *const kRepeatUserUnder18 = @"Repeat Users < 18";
+NSString *const kRepeatUserOver18 = @"Repeat Users ≥ 18";
+NSString *const kDiscontinuedOver18 = @"Discontinued < 18";
+NSString *const kDiscontinuedUnder18 = @"Discontinued ≥ 18";
+NSString *const kQuantityDistributed = @"Quantity of each method distributed during period";
+
+////////////////////////////////////////////////////////////////////////////////
+
 @interface HCRDataSource ()
 
 @end
@@ -146,6 +154,89 @@
              };
 }
 
+#pragma mark - Health
+
++ (NSArray *)_healthTallySheetsArray {
+    
+    return @[
+             [HCRDataSource _familyPlanningTallySheet]
+             ];
+    
+}
+
++ (NSDictionary *)_familyPlanningTallySheet {
+    return @{@"Name": @"Family Planning",
+             @"Resources": @[
+                     @{@"Title": @"COCP - low dose",
+                       @"Subtitle": @"(Micro-gynon; Nordette)",
+                       @"Unit": @"cycles"
+                       },
+                     @{@"Title": @"COCP - high dose",
+                       @"Subtitle": @"(Lo-femenal)",
+                       @"Unit": @"cycles"
+                       },
+                     @{@"Title": @"POP",
+                       @"Subtitle": @"(Micro-val; Micro-lut)",
+                       @"Unit": @"doses"
+                       },
+                     @{@"Title": @"ECP",
+                       @"Subtitle": @"(Postinor-2)",
+                       @"Unit": @"doses"
+                       },
+                     @{@"Title": @"Injectable",
+                       @"Subtitle": @"(Depo-Provera)",
+                       @"Unit": @"doses (ml)"
+                       },
+                     @{@"Title": @"Implantable",
+                       @"Subtitle": @"(Norplant)",
+                       @"Unit": @"implants"
+                       },
+                     @{@"Title": @"Intra-Uterine Device (IUD)",
+                       @"Unit": @"IUDs"
+                       },
+                     @{@"Title": @"Condom (Male)",
+                       @"Unit": @"pieces"
+                       },
+                     @{@"Title": @"Condom (Female)",
+                       @"Unit": @"pieces"
+                       },
+                     @{@"Title": @"Sterilisation (Male)",
+                       @"Unit": @"strerilisations",
+                       @"Exclusions": @[
+                               kRepeatUserOver18,
+                               kRepeatUserUnder18,
+                               kRepeatUserOver18,
+                               kRepeatUserUnder18
+                               ]
+                       },
+                     @{@"Title": @"Sterilisation (Female)",
+                       @"Unit": @"strerilisations",
+                       @"Exclusions": @[
+                               kRepeatUserOver18,
+                               kRepeatUserUnder18,
+                               kRepeatUserOver18,
+                               kRepeatUserUnder18
+                               ]
+                       },
+                     @{@"Title": @"Other",
+                       @"Exclusions": @[
+                               kQuantityDistributed
+                               ]
+                       },
+                     ],
+             @"Questions": @[
+                     @"Cumulative number at start of period",
+                     @"New Users < 18",
+                     @"New Users ≥ 18",
+                     @"Repeat Users < 18",
+                     @"Repeat Users ≥ 18",
+                     @"Discontinued < 18",
+                     @"Discontinued ≥ 18",
+                     @"Cumulative number at end of period",
+                     @"Quantity of each method distributed during period"
+                     ]};
+}
+
 #pragma mark - Iraq Agencies
 
 + (NSDictionary *)_iraqAgenciesData {
@@ -185,7 +276,7 @@
                              [HCRDataSource _whoIraqData]
                              ],
                      @"SitReps": @"http://data.unhcr.org/syrianrefugees/documents.php?page=1&view=list&Language%5B%5D=1&Country%5B%5D=103&Type%5B%5D=2&Sector%5B%5D=3",
-                     @"TallySheets": @YES
+                     @"TallySheets": [HCRDataSource _healthTallySheetsArray]
                      },
              @"Emergency Telecom": @{
                      @"Agencies": @[

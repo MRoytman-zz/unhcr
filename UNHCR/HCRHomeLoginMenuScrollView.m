@@ -103,6 +103,8 @@
         self.loginButton.center = CGPointMake(CGRectGetMidX(self.frame),
                                               CGRectGetMidY(self.countriesButton.frame));
         
+        self.loginButton.alpha = 0.0; // TODO: handle initial state better
+        
         // signout button
         CGFloat xSmallButtonOffset = 15;
         CGSize smallButtonSize = CGSizeMake(100, 30);
@@ -185,6 +187,8 @@
     
     static const NSTimeInterval kAnimationTimeInteval = 0.33;
     [UIView animateWithDuration:kAnimationTimeInteval
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
                          
                          [self setContentOffset:contentOffset];

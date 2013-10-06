@@ -162,6 +162,7 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
     
     HCRCampClusterDetailViewController *campClusterDetail = [[HCRCampClusterDetailViewController alloc] initWithCollectionViewLayout:[HCRCampClusterDetailViewController preferredLayout]];
     
+    campClusterDetail.countryName = self.countryName;
     campClusterDetail.campDictionary = self.campDictionary;
     campClusterDetail.selectedClusterMetaData = [self.clusterCompareDataArray objectAtIndex:button.tag ofClass:@"NSDictionary"];
     

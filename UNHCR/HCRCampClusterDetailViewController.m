@@ -10,7 +10,7 @@
 #import "HCRTableFlowLayout.h"
 #import "HCRGraphCell.h"
 #import "HCRButtonListCell.h"
-
+#import "HCRTallySheetPickerViewController.h"
 #import "EAEmailUtilities.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
 
 NSString *const kResourceNameSupplies = @"Request Supplies";
 NSString *const kResourceNameSitReps = @"Situation Reports";
-NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
+NSString *const kResourceNameTallySheets = @"Tally Sheets";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -55,7 +55,7 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
                                         @"Resources": @[
                                                 kResourceNameSupplies,
                                                 kResourceNameSitReps,
-                                                kResourceNameSitTallySheets
+                                                kResourceNameTallySheets
                                                 ]},
                                       @{@"Section": @"Local Agencies",
                                         @"Cell": kCampClusterAgenciesCellIdentifier}
@@ -217,6 +217,8 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
     
 }
 
+#pragma mark - UICollectionView Delegate
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
     HCRButtonListCell *cell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
@@ -234,7 +236,7 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
             [self _requestSuppliesButtonPressed];
         } else if ([cell.listButtonTitle isEqualToString:kResourceNameSitReps]) {
             [self _sitRepsButtonPressed];
-        } else if ([cell.listButtonTitle isEqualToString:kResourceNameSitTallySheets]) {
+        } else if ([cell.listButtonTitle isEqualToString:kResourceNameTallySheets]) {
             [self _tallySheetsButtonPressed];
         }
         
@@ -328,7 +330,7 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
 #pragma mark - Getters & Setters
 
 - (BOOL)clusterContainsTallySheets {
-    return ([self.campClusterData objectForKey:@"TallySheets" ofClass:@"NSNumber" mustExist:NO] != nil);
+    return ([self.campClusterData objectForKey:@"TallySheets" ofClass:@"NSArray" mustExist:NO] != nil);
 }
 
 #pragma mark - Private Methods
@@ -365,7 +367,17 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
 }
 
 - (void)_tallySheetsButtonPressed {
-    // TODO: push tally sheet controller
+    
+    HCRTallySheetPickerViewController *healthTallySheet = [[HCRTallySheetPickerViewController alloc] initWithCollectionViewLayout:[HCRTallySheetPickerViewController preferredLayout]];
+    
+    healthTallySheet.title = kResourceNameTallySheets;
+    healthTallySheet.countryName = self.countryName;
+    healthTallySheet.campData = self.campDictionary;
+    healthTallySheet.campClusterData = self.campClusterData;
+    healthTallySheet.selectedClusterMetaData = self.selectedClusterMetaData;
+    
+    [self.navigationController pushViewController:healthTallySheet animated:YES];
+    
 }
 
 - (void)_footerButtonPressed {
