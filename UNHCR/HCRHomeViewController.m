@@ -110,7 +110,7 @@
     bodyLabel.attributedText = attributedBodyString;
     
     // country button
-    CGFloat buttonPadding = 6;
+    CGFloat buttonPadding = 10;
     CGFloat buttonHeight = 50;
     
     CGFloat yButtonOffset = (self.view.bounds.size.height - CGRectGetMaxY(bodyLabel.frame) - (buttonHeight * 2 + buttonPadding)) * 0.5;
@@ -122,7 +122,7 @@
     [self.view addSubview:countryButton];
     
     countryButton.center = CGPointMake(CGRectGetMidX(self.view.bounds),
-                                       CGRectGetMaxY(bodyLabel.frame) + MIN(yButtonOffset,30) + CGRectGetMidY(countryButton.bounds));
+                                       CGRectGetMaxY(bodyLabel.frame) + MIN(yButtonOffset,25) + CGRectGetMidY(countryButton.bounds));
     
     [countryButton addTarget:self
                       action:@selector(_countryButtonPressed)

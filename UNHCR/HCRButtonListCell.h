@@ -21,11 +21,12 @@ static const CGFloat kYButtonPadding = 10;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface HCRCampClusterButtonListCell : UICollectionViewCell
+@interface HCRButtonListCell : UICollectionViewCell
 
-@property (nonatomic, strong) NSMutableArray *buttonsArray;
+@property (nonatomic, readonly) UIButton *listButton;
+@property (nonatomic, strong) NSString *listButtonTitle;
 
-+ (CGFloat)preferredCellHeightForNumberOfButtons:(NSInteger)numberOfButtons;
-- (UIButton *)buttonListCellButtonWithTitle:(NSString *)titleString;
++ (CGFloat)preferredCellHeight;
++ (CGFloat)preferredButtonPadding;
 
 @end

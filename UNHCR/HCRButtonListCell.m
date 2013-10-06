@@ -6,19 +6,20 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import "HCRCampClusterButtonListCell.h"
+#import "HCRButtonListCell.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface HCRCampClusterButtonListCell ()
+@interface HCRButtonListCell ()
 
 @property (nonatomic, readonly) CGSize sharedButtonSize;
+@property (nonatomic, readwrite) UIButton *listButton;
 
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@implementation HCRCampClusterButtonListCell
+@implementation HCRButtonListCell
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -29,31 +30,14 @@
     return self;
 }
 
-- (void)layoutSubviews {
-    
-    CGFloat bottomY = kYListOffset;
-    
-    for (UIButton *button in self.buttonsArray) {
-        
-        BOOL addPadding = ( [self.buttonsArray indexOfObject:button] != 0 );
-        CGFloat padding = (addPadding) ? kYButtonPadding : 0;
-        button.center = CGPointMake(kXListOffset + CGRectGetMidX(button.bounds),
-                                    bottomY + padding + CGRectGetMidY(button.bounds));
-        
-        bottomY = CGRectGetMaxY(button.frame);
-        
-    }
-    
-}
-
 #pragma mark - Class Methods
 
-+ (CGFloat)preferredCellHeightForNumberOfButtons:(NSInteger)numberOfButtons {
-    
-    NSParameterAssert(numberOfButtons > 0);
-    
-    return kYListOffset + numberOfButtons * (kSharedButtonHeight + kYButtonPadding) - kYButtonPadding + kYListOffset;
-    
++ (CGFloat)preferredCellHeight {
+    return kSharedButtonHeight;
+}
+
++ (CGFloat)preferredButtonPadding {
+    return kYButtonPadding;
 }
 
 #pragma mark - Getters & Setters
@@ -63,9 +47,30 @@
                       kSharedButtonHeight);
 }
 
-#pragma mark - Public Methods
+- (void)setListButtonTitle:(NSString *)listButtonTitle {
+    
+    _listButtonTitle = listButtonTitle;
+    
+    [self.listButton removeFromSuperview];
+    
+    if (listButtonTitle) {
+        
+        self.listButton = [self _listCellButtonWithTitle:listButtonTitle];
+        [self addSubview:self.listButton];
+        
+        self.listButton.center = CGPointMake(kXListOffset + CGRectGetMidX(self.listButton.bounds),
+                                             CGRectGetMidY(self.bounds));
+        
+        // workaround; convenience after a refactor
+        self.listButton.userInteractionEnabled = NO;
+        
+    }
+    
+}
 
-- (UIButton *)buttonListCellButtonWithTitle:(NSString *)titleString {
+#pragma mark - Private Methods
+
+- (UIButton *)_listCellButtonWithTitle:(NSString *)titleString {
     
     return [UIButton buttonWithUNHCRTextStyleWithString:titleString
                                     horizontalAlignment:UIControlContentHorizontalAlignmentLeft
