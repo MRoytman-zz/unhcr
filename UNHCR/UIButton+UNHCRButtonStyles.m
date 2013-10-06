@@ -99,7 +99,6 @@
                                                       horizontalAlignment:UIControlContentHorizontalAlignmentRight
                                                                buttonSize:[UIButton preferredSizeForUNHCRGraphCellFooterButton]
                                                                  fontSize:nil];
-    [footer addSubview:footerButton];
     
     CGFloat xButtonPadding = 8;
     footerButton.center = CGPointMake(CGRectGetWidth(footer.bounds) - CGRectGetMidX(footerButton.bounds) - xButtonPadding,

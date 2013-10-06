@@ -210,6 +210,7 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
                                                                                                            indexPath:indexPath];
         
         UIButton *footerButton = [UIButton footerButtonForUNHCRGraphCellInFooter:footer title:@"Raw Data"];
+        [footer addSubview:footerButton];
         
         [footerButton addTarget:self
                          action:@selector(_footerButtonPressed)
@@ -254,19 +255,23 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
 
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRButtonListCell *cell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRButtonListCell class]]);
-    
-    [cell.listButton setHighlighted:YES];
+    if (indexPath.section != 0) {
+        HCRButtonListCell *cell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
+        NSParameterAssert([cell isKindOfClass:[HCRButtonListCell class]]);
+        
+        [cell.listButton setHighlighted:YES];
+    }
     
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRButtonListCell *cell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRButtonListCell class]]);
-    
-    [cell.listButton setHighlighted:NO];
+    if (indexPath.section != 0) {
+        HCRButtonListCell *cell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
+        NSParameterAssert([cell isKindOfClass:[HCRButtonListCell class]]);
+        
+        [cell.listButton setHighlighted:NO];
+    }
     
 }
 
@@ -367,9 +372,7 @@ NSString *const kResourceNameSitTallySheets = @"Tally Sheets";
 }
 
 - (void)_tallySheetsButtonPressed {
-    
     // TODO: push tally sheet controller
-    
 }
 
 - (void)_footerButtonPressed {

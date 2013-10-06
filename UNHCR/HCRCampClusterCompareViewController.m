@@ -10,6 +10,7 @@
 #import "HCRDataSource.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRGraphCell.h"
+#import "HCRCampClusterDetailViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -68,7 +69,6 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     [tableLayout setDisplayHeader:YES withSize:[HCRTableFlowLayout preferredHeaderSizeForCollectionView:self.collectionView]];
-    [tableLayout setDisplayFooter:YES withSize:[HCRTableFlowLayout preferredFooterSizeForGraphCellInCollectionView:self.collectionView]];
     tableLayout.itemSize = CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
                                       [HCRGraphCell preferredHeightForGraphCell]);
     
@@ -117,11 +117,16 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
                                                                                                           identifier:kCampClusterCompareFooterIdentifier
                                                                                                            indexPath:indexPath];
         
-        UIButton *footerButton = [UIButton footerButtonForUNHCRGraphCellInFooter:footer title:@"See More"];
-        
-        [footerButton addTarget:self
-                         action:@selector(_footerButtonPressed)
-               forControlEvents:UIControlEventTouchUpInside];
+        if (indexPath.section != 0) {
+            UIButton *footerButton = [UIButton footerButtonForUNHCRGraphCellInFooter:footer title:@"See More"];
+            [footer addSubview:footerButton];
+            
+            footerButton.tag = indexPath.section;
+            
+            [footerButton addTarget:self
+                             action:@selector(_footerButtonPressed:)
+                   forControlEvents:UIControlEventTouchUpInside];
+        }
         
         return footer;
         
@@ -139,10 +144,29 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
     
 }
 
+#pragma mark - UICollectionView Delegate Flow Layout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    
+    if (section == 0) {
+        return [HCRTableFlowLayout preferredFooterSizeForCollectionView:collectionView];
+    } else {
+        return [HCRTableFlowLayout preferredFooterSizeForGraphCellInCollectionView:collectionView];
+    }
+    
+}
+
 #pragma mark - Private Methods
 
-- (void)_footerButtonPressed {
-    //
+- (void)_footerButtonPressed:(UIButton *)button {
+    
+    HCRCampClusterDetailViewController *campClusterDetail = [[HCRCampClusterDetailViewController alloc] initWithCollectionViewLayout:[HCRCampClusterDetailViewController preferredLayout]];
+    
+    campClusterDetail.campDictionary = self.campDictionary;
+    campClusterDetail.selectedClusterMetaData = [self.clusterCompareDataArray objectAtIndex:button.tag ofClass:@"NSDictionary"];
+    
+    [self.navigationController pushViewController:campClusterDetail animated:YES];
+    
 }
 
 @end

@@ -9,6 +9,7 @@
 #import "HCRCollectionViewController.h"
 
 @interface HCRCampClusterCompareViewController : HCRCollectionViewController
+<UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) NSDictionary *campDictionary;
 
