@@ -30,8 +30,10 @@ static const CGFloat kXLabelPadding = 8;
 
 @property UILabel *titleLabel;
 @property UILabel *staticTextLabel;
+@property UILabel *dataEntryStepperLabel;
 
 @property (nonatomic, readwrite) UIButton *dataEntryButton;
+@property (nonatomic, readwrite) UIStepper *dataEntryStepper;
 
 @end
 
@@ -52,7 +54,7 @@ static const CGFloat kXLabelPadding = 8;
 
 - (void)prepareForReuse {
     
-    self.cellStatus = HCRDataEntryCellStatusNotCompleted;
+    self.cellStatus = HCRDataEntryCellStatusNone;
     self.dataDictionary = nil;
     
     [self.titleLabel removeFromSuperview];
@@ -60,6 +62,9 @@ static const CGFloat kXLabelPadding = 8;
     
     [self.dataEntryButton removeFromSuperview];
     self.dataEntryButton = nil;
+    
+    [self.dataEntryStepper removeFromSuperview];
+    self.dataEntryStepper = nil;
     
     [self.staticTextLabel removeFromSuperview];
     self.staticTextLabel = nil;
@@ -72,11 +77,79 @@ static const CGFloat kXLabelPadding = 8;
     
     NSParameterAssert(self.dataDictionary);
     
+    // input
+    NSString *inputString = [self.dataDictionary objectForKey:@"Input" ofClass:@"NSString" mustExist:NO];
+    UIView *inputView;
+    switch (self.cellStatus) {
+        case HCRDataEntryCellStatusNone:
+            break;
+            
+        case HCRDataEntryCellStatusChildNotCompleted:
+        {
+            NSParameterAssert(inputString);
+            CGSize buttonSize = CGSizeMake(60,
+                                           CGRectGetHeight(self.contentView.bounds));
+            
+            self.dataEntryButton = [UIButton buttonWithUNHCRTextStyleWithString:inputString
+                                                            horizontalAlignment:UIControlContentHorizontalAlignmentRight
+                                                                     buttonSize:buttonSize
+                                                                       fontSize:[NSNumber numberWithFloat:kTitleFontSize]];
+            [self.contentView addSubview:self.dataEntryButton];
+            
+            self.dataEntryButton.userInteractionEnabled = NO;
+            
+            self.dataEntryButton.center = [self _inputCenterForInputView:self.dataEntryButton];
+            
+            inputView = self.dataEntryButton;
+            
+            break;
+        }
+            
+        case HCRDataEntryCellStatusChildCompleted:
+            NSParameterAssert(inputString);
+            break;
+            
+        case HCRDataEntryCellStatusStepperInputReady:
+        {
+            self.dataEntryStepper = [UIStepper new];
+            [self.contentView addSubview:self.dataEntryStepper];
+            
+            self.dataEntryStepper.center = [self _inputCenterForInputView:self.dataEntryStepper];
+            
+            [self.dataEntryStepper addTarget:self
+                                      action:@selector(_stepperValueChanged:)
+                            forControlEvents:UIControlEventValueChanged];
+            
+            inputView = self.dataEntryStepper;
+            
+            break;
+        }
+            
+        case HCRDataEntryCellStatusStatic:
+            NSParameterAssert(inputString);
+            self.staticTextLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+            [self.contentView addSubview:self.staticTextLabel];
+            
+            self.staticTextLabel.text = inputString;
+            self.staticTextLabel.font = [UIFont helveticaNeueLightFontFontOfSize:kTitleFontSize];
+            
+            [self.staticTextLabel sizeToFit];
+            self.staticTextLabel.center = [self _inputCenterForInputView:self.staticTextLabel];
+            
+            inputView = self.staticTextLabel;
+            
+            break;
+    }
+    
     // title & subtitle
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    CGRect titleLabelFrame = CGRectMake(kXLabelPadding,
+                                        0,
+                                        CGRectGetMinX(inputView.frame) - kXLabelPadding,
+                                        CGRectGetHeight(self.contentView.bounds));
+    self.titleLabel = [[UILabel alloc] initWithFrame:titleLabelFrame];
     [self.contentView addSubview:self.titleLabel];
     
-//    self.titleLabel.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.2];
+//    self.titleLabel.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:0.2];
     
     BOOL isHeader = [[self.dataDictionary objectForKey:@"Header" ofClass:@"NSNumber" mustExist:NO] boolValue];
     self.titleLabel.font = (isHeader) ? [UIFont helveticaNeueBoldFontOfSize:kTitleFontSize] : [UIFont helveticaNeueFontOfSize:kTitleFontSize];
@@ -105,48 +178,6 @@ static const CGFloat kXLabelPadding = 8;
         self.titleLabel.text = titleString;
     }
     
-    [self.titleLabel sizeToFit];
-    
-    self.titleLabel.center = CGPointMake(kXLabelPadding + CGRectGetMidX(self.titleLabel.bounds),
-                                         CGRectGetMidY(self.contentView.bounds));
-    
-    // input
-    NSString *inputString = [self.dataDictionary objectForKey:@"Input" ofClass:@"NSString"];
-    switch (self.cellStatus) {
-        case HCRDataEntryCellStatusNotCompleted:
-        {
-            CGSize buttonSize = CGSizeMake(CGRectGetWidth(self.contentView.bounds) - CGRectGetWidth(self.titleLabel.bounds),
-                                           CGRectGetHeight(self.contentView.bounds));
-            
-            self.dataEntryButton = [UIButton buttonWithUNHCRTextStyleWithString:inputString
-                                                            horizontalAlignment:UIControlContentHorizontalAlignmentRight
-                                                                     buttonSize:buttonSize
-                                                                       fontSize:[NSNumber numberWithFloat:kTitleFontSize]];
-            [self.contentView addSubview:self.dataEntryButton];
-            
-            self.dataEntryButton.userInteractionEnabled = NO;
-            
-            self.dataEntryButton.center = [self _inputCenterForInputView:self.dataEntryButton];
-            
-            break;
-        }
-            
-        case HCRDataEntryCellStatusCompleted:
-            break;
-            
-        case HCRDataEntryCellStatusStatic:
-            self.staticTextLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-            [self.contentView addSubview:self.staticTextLabel];
-            
-            self.staticTextLabel.text = inputString;
-            self.staticTextLabel.font = [UIFont helveticaNeueLightFontFontOfSize:kTitleFontSize];
-            
-            [self.staticTextLabel sizeToFit];
-            self.staticTextLabel.center = [self _inputCenterForInputView:self.staticTextLabel];
-            
-            break;
-    }
-    
 }
 
 #pragma mark - Getters & Setters
@@ -161,6 +192,12 @@ static const CGFloat kXLabelPadding = 8;
 - (CGPoint)_inputCenterForInputView:(UIView *)view {
     return CGPointMake(CGRectGetWidth(self.contentView.bounds) - CGRectGetMidX(view.bounds) - kXLabelPadding,
                        CGRectGetMidY(self.contentView.bounds));
+}
+
+- (void)_stepperValueChanged:(UIStepper *)stepper {
+    
+    NSLog(@"stepper.value: %.2f",stepper.value);
+    
 }
 
 @end

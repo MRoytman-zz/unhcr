@@ -228,15 +228,18 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                        },
                      ],
              @"Questions": @[
-                     @"Cumulative number\nat start of period",
-                     @"New Users < 18",
-                     @"New Users ≥ 18",
-                     @"Repeat Users < 18",
-                     @"Repeat Users ≥ 18",
-                     @"Discontinued < 18",
-                     @"Discontinued ≥ 18",
-                     @"Cumulative number\nat end of period",
-                     @"Quantity of each method\ndistributed during period"
+                     @{@"Text": @"Cumulative number at start of period",
+                       @"Lines": @2},
+                     @{@"Text": @"New Users < 18"},
+                     @{@"Text": @"New Users ≥ 18"},
+                     @{@"Text": @"Repeat Users < 18"},
+                     @{@"Text": @"Repeat Users ≥ 18"},
+                     @{@"Text": @"Discontinued < 18"},
+                     @{@"Text": @"Discontinued ≥ 18"},
+                     @{@"Text": @"Cumulative number at end of period",
+                       @"Lines": @2},
+                     @{@"Text": @"Quantity of each method\ndistributed during period",
+                       @"Lines": @2},
                      ]};
 }
 
@@ -255,8 +258,8 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                      @{@"Title": @"Oedema"}
                      ],
              @"Questions": @[
-                     @"Refugee < 1",
-                     @"Refugee ≥ 1 to < 5"
+                     @{@"Text": @"Refugee < 1"},
+                     @{@"Text": @"Refugee ≥ 1 to < 5"}
                      ]};
 }
 
@@ -270,9 +273,9 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                      @{@"Title": @"# doses of TT 5"}
                      ],
              @"Questions": @[
-                     @"Refugee Pregnant",
-                     @"Refugee Non-Pregnant",
-                     @"Other"
+                     @{@"Text": @"Refugee Pregnant"},
+                     @{@"Text": @"Refugee Non-Pregnant"},
+                     @{@"Text": @"Other"}
                      ]};
 }
 
@@ -288,19 +291,24 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                      @{@"Title": @"repeat visits"},
                      @{@"Title": @"syphilis tests conducted"},
                      @{@"Title": @"syphilis tests positive"},
-                     @{@"Title": @"syphilis positive contacts\ntreated"},
-                     @{@"Title": @"high-risk pregnancies\ndetected"},
+                     @{@"Title": @"syphilis positive contacts treated",
+                       @"Lines": @2},
+                     @{@"Title": @"high-risk pregnancies detected",
+                       @"Lines": @2},
                      @{@"Title": @"abortions performed"},
                      @{@"Title": @"received 4 or more visits"},
-                     @{@"Title": @"received 2 doses of tetanus\ntoxoid vaccine"},
-                     @{@"Title": @"received at least 2 doses\nof fansidar"},
+                     @{@"Title": @"received 2 doses of tetanus toxoid vaccine",
+                       @"Lines": @2},
+                     @{@"Title": @"received at least 2 doses of fansidar",
+                       @"Lines": @2},
                      @{@"Title": @"screened for syphilis"},
-                     @{@"Title": @"received 2 doses of\nmebendazole"},
+                     @{@"Title": @"received 2 doses of mebendazole",
+                       @"Lines": @2},
                      @{@"Title": @"1 insecticide treated net (ITN)"}
                      ],
              @"Questions": @[
-                     @"Refugee < 18",
-                     @"Refugee ≥ 18"
+                     @{@"Text": @"Refugee < 18"},
+                     @{@"Text": @"Refugee ≥ 18"}
                      ]};
 }
 

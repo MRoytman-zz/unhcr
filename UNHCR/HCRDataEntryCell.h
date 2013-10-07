@@ -11,8 +11,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 typedef NS_ENUM(NSInteger, HCRDataEntryCellStatus) {
-    HCRDataEntryCellStatusNotCompleted,
-    HCRDataEntryCellStatusCompleted,
+    HCRDataEntryCellStatusNone,
+    HCRDataEntryCellStatusChildNotCompleted,
+    HCRDataEntryCellStatusChildCompleted,
+    HCRDataEntryCellStatusStepperInputReady,
     HCRDataEntryCellStatusStatic
 };
 
@@ -30,5 +32,6 @@ typedef NS_ENUM(NSInteger, HCRDataEntryCellStatus) {
 @property (nonatomic, strong) NSDictionary *dataDictionary;
 
 @property (nonatomic, readonly) UIButton *dataEntryButton;
+@property (nonatomic, readonly) UIStepper *dataEntryStepper;
 
 @end

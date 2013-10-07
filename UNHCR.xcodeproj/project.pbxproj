@@ -215,7 +215,8 @@
 				4F866B1217FAB840000350E4 /* Cluster Selection */,
 				4FD838EF18011B5A00B49498 /* Camp-Cluster Compare */,
 				4F1C940617FC28C80003AA21 /* Camp-Cluster Detail */,
-				4FD839021801DF6200B49498 /* Tally Sheets */,
+				4FD839021801DF6200B49498 /* Tally Sheet Picker */,
+				4FD8391218025C0700B49498 /* Tally Sheet Detail */,
 				4F866AC917F9E022000350E4 /* Supporting Files */,
 			);
 			path = UNHCR;
@@ -322,17 +323,24 @@
 			name = "Camp-Cluster Compare";
 			sourceTree = "<group>";
 		};
-		4FD839021801DF6200B49498 /* Tally Sheets */ = {
+		4FD839021801DF6200B49498 /* Tally Sheet Picker */ = {
 			isa = PBXGroup;
 			children = (
 				4FD839031801DF8900B49498 /* HCRTallySheetPickerViewController.h */,
 				4FD839041801DF8900B49498 /* HCRTallySheetPickerViewController.m */,
+			);
+			name = "Tally Sheet Picker";
+			sourceTree = "<group>";
+		};
+		4FD8391218025C0700B49498 /* Tally Sheet Detail */ = {
+			isa = PBXGroup;
+			children = (
 				4FD839061801E59500B49498 /* HCRTallySheetDetailViewController.h */,
 				4FD839071801E59500B49498 /* HCRTallySheetDetailViewController.m */,
 				4FD839091801E5B200B49498 /* HCRTallySheetDetailInputViewController.h */,
 				4FD8390A1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m */,
 			);
-			name = "Tally Sheets";
+			name = "Tally Sheet Detail";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

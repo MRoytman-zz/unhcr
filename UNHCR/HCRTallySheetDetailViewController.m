@@ -154,10 +154,10 @@ NSString *const kTallyOrganization = @"Organization";
             
         } else if ([cellTitle isEqualToString:kTallyOrganization]) {
             
-            dataCell.cellStatus = HCRDataEntryCellStatusNotCompleted;
+            dataCell.cellStatus = HCRDataEntryCellStatusChildNotCompleted;
             dataCell.dataDictionary = @{@"Header": @YES,
                                         @"Title": cellTitle,
-                                        @"Input": @"tap to select"};
+                                        @"Input": @"select"};
             
         }
         
@@ -166,13 +166,14 @@ NSString *const kTallyOrganization = @"Organization";
         NSDictionary *resourceDictionary = [self.tallyResources objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
         
         NSMutableDictionary *mutableData = @{@"Title": [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"],
-                                             @"Input": @"fill out"}.mutableCopy;
+                                             @"Input": @"enter"}.mutableCopy;
         
         NSString *subtitle = [resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
         if (subtitle) {
             [mutableData setObject:subtitle forKey:@"Subtitle"];
         }
         
+        dataCell.cellStatus = HCRDataEntryCellStatusChildNotCompleted;
         dataCell.dataDictionary = [NSDictionary dictionaryWithDictionary:mutableData];
         
     }
@@ -270,14 +271,15 @@ NSString *const kTallyOrganization = @"Organization";
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) {
-        return [HCRTableFlowLayout preferredTableFlowSingleLineCellSizeForCollectionView:collectionView];
+        return [HCRTableFlowLayout preferredTableFlowCellSizeForCollectionView:collectionView numberOfLines:@1];
     } else {
         
         NSDictionary *resourceDictionary = [self.tallyResources objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
         if ([resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO]) {
-            return [HCRTableFlowLayout preferredTableFlowDoubleLineCellSizeForCollectionView:collectionView];
+            return [HCRTableFlowLayout preferredTableFlowCellSizeForCollectionView:collectionView numberOfLines:@2];
         } else {
-            return [HCRTableFlowLayout preferredTableFlowCellSizeForCollectionView:collectionView];
+            NSNumber *numberOfLines = [resourceDictionary objectForKey:@"Lines" ofClass:@"NSNumber" mustExist:NO];
+            return [HCRTableFlowLayout preferredTableFlowCellSizeForCollectionView:collectionView numberOfLines:numberOfLines];
         }
             
     }

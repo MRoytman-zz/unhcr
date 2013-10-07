@@ -98,19 +98,24 @@ CGFloat const kTableCellDoubleLineHeight = 54;
 
 #pragma mark - Class Methods
 
-+ (CGSize)preferredTableFlowCellSizeForCollectionView:(UICollectionView *)collectionView {
++ (CGSize)preferredTableFlowCellSizeForCollectionView:(UICollectionView *)collectionView numberOfLines:(NSNumber *)numberOfLines {
+    
+    CGFloat height = kTableCellHeight;
+    if (numberOfLines) {
+        
+        if (numberOfLines.integerValue == 1) {
+            height = kTableCellSingleLineHeight;
+        } else if (numberOfLines.integerValue == 2) {
+            height = kTableCellDoubleLineHeight;
+        } else {
+            NSAssert(NO, @"Unknown number of lines specified. Please extend class.");
+        }
+        
+    }
+    
     return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                      kTableCellHeight);
-}
-
-+ (CGSize)preferredTableFlowSingleLineCellSizeForCollectionView:(UICollectionView *)collectionView {
-    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                      kTableCellSingleLineHeight);
-}
-
-+ (CGSize)preferredTableFlowDoubleLineCellSizeForCollectionView:(UICollectionView *)collectionView {
-    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                      kTableCellDoubleLineHeight);
+                      height);
+    
 }
 
 @end

@@ -51,6 +51,8 @@ NSString *const kTallyDetailInputHeaderIdentifier = @"kTallyDetailInputHeaderIde
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     [tableLayout setDisplayHeader:YES withSize:[HCRTableFlowLayout preferredHeaderSizeForCollectionView:self.collectionView]];
     tableLayout.sectionInset = UIEdgeInsetsMake(12, 0, 12, 0);
+    tableLayout.minimumLineSpacing = 0;
+    tableLayout.itemSize = [HCRTableFlowLayout preferredTableFlowCellSizeForCollectionView:self.collectionView numberOfLines:@2];
     
     [self.collectionView registerClass:[HCRDataEntryCell class]
             forCellWithReuseIdentifier:kTallyDetailInputCellIdentifier];
@@ -95,11 +97,11 @@ NSString *const kTallyDetailInputHeaderIdentifier = @"kTallyDetailInputHeaderIde
     
     HCRDataEntryCell *dataCell = [collectionView dequeueReusableCellWithReuseIdentifier:kTallyDetailInputCellIdentifier forIndexPath:indexPath];
     
-    NSString *questionString = [self.questionsArray objectAtIndex:indexPath.row ofClass:@"NSString"];
+    NSDictionary *questionDictionary = [self.questionsArray objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+    NSString *questionString = [questionDictionary objectForKey:@"Text" ofClass:@"NSString"];
     
-    dataCell.cellStatus = HCRDataEntryCellStatusNotCompleted;
-    dataCell.dataDictionary = @{@"Title": questionString,
-                                @"Input": @"enter data"};
+    dataCell.cellStatus = HCRDataEntryCellStatusStepperInputReady;
+    dataCell.dataDictionary = @{@"Title": questionString};
     
     return dataCell;
     
@@ -146,6 +148,16 @@ NSString *const kTallyDetailInputHeaderIdentifier = @"kTallyDetailInputHeaderIde
     NSParameterAssert([cell isKindOfClass:[HCRDataEntryCell class]]);
     
     [cell.dataEntryButton setHighlighted:NO];
+    
+}
+
+#pragma mark - UICollectionView Delegate Flow Layout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSDictionary *questionDictionary = [self.questionsArray objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+    NSNumber *numberOfLines = [questionDictionary objectForKey:@"Lines" ofClass:@"NSNumber" mustExist:NO];
+    return [HCRTableFlowLayout preferredTableFlowCellSizeForCollectionView:collectionView numberOfLines:numberOfLines];
     
 }
 

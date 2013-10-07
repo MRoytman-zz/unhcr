@@ -10,9 +10,6 @@
 
 @interface HCRTableFlowLayout : HCRFlowLayout
 
-+ (CGSize)preferredTableFlowCellSizeForCollectionView:(UICollectionView *)collectionView;
-
-+ (CGSize)preferredTableFlowSingleLineCellSizeForCollectionView:(UICollectionView *)collectionView;
-+ (CGSize)preferredTableFlowDoubleLineCellSizeForCollectionView:(UICollectionView *)collectionView;
++ (CGSize)preferredTableFlowCellSizeForCollectionView:(UICollectionView *)collectionView numberOfLines:(NSNumber *)numberOfLines;
 
 @end
