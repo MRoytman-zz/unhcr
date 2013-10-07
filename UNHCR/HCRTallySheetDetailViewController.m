@@ -136,7 +136,7 @@ NSString *const kTallyOrganization = @"Organization";
         
         if ([cellTitle isEqualToString:kTallyReportingPeriod]) {
             
-            dataCell.cellType = HCRDataEntryCellTypeStatic;
+            dataCell.cellStatus = HCRDataEntryCellStatusStatic;
             dataCell.dataDictionary = @{@"Header": @YES,
                                         @"Title": cellTitle,
                                         @"Input": [self _inputDateRangeString]};
@@ -147,14 +147,14 @@ NSString *const kTallyOrganization = @"Organization";
                                      self.countryName,
                                      self.campName];
             
-            dataCell.cellType = HCRDataEntryCellTypeStatic;
+            dataCell.cellStatus = HCRDataEntryCellStatusStatic;
             dataCell.dataDictionary = @{@"Header": @YES,
                                         @"Title": cellTitle,
                                         @"Input": inputString};
             
         } else if ([cellTitle isEqualToString:kTallyOrganization]) {
             
-            dataCell.cellType = HCRDataEntryCellTypeNotCompleted;
+            dataCell.cellStatus = HCRDataEntryCellStatusNotCompleted;
             dataCell.dataDictionary = @{@"Header": @YES,
                                         @"Title": cellTitle,
                                         @"Input": @"tap to select"};
@@ -233,12 +233,13 @@ NSString *const kTallyOrganization = @"Organization";
         HCRTallySheetDetailInputViewController *tallyInput = [[HCRTallySheetDetailInputViewController alloc] initWithCollectionViewLayout:[HCRTallySheetDetailInputViewController preferredLayout]];
         
         tallyInput.headerDictionary = @{@"Header": [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"],
-                                        @"Subheader": [NSString stringWithFormat:@"%@ > %@ - %@",
+                                        @"Subheader": [NSString stringWithFormat:@"%@ > %@ @ %@",
                                                        self.countryName,
                                                        self.campName,
                                                        [self _inputDateRangeString]]};
         
         tallyInput.questionsArray = questions;
+        tallyInput.selectedClusterMetaData = self.selectedClusterMetaData;
         
         [self.navigationController pushViewController:tallyInput animated:YES];
         

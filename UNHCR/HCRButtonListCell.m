@@ -43,7 +43,7 @@
 #pragma mark - Getters & Setters
 
 - (CGSize)sharedButtonSize {
-    return CGSizeMake(kLargeButtonWidth,
+    return CGSizeMake(CGRectGetWidth(self.bounds),
                       kSharedButtonHeight);
 }
 

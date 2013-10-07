@@ -159,7 +159,10 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
 + (NSArray *)_healthTallySheetsArray {
     
     return @[
-             [HCRDataSource _familyPlanningTallySheet]
+             [HCRDataSource _growthMonitoringTallySheet],
+             [HCRDataSource _familyPlanningTallySheet],
+             [HCRDataSource _tetanusToxoidTallySheet],
+             [HCRDataSource _antenatalTallySheet]
              ];
     
 }
@@ -225,15 +228,79 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                        },
                      ],
              @"Questions": @[
-                     @"Cumulative number at start of period",
+                     @"Cumulative number\nat start of period",
                      @"New Users < 18",
                      @"New Users ≥ 18",
                      @"Repeat Users < 18",
                      @"Repeat Users ≥ 18",
                      @"Discontinued < 18",
                      @"Discontinued ≥ 18",
-                     @"Cumulative number at end of period",
-                     @"Quantity of each method distributed during period"
+                     @"Cumulative number\nat end of period",
+                     @"Quantity of each method\ndistributed during period"
+                     ]};
+}
+
++ (NSDictionary *)_growthMonitoringTallySheet {
+    return @{@"Name": @"Growth Monitoring",
+             @"Resources": @[
+                     @{@"Title": @"Green",
+                       @"Subtitle": @"(normal)"
+                       },
+                     @{@"Title": @"Yellow",
+                       @"Subtitle": @"(borderline)"
+                       },
+                     @{@"Title": @"Red",
+                       @"Subtitle": @"(danger)"
+                       },
+                     @{@"Title": @"Oedema"}
+                     ],
+             @"Questions": @[
+                     @"Refugee < 1",
+                     @"Refugee ≥ 1 to < 5"
+                     ]};
+}
+
++ (NSDictionary *)_tetanusToxoidTallySheet {
+    return @{@"Name": @"Tetanus Toxoid",
+             @"Resources": @[
+                     @{@"Title": @"# doses of TT 1"},
+                     @{@"Title": @"# doses of TT 2"},
+                     @{@"Title": @"# doses of TT 3"},
+                     @{@"Title": @"# doses of TT 4"},
+                     @{@"Title": @"# doses of TT 5"}
+                     ],
+             @"Questions": @[
+                     @"Refugee Pregnant",
+                     @"Refugee Non-Pregnant",
+                     @"Other"
+                     ]};
+}
+
++ (NSDictionary *)_antenatalTallySheet {
+    return @{@"Name": @"Antenatal",
+             @"Resources": @[
+                     @{@"Title": @"first visits",
+                       @"Subtitle": @"< 1st trimester"
+                       },
+                     @{@"Title": @"first visits",
+                       @"Subtitle": @"> 1st trimester"
+                       },
+                     @{@"Title": @"repeat visits"},
+                     @{@"Title": @"syphilis tests conducted"},
+                     @{@"Title": @"syphilis tests positive"},
+                     @{@"Title": @"syphilis positive contacts\ntreated"},
+                     @{@"Title": @"high-risk pregnancies\ndetected"},
+                     @{@"Title": @"abortions performed"},
+                     @{@"Title": @"received 4 or more visits"},
+                     @{@"Title": @"received 2 doses of tetanus\ntoxoid vaccine"},
+                     @{@"Title": @"received at least 2 doses\nof fansidar"},
+                     @{@"Title": @"screened for syphilis"},
+                     @{@"Title": @"received 2 doses of\nmebendazole"},
+                     @{@"Title": @"1 insecticide treated net (ITN)"}
+                     ],
+             @"Questions": @[
+                     @"Refugee < 18",
+                     @"Refugee ≥ 18"
                      ]};
 }
 

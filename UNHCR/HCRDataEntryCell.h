@@ -10,17 +10,17 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-typedef NS_ENUM(NSInteger, HCRDataEntryCellType) {
-    HCRDataEntryCellTypeNotCompleted,
-    HCRDataEntryCellTypeCompleted,
-    HCRDataEntryCellTypeStatic
+typedef NS_ENUM(NSInteger, HCRDataEntryCellStatus) {
+    HCRDataEntryCellStatusNotCompleted,
+    HCRDataEntryCellStatusCompleted,
+    HCRDataEntryCellStatusStatic
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRDataEntryCell : UICollectionViewCell
 
-@property (nonatomic) HCRDataEntryCellType cellType;
+@property (nonatomic) HCRDataEntryCellStatus cellStatus;
 
 // dataDictionary fields
 // Header - BOOL - if present, line is header object and deserves more weight

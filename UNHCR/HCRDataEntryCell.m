@@ -52,7 +52,7 @@ static const CGFloat kXLabelPadding = 8;
 
 - (void)prepareForReuse {
     
-    self.cellType = HCRDataEntryCellTypeNotCompleted;
+    self.cellStatus = HCRDataEntryCellStatusNotCompleted;
     self.dataDictionary = nil;
     
     [self.titleLabel removeFromSuperview];
@@ -82,6 +82,8 @@ static const CGFloat kXLabelPadding = 8;
     self.titleLabel.font = (isHeader) ? [UIFont helveticaNeueBoldFontOfSize:kTitleFontSize] : [UIFont helveticaNeueFontOfSize:kTitleFontSize];
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
     
+    self.titleLabel.numberOfLines = 2;
+    
     NSString *titleString = [self.dataDictionary objectForKey:@"Title" ofClass:@"NSString"];
     NSString *subtitleString = [self.dataDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
     if (subtitleString) {
@@ -98,7 +100,6 @@ static const CGFloat kXLabelPadding = 8;
                                                            combinedString.length - titleString.length)];
         
         self.titleLabel.attributedText = mutableAttributedString;
-        self.titleLabel.numberOfLines = 2;
         
     } else {
         self.titleLabel.text = titleString;
@@ -111,8 +112,8 @@ static const CGFloat kXLabelPadding = 8;
     
     // input
     NSString *inputString = [self.dataDictionary objectForKey:@"Input" ofClass:@"NSString"];
-    switch (self.cellType) {
-        case HCRDataEntryCellTypeNotCompleted:
+    switch (self.cellStatus) {
+        case HCRDataEntryCellStatusNotCompleted:
         {
             CGSize buttonSize = CGSizeMake(CGRectGetWidth(self.contentView.bounds) - CGRectGetWidth(self.titleLabel.bounds),
                                            CGRectGetHeight(self.contentView.bounds));
@@ -130,10 +131,10 @@ static const CGFloat kXLabelPadding = 8;
             break;
         }
             
-        case HCRDataEntryCellTypeCompleted:
+        case HCRDataEntryCellStatusCompleted:
             break;
             
-        case HCRDataEntryCellTypeStatic:
+        case HCRDataEntryCellStatusStatic:
             self.staticTextLabel = [[UILabel alloc] initWithFrame:CGRectZero];
             [self.contentView addSubview:self.staticTextLabel];
             

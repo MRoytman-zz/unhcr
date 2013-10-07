@@ -12,5 +12,6 @@
 
 @property (nonatomic, strong) NSDictionary *headerDictionary;
 @property (nonatomic, strong) NSArray *questionsArray;
+@property (nonatomic, strong) NSDictionary *selectedClusterMetaData;
 
 @end
