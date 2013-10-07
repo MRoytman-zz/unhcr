@@ -19,6 +19,8 @@ static const CGFloat kImageToTextRatio = 0.6;
 @property UILabel *clusterLabel;
 @property UIImageView *clusterImageView;
 
+@property UIButton *disclosureButton;
+
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -46,10 +48,16 @@ static const CGFloat kImageToTextRatio = 0.6;
     _clusterDictionary = clusterDictionary;
     
     if ( clusterDictionary == nil ) {
+        
         [self.clusterImageView removeFromSuperview];
         self.clusterImageView = nil;
+        
         [self.clusterLabel removeFromSuperview];
         self.clusterLabel = nil;
+        
+        [self.disclosureButton removeFromSuperview];
+        self.disclosureButton = nil;
+        
         return;
     }
     
@@ -101,6 +109,36 @@ static const CGFloat kImageToTextRatio = 0.6;
     [self.clusterLabel sizeToFit];
     self.clusterLabel.center = CGPointMake(CGRectGetMidX(self.bounds),
                                            CGRectGetHeight(self.bounds) * kImageToTextRatio + CGRectGetMidY(self.clusterLabel.bounds) + 4);
+    
+    if ([HCRDataSource globalAlertsData].count > 0) {
+        
+        BOOL showDisclosure = NO;
+        
+        for (NSDictionary *alertsDictionary in [HCRDataSource globalAlertsData]) {
+            
+            NSString *alertCluster = [alertsDictionary objectForKey:@"Cluster" ofClass:@"NSString"];
+            if ([alertCluster isEqualToString:clusterName]) {
+                showDisclosure = YES;
+                break;
+            }
+            
+        }
+        
+        if (showDisclosure) {
+            
+            if (!self.disclosureButton) {
+                self.disclosureButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+                [self addSubview:self.disclosureButton];
+                
+                self.disclosureButton.tintColor = [UIColor redColor];
+                self.disclosureButton.userInteractionEnabled = NO;
+            }
+            
+            self.disclosureButton.center = CGPointMake(CGRectGetMaxX(self.bounds) - CGRectGetMidX(self.disclosureButton.bounds),
+                                                       CGRectGetMidY(self.disclosureButton.bounds));
+        }
+        
+    }
     
 }
 

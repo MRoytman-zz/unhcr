@@ -23,6 +23,8 @@
         }
     }
     
+    header.backgroundColor = [[UIColor UNHCRBlue] colorWithAlphaComponent:0.7];
+    
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:header.bounds];
     [header addSubview:headerLabel];
     
@@ -30,7 +32,6 @@
     headerLabel.font = [UIFont boldSystemFontOfSize:18];
     
     headerLabel.textColor = [UIColor whiteColor];
-    headerLabel.backgroundColor = [[UIColor UNHCRBlue] colorWithAlphaComponent:0.7];
     headerLabel.textAlignment = NSTextAlignmentCenter;
     
     return header;

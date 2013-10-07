@@ -11,7 +11,6 @@
 #import "HCRClusterCollectionController.h"
 #import "HCRClusterFlowLayout.h"
 #import "HCRClusterCollectionCell.h"
-#import "HCRDataSource.h"
 #import "HCRCampClusterDetailViewController.h"
 #import "HCRCampClusterCompareViewController.h"
 

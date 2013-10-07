@@ -10,7 +10,6 @@
 #import "HCRCountryCollectionCell.h"
 #import "HCRCampCollectionViewController.h"
 #import "HCRTableFlowLayout.h"
-#import "HCRDataSource.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 

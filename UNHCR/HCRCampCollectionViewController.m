@@ -12,7 +12,6 @@
 #import "HCRCampCollectionCell.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRClusterCollectionController.h"
-#import "HCRDataSource.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 

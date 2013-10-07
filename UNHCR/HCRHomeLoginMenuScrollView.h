@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, HCRHomeLoginMenuState) {
 
 @property (nonatomic) HCRHomeLoginMenuState loginState;
 
+@property (nonatomic) BOOL alertsUnread;
+
 @property (nonatomic, readonly) UIButton *loginButton;
 @property (nonatomic, readonly) UIButton *alertsButton;
 @property (nonatomic, readonly) UIButton *conflictsButton;

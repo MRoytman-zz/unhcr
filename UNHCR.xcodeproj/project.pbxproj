@@ -47,6 +47,8 @@
 		4FD8390B1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390A1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m */; };
 		4FD8390E1801EB5F00B49498 /* HCRDataEntryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */; };
 		4FD8391118020D4E00B49498 /* UIFont+HCRCommonFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */; };
+		4FD839151803197200B49498 /* HCRAlertCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839141803197200B49498 /* HCRAlertCell.m */; };
+		4FD8391918032B6300B49498 /* HCRAlertsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391818032B6300B49498 /* HCRAlertsViewController.m */; };
 		C1FCCA2A37DE44BABAAEC9EC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04773A9AD17C462187CA1561 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -128,6 +130,10 @@
 		4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDataEntryCell.m; sourceTree = "<group>"; };
 		4FD8390F18020D4E00B49498 /* UIFont+HCRCommonFonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+HCRCommonFonts.h"; sourceTree = "<group>"; };
 		4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+HCRCommonFonts.m"; sourceTree = "<group>"; };
+		4FD839131803197200B49498 /* HCRAlertCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRAlertCell.h; sourceTree = "<group>"; };
+		4FD839141803197200B49498 /* HCRAlertCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRAlertCell.m; sourceTree = "<group>"; };
+		4FD8391718032B6300B49498 /* HCRAlertsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRAlertsViewController.h; sourceTree = "<group>"; };
+		4FD8391818032B6300B49498 /* HCRAlertsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRAlertsViewController.m; sourceTree = "<group>"; };
 		D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -210,6 +216,7 @@
 				4F866B0C17FAA5FE000350E4 /* Categories */,
 				4F866B0117FA9F8B000350E4 /* Shared UI */,
 				4F1C940C17FCBE6A0003AA21 /* Home View */,
+				4FD8391618032B4100B49498 /* Alerts View */,
 				4F866AFD17FA8324000350E4 /* Country Selection */,
 				4F866B0517FAA083000350E4 /* Camp Selection */,
 				4F866B1217FAB840000350E4 /* Cluster Selection */,
@@ -261,6 +268,8 @@
 				4FD838F7180121EF00B49498 /* HCRGraphCell.m */,
 				4FD8390C1801EB5F00B49498 /* HCRDataEntryCell.h */,
 				4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */,
+				4FD839131803197200B49498 /* HCRAlertCell.h */,
+				4FD839141803197200B49498 /* HCRAlertCell.m */,
 			);
 			name = "Shared UI";
 			sourceTree = "<group>";
@@ -341,6 +350,15 @@
 				4FD8390A1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m */,
 			);
 			name = "Tally Sheet Detail";
+			sourceTree = "<group>";
+		};
+		4FD8391618032B4100B49498 /* Alerts View */ = {
+			isa = PBXGroup;
+			children = (
+				4FD8391718032B6300B49498 /* HCRAlertsViewController.h */,
+				4FD8391818032B6300B49498 /* HCRAlertsViewController.m */,
+			);
+			name = "Alerts View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -464,6 +482,7 @@
 				4FD838EB1800D95000B49498 /* UIAlertView+Blocks.m in Sources */,
 				4F866AF617F9EC0C000350E4 /* HCRTableFlowLayout.m in Sources */,
 				4F866ACF17F9E022000350E4 /* main.m in Sources */,
+				4FD839151803197200B49498 /* HCRAlertCell.m in Sources */,
 				4F0C702D17FF56680081F201 /* MKMapView+HCRMapView.m in Sources */,
 				4F1C940517FC28C40003AA21 /* HCRCampClusterDetailViewController.m in Sources */,
 				4FD8390B1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m in Sources */,
@@ -474,6 +493,7 @@
 				4F1C93F917FC06D00003AA21 /* HCRClusterFlowLayout.m in Sources */,
 				4F866B0817FAA09B000350E4 /* HCRCampCollectionCell.m in Sources */,
 				4F1C93FF17FC0B150003AA21 /* HCRClusterCollectionCell.m in Sources */,
+				4FD8391918032B6300B49498 /* HCRAlertsViewController.m in Sources */,
 				4FD8391118020D4E00B49498 /* UIFont+HCRCommonFonts.m in Sources */,
 				4FD839081801E59500B49498 /* HCRTallySheetDetailViewController.m in Sources */,
 				4F0C702A17FF4BE70081F201 /* HCRCollectionViewController.m in Sources */,

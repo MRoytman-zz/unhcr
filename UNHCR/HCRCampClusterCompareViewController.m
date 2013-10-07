@@ -7,7 +7,6 @@
 //
 
 #import "HCRCampClusterCompareViewController.h"
-#import "HCRDataSource.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRGraphCell.h"
 #import "HCRCampClusterDetailViewController.h"

@@ -11,6 +11,7 @@
 @interface HCRDataSource : NSObject
 
 + (NSArray *)globalDataArray;
++ (NSArray *)globalAlertsData;
 + (NSArray *)clusterLayoutMetaDataArray;
 
 @end

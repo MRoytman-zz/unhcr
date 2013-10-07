@@ -43,10 +43,10 @@
                                       CGRectGetHeight(self.frame));
         
         // BUTTONS
-        CGFloat buttonPadding = ([UIDevice isFourInch]) ? 10 : 6;
+        CGFloat buttonPadding = ([UIDevice isFourInch]) ? 10 : 0;
         CGFloat buttonHeight = 50;
         
-        CGFloat yButtonOffset = (CGRectGetHeight(self.frame) - (buttonHeight * 2 + buttonPadding)) * 0.5 - 5.0;
+        CGFloat yButtonOffset = (CGRectGetHeight(self.frame) - (buttonHeight * 3 + buttonPadding * 2)) * 0.5 - 5.0;
         
         // ALERTS
         self.alertsButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Alerts"
@@ -56,7 +56,7 @@
         [self addSubview:self.alertsButton];
         
         self.alertsButton.center = CGPointMake(CGRectGetWidth(self.frame) + CGRectGetMidX(self.bounds),
-                                               MIN(yButtonOffset,25) + CGRectGetMidY(self.alertsButton.bounds));
+                                               yButtonOffset + CGRectGetMidY(self.alertsButton.bounds));
         
         // CONFLICTS
         self.conflictsButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Conflicts"
@@ -108,13 +108,15 @@
         [self.signingInSpinner startAnimating];
         
         // position
-        CGFloat padding = 10;
+        CGFloat xButtonPadding = 10;
+        CGFloat yMininumOffset = 30;
+        CGFloat yButtonPadding = 45;
         
-        self.signingInSpinner.center = CGPointMake(CGRectGetMidX(self.frame) - (CGRectGetMidX(self.signingInLabel.bounds) + CGRectGetMidX(self.signingInSpinner.bounds) + padding) + CGRectGetMidX(self.signingInSpinner.bounds),
-                                                   CGRectGetMidY(self.alertsButton.frame));
+        self.signingInSpinner.center = CGPointMake(CGRectGetMidX(self.frame) - (CGRectGetMidX(self.signingInLabel.bounds) + CGRectGetMidX(self.signingInSpinner.bounds) + xButtonPadding) + CGRectGetMidX(self.signingInSpinner.bounds),
+                                                   MAX(CGRectGetMidY(self.alertsButton.frame),yMininumOffset));
         
-        self.signingInLabel.center = CGPointMake(CGRectGetMaxX(self.signingInSpinner.frame) + CGRectGetMidX(self.signingInLabel.bounds) + padding,
-                                                 CGRectGetMidY(self.alertsButton.frame));
+        self.signingInLabel.center = CGPointMake(CGRectGetMaxX(self.signingInSpinner.frame) + CGRectGetMidX(self.signingInLabel.bounds) + xButtonPadding,
+                                                 MAX(CGRectGetMidY(self.alertsButton.frame),yMininumOffset));
         
         // login button
         self.loginButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Log in"
@@ -124,9 +126,14 @@
         [self addSubview:self.loginButton];
         
         self.loginButton.center = CGPointMake(CGRectGetMidX(self.frame),
-                                              CGRectGetMidY(self.alertsButton.frame));
+                                              MAX(CGRectGetMidY(self.alertsButton.frame),yMininumOffset));
         
         self.loginButton.alpha = 0.0; // TODO: handle initial state better
+        
+        // shared
+        CGFloat desired4Inch = CGRectGetMidY(self.conflictsButton.frame);
+        CGFloat desired35Inch = CGRectGetMaxY(self.loginButton.frame) + yButtonPadding;
+        CGFloat yOffset = MAX(desired4Inch, desired35Inch);
         
         // signout button
         CGFloat xSmallButtonOffset = 15;
@@ -135,7 +142,7 @@
         [self addSubview:self.signOutButton];
         
         self.signOutButton.frame = CGRectMake(xSmallButtonOffset,
-                                              CGRectGetMidY(self.conflictsButton.frame),
+                                              yOffset,
                                               smallButtonSize.width,
                                               smallButtonSize.height);
         
@@ -149,7 +156,7 @@
         [self addSubview:self.settingsButton];
         
         self.settingsButton.frame = CGRectMake(CGRectGetWidth(self.frame) - smallButtonSize.width - xSmallButtonOffset,
-                                               CGRectGetMidY(self.conflictsButton.frame),
+                                               yOffset,
                                                smallButtonSize.width,
                                                smallButtonSize.height);
         
@@ -166,6 +173,27 @@
 }
 
 #pragma mark - Getters & Setters
+
+- (void)setAlertsUnread:(BOOL)alertsUnread {
+    
+    _alertsUnread = alertsUnread;
+    
+    if (alertsUnread) {
+        
+        [UIView animateWithDuration:0.5
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse
+                         animations:^{
+                             self.alertsButton.tintColor = [UIColor redColor];
+                         }
+                         completion:nil];
+        
+    } else {
+        [self.alertsButton.layer removeAllAnimations];
+        self.alertsButton.tintColor = [UIColor UNHCRBlue];
+    }
+    
+}
 
 - (void)setLoginState:(HCRHomeLoginMenuState)loginState {
     

@@ -10,6 +10,7 @@
 #import "HCRCountryCollectionViewController.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRHomeLoginMenuScrollView.h"
+#import "HCRAlertsViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -117,6 +118,8 @@
     self.scrollView = [[HCRHomeLoginMenuScrollView alloc] initWithFrame:scrollFrame];
     [self.view addSubview:self.scrollView];
     
+    self.scrollView.alertsUnread = ([HCRDataSource globalAlertsData].count > 0);
+    
     [self.scrollView.alertsButton addTarget:self
                                      action:@selector(_alertsButtonPressed)
                            forControlEvents:UIControlEventTouchUpInside];
@@ -160,7 +163,9 @@
 #pragma mark - Private Methods
 
 - (void)_alertsButtonPressed {
-    // TODO: alerts button
+    HCRAlertsViewController *alertsController = [[HCRAlertsViewController alloc] initWithCollectionViewLayout:[HCRAlertsViewController preferredLayout]];
+    
+    [self.navigationController pushViewController:alertsController animated:YES];
 }
 
 - (void)_conflictsButtonPressed {
