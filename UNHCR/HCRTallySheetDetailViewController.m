@@ -233,7 +233,10 @@ NSString *const kTallyOrganization = @"Organization";
         
         HCRTallySheetDetailInputViewController *tallyInput = [[HCRTallySheetDetailInputViewController alloc] initWithCollectionViewLayout:[HCRTallySheetDetailInputViewController preferredLayout]];
         
-        tallyInput.headerDictionary = @{@"Header": [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"],
+        NSString *title = [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"];
+        NSString *subtitle = [resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
+        NSString *headerString = (subtitle) ? [NSString stringWithFormat:@"%@ %@",title, subtitle] : title;
+        tallyInput.headerDictionary = @{@"Header": headerString,
                                         @"Subheader": [NSString stringWithFormat:@"%@ > %@ @ %@",
                                                        self.countryName,
                                                        self.campName,
