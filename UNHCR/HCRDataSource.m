@@ -238,8 +238,8 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                      @{@"Text": @"Discontinued ≥ 18"},
                      @{@"Text": @"Cumulative number at end of period",
                        @"Lines": @2},
-                     @{@"Text": @"Quantity of each method\ndistributed during period",
-                       @"Lines": @2},
+                     @{@"Text": @"Quantity of each method distributed during period",
+                       @"Lines": @3},
                      ]};
 }
 

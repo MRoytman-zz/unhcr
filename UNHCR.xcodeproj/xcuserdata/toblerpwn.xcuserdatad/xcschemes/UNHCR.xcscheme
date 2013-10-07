@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4F866ABE17F9E022000350E4"
                BuildableName = "UNHCR.app"
-               BlueprintName = "UNHCR"
+               BlueprintName = "RIS"
                ReferencedContainer = "container:UNHCR.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,7 +44,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4F866ABE17F9E022000350E4"
             BuildableName = "UNHCR.app"
-            BlueprintName = "UNHCR"
+            BlueprintName = "RIS"
             ReferencedContainer = "container:UNHCR.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,7 +63,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4F866ABE17F9E022000350E4"
             BuildableName = "UNHCR.app"
-            BlueprintName = "UNHCR"
+            BlueprintName = "RIS"
             ReferencedContainer = "container:UNHCR.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -81,7 +81,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4F866ABE17F9E022000350E4"
             BuildableName = "UNHCR.app"
-            BlueprintName = "UNHCR"
+            BlueprintName = "RIS"
             ReferencedContainer = "container:UNHCR.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

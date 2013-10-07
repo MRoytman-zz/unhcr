@@ -11,8 +11,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 CGFloat const kTableCellHeight = 44;
-CGFloat const kTableCellSingleLineHeight = 34;
-CGFloat const kTableCellDoubleLineHeight = 54;
+CGFloat const kTableCellHeightOffset = -10;
+CGFloat const kTableCellHeightIncremenetPerLine = 20;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -100,19 +100,8 @@ CGFloat const kTableCellDoubleLineHeight = 54;
 
 + (CGSize)preferredTableFlowCellSizeForCollectionView:(UICollectionView *)collectionView numberOfLines:(NSNumber *)numberOfLines {
     
-    CGFloat height = kTableCellHeight;
-    if (numberOfLines) {
-        
-        if (numberOfLines.integerValue == 1) {
-            height = kTableCellSingleLineHeight;
-        } else if (numberOfLines.integerValue == 2) {
-            height = kTableCellDoubleLineHeight;
-        } else {
-            NSAssert(NO, @"Unknown number of lines specified. Please extend class.");
-        }
-        
-    }
-    
+    CGFloat height = (numberOfLines) ? kTableCellHeight + kTableCellHeightOffset + ((numberOfLines.integerValue - 1) * kTableCellHeightIncremenetPerLine) : kTableCellHeight;
+
     return CGSizeMake(CGRectGetWidth(collectionView.bounds),
                       height);
     

@@ -346,9 +346,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4F866ABE17F9E022000350E4 /* UNHCR */ = {
+		4F866ABE17F9E022000350E4 /* RIS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4F866AEB17F9E022000350E4 /* Build configuration list for PBXNativeTarget "UNHCR" */;
+			buildConfigurationList = 4F866AEB17F9E022000350E4 /* Build configuration list for PBXNativeTarget "RIS" */;
 			buildPhases = (
 				CD4E84F9376F4BB4B72AC98E /* Check Pods Manifest.lock */,
 				4F866ABB17F9E022000350E4 /* Sources */,
@@ -360,7 +360,7 @@
 			);
 			dependencies = (
 			);
-			name = UNHCR;
+			name = RIS;
 			productName = UNHCR;
 			productReference = 4F866ABF17F9E022000350E4 /* UNHCR.app */;
 			productType = "com.apple.product-type.application";
@@ -392,7 +392,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4F866ABE17F9E022000350E4 /* UNHCR */,
+				4F866ABE17F9E022000350E4 /* RIS */,
 			);
 		};
 /* End PBXProject section */
@@ -620,7 +620,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4F866AEB17F9E022000350E4 /* Build configuration list for PBXNativeTarget "UNHCR" */ = {
+		4F866AEB17F9E022000350E4 /* Build configuration list for PBXNativeTarget "RIS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4F866AEC17F9E022000350E4 /* Debug */,

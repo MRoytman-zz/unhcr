@@ -18,6 +18,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+static const CGFloat kStepperNumberFontSize = 25.0;
 static const CGFloat kHeaderFontSize = 20.0;
 static const CGFloat kTitleFontSize = 18.0;
 static const CGFloat kSubtitleFontSize = 15.0;
@@ -54,9 +55,6 @@ static const CGFloat kXLabelPadding = 8;
 
 - (void)prepareForReuse {
     
-    self.cellStatus = HCRDataEntryCellStatusNone;
-    self.dataDictionary = nil;
-    
     [self.titleLabel removeFromSuperview];
     self.titleLabel = nil;
     
@@ -66,8 +64,14 @@ static const CGFloat kXLabelPadding = 8;
     [self.dataEntryStepper removeFromSuperview];
     self.dataEntryStepper = nil;
     
+    [self.dataEntryStepperLabel removeFromSuperview];
+    self.dataEntryStepperLabel = nil;
+    
     [self.staticTextLabel removeFromSuperview];
     self.staticTextLabel = nil;
+    
+    self.cellStatus = HCRDataEntryCellStatusNone;
+    self.dataDictionary = nil;
     
 }
 
@@ -78,8 +82,9 @@ static const CGFloat kXLabelPadding = 8;
     NSParameterAssert(self.dataDictionary);
     
     // input
-    NSString *inputString = [self.dataDictionary objectForKey:@"Input" ofClass:@"NSString" mustExist:NO];
     UIView *inputView;
+    CGFloat titleLabelFontSize = kTitleFontSize;
+    NSString *inputString = [self.dataDictionary objectForKey:@"Input" ofClass:@"NSString" mustExist:NO];
     switch (self.cellStatus) {
         case HCRDataEntryCellStatusNone:
             break;
@@ -111,8 +116,13 @@ static const CGFloat kXLabelPadding = 8;
             
         case HCRDataEntryCellStatusStepperInputReady:
         {
+            
+            titleLabelFontSize = kSubtitleFontSize;
+            
             self.dataEntryStepper = [UIStepper new];
             [self.contentView addSubview:self.dataEntryStepper];
+            
+            self.dataEntryStepper.maximumValue = HUGE_VALF;
             
             self.dataEntryStepper.center = [self _inputCenterForInputView:self.dataEntryStepper];
             
@@ -120,7 +130,21 @@ static const CGFloat kXLabelPadding = 8;
                                       action:@selector(_stepperValueChanged:)
                             forControlEvents:UIControlEventValueChanged];
             
-            inputView = self.dataEntryStepper;
+            CGFloat labelWidth = 40;
+            self.dataEntryStepperLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(self.dataEntryStepper.frame) - labelWidth,
+                                                                                   0,
+                                                                                   labelWidth,
+                                                                                   CGRectGetHeight(self.contentView.bounds))];
+            [self.contentView addSubview:self.dataEntryStepperLabel];
+            
+            self.dataEntryStepperLabel.text = @"0";
+            self.dataEntryStepperLabel.font = [UIFont helveticaNeueBoldFontOfSize:kStepperNumberFontSize];
+            self.dataEntryStepperLabel.textAlignment = NSTextAlignmentCenter;
+            self.dataEntryStepperLabel.textColor = [UIColor UNHCRBlue];
+            
+            self.dataEntryStepperLabel.adjustsFontSizeToFitWidth = YES;
+            
+            inputView = self.dataEntryStepperLabel;
             
             break;
         }
@@ -152,10 +176,10 @@ static const CGFloat kXLabelPadding = 8;
 //    self.titleLabel.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:0.2];
     
     BOOL isHeader = [[self.dataDictionary objectForKey:@"Header" ofClass:@"NSNumber" mustExist:NO] boolValue];
-    self.titleLabel.font = (isHeader) ? [UIFont helveticaNeueBoldFontOfSize:kTitleFontSize] : [UIFont helveticaNeueFontOfSize:kTitleFontSize];
+    self.titleLabel.font = (isHeader) ? [UIFont helveticaNeueBoldFontOfSize:titleLabelFontSize] : [UIFont helveticaNeueFontOfSize:kTitleFontSize];
     self.titleLabel.textAlignment = NSTextAlignmentLeft;
     
-    self.titleLabel.numberOfLines = 2;
+    self.titleLabel.numberOfLines = 0;
     
     NSString *titleString = [self.dataDictionary objectForKey:@"Title" ofClass:@"NSString"];
     NSString *subtitleString = [self.dataDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
@@ -184,7 +208,10 @@ static const CGFloat kXLabelPadding = 8;
 
 - (void)setDataDictionary:(NSDictionary *)dataDictionary {
     _dataDictionary = dataDictionary;
-    [self setNeedsLayout];
+    
+    if (dataDictionary) {
+        [self setNeedsLayout];
+    }
 }
 
 #pragma mark - Private Methods
@@ -196,7 +223,7 @@ static const CGFloat kXLabelPadding = 8;
 
 - (void)_stepperValueChanged:(UIStepper *)stepper {
     
-    NSLog(@"stepper.value: %.2f",stepper.value);
+    self.dataEntryStepperLabel.text = [NSString stringWithFormat:@"%.0f",stepper.value];
     
 }
 
