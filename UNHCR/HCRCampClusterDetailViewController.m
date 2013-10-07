@@ -36,6 +36,8 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 @property NSDictionary *campClusterData;
 @property NSMutableArray *campClusterCollectionLayoutData;
 
+@property (nonatomic) BOOL alertsAdded;
+
 @property (nonatomic, readonly) BOOL clusterContainsTallySheets;
 
 @end
@@ -50,6 +52,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     if (self) {
         // Custom initialization
         
+        self.alertsAdded = NO;
         self.localAlerts = @[].mutableCopy;
         
         self.campClusterCollectionLayoutData = @[
@@ -89,12 +92,14 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
                 
                 [self.localAlerts addObject:alertsDictionary];
                 
-                static dispatch_once_t onceToken;
-                dispatch_once(&onceToken, ^{
+                if (!self.alertsAdded) {
+                    self.alertsAdded = YES;
                     [self.campClusterCollectionLayoutData insertObject:@{@"Section": @"Alerts",
                                                                          @"Cell": kCampClusterAlertCellIdentifier}
                                                                atIndex:0];
-                });
+                    
+                }
+                
                 
             }
             
