@@ -117,6 +117,14 @@
     self.scrollView = [[HCRHomeLoginMenuScrollView alloc] initWithFrame:scrollFrame];
     [self.view addSubview:self.scrollView];
     
+    [self.scrollView.alertsButton addTarget:self
+                                     action:@selector(_alertsButtonPressed)
+                           forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.scrollView.conflictsButton addTarget:self
+                                        action:@selector(_conflictsButtonPressed)
+                              forControlEvents:UIControlEventTouchUpInside];
+    
     [self.scrollView.countriesButton addTarget:self
                                    action:@selector(_countryButtonPressed)
                          forControlEvents:UIControlEventTouchUpInside];
@@ -151,11 +159,21 @@
 
 #pragma mark - Private Methods
 
-- (void)_countryButtonPressed {
+- (void)_alertsButtonPressed {
+    // TODO: alerts button
+}
+
+- (void)_conflictsButtonPressed {
     
     HCRCountryCollectionViewController *countryCollection = [[HCRCountryCollectionViewController alloc] initWithCollectionViewLayout:[HCRCountryCollectionViewController preferredLayout]];
     
     [self.navigationController pushViewController:countryCollection animated:YES];
+    
+}
+
+- (void)_countryButtonPressed {
+    
+    // TODO: countries view
     
 }
 

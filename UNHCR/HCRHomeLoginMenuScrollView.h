@@ -22,6 +22,8 @@ typedef NS_ENUM(NSInteger, HCRHomeLoginMenuState) {
 @property (nonatomic) HCRHomeLoginMenuState loginState;
 
 @property (nonatomic, readonly) UIButton *loginButton;
+@property (nonatomic, readonly) UIButton *alertsButton;
+@property (nonatomic, readonly) UIButton *conflictsButton;
 @property (nonatomic, readonly) UIButton *countriesButton;
 @property (nonatomic, readonly) UIButton *campsButton;
 

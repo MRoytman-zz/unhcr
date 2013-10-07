@@ -16,6 +16,8 @@
 @property UIActivityIndicatorView *signingInSpinner;
 
 @property (nonatomic, readwrite) UIButton *loginButton;
+@property (nonatomic, readwrite) UIButton *alertsButton;
+@property (nonatomic, readwrite) UIButton *conflictsButton;
 @property (nonatomic, readwrite) UIButton *countriesButton;
 @property (nonatomic, readwrite) UIButton *campsButton;
 
@@ -40,12 +42,33 @@
         self.contentSize = CGSizeMake(CGRectGetWidth(self.frame) * 2.0,
                                       CGRectGetHeight(self.frame));
         
-        // country button
+        // BUTTONS
         CGFloat buttonPadding = ([UIDevice isFourInch]) ? 10 : 6;
         CGFloat buttonHeight = 50;
         
         CGFloat yButtonOffset = (CGRectGetHeight(self.frame) - (buttonHeight * 2 + buttonPadding)) * 0.5 - 5.0;
         
+        // ALERTS
+        self.alertsButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Alerts"
+                                                        horizontalAlignment:UIControlContentHorizontalAlignmentCenter
+                                                                 buttonSize:CGSizeMake(170, buttonHeight)
+                                                                   fontSize:nil];
+        [self addSubview:self.alertsButton];
+        
+        self.alertsButton.center = CGPointMake(CGRectGetWidth(self.frame) + CGRectGetMidX(self.bounds),
+                                               MIN(yButtonOffset,25) + CGRectGetMidY(self.alertsButton.bounds));
+        
+        // CONFLICTS
+        self.conflictsButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Conflicts"
+                                                        horizontalAlignment:UIControlContentHorizontalAlignmentCenter
+                                                                 buttonSize:CGSizeMake(200, buttonHeight)
+                                                                   fontSize:nil];
+        [self addSubview:self.conflictsButton];
+        
+        self.conflictsButton.center = CGPointMake(CGRectGetWidth(self.frame) + CGRectGetMidX(self.bounds),
+                                                  CGRectGetMaxY(self.alertsButton.frame) + buttonPadding + CGRectGetMidY(self.conflictsButton.bounds));
+        
+        // COUNTRIES
         self.countriesButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Countries"
                                                         horizontalAlignment:UIControlContentHorizontalAlignmentCenter
                                                                  buttonSize:CGSizeMake(200, buttonHeight)
@@ -53,14 +76,14 @@
         [self addSubview:self.countriesButton];
         
         self.countriesButton.center = CGPointMake(CGRectGetWidth(self.frame) + CGRectGetMidX(self.bounds),
-                                                  MIN(yButtonOffset,25) + CGRectGetMidY(self.countriesButton.bounds));
+                                                  CGRectGetMaxY(self.conflictsButton.frame) + buttonPadding + CGRectGetMidY(self.countriesButton.bounds));
         
-        // camps button
+        // CAMPS
         self.campsButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Camps"
                                                     horizontalAlignment:UIControlContentHorizontalAlignmentCenter
                                                              buttonSize:CGSizeMake(170, buttonHeight)
                                                                fontSize:nil];
-        [self addSubview:self.campsButton];
+//        [self addSubview:self.campsButton];
         
         self.campsButton.center = CGPointMake(CGRectGetWidth(self.frame) + CGRectGetMidX(self.bounds),
                                               CGRectGetMaxY(self.countriesButton.frame) + buttonPadding + CGRectGetMidY(self.campsButton.bounds));
@@ -88,10 +111,10 @@
         CGFloat padding = 10;
         
         self.signingInSpinner.center = CGPointMake(CGRectGetMidX(self.frame) - (CGRectGetMidX(self.signingInLabel.bounds) + CGRectGetMidX(self.signingInSpinner.bounds) + padding) + CGRectGetMidX(self.signingInSpinner.bounds),
-                                                   CGRectGetMidY(self.countriesButton.frame));
+                                                   CGRectGetMidY(self.alertsButton.frame));
         
         self.signingInLabel.center = CGPointMake(CGRectGetMaxX(self.signingInSpinner.frame) + CGRectGetMidX(self.signingInLabel.bounds) + padding,
-                                                 CGRectGetMidY(self.countriesButton.frame));
+                                                 CGRectGetMidY(self.alertsButton.frame));
         
         // login button
         self.loginButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Log in"
@@ -101,7 +124,7 @@
         [self addSubview:self.loginButton];
         
         self.loginButton.center = CGPointMake(CGRectGetMidX(self.frame),
-                                              CGRectGetMidY(self.countriesButton.frame));
+                                              CGRectGetMidY(self.alertsButton.frame));
         
         self.loginButton.alpha = 0.0; // TODO: handle initial state better
         
@@ -112,7 +135,7 @@
         [self addSubview:self.signOutButton];
         
         self.signOutButton.frame = CGRectMake(xSmallButtonOffset,
-                                              CGRectGetMidY(self.campsButton.frame),
+                                              CGRectGetMidY(self.conflictsButton.frame),
                                               smallButtonSize.width,
                                               smallButtonSize.height);
         
@@ -126,7 +149,7 @@
         [self addSubview:self.settingsButton];
         
         self.settingsButton.frame = CGRectMake(CGRectGetWidth(self.frame) - smallButtonSize.width - xSmallButtonOffset,
-                                               CGRectGetMidY(self.campsButton.frame),
+                                               CGRectGetMidY(self.conflictsButton.frame),
                                                smallButtonSize.width,
                                                smallButtonSize.height);
         
