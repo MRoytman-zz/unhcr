@@ -19,4 +19,11 @@
     
 }
 
++ (UIColor *)HMSPurple {
+    return [UIColor colorWithRed:62 / 256.0
+                           green:0 / 256.0
+                            blue:199 / 256.0
+                           alpha:1.0];
+}
+
 @end

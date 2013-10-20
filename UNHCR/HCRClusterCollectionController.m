@@ -120,7 +120,7 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
                                                                                                            indexPath:indexPath];
         
         CGSize buttonSize = CGSizeMake(180, CGRectGetHeight(footer.bounds));
-        UIButton *footerButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Compare All Clusters"
+        UIButton *footerButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Compare Clusters"
                                                           horizontalAlignment:UIControlContentHorizontalAlignmentCenter
                                                                          buttonSize:buttonSize
                                                                      fontSize:@16.0];

@@ -12,4 +12,6 @@
 
 + (UIColor *)UNHCRBlue;
 
++ (UIColor *)HMSPurple;
+
 @end

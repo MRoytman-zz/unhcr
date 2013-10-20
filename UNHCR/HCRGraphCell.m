@@ -7,6 +7,17 @@
 //
 
 #import "HCRGraphCell.h"
+#import "SCGraphView.h"
+
+////////////////////////////////////////////////////////////////////////////////
+
+@interface HCRGraphCell ()
+
+@property SCGraphView *graphView;
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////
 
 @implementation HCRGraphCell
 
@@ -15,14 +26,14 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        UIImageView *graphImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,
-                                                                                    0,
-                                                                                    CGRectGetWidth(self.bounds),
-                                                                                    CGRectGetHeight(self.bounds))];
-        [self addSubview:graphImageView];
+        static const CGFloat kGraphOffset = 0;
+        CGRect graphFrame = CGRectMake(kGraphOffset,
+                                       kGraphOffset,
+                                       CGRectGetWidth(self.bounds) - 2 * kGraphOffset,
+                                       CGRectGetHeight(self.bounds) - 2 * kGraphOffset);
         
-        graphImageView.image = [UIImage imageNamed:@"campcluster-graph"];
-        graphImageView.contentMode = UIViewContentModeScaleAspectFit;
+        self.graphView = [[SCGraphView alloc] initWithFrame:graphFrame];
+        [self addSubview:self.graphView];
         
     }
     return self;
@@ -32,6 +43,18 @@
 
 + (CGFloat)preferredHeightForGraphCell {
     return 200;
+}
+
+#pragma mark - Getters & Setters
+
+- (void)setGraphDataSource:(id<SCGraphViewDataSource>)graphDataSource {
+    
+    _graphDataSource = graphDataSource;
+    
+    self.graphView.dataSource = graphDataSource;
+    
+    [self.graphView setNeedsDisplay];
+    
 }
 
 @end

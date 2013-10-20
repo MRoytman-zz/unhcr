@@ -14,6 +14,8 @@
 #import "EAEmailUtilities.h"
 #import "HCRAlertCell.h"
 
+#import <CPTXYGraph.h>
+
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kCampClusterHeaderIdentifier = @"kCampClusterHeaderIdentifier";
@@ -195,7 +197,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
         HCRGraphCell *graphCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterGraphCellIdentifier forIndexPath:indexPath];
         
-        // TODO: make this real
+        graphCell.graphDataSource = self;
         
         return graphCell;
     } else if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
@@ -275,9 +277,6 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRButtonListCell *cell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRButtonListCell class]]);
-    
     NSString *cellType = [self _cellTypeForSection:indexPath.section];
     
     if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
@@ -285,6 +284,9 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         // do nothing
         
     } else if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
+        
+        HCRButtonListCell *cell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
+        NSParameterAssert([cell isKindOfClass:[HCRButtonListCell class]]);
         
         if ([cell.listButtonTitle isEqualToString:kResourceNameSupplies]) {
             [self _requestSuppliesButtonPressed];
@@ -373,6 +375,30 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         return CGSizeZero;
     }
     
+}
+
+#pragma mark - SCGraphView Data Source
+
+- (NSInteger)numberOfDataPointsInGraphView:(SCGraphView *)graphView {
+    return 30;
+}
+
+- (CGFloat)graphViewMinYValue:(SCGraphView *)graphView {
+    return 0;
+}
+
+- (CGFloat)graphViewMaxYValue:(SCGraphView *)graphView {
+    return 200;
+}
+
+- (NSNumber *)graphView:(SCGraphView *)graphView dataPointForIndex:(NSInteger)index {
+    
+    return @(100 + index * 3);
+    
+}
+
+- (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index {
+    return [NSString stringWithFormat:@"section %d",index];
 }
 
 #pragma mark - Getters & Setters

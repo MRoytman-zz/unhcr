@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#import "SCGraphView.h"
+
 @interface HCRGraphCell : UICollectionViewCell
 
 + (CGFloat)preferredHeightForGraphCell;
+
+@property (nonatomic, weak) id<SCGraphViewDataSource> graphDataSource;
 
 @end
