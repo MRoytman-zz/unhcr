@@ -14,8 +14,6 @@
 #import "EAEmailUtilities.h"
 #import "HCRAlertCell.h"
 
-#import <CPTXYGraph.h>
-
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kCampClusterHeaderIdentifier = @"kCampClusterHeaderIdentifier";

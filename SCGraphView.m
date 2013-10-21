@@ -54,8 +54,8 @@
 @property CGPoint initialDataPointLocation;
 @property NSNumberFormatter *numberFormatter;
 
-@property CGGradientRef backgroundGradientRef;
-@property CGGradientRef blueGradientRef;
+@property (nonatomic) CGGradientRef backgroundGradientRef;
+@property (nonatomic) CGGradientRef blueGradientRef;
 
 @end
 
@@ -67,7 +67,11 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        
+        self.backgroundColor = [UIColor clearColor];
+        
         self.numberFormatter = [[NSNumberFormatter alloc] init];
+        
     }
     return self;
 }
@@ -89,11 +93,11 @@
     CGRect dataRect = self.bounds;
     
     // clip to the rounded rect
-    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:self.bounds
-                                               byRoundingCorners:UIRectCornerAllCorners
-                                                     cornerRadii:CGSizeMake(16.0, 16.0)];
-    [path addClip];
-    [self _drawBackgroundGradient];
+//    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:self.bounds
+//                                               byRoundingCorners:UIRectCornerAllCorners
+//                                                     cornerRadii:CGSizeMake(16.0, 16.0)];
+//    [path addClip];
+//    [self _drawBackgroundGradient];
     [self _drawVerticalGridInRect:dataRect];
     [self _drawHorizontalGridInRect:dataRect clip:YES];
     [self _drawPatternArtUnderClosingData:dataRect clip:YES];
@@ -102,6 +106,41 @@
     [self _drawLabelsUnderDataRect:dataRect];
 }
 
+#pragma mark -
+#pragma mark Getters & Setters
+
+/*
+ * This method creates the blue gradient used behind the 'programmer art' pattern
+ */
+- (CGGradientRef)blueGradientRef {
+    if( NULL == _blueGradientRef) {
+        CGFloat colors[8] = {0.0, 80.0 / 255.0, 89.0 / 255.0, 1.0,
+            0.0, 50.0f / 255.0, 64.0 / 255.0, 1.0};
+        CGFloat locations[2] = {0.0, 0.90};
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        _blueGradientRef = CGGradientCreateWithColorComponents(colorSpace, colors, locations, 2);
+        CGColorSpaceRelease(colorSpace);
+    }
+    return _blueGradientRef;
+}
+
+/*
+ * Creates the blue background gradient
+ */
+- (CGGradientRef)backgroundGradientRef {
+    if(NULL == _backgroundGradientRef) {
+        // lazily create the gradient, then reuse it
+        CGFloat colors[16] = {48.0 / 255.0, 61.0 / 255.0, 114.0 / 255.0, 1.0,
+            33.0 / 255.0, 47.0 / 255.0, 113.0 / 255.0, 1.0,
+            20.0 / 255.0, 33.0 / 255.0, 104.0 / 255.0, 1.0,
+            20.0 / 255.0, 33.0 / 255.0, 104.0 / 255.0, 1.0 };
+        CGFloat colorStops[4] = {0.0, 0.5, 0.5, 1.0};
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+        _backgroundGradientRef = CGGradientCreateWithColorComponents(colorSpace, colors, colorStops, 4);
+        CGColorSpaceRelease(colorSpace);
+    }
+    return _backgroundGradientRef;
+}
 
 #pragma mark -
 #pragma mark Clipping Paths
@@ -110,7 +149,7 @@
  * Creates and returns a path that can be used to clip drawing to the top
  * of the data graph.
  */
-- (UIBezierPath *)topClipPathFromDataInRect:(CGRect)rect {
+- (UIBezierPath *)_topClipPathFromDataInRect:(CGRect)rect {
     UIBezierPath *path = [UIBezierPath bezierPath];
     [path appendPath:[self _linePathForDataPointsInRect:rect]];
     CGPoint currentPoint = [path currentPoint];
@@ -127,7 +166,7 @@
  * Creates and returns a path that can be used to clip drawing to the bottom
  * of the data graph.
  */
-- (UIBezierPath *)bottomClipPathFromDataInRect:(CGRect)rect {
+- (UIBezierPath *)_bottomClipPathFromDataInRect:(CGRect)rect {
     UIBezierPath *path = [UIBezierPath bezierPath];
     [path appendPath:[self _linePathForDataPointsInRect:rect]];
     CGPoint currentPoint = [path currentPoint];
@@ -180,7 +219,7 @@
  * Draws the path for the closing price data set.
  */
 - (void)_drawLineForDataPointsInRect:(CGRect)rect {
-    [[UIColor whiteColor] setStroke];
+    [[UIColor UNHCRBlue] setStroke];
     UIBezierPath *path = [self _linePathForDataPointsInRect:rect];
     [path stroke];
 }
@@ -197,7 +236,7 @@
     UIBezierPath *path = [UIBezierPath bezierPath];
     // even though this lineWidth is odd, we don't do any offset because its not going to
     // ever line up with any pixels, just think geometrically
-    CGFloat lineWidth = 2.0;
+    CGFloat lineWidth = 3.0;
     [path setLineWidth:lineWidth];
     [path setLineJoinStyle:kCGLineJoinRound];
     [path setLineCapStyle:kCGLineCapRound];
@@ -218,12 +257,12 @@
         CGFloat yValue = topline - (baseline + (dataPoint - minY) * verticalScale);
         
         if (i == 0) {
-            self.initialDataPointLocation = CGPointMake(lineWidth / 2.0,
+            self.initialDataPointLocation = CGPointMake(lineWidth,
                                                         yValue);
             [path moveToPoint:self.initialDataPointLocation];
         }
         
-        [path addLineToPoint:CGPointMake(i * horizontalSpacing,
+        [path addLineToPoint:CGPointMake(CGRectGetMinX(rect) + i * horizontalSpacing,
                                          yValue)];
         
     }
@@ -242,7 +281,7 @@
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     if(shouldClip) {
         CGContextSaveGState(ctx);
-        UIBezierPath *clipPath = [self bottomClipPathFromDataInRect:rect];
+        UIBezierPath *clipPath = [self _bottomClipPathFromDataInRect:rect];
         [clipPath addClip];
     }
     
@@ -276,26 +315,11 @@
 }
 
 /*
- * This method creates the blue gradient used behind the 'programmer art' pattern
- */
-- (CGGradientRef)blueBlendGradient {
-    if(NULL == self.blueGradientRef) {
-        CGFloat colors[8] = {0.0, 80.0 / 255.0, 89.0 / 255.0, 1.0,
-            0.0, 50.0f / 255.0, 64.0 / 255.0, 1.0};
-        CGFloat locations[2] = {0.0, 0.90};
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        self.blueGradientRef = CGGradientCreateWithColorComponents(colorSpace, colors, locations, 2);
-        CGColorSpaceRelease(colorSpace);
-    }
-    return self.blueGradientRef;
-}
-
-/*
  * This method draws the line used behind the 'programmer art' pattern
  */
-- (void)drawLineFromPoint:(CGPoint)start toPoint:(CGPoint)end {
+- (void)_drawLineFromPoint:(CGPoint)start toPoint:(CGPoint)end {
     UIBezierPath *path = [UIBezierPath bezierPath];
-    [path setLineWidth:2.0];
+    [path setLineWidth:1.0];
     [path moveToPoint:start];
     [path addLineToPoint:end];
     [path stroke];
@@ -304,23 +328,23 @@
 /*
  * This method draws the blue gradient used behind the 'programmer art' pattern
  */
-- (void)drawRadialGradientInSize:(CGSize)size centeredAt:(CGPoint)center {
+- (void)_drawRadialGradientInSize:(CGSize)size centeredAt:(CGPoint)center {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGFloat startRadius = 0.0;
     CGFloat endRadius = 0.85 * pow(floor(size.width / 2.0) * floor(size.width / 2.0) +
                                    floor(size.height / 2.0) * floor(size.height / 2.0), 0.5);
-    CGContextDrawRadialGradient(ctx, [self blueBlendGradient],  center, startRadius, center,
+    CGContextDrawRadialGradient(ctx, self.blueGradientRef,  center, startRadius, center,
                                 endRadius, kCGGradientDrawsAfterEndLocation);
 }
 
 /*
  * This method creates a UIImage from the 'programmer art' pattern
  */
-- (UIImage *)patternImageOfSize:(CGSize)size {
+- (UIImage *)_patternImageOfSize:(CGSize)size {
     UIGraphicsBeginImageContextWithOptions(size, YES, 0.0);
     
     CGPoint center = CGPointMake(floor(size.width / 2.0), floor(size.height / 2.0));
-    [self drawRadialGradientInSize:size centeredAt:center];
+    [self _drawRadialGradientInSize:size centeredAt:center];
     UIColor *lineColor = [UIColor colorWithRed:211.0 / 255.0 
                                          green:218.0 / 255.0
                                           blue:182.0 / 255.0
@@ -329,11 +353,11 @@
     
     CGPoint start = CGPointMake(0.0, 0.0);
     CGPoint end = CGPointMake(floor(size.width), floor(size.height));
-    [self drawLineFromPoint:start toPoint:end];
+    [self _drawLineFromPoint:start toPoint:end];
     
     start = CGPointMake(0.0, floor(size.height));
     end = CGPointMake(floor(size.width), 0.0);
-    [self drawLineFromPoint:start toPoint:end];
+    [self _drawLineFromPoint:start toPoint:end];
     
     UIImage *patternImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -344,9 +368,9 @@
  * draws the 'programmer art' pattern under the closing data graph
  */
 - (void)_drawPatternArtUnderClosingData:(CGRect)rect clip:(BOOL)shouldClip {
-    [[UIColor colorWithPatternImage:[self patternImageOfSize:CGSizeMake(32.0, 32.0)]] setFill];
+    [[UIColor colorWithPatternImage:[self _patternImageOfSize:CGSizeMake(32.0, 32.0)]] setFill];
     if(shouldClip) {
-        UIBezierPath *path = [self bottomClipPathFromDataInRect:rect];
+        UIBezierPath *path = [self _bottomClipPathFromDataInRect:rect];
         [path fill];
     } else {
         UIRectFill(rect);
@@ -367,7 +391,7 @@
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     if(shouldClip) {
         CGContextSaveGState(ctx);
-        UIBezierPath *clipPath = [self topClipPathFromDataInRect:dataRect];
+        UIBezierPath *clipPath = [self _topClipPathFromDataInRect:dataRect];
         [clipPath addClip];
     }
     
@@ -380,7 +404,7 @@
     CGFloat dashPatern[2] = {1.0, 1.0};
     [path setLineDash:dashPatern count:2 phase:0.0];
     UIColor *gridColor = [UIColor colorWithRed:74.0 / 255.0 green:86.0 / 255.0 
-                                          blue:126.0 / 266.0 alpha:1.0];
+                                          blue:126.0 / 266.0 alpha:0.25];
     [gridColor setStroke];
     
     CGContextSaveGState(ctx);
@@ -406,7 +430,7 @@
  */
 - (void)_drawVerticalGridInRect:(CGRect)dataRect {
     UIColor *gridColor = [UIColor colorWithRed:74.0 / 255.0 green:86.0 / 255.0 
-                                          blue:126.0 / 266.0 alpha:0.5];
+                                          blue:126.0 / 266.0 alpha:0.25];
     [gridColor setStroke];
     
     NSInteger dataCount = [[self dataSource] numberOfDataPointsInGraphView:self];
@@ -414,7 +438,7 @@
     UIBezierPath *gridLinePath = [UIBezierPath bezierPath];
     [gridLinePath moveToPoint:CGPointMake(rint(CGRectGetMinX(dataRect)), CGRectGetMinY(dataRect))];
     [gridLinePath addLineToPoint:CGPointMake(rint(CGRectGetMinX(dataRect)), CGRectGetMaxY(dataRect))];
-    [gridLinePath setLineWidth:2.0];
+    [gridLinePath setLineWidth:1.0];
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
@@ -444,27 +468,7 @@
 //    CGContextRestoreGState(ctx);
 }
 
-
-#pragma mark -
-#pragma mark Background Gradient
-
-/*
- * Creates the blue background gradient
- */
-- (CGGradientRef)backgroundGradient {
-    if(NULL == self.backgroundGradientRef) {
-        // lazily create the gradient, then reuse it
-        CGFloat colors[16] = {48.0 / 255.0, 61.0 / 255.0, 114.0 / 255.0, 1.0,
-            33.0 / 255.0, 47.0 / 255.0, 113.0 / 255.0, 1.0,
-            20.0 / 255.0, 33.0 / 255.0, 104.0 / 255.0, 1.0,
-            20.0 / 255.0, 33.0 / 255.0, 104.0 / 255.0, 1.0 };
-        CGFloat colorStops[4] = {0.0, 0.5, 0.5, 1.0};
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-        self.backgroundGradientRef = CGGradientCreateWithColorComponents(colorSpace, colors, colorStops, 4);
-        CGColorSpaceRelease(colorSpace);
-    }
-    return self.backgroundGradientRef;
-}
+#pragma mark - Background Gradient
 
 /*
  * draws the blue background gradient
@@ -473,7 +477,7 @@
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGPoint startPoint = {0.0, 0.0};
     CGPoint endPoint = {0.0, self.bounds.size.height};
-    CGContextDrawLinearGradient(ctx, [self backgroundGradient], startPoint, endPoint,0);
+    CGContextDrawLinearGradient(ctx, self.backgroundGradientRef, startPoint, endPoint,0);
 }
 
 
@@ -504,7 +508,7 @@
 - (void)drawBeachUnderDataInRect:(CGRect)rect {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
-    UIBezierPath *clipPath = [self bottomClipPathFromDataInRect:rect];
+    UIBezierPath *clipPath = [self _bottomClipPathFromDataInRect:rect];
     [clipPath addClip];
     UIImage *image = [UIImage imageNamed:@"Beach.png"];
     [image drawInRect:rect];
