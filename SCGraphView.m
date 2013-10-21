@@ -210,12 +210,9 @@
     CGFloat topline = CGRectGetMaxY(rect);
     
     for(int i = 0; i < dataCount; i++) {
-        NSLog(@"iteration: %d",i);
         
         NSNumber *dataPointNumber = [self.dataSource graphView:self dataPointForIndex:i];
         NSParameterAssert(dataPointNumber);
-        
-        NSLog(@"dataPointNumber: %@",dataPointNumber);
         
         CGFloat dataPoint = [dataPointNumber floatValue];
         CGFloat yValue = topline - (baseline + (dataPoint - minY) * verticalScale);
@@ -230,8 +227,6 @@
                                          yValue)];
         
     }
-    
-    NSLog(@"path: %@",path);
     
     return path;
 }

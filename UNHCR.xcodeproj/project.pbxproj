@@ -19,7 +19,6 @@
 		4F1C940517FC28C40003AA21 /* HCRCampClusterDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940417FC28C40003AA21 /* HCRCampClusterDetailViewController.m */; };
 		4F1C940817FCB8010003AA21 /* Common.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F1C940717FCB8010003AA21 /* Common.xcassets */; };
 		4F1C940B17FCBE640003AA21 /* HCRHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */; };
-		4F71C0E71811C74200672C6A /* GraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0E61811C74200672C6A /* GraphView.m */; };
 		4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
 		4F866AC317F9E022000350E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC217F9E022000350E4 /* Foundation.framework */; };
 		4F866AC517F9E022000350E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC417F9E022000350E4 /* CoreGraphics.framework */; };
@@ -79,8 +78,6 @@
 		4F1C940717FCB8010003AA21 /* Common.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Common.xcassets; sourceTree = "<group>"; };
 		4F1C940917FCBE640003AA21 /* HCRHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRHomeViewController.h; sourceTree = "<group>"; };
 		4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRHomeViewController.m; sourceTree = "<group>"; };
-		4F71C0E51811C74200672C6A /* GraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphView.h; sourceTree = "<group>"; };
-		4F71C0E61811C74200672C6A /* GraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphView.m; sourceTree = "<group>"; };
 		4F71C0EF18133D0B00672C6A /* SCGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGraphView.h; sourceTree = "<group>"; };
 		4F71C0F018133D0B00672C6A /* SCGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGraphView.m; sourceTree = "<group>"; };
 		4F866ABF17F9E022000350E4 /* RIS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RIS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,18 +180,8 @@
 			isa = PBXGroup;
 			children = (
 				4F71C0EB18133CDF00672C6A /* SCGraphView */,
-				4F71C0E81811C74600672C6A /* DynamicGraphView */,
 			);
 			name = Vendors;
-			sourceTree = "<group>";
-		};
-		4F71C0E81811C74600672C6A /* DynamicGraphView */ = {
-			isa = PBXGroup;
-			children = (
-				4F71C0E51811C74200672C6A /* GraphView.h */,
-				4F71C0E61811C74200672C6A /* GraphView.m */,
-			);
-			name = DynamicGraphView;
 			sourceTree = "<group>";
 		};
 		4F71C0EB18133CDF00672C6A /* SCGraphView */ = {
@@ -503,7 +490,6 @@
 				4FD839051801DF8900B49498 /* HCRTallySheetPickerViewController.m in Sources */,
 				4FD838F518011BB300B49498 /* HCRCampClusterCompareViewController.m in Sources */,
 				4F866AD317F9E022000350E4 /* HCRAppDelegate.m in Sources */,
-				4F71C0E71811C74200672C6A /* GraphView.m in Sources */,
 				4F1C940217FC17770003AA21 /* UIImage+RMImageManipulation.m in Sources */,
 				4F1C93FC17FC09190003AA21 /* HCRFlowLayout.m in Sources */,
 				4F0C701B17FF482B0081F201 /* AssertionCategories.m in Sources */,
