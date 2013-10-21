@@ -203,28 +203,35 @@
     [path setLineCapStyle:kCGLineCapRound];
     // inset so the path does not ever go beyond the frame of the graph
     rect = CGRectInset(rect, lineWidth / 2.0, lineWidth);
-    CGFloat horizontalSpacing = CGRectGetWidth(rect) / dataCount;
+    CGFloat horizontalSpacing = CGRectGetWidth(rect) / (dataCount - 1); // # of gaps = count - 1
     CGFloat verticalScale = CGRectGetHeight(rect) / (maxY - minY);
+    
+    CGFloat baseline = CGRectGetMinY(rect);
+    CGFloat topline = CGRectGetMaxY(rect);
+    
     for(int i = 0; i < dataCount; i++) {
+        NSLog(@"iteration: %d",i);
         
         NSNumber *dataPointNumber = [self.dataSource graphView:self dataPointForIndex:i];
         NSParameterAssert(dataPointNumber);
         
+        NSLog(@"dataPointNumber: %@",dataPointNumber);
+        
         CGFloat dataPoint = [dataPointNumber floatValue];
-        CGFloat baseline = CGRectGetMinY(rect);
-        CGFloat topline = CGRectGetMaxY(rect);
         CGFloat yValue = topline - (baseline + (dataPoint - minY) * verticalScale);
         
-        if (i == 1) {
+        if (i == 0) {
             self.initialDataPointLocation = CGPointMake(lineWidth / 2.0,
                                                         yValue);
             [path moveToPoint:self.initialDataPointLocation];
         }
         
-        [path addLineToPoint:CGPointMake((i + 1) * horizontalSpacing,
+        [path addLineToPoint:CGPointMake(i * horizontalSpacing,
                                          yValue)];
         
     }
+    
+    NSLog(@"path: %@",path);
     
     return path;
 }
@@ -383,7 +390,7 @@
     
     CGContextSaveGState(ctx);
     [path stroke];
-    for(int i = 0;i < 5;i++) {
+    for(int i = 0; i < 5; i++) {
         CGContextTranslateCTM(ctx, 0.0, rint(CGRectGetHeight(dataRect) / 5.0));
         [path stroke];
     }
@@ -404,7 +411,7 @@
  */
 - (void)_drawVerticalGridInRect:(CGRect)dataRect {
     UIColor *gridColor = [UIColor colorWithRed:74.0 / 255.0 green:86.0 / 255.0 
-                                          blue:126.0 / 266.0 alpha:1.0];
+                                          blue:126.0 / 266.0 alpha:0.5];
     [gridColor setStroke];
     
     NSInteger dataCount = [[self dataSource] numberOfDataPointsInGraphView:self];
@@ -416,9 +423,14 @@
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
+    
+    // # of gaps is # of data points - 1
+    // context saves, so don't re-calc every time
+    CGFloat lineGap = CGRectGetWidth(self.bounds) / (dataCount - 1);
+    
     for(int i = 0; i < dataCount; i++) {
-        CGFloat linePosition = i * ( CGRectGetWidth(self.bounds) / dataCount );
-        CGContextTranslateCTM(ctx, rint(linePosition), 0.0);
+//        CGFloat linePosition = i * ( CGRectGetWidth(self.bounds) / dataCount );
+        CGContextTranslateCTM(ctx, rint(lineGap), 0.0);
         [gridLinePath stroke];
     }
     CGContextRestoreGState(ctx);
