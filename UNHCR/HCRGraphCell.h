@@ -14,6 +14,7 @@
 
 + (CGFloat)preferredHeightForGraphCell;
 
+@property (nonatomic, weak) id<SCGraphViewDelegate> graphDelegate;
 @property (nonatomic, weak) id<SCGraphViewDataSource> graphDataSource;
 
 @end

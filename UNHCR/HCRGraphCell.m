@@ -47,6 +47,16 @@
 
 #pragma mark - Getters & Setters
 
+- (void)setGraphDelegate:(id<SCGraphViewDelegate>)graphDelegate {
+    
+    _graphDelegate = graphDelegate;
+    
+    self.graphView.delegate = graphDelegate;
+    
+    [self.graphView setNeedsDisplay];
+    
+}
+
 - (void)setGraphDataSource:(id<SCGraphViewDataSource>)graphDataSource {
     
     _graphDataSource = graphDataSource;

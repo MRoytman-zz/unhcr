@@ -52,9 +52,20 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+extern NSString *SCGraphTipDateKey;
+extern NSString *SCGraphTipValueKey;
+
+////////////////////////////////////////////////////////////////////////////////
+
 typedef NS_ENUM(NSInteger, SCGraphAxis) {
     SCGraphAxisX,
     SCGraphAxisY
+};
+
+typedef NS_ENUM(NSInteger, SCDataTimePeriod) {
+    SCDataTimePeriod30Days,
+    SCDataTimePeriod7Days,
+    SCDataTimePeriodYesterday
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +87,7 @@ typedef NS_ENUM(NSInteger, SCGraphAxis) {
 - (NSNumber *)graphView:(SCGraphView *)graphView dataPointForIndex:(NSInteger)index;
 - (NSInteger)numberOfDataPointsInGraphView:(SCGraphView *)graphView;
 - (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index;
+- (NSDictionary *)graphView:(SCGraphView *)graphView dictionaryForDataPointAtIndex:(NSInteger)index;
 @end
                                                                            
 ////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +97,15 @@ typedef NS_ENUM(NSInteger, SCGraphAxis) {
  */
 @interface SCGraphView : UIView
 
+@property (nonatomic, weak) id<SCGraphViewDelegate> delegate;
 @property (nonatomic, weak) id<SCGraphViewDataSource> dataSource;
+
+@property (nonatomic) SCDataTimePeriod displayedTimePeriod;
+
+@property (nonatomic, strong) UIColor *dataLineColor;
+@property (nonatomic, strong) UIColor *dotColor;
+@property (nonatomic, strong) UIColor *horizontalGuideLineColor;
+@property (nonatomic, strong) UIColor *labelColor;
 
 - (NSInteger)indexOfDataAtPoint:(CGPoint)point;
 

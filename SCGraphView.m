@@ -49,10 +49,28 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+NSString *SCGraphTipDateKey = @"SCGraphTipDateKey";
+NSString *SCGraphTipValueKey = @"SCGraphTipValueKey";
+
+static const CGFloat kDataLineWidth = 1.0;
+
+static const CGFloat kGraphDataPointHighlightFontSize = 16.0;
+static const CGFloat kGraphDataPointHighlightLabelHeight = 25.0;
+
+static const CGFloat kGraphDateLabelHeight = 20.0;
+static const CGFloat kGraphDateLabelFontSize = 14.0;
+
+////////////////////////////////////////////////////////////////////////////////
+
 @interface SCGraphView ()
 
+@property UILabel *highlightedDataPointLabel;
+@property NSNumber *highlightedDataPointIndex;
+
+@property CGRect dataRect;
+@property BOOL displayTimePeriodLabels;
 @property CGPoint initialDataPointLocation;
-@property NSNumberFormatter *numberFormatter;
+@property UIFont *preferredLabelFont;
 
 @property (nonatomic) CGGradientRef backgroundGradientRef;
 @property (nonatomic) CGGradientRef blueGradientRef;
@@ -70,7 +88,14 @@
         
         self.backgroundColor = [UIColor clearColor];
         
-        self.numberFormatter = [[NSNumberFormatter alloc] init];
+        self.dataLineColor = [UIColor UNHCRBlue];
+        self.dotColor = [UIColor UNHCRBlue];
+        self.labelColor = [UIColor lightGrayColor];
+        self.horizontalGuideLineColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.25];
+        
+        self.preferredLabelFont = [UIFont helveticaNeueLightFontFontOfSize:kGraphDateLabelFontSize];
+        
+        self.displayTimePeriodLabels = YES;
         
     }
     return self;
@@ -90,7 +115,21 @@
  */
 - (void)drawRect:(CGRect)rect {
     
-    CGRect dataRect = self.bounds;
+    // TODO: respond better to dynamic specification of input 'rect' value - poorly supported atm
+    
+    CGRect highlightedDataPointLabelRect = CGRectMake(self.bounds.origin.x,
+                                                      self.bounds.origin.y,
+                                                      CGRectGetWidth(self.bounds),
+                                                      kGraphDataPointHighlightLabelHeight);
+    
+    CGFloat dateLabelHeight = (self.displayTimePeriodLabels) ? kGraphDateLabelHeight : 0.0;
+    
+    self.dataRect = CGRectMake(self.bounds.origin.x,
+                               CGRectGetMaxY(highlightedDataPointLabelRect),
+                               CGRectGetWidth(self.bounds),
+                               CGRectGetHeight(self.bounds) - dateLabelHeight - highlightedDataPointLabelRect.size.height);
+    
+    
     
     // clip to the rounded rect
 //    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:self.bounds
@@ -98,16 +137,68 @@
 //                                                     cornerRadii:CGSizeMake(16.0, 16.0)];
 //    [path addClip];
 //    [self _drawBackgroundGradient];
-    [self _drawVerticalGridInRect:dataRect];
-    [self _drawHorizontalGridInRect:dataRect clip:YES];
-    [self _drawPatternArtUnderClosingData:dataRect clip:YES];
-    [self _drawPatternLinesUnderDataPoints:dataRect clip:YES];
-    [self _drawLineForDataPointsInRect:dataRect];
-    [self _drawLabelsUnderDataRect:dataRect];
+//    [self _drawVerticalGridInRect:dataRect];
+    
+    if (CGRectContainsRect(rect, highlightedDataPointLabelRect)) {
+        NSInteger index = [self.dataSource numberOfDataPointsInGraphView:self] - 1;
+        [self _drawHighlightedDataPointInRect:highlightedDataPointLabelRect forDataPointAtIndex:index];
+    }
+    
+    [self _drawHorizontalGridInRect:self.dataRect clip:NO];
+//    [self _drawPatternArtUnderClosingData:dataRect clip:YES];
+//    [self _drawPatternLinesUnderDataPoints:dataRect clip:YES];
+    [self _drawLineForDataPointsInRect:self.dataRect];
+    [self _drawVerticalLineForHighlightedDataPointInRect:self.dataRect];
+    [self _drawDotsAtDataPointsInRect:self.dataRect];
+    [self _drawLabelsUnderDataRect:self.dataRect];
+}
+
+#pragma mark - Touches
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self _touchesOccurring:touches];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self _touchesOccurring:touches];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self _touchesStopped];
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self _touchesStopped];
 }
 
 #pragma mark -
 #pragma mark Getters & Setters
+
+// TODO: use proper rect to redraw
+- (void)setDisplayedTimePeriod:(SCDataTimePeriod)displayedTimePeriod {
+    _displayedTimePeriod = displayedTimePeriod;
+    [self setNeedsDisplay];
+}
+
+- (void)setDataLineColor:(UIColor *)dataLineColor {
+    _dataLineColor = dataLineColor;
+    [self setNeedsDisplay];
+}
+
+- (void)setDotColor:(UIColor *)dotColor {
+    _dotColor = dotColor;
+    [self setNeedsDisplay];
+}
+
+- (void)setHorizontalGuideLineColor:(UIColor *)horizontalGuideLineColor {
+    _horizontalGuideLineColor = horizontalGuideLineColor;
+    [self setNeedsDisplay];
+}
+
+- (void)setLabelColor:(UIColor *)labelColor {
+    _labelColor = labelColor;
+    [self setNeedsDisplay];
+}
 
 /*
  * This method creates the blue gradient used behind the 'programmer art' pattern
@@ -142,8 +233,15 @@
     return _backgroundGradientRef;
 }
 
-#pragma mark -
-#pragma mark Clipping Paths
+#pragma mark - Public Methods
+
+- (NSInteger)indexOfDataAtPoint:(CGPoint)point {
+    
+    return [self _indexOfDataAtXPosition:point.x];
+    
+}
+
+#pragma mark - Private - Clipping Paths
 
 /*
  * Creates and returns a path that can be used to clip drawing to the top
@@ -181,34 +279,57 @@
 
 
 #pragma mark -
-#pragma mark Draw Month Names
+#pragma mark Draw Labels
+
+- (void)_drawHighlightedDataPointInRect:(CGRect)labelRect forDataPointAtIndex:(NSInteger)index {
+    
+    // write the string
+    if (!self.highlightedDataPointLabel) {
+        self.highlightedDataPointLabel = [[UILabel alloc] initWithFrame:labelRect];
+        [self addSubview:self.highlightedDataPointLabel];
+        
+        self.highlightedDataPointLabel.font = [UIFont helveticaNeueFontOfSize:kGraphDataPointHighlightFontSize];
+        self.highlightedDataPointLabel.textAlignment = NSTextAlignmentRight;
+    }
+    
+    [self _updateHighlightedDataPointLabelForIndex:index]; // this method sets text directly
+    
+}
 
 /*
- * Draws the month names, reterived from the NSDateFormatter.
+ * Draws the label names, reterived from the NSDateFormatter.
  */
 - (void)_drawLabelsUnderDataRect:(CGRect)dataRect {
+    
+    // get vars
+    CGFloat maxLabelWidth = ceilf([self _maximumLabelWidth]);
     NSInteger dataCount = [[self dataSource] numberOfDataPointsInGraphView:self];
-
-    [[UIColor whiteColor] setFill];
-    UIFont *font = [UIFont boldSystemFontOfSize:16.0];
-
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(ctx);
-    CGFloat shadowHeight = 2.0;
-    CGContextSetShadowWithColor(ctx, CGSizeMake(1.0, -shadowHeight), 0.0, [[UIColor darkGrayColor] CGColor]);
-    for(int i = 0; i < dataCount; i++) {
+    
+    //find safe # of labels to display - round down/truncate
+    CGFloat xMinimumPadding = 15.0;
+    CGFloat dataWidth = CGRectGetWidth(dataRect);
+    NSInteger maxLabelsThatFit = dataWidth / (maxLabelWidth + xMinimumPadding); // is this a safe way to truncate/round down?
+    NSInteger labelsToDisplay = MIN(maxLabelsThatFit,dataCount);
+    
+    // display labels
+    CGFloat baseLabelGap = (dataWidth / labelsToDisplay);
+    for (NSInteger i = 0; i < labelsToDisplay; i++) {
         
-        CGFloat linePosition = i * ( CGRectGetWidth(self.bounds) / dataCount );
-        CGContextTranslateCTM(ctx, linePosition, 0.0);
-        NSString *labelString = [self.dataSource graphView:self labelForDataPointAtIndex:i];
-        CGSize labelSize = [labelString sizeWithAttributes:@{NSFontAttributeName: font}];
-        CGRect labelRect = CGRectMake(0.0,
-                                      CGRectGetMaxY(dataRect) + shadowHeight,
+        CGFloat actualLabelXPosition = i * baseLabelGap + baseLabelGap;
+        NSInteger indexToUse = [self _indexOfDataAtXPosition:actualLabelXPosition];
+        NSString *labelStringToUse = [self.dataSource graphView:self labelForDataPointAtIndex:indexToUse];
+        
+        // write the string
+        CGSize labelSize = [labelStringToUse sizeWithAttributes:@{NSFontAttributeName: self.preferredLabelFont}];
+        CGRect labelRect = CGRectMake(actualLabelXPosition - labelSize.width,
+                                      CGRectGetMaxY(dataRect),
                                       labelSize.width,
                                       labelSize.height);
-        [labelString drawInRect:labelRect withAttributes:@{NSFontAttributeName: font}];
+        [labelStringToUse drawInRect:labelRect withAttributes:@{NSFontAttributeName: self.preferredLabelFont,
+                                                                NSForegroundColorAttributeName: self.labelColor}];
+        
     }
-    CGContextRestoreGState(ctx);
+    
 }
 
 
@@ -219,9 +340,68 @@
  * Draws the path for the closing price data set.
  */
 - (void)_drawLineForDataPointsInRect:(CGRect)rect {
-    [[UIColor UNHCRBlue] setStroke];
+    [self.dataLineColor setStroke];
     UIBezierPath *path = [self _linePathForDataPointsInRect:rect];
     [path stroke];
+}
+
+/*
+ * Draws dots on the points in the rect
+ */
+- (void)_drawDotsAtDataPointsInRect:(CGRect)rect {
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSetStrokeColorWithColor(context, self.dotColor.CGColor);
+    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+    
+    [self _performBlockInRect:rect atDataPoints:^(NSInteger index, CGFloat xValue, CGFloat yValue) {
+        
+        CGFloat dotWidth = 4.0;
+        
+        if (self.highlightedDataPointIndex &&
+            self.highlightedDataPointIndex.integerValue == index) {
+            
+            dotWidth = 8.0;
+            
+        }
+        
+        CGRect rect = CGRectMake(xValue - dotWidth * 0.5,
+                                 yValue - dotWidth * 0.5,
+                                 dotWidth,
+                                 dotWidth);
+        
+        CGContextAddEllipseInRect(context, rect);
+        
+    }];
+    
+    CGContextDrawPath(context, kCGPathFillStroke);
+    
+}
+
+- (void)_drawVerticalLineForHighlightedDataPointInRect:(CGRect)rect {
+    
+    if (self.highlightedDataPointIndex) {
+        
+        NSInteger highlightedIndex = self.highlightedDataPointIndex.integerValue;
+        [self _performBlockInRect:rect atDataPoints:^(NSInteger index, CGFloat xValue, CGFloat yValue) {
+            
+            if (index == highlightedIndex) {
+                // draw vertical line!
+                UIBezierPath *path = [UIBezierPath bezierPath];
+                path.lineWidth = 2.0;
+                
+                [path moveToPoint:CGPointMake(xValue, CGRectGetMinY(rect))];
+                [path addLineToPoint:CGPointMake(xValue, CGRectGetMaxY(rect))];
+                
+                [[UIColor redColor] setStroke];
+                [path stroke];
+                
+            }
+                
+        }];
+    }
+    
 }
 
 /*
@@ -229,43 +409,25 @@
  * top and bottom clip paths.
  */
 - (UIBezierPath *)_linePathForDataPointsInRect:(CGRect)rect {
-    CGFloat maxY = [self.dataSource graphViewMaxYValue:self];
-    CGFloat minY = [self.dataSource graphViewMinYValue:self];
-    NSInteger dataCount = [self.dataSource numberOfDataPointsInGraphView:self];
     
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    // even though this lineWidth is odd, we don't do any offset because its not going to
-    // ever line up with any pixels, just think geometrically
-    CGFloat lineWidth = 3.0;
+    __block UIBezierPath *path = [UIBezierPath bezierPath];
+
+    CGFloat lineWidth = kDataLineWidth;
     [path setLineWidth:lineWidth];
     [path setLineJoinStyle:kCGLineJoinRound];
     [path setLineCapStyle:kCGLineCapRound];
-    // inset so the path does not ever go beyond the frame of the graph
-    rect = CGRectInset(rect, lineWidth / 2.0, lineWidth);
-    CGFloat horizontalSpacing = CGRectGetWidth(rect) / (dataCount - 1); // # of gaps = count - 1
-    CGFloat verticalScale = CGRectGetHeight(rect) / (maxY - minY);
     
-    CGFloat baseline = CGRectGetMinY(rect);
-    CGFloat topline = CGRectGetMaxY(rect);
-    
-    for(int i = 0; i < dataCount; i++) {
+    [self _performBlockInRect:rect atDataPoints:^(NSInteger index, CGFloat xValue, CGFloat yValue) {
         
-        NSNumber *dataPointNumber = [self.dataSource graphView:self dataPointForIndex:i];
-        NSParameterAssert(dataPointNumber);
-        
-        CGFloat dataPoint = [dataPointNumber floatValue];
-        CGFloat yValue = topline - (baseline + (dataPoint - minY) * verticalScale);
-        
-        if (i == 0) {
-            self.initialDataPointLocation = CGPointMake(lineWidth,
+        if (index == 0) {
+            self.initialDataPointLocation = CGPointMake(lineWidth * 0.5,
                                                         yValue);
             [path moveToPoint:self.initialDataPointLocation];
         }
         
-        [path addLineToPoint:CGPointMake(CGRectGetMinX(rect) + i * horizontalSpacing,
-                                         yValue)];
+        [path addLineToPoint:CGPointMake(xValue, yValue)];
         
-    }
+    }];
     
     return path;
 }
@@ -368,13 +530,13 @@
  * draws the 'programmer art' pattern under the closing data graph
  */
 - (void)_drawPatternArtUnderClosingData:(CGRect)rect clip:(BOOL)shouldClip {
-    [[UIColor colorWithPatternImage:[self _patternImageOfSize:CGSizeMake(32.0, 32.0)]] setFill];
-    if(shouldClip) {
-        UIBezierPath *path = [self _bottomClipPathFromDataInRect:rect];
-        [path fill];
-    } else {
-        UIRectFill(rect);
-    }
+//    [[UIColor colorWithPatternImage:[self _patternImageOfSize:CGSizeMake(32.0, 32.0)]] setFill];
+//    if(shouldClip) {
+//        UIBezierPath *path = [self _bottomClipPathFromDataInRect:rect];
+//        [path fill];
+//    } else {
+//        UIRectFill(rect);
+//    }
 }
 
 
@@ -403,9 +565,8 @@
                                      rint(CGRectGetMinY(dataRect)) + 0.5)];
     CGFloat dashPatern[2] = {1.0, 1.0};
     [path setLineDash:dashPatern count:2 phase:0.0];
-    UIColor *gridColor = [UIColor colorWithRed:74.0 / 255.0 green:86.0 / 255.0 
-                                          blue:126.0 / 266.0 alpha:0.25];
-    [gridColor setStroke];
+    
+    [self.horizontalGuideLineColor setStroke];
     
     CGContextSaveGState(ctx);
     [path stroke];
@@ -481,71 +642,110 @@
 }
 
 
-#pragma mark -
-#pragma mark Layout Calculations
+#pragma mark - Private Methods
 
-- (CGFloat)_labelWidth {
-    // tweaked till it looked good
-    CGFloat minimum = 32.0;
-    CGFloat maximum = 54.0;
-    NSNumber *number = [NSNumber numberWithDouble:[[self dataSource] graphViewMaxYValue:self]];
-    CGSize size = [[self.numberFormatter stringFromNumber:number] sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:14]}];
-    CGFloat width = minimum;
-    if(size.width < maximum && size.width > minimum) {
-        width = size.width;
+- (CGFloat)_maximumLabelWidth {
+
+    // set custom font
+    UIFont *labelFont = self.preferredLabelFont;
+    
+    // compare all strings using font
+    NSInteger numberOfDataPoints = [self.dataSource numberOfDataPointsInGraphView:self];
+    
+    CGFloat maxWidth = 0;
+    for (NSInteger i = 0; i < numberOfDataPoints; i++) {
+        NSString *labelString = [self.dataSource graphView:self labelForDataPointAtIndex:i];
+        CGSize projectedLabelSize = [labelString sizeWithAttributes:@{NSFontAttributeName: labelFont}];
+        CGFloat projectedLabelWidth = projectedLabelSize.width;
+        maxWidth = MAX(maxWidth,projectedLabelWidth);
     }
-    return width;
+    
+    return maxWidth;
 }
 
-@end
-
-@implementation SCGraphView (Extras)
-
-/*
- * call this method after drawVolumeDataInRect: in the drawRect: method
- * and see what exciting drawing results.
- */
-- (void)drawBeachUnderDataInRect:(CGRect)rect {
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(ctx);
-    UIBezierPath *clipPath = [self _bottomClipPathFromDataInRect:rect];
-    [clipPath addClip];
-    UIImage *image = [UIImage imageNamed:@"Beach.png"];
-    [image drawInRect:rect];
+- (void)_performBlockInRect:(CGRect)rect atDataPoints:(void (^)(NSInteger index, CGFloat xValue, CGFloat yValue))dataPointBlock {
+    
+    // inset so the path does not ever go beyond the frame of the graph
+    rect = CGRectInset(rect, kDataLineWidth / 2.0, kDataLineWidth);
+    
+    NSInteger dataCount = [self.dataSource numberOfDataPointsInGraphView:self];
+    
+    CGFloat maxY = [self.dataSource graphViewMaxYValue:self];
+    CGFloat minY = [self.dataSource graphViewMinYValue:self];
+    
+    CGFloat verticalScale = CGRectGetHeight(rect) / (maxY - minY);
+    CGFloat horizontalSpacing = CGRectGetWidth(rect) / (dataCount - 1); // # of gaps = count - 1
+    
+    CGFloat baseline = CGRectGetMinY(rect);
+    CGFloat maxHeight = CGRectGetHeight(rect);
+    
+    for(int i = 0; i < dataCount; i++) {
+        
+        NSNumber *dataPointNumber = [self.dataSource graphView:self dataPointForIndex:i];
+        NSParameterAssert(dataPointNumber);
+        
+        CGFloat dataPoint = [dataPointNumber floatValue];
+        CGFloat yValue = baseline + (maxHeight - (dataPoint - minY) * verticalScale);
+        
+        CGFloat xValue = CGRectGetMinX(rect) + i * horizontalSpacing;
+        
+        dataPointBlock(i, xValue, yValue);
+        
+    }
+    
 }
 
-/*
- * used to get the shadowed circles shown in the preso
- * not called as part of this sample, but here for your illumination 
- */
-- (void)drawShadowedCirclesInRect:(CGRect)rect {
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(ctx);
-    CGFloat shadowHeight = 16.0;
-    CGFloat radius = CGRectGetHeight(rect) / 2.5;
-    CGContextSetShadowWithColor(ctx, CGSizeMake(shadowHeight, shadowHeight), 5.0,
-                                [[[UIColor purpleColor] colorWithAlphaComponent:0.7] CGColor]);
-    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect))
-                                                        radius:radius startAngle:0.0
-                                                      endAngle:2.0 * M_PI clockwise:YES];
-    UIColor *color1 = [UIColor colorWithRed:99.0 / 255.0 green:66.0 / 255.0
-                                       blue:58.0 / 255.0 alpha:1.0];
-    UIColor *color2 = [UIColor colorWithRed:149.0 / 255.0 green:64.0 / 255.0
-                                       blue:73.0 / 255.0 alpha:1.0];
-    UIColor *color3 = [UIColor colorWithRed:195.0 / 255.0 green:111.0 / 255.0
-                                       blue:97.0 / 255.0 alpha:1.0];
-    CGContextBeginTransparencyLayer(ctx, NULL);
-    [color1 setFill];
-    CGContextTranslateCTM(ctx, -radius / 2.0, 0.0);
-    [path fill];
-    [color2 setFill];
-    CGContextTranslateCTM(ctx, 1.25 * radius, 0.75 * radius);
-    [path fill];
-    [color3 setFill];
-    CGContextTranslateCTM(ctx, 0.0, -1.5 * radius);
-    [path fill];
-    CGContextEndTransparencyLayer(ctx);
-    CGContextRestoreGState(ctx);
+- (NSInteger)_indexOfDataAtXPosition:(CGFloat)xPosition {
+    
+    NSInteger numberOfDataPoints = [self.dataSource numberOfDataPointsInGraphView:self];
+    NSInteger validIndexMaximum = numberOfDataPoints - 1;
+    
+    CGFloat positionRatio = xPosition / CGRectGetWidth(self.bounds);
+    NSInteger roundedIndexFromPositionRatio = lroundf(validIndexMaximum * positionRatio);
+    
+    return roundedIndexFromPositionRatio;
+    
+}
+
+- (void)_updateHighlightedDataPointLabelForIndex:(NSInteger)index {
+    
+    NSNumber *dataValue = [self.dataSource graphView:self dataPointForIndex:index];
+    NSString *dataDate = [self.dataSource graphView:self labelForDataPointAtIndex:index];
+    
+    self.highlightedDataPointLabel.text = [NSString stringWithFormat:@"%@: %@ %@",
+                                           dataDate,
+                                           dataValue,
+                                           @"messages"];
+    
+}
+
+- (void)_touchesOccurring:(NSSet *)touches {
+    
+    if ([self.delegate respondsToSelector:@selector(graphViewBeganTouchingData:withTouches:)]) {
+        [self.delegate graphViewBeganTouchingData:self withTouches:touches];
+    }
+    
+    UITouch *touch = touches.anyObject;
+    CGFloat xTouchFactor = [touch locationInView:self].x;
+    
+    NSInteger highlightedIndex = [self _indexOfDataAtXPosition:xTouchFactor];
+    [self _updateHighlightedDataPointLabelForIndex:highlightedIndex];
+    
+    // update line
+    self.highlightedDataPointIndex = @(highlightedIndex);
+    [self setNeedsDisplayInRect:self.dataRect];
+    
+}
+
+- (void)_touchesStopped {
+    
+    if ([self.delegate respondsToSelector:@selector(graphViewStoppedTouchingData:)]) {
+        [self.delegate graphViewStoppedTouchingData:self];
+    }
+    
+    // reset line and label
+    self.highlightedDataPointIndex = nil;
+    [self setNeedsDisplay];
 }
 
 @end

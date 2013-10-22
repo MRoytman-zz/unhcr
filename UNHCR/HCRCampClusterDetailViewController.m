@@ -36,6 +36,8 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 @property NSDictionary *campClusterData;
 @property NSMutableArray *campClusterCollectionLayoutData;
 
+@property NSDateFormatter *dateFormatter;
+
 @property (nonatomic) BOOL alertsAdded;
 
 @property (nonatomic, readonly) BOOL clusterContainsTallySheets;
@@ -54,6 +56,9 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         
         self.alertsAdded = NO;
         self.localAlerts = @[].mutableCopy;
+        
+        self.dateFormatter = [NSDateFormatter new];
+        self.dateFormatter.dateFormat = @"MMM dd";
         
         self.campClusterCollectionLayoutData = @[
                                       @{@"Section": @"Refugee Requests",
@@ -195,6 +200,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
         HCRGraphCell *graphCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterGraphCellIdentifier forIndexPath:indexPath];
         
+        graphCell.graphDelegate = self;
         graphCell.graphDataSource = self;
         
         return graphCell;
@@ -375,10 +381,24 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     
 }
 
+#pragma mark - SCGraphView Delegate
+
+- (void)graphViewBeganTouchingData:(SCGraphView *)graphView withTouches:(NSSet *)touches {
+    self.collectionView.scrollEnabled = NO;
+}
+
+- (void)graphViewStoppedTouchingData:(SCGraphView *)graphView {
+    self.collectionView.scrollEnabled = YES;
+}
+
 #pragma mark - SCGraphView Data Source
 
+// TODO: DELETE
+static const NSInteger kNumberOfDataPoints = 30;
+static const CGFloat kMaxYValue = 200.0;
+
 - (NSInteger)numberOfDataPointsInGraphView:(SCGraphView *)graphView {
-    return 30;
+    return kNumberOfDataPoints;
 }
 
 - (CGFloat)graphViewMinYValue:(SCGraphView *)graphView {
@@ -386,7 +406,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 }
 
 - (CGFloat)graphViewMaxYValue:(SCGraphView *)graphView {
-    return 200;
+    return kMaxYValue;
 }
 
 - (NSNumber *)graphView:(SCGraphView *)graphView dataPointForIndex:(NSInteger)index {
@@ -396,7 +416,14 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 }
 
 - (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index {
-    return [NSString stringWithFormat:@"section %d",index];
+    
+    // go back [index] days since today
+    NSTimeInterval numberOfSecondsToTargetDate = -1 * ((kNumberOfDataPoints - (index + 1)) * 60 * 60 * 24);
+    NSDate *targetDate = [NSDate dateWithTimeIntervalSinceNow:numberOfSecondsToTargetDate];
+
+    NSString *dateString = [self.dateFormatter stringFromDate:targetDate];
+    
+    return dateString;
 }
 
 #pragma mark - Getters & Setters
