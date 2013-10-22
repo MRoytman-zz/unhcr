@@ -20,6 +20,7 @@
     
     HCRHomeViewController *homeView = [[HCRHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *rootNavigationController = [[UINavigationController alloc] initWithRootViewController:homeView];
+    rootNavigationController.interactivePopGestureRecognizer.enabled = NO;
     
     self.window.rootViewController = rootNavigationController;
     self.window.backgroundColor = [UIColor whiteColor];

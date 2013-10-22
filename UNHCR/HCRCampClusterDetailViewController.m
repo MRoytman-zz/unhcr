@@ -394,7 +394,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 #pragma mark - SCGraphView Data Source
 
 // TODO: DELETE
-static const NSInteger kNumberOfDataPoints = 30;
+static const NSInteger kNumberOfDataPoints = 7;
 static const CGFloat kMaxYValue = 200.0;
 
 - (NSInteger)numberOfDataPointsInGraphView:(SCGraphView *)graphView {

@@ -57,6 +57,12 @@ extern NSString *SCGraphTipValueKey;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+typedef NS_ENUM(NSInteger, SCGraphIndexRoundingMode) {
+    SCGraphIndexRoundingModeNormal,
+    SCGraphIndexRoundingModeFloor,
+    SCGraphIndexRoundingModeCeiling
+};
+
 typedef NS_ENUM(NSInteger, SCGraphAxis) {
     SCGraphAxisX,
     SCGraphAxisY
@@ -101,6 +107,7 @@ typedef NS_ENUM(NSInteger, SCDataTimePeriod) {
 @property (nonatomic, weak) id<SCGraphViewDataSource> dataSource;
 
 @property (nonatomic) SCDataTimePeriod displayedTimePeriod;
+@property (nonatomic) SCGraphIndexRoundingMode roundingMode;
 
 @property (nonatomic, strong) UIColor *dataLineColor;
 @property (nonatomic, strong) UIColor *dotColor;

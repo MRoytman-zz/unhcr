@@ -26,7 +26,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        static const CGFloat kGraphOffset = 0;
+        static const CGFloat kGraphOffset = 0.0;
         CGRect graphFrame = CGRectMake(kGraphOffset,
                                        kGraphOffset,
                                        CGRectGetWidth(self.bounds) - 2 * kGraphOffset,
@@ -37,6 +37,11 @@
         
     }
     return self;
+}
+
+- (void)prepareForReuse {
+    self.graphDataSource = nil;
+    self.graphDelegate = nil;
 }
 
 #pragma mark - Class Methods

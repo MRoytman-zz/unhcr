@@ -54,6 +54,9 @@ NSString *SCGraphTipValueKey = @"SCGraphTipValueKey";
 
 static const CGFloat kDataLineWidth = 1.0;
 
+static const CGFloat kDataDotWidth = 4.0;
+static const CGFloat kDataDotWidthHighlighted = 8.0;
+
 static const CGFloat kGraphDataPointHighlightFontSize = 16.0;
 static const CGFloat kGraphDataPointHighlightLabelHeight = 25.0;
 
@@ -97,6 +100,8 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
         
         self.displayTimePeriodLabels = YES;
         
+        self.roundingMode = SCGraphIndexRoundingModeNormal;
+        
     }
     return self;
 }
@@ -124,9 +129,10 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     
     CGFloat dateLabelHeight = (self.displayTimePeriodLabels) ? kGraphDateLabelHeight : 0.0;
     
-    self.dataRect = CGRectMake(self.bounds.origin.x,
+    static const CGFloat kXPadding = 0.0;
+    self.dataRect = CGRectMake(self.bounds.origin.x + kXPadding,
                                CGRectGetMaxY(highlightedDataPointLabelRect),
-                               CGRectGetWidth(self.bounds),
+                               CGRectGetWidth(self.bounds) - 2 * kXPadding,
                                CGRectGetHeight(self.bounds) - dateLabelHeight - highlightedDataPointLabelRect.size.height);
     
     
@@ -177,6 +183,11 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
 // TODO: use proper rect to redraw
 - (void)setDisplayedTimePeriod:(SCDataTimePeriod)displayedTimePeriod {
     _displayedTimePeriod = displayedTimePeriod;
+    [self setNeedsDisplay];
+}
+
+- (void)setRoundingMode:(SCGraphIndexRoundingMode)roundingMode {
+    _roundingMode = roundingMode;
     [self setNeedsDisplay];
 }
 
@@ -321,7 +332,7 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
         
         // write the string
         CGSize labelSize = [labelStringToUse sizeWithAttributes:@{NSFontAttributeName: self.preferredLabelFont}];
-        CGRect labelRect = CGRectMake(actualLabelXPosition - labelSize.width,
+        CGRect labelRect = CGRectMake(CGRectGetMinX(dataRect) + actualLabelXPosition - labelSize.width,
                                       CGRectGetMaxY(dataRect),
                                       labelSize.width,
                                       labelSize.height);
@@ -357,12 +368,12 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     
     [self _performBlockInRect:rect atDataPoints:^(NSInteger index, CGFloat xValue, CGFloat yValue) {
         
-        CGFloat dotWidth = 4.0;
+        CGFloat dotWidth = kDataDotWidth;
         
         if (self.highlightedDataPointIndex &&
             self.highlightedDataPointIndex.integerValue == index) {
             
-            dotWidth = 8.0;
+            dotWidth = kDataDotWidthHighlighted;
             
         }
         
@@ -420,7 +431,7 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     [self _performBlockInRect:rect atDataPoints:^(NSInteger index, CGFloat xValue, CGFloat yValue) {
         
         if (index == 0) {
-            self.initialDataPointLocation = CGPointMake(lineWidth * 0.5,
+            self.initialDataPointLocation = CGPointMake(CGRectGetMinX(rect) + MAX(lineWidth,kDataDotWidthHighlighted) * 0.5,
                                                         yValue);
             [path moveToPoint:self.initialDataPointLocation];
         }
@@ -666,7 +677,8 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
 - (void)_performBlockInRect:(CGRect)rect atDataPoints:(void (^)(NSInteger index, CGFloat xValue, CGFloat yValue))dataPointBlock {
     
     // inset so the path does not ever go beyond the frame of the graph
-    rect = CGRectInset(rect, kDataLineWidth / 2.0, kDataLineWidth);
+    CGFloat largestObjectWidth = MAX(kDataLineWidth,kDataDotWidthHighlighted);
+    rect = CGRectInset(rect, largestObjectWidth / 2.0, largestObjectWidth);
     
     NSInteger dataCount = [self.dataSource numberOfDataPointsInGraphView:self];
     
@@ -695,13 +707,23 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     
 }
 
-- (NSInteger)_indexOfDataAtXPosition:(CGFloat)xPosition {
+- (NSInteger)_indexOfDataAtXPosition:(CGFloat)xPosition withRoundingMode:(SCGraphIndexRoundingMode)roundingMode {
     
     NSInteger numberOfDataPoints = [self.dataSource numberOfDataPointsInGraphView:self];
     NSInteger validIndexMaximum = numberOfDataPoints - 1;
     
     CGFloat positionRatio = xPosition / CGRectGetWidth(self.bounds);
-    NSInteger roundedIndexFromPositionRatio = lroundf(validIndexMaximum * positionRatio);
+    CGFloat rawPositionResult = validIndexMaximum * positionRatio;
+    
+    NSInteger roundedIndexFromPositionRatio;
+    switch (roundingMode) {
+        case SCGraphIndexRoundingModeNormal:
+            roundedIndexFromPositionRatio = lroundf(rawPositionResult);
+            break;
+            
+        default:
+            break;
+    }
     
     return roundedIndexFromPositionRatio;
     
