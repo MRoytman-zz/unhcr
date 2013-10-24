@@ -44,8 +44,7 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
         
         self.clusterCompareDataArray = clusterData;
         
-        self.dateFormatter = [NSDateFormatter new];
-        self.dateFormatter.dateFormat = @"MMM dd";
+        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd];
         
     }
     return self;

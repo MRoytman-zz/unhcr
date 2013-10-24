@@ -15,7 +15,7 @@
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     
     switch (dateFormat) {
-        case HCRDateFormatMMddd:
+        case HCRDateFormatMMMdd:
             dateFormatter.dateFormat = @"MMM dd";
             break;
     }

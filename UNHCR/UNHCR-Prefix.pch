@@ -23,4 +23,5 @@
     #import "UICollectionReusableView+HCRSupplementalViews.h"
     #import "UIDevice+EAAdditions.h"
     #import "UIFont+HCRCommonFonts.h"
+    #import "NSDateFormatter+HCRAdditions.h"
 #endif
