@@ -17,4 +17,6 @@
 @property (nonatomic, weak) id<SCGraphViewDelegate> graphDelegate;
 @property (nonatomic, weak) id<SCGraphViewDataSource> graphDataSource;
 
+@property (nonatomic, readonly) SCGraphView *graphView;
+
 @end

@@ -42,6 +42,10 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 
 @property (nonatomic, readonly) BOOL clusterContainsTallySheets;
 
+// DEBUG ONLY //
+@property (nonatomic) NSArray *messagesReceivedArray;
+// DEBUG ONLY //
+
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -393,12 +397,8 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 
 #pragma mark - SCGraphView Data Source
 
-// TODO: DELETE
-static const NSInteger kNumberOfDataPoints = 7;
-static const CGFloat kMaxYValue = 200.0;
-
 - (NSInteger)numberOfDataPointsInGraphView:(SCGraphView *)graphView {
-    return kNumberOfDataPoints;
+    return self.messagesReceivedArray.count;
 }
 
 - (CGFloat)graphViewMinYValue:(SCGraphView *)graphView {
@@ -406,19 +406,24 @@ static const CGFloat kMaxYValue = 200.0;
 }
 
 - (CGFloat)graphViewMaxYValue:(SCGraphView *)graphView {
-    return kMaxYValue;
+    
+    // http://stackoverflow.com/questions/3080540/finding-maximum-numeric-value-in-nsarray
+    NSNumber *largestNumber = [self.messagesReceivedArray valueForKeyPath:@"@max.intValue"];
+    CGFloat maxNumberWithPadding = largestNumber.floatValue * 1.1;
+    
+    return maxNumberWithPadding;
 }
 
 - (NSNumber *)graphView:(SCGraphView *)graphView dataPointForIndex:(NSInteger)index {
     
-    return @(100 + index * 3);
+    return [self.messagesReceivedArray objectAtIndex:index];
     
 }
 
 - (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index {
     
     // go back [index] days since today
-    NSTimeInterval numberOfSecondsToTargetDate = -1 * ((kNumberOfDataPoints - (index + 1)) * 60 * 60 * 24);
+    NSTimeInterval numberOfSecondsToTargetDate = -1 * ((self.messagesReceivedArray.count - (index + 1)) * 60 * 60 * 24);
     NSDate *targetDate = [NSDate dateWithTimeIntervalSinceNow:numberOfSecondsToTargetDate];
 
     NSString *dateString = [self.dateFormatter stringFromDate:targetDate];
@@ -427,6 +432,30 @@ static const CGFloat kMaxYValue = 200.0;
 }
 
 #pragma mark - Getters & Setters
+
+- (NSArray *)messagesReceivedArray {
+    
+    // TODO: debug only - need to retrieve live data
+    static const NSInteger kNumberOfDataPoints = 30;
+    static const CGFloat kDataPointBaseline = 50.0;
+    static const CGFloat kDataPointRange = 50.0;
+    static const CGFloat kDataPointIncrement = 6.0;
+    
+    if ( ! _messagesReceivedArray ) {
+        
+        NSMutableArray *randomMessagesArray = @[].mutableCopy;
+        
+        for (NSInteger i = 0; i < kNumberOfDataPoints; i++) {
+            CGFloat nextValue = kDataPointBaseline + (i * kDataPointIncrement) + arc4random_uniform(kDataPointRange);
+            [randomMessagesArray addObject:@(nextValue)];
+        }
+        
+        _messagesReceivedArray = randomMessagesArray;
+    }
+    
+    return _messagesReceivedArray;
+    
+}
 
 - (BOOL)clusterContainsTallySheets {
     return ([self.campClusterData objectForKey:@"TallySheets" ofClass:@"NSArray" mustExist:NO] != nil);

@@ -13,7 +13,7 @@
 
 @interface HCRGraphCell ()
 
-@property SCGraphView *graphView;
+@property (nonatomic, readwrite) SCGraphView *graphView;
 
 @end
 

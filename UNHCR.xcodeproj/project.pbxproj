@@ -50,6 +50,7 @@
 		4FD8391118020D4E00B49498 /* UIFont+HCRCommonFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */; };
 		4FD839151803197200B49498 /* HCRAlertCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839141803197200B49498 /* HCRAlertCell.m */; };
 		4FD8391918032B6300B49498 /* HCRAlertsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391818032B6300B49498 /* HCRAlertsViewController.m */; };
+		4FD9308D1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9308C1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m */; };
 		C1FCCA2A37DE44BABAAEC9EC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04773A9AD17C462187CA1561 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -137,6 +138,8 @@
 		4FD839141803197200B49498 /* HCRAlertCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRAlertCell.m; sourceTree = "<group>"; };
 		4FD8391718032B6300B49498 /* HCRAlertsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRAlertsViewController.h; sourceTree = "<group>"; };
 		4FD8391818032B6300B49498 /* HCRAlertsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRAlertsViewController.m; sourceTree = "<group>"; };
+		4FD9308B1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+HCRAdditions.h"; sourceTree = "<group>"; };
+		4FD9308C1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+HCRAdditions.m"; sourceTree = "<group>"; };
 		D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -329,6 +332,8 @@
 				4FD8390018013F5200B49498 /* UIDevice+EAAdditions.m */,
 				4FD8390F18020D4E00B49498 /* UIFont+HCRCommonFonts.h */,
 				4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */,
+				4FD9308B1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.h */,
+				4FD9308C1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -494,6 +499,7 @@
 				4F1C93FC17FC09190003AA21 /* HCRFlowLayout.m in Sources */,
 				4F0C701B17FF482B0081F201 /* AssertionCategories.m in Sources */,
 				4F866B1117FAB83B000350E4 /* HCRClusterCollectionController.m in Sources */,
+				4FD9308D1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m in Sources */,
 				4F866B0017FA8350000350E4 /* HCRCountryCollectionCell.m in Sources */,
 				4FD838E81800D88200B49498 /* EAEmailUtilities.m in Sources */,
 				4F866AF317F9EB8C000350E4 /* HCRCountryCollectionViewController.m in Sources */,
