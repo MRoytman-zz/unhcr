@@ -12,10 +12,12 @@
 #import "HCRTableFlowLayout.h"
 #import "HCRDataEntryCell.h"
 #import "HCRTallySheetDetailInputViewController.h"
+#import "HCRHeaderView.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kTallyDetailCellIdentifier = @"kTallyDetailCellIdentifier";
+NSString *const kTallyDetailHeaderIdentifier = @"kTallyDetailHeaderIdentifier";
 
 NSString *const kTallyReportingPeriod = @"Reporting Period";
 NSString *const kTallyLocation = @"Location";
@@ -62,10 +64,7 @@ NSString *const kTallyOrganization = @"Organization";
     
     self.tallyResources = [self.tallySheetData objectForKey:@"Resources" ofClass:@"NSArray"];
     
-    self.title = [self.tallySheetData objectForKey:@"Name" ofClass:@"NSString"];
-    
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.925];
+//    self.view.backgroundColor = [UIColor whiteColor];
     
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                   target:self
@@ -83,21 +82,27 @@ NSString *const kTallyOrganization = @"Organization";
     tableLayout.minimumLineSpacing = 0;
     tableLayout.sectionInset = UIEdgeInsetsMake(15, 0, 0, 0);
     
+    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
+    
     [self.collectionView registerClass:[HCRDataEntryCell class]
             forCellWithReuseIdentifier:kTallyDetailCellIdentifier];
     
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:backgroundImageView];
-    [self.view sendSubviewToBack:backgroundImageView];
+    [self.collectionView registerClass:[HCRHeaderView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                   withReuseIdentifier:kTallyDetailHeaderIdentifier];
     
-    UIView *background = [[UIView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:background];
-    [self.view sendSubviewToBack:background];
-    
-    UIImage *clusterImage = [[UIImage imageNamed:[self.selectedClusterMetaData objectForKey:@"Image"]] colorImage:[UIColor lightGrayColor]
-                                                                                                    withBlendMode:kCGBlendModeNormal
-                                                                                                 withTransparency:YES];
-    background.backgroundColor = [UIColor colorWithPatternImage:clusterImage];
+//    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+//    [self.view addSubview:backgroundImageView];
+//    [self.view sendSubviewToBack:backgroundImageView];
+//    
+//    UIView *background = [[UIView alloc] initWithFrame:self.view.bounds];
+//    [self.view addSubview:background];
+//    [self.view sendSubviewToBack:background];
+//    
+//    UIImage *clusterImage = [[UIImage imageNamed:[self.selectedClusterMetaData objectForKey:@"Image"]] colorImage:[UIColor lightGrayColor]
+//                                                                                                    withBlendMode:kCGBlendModeNormal
+//                                                                                                 withTransparency:YES];
+//    background.backgroundColor = [UIColor colorWithPatternImage:clusterImage];
     
 }
 
@@ -110,18 +115,21 @@ NSString *const kTallyOrganization = @"Organization";
 #pragma mark - UICollectionView Data Source
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 2;
+    return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     
-    if (section == 0) {
-        // data section
-        return self.tallyLayoutData.count;
-    } else {
-        // tally section
-        return self.tallyResources.count;
-    }
+    return self.tallyResources.count;
+    
+//    if (section == 0) {
+//        // data section
+//        return self.tallyLayoutData.count;
+//    } else {
+//        // todo
+//        // tally section
+//        return self.tallyResources.count;
+//    }
     
 }
 
@@ -130,39 +138,39 @@ NSString *const kTallyOrganization = @"Organization";
     HCRDataEntryCell *dataCell = [collectionView dequeueReusableCellWithReuseIdentifier:kTallyDetailCellIdentifier
                                                                            forIndexPath:indexPath];
     
-    if (indexPath.section == 0) {
-        
-        NSString *cellTitle = [self.tallyLayoutData objectAtIndex:indexPath.row ofClass:@"NSString"];
-        
-        if ([cellTitle isEqualToString:kTallyReportingPeriod]) {
-            
-            dataCell.cellStatus = HCRDataEntryCellStatusStatic;
-            dataCell.dataDictionary = @{@"Header": @YES,
-                                        @"Title": cellTitle,
-                                        @"Input": [self _inputDateRangeString]};
-            
-        } else if ([cellTitle isEqualToString:kTallyLocation]) {
-            
-            NSString *inputString = [NSString stringWithFormat:@"%@ > %@",
-                                     self.countryName,
-                                     self.campName];
-            
-            dataCell.cellStatus = HCRDataEntryCellStatusStatic;
-            dataCell.dataDictionary = @{@"Header": @YES,
-                                        @"Title": cellTitle,
-                                        @"Input": inputString};
-            
-        } else if ([cellTitle isEqualToString:kTallyOrganization]) {
-            
-            dataCell.cellStatus = HCRDataEntryCellStatusChildNotCompleted;
-            dataCell.dataDictionary = @{@"Header": @YES,
-                                        @"Title": cellTitle,
-                                        @"Input": @"select"};
-            
-        }
-        
-    } else if (indexPath.section == 1) {
-        
+//    if (indexPath.section == 0) {
+//        
+//        NSString *cellTitle = [self.tallyLayoutData objectAtIndex:indexPath.row ofClass:@"NSString"];
+//        
+//        if ([cellTitle isEqualToString:kTallyReportingPeriod]) {
+//            
+//            dataCell.cellStatus = HCRDataEntryCellStatusStatic;
+//            dataCell.dataDictionary = @{@"Header": @YES,
+//                                        @"Title": cellTitle,
+//                                        @"Input": [self _inputDateRangeString]};
+//            
+//        } else if ([cellTitle isEqualToString:kTallyLocation]) {
+//            
+//            NSString *inputString = [NSString stringWithFormat:@"%@ > %@",
+//                                     self.countryName,
+//                                     self.campName];
+//            
+//            dataCell.cellStatus = HCRDataEntryCellStatusStatic;
+//            dataCell.dataDictionary = @{@"Header": @YES,
+//                                        @"Title": cellTitle,
+//                                        @"Input": inputString};
+//            
+//        } else if ([cellTitle isEqualToString:kTallyOrganization]) {
+//            
+//            dataCell.cellStatus = HCRDataEntryCellStatusChildNotCompleted;
+//            dataCell.dataDictionary = @{@"Header": @YES,
+//                                        @"Title": cellTitle,
+//                                        @"Input": @"select"};
+//            
+//        }
+//        
+//    } else if (indexPath.section == 1) {
+    
         NSDictionary *resourceDictionary = [self.tallyResources objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
         
         NSMutableDictionary *mutableData = @{@"Title": [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"],
@@ -176,9 +184,29 @@ NSString *const kTallyOrganization = @"Organization";
         dataCell.cellStatus = HCRDataEntryCellStatusChildNotCompleted;
         dataCell.dataDictionary = [NSDictionary dictionaryWithDictionary:mutableData];
         
-    }
+//    }
     
     return dataCell;
+    
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        
+        NSString *title = [self.tallySheetData objectForKey:@"Name" ofClass:@"NSString"];
+        
+        HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                   withReuseIdentifier:kTallyDetailHeaderIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        header.titleString = title;
+        
+        return header;
+        
+    }
+    
+    return nil;
     
 }
 
@@ -186,11 +214,11 @@ NSString *const kTallyOrganization = @"Organization";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 0) {
-        
-        NSString *cellTitle = [self.tallyLayoutData objectAtIndex:indexPath.row ofClass:@"NSString"];
-        if ([cellTitle isEqualToString:kTallyOrganization]) {
-            
+//    if (indexPath.section == 0) {
+//        
+//        NSString *cellTitle = [self.tallyLayoutData objectAtIndex:indexPath.row ofClass:@"NSString"];
+//        if ([cellTitle isEqualToString:kTallyOrganization]) {
+//            
 //            self.agencyPickerBackground = [[UIView alloc] initWithFrame:self.view.bounds];
 //            [self.view addSubview:self.agencyPickerBackground];
 //            
@@ -209,10 +237,10 @@ NSString *const kTallyOrganization = @"Organization";
 //                             animations:^{
 //                                 self.agencyPickerBackground.transform = CGAffineTransformIdentity;
 //                             }];
-            
-        }
-        
-    } else if (indexPath.section == 1) {
+//            
+//        }
+//        
+//    } else if (indexPath.section == 1) {
         
         NSArray *questions = [self.tallySheetData objectForKey:@"Questions" ofClass:@"NSArray"];
         
@@ -247,7 +275,7 @@ NSString *const kTallyOrganization = @"Organization";
         
         [self.navigationController pushViewController:tallyInput animated:YES];
         
-    }
+//    }
     
 }
 
@@ -322,8 +350,7 @@ NSString *const kTallyOrganization = @"Organization";
     NSDate *now = [NSDate new];
     NSDate *nextWeek = [now dateByAddingTimeInterval:secondsPerWeek];
     
-    NSDateFormatter *formatter = [NSDateFormatter new];
-    formatter.dateFormat = @"MMM dd";
+    NSDateFormatter *formatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd];
     
     NSString *nowString = [formatter stringFromDate:now];
     NSString *nextWeekString = [formatter stringFromDate:nextWeek];

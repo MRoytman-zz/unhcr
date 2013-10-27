@@ -41,7 +41,6 @@ NSString *const kAlertsCellIdentifier = @"kAlertsCellIdentifier";
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     self.title = @"Alerts";
-    self.collectionView.backgroundColor = [UIColor whiteColor];
     
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);

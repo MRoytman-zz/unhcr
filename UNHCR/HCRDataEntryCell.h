@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "HCRCollectionCell.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, HCRDataEntryCellStatus) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface HCRDataEntryCell : UICollectionViewCell
+@interface HCRDataEntryCell : HCRCollectionCell
 
 @property (nonatomic) HCRDataEntryCellStatus cellStatus;
 

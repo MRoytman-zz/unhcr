@@ -54,6 +54,7 @@ static const CGFloat kXLabelPadding = 8;
 }
 
 - (void)prepareForReuse {
+    [super prepareForReuse];
     
     [self.titleLabel removeFromSuperview];
     self.titleLabel = nil;
@@ -155,7 +156,7 @@ static const CGFloat kXLabelPadding = 8;
             [self.contentView addSubview:self.staticTextLabel];
             
             self.staticTextLabel.text = inputString;
-            self.staticTextLabel.font = [UIFont helveticaNeueLightFontFontOfSize:kTitleFontSize];
+            self.staticTextLabel.font = [UIFont helveticaNeueLightFontOfSize:kTitleFontSize];
             
             [self.staticTextLabel sizeToFit];
             self.staticTextLabel.center = [self _inputCenterForInputView:self.staticTextLabel];
@@ -189,7 +190,7 @@ static const CGFloat kXLabelPadding = 8;
                                     titleString,
                                     subtitleString];
         
-        NSDictionary *lightAttribute = @{NSFontAttributeName: [UIFont helveticaNeueLightFontFontOfSize:kSubtitleFontSize],
+        NSDictionary *lightAttribute = @{NSFontAttributeName: [UIFont helveticaNeueLightFontOfSize:kSubtitleFontSize],
                                          NSObliquenessAttributeName: @0.1};
         NSMutableAttributedString *mutableAttributedString = [[NSMutableAttributedString alloc] initWithString:combinedString];
         [mutableAttributedString addAttributes:lightAttribute

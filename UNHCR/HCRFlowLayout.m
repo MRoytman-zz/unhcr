@@ -10,12 +10,6 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const CGFloat kHeaderHeight = 44.0;
-const CGFloat kFooterHeight = 30.0;
-const CGFloat kFooterHeightForGraphCell = 50.0;
-
-////////////////////////////////////////////////////////////////////////////////
-
 @interface HCRFlowLayout ()
 
 @property (nonatomic, readwrite) BOOL displayHeader;
@@ -28,21 +22,6 @@ const CGFloat kFooterHeightForGraphCell = 50.0;
 @implementation HCRFlowLayout
 
 #pragma mark - Public Methods
-
-+ (CGSize)preferredHeaderSizeForCollectionView:(UICollectionView *)collectionView {
-    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                      kHeaderHeight);
-}
-
-+ (CGSize)preferredFooterSizeForCollectionView:(UICollectionView *)collectionView {
-    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                      kFooterHeight);
-}
-
-+ (CGSize)preferredFooterSizeForGraphCellInCollectionView:(UICollectionView *)collectionView {
-    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                      kFooterHeightForGraphCell);
-}
 
 - (void)setDisplayHeader:(BOOL)displayHeader withSize:(CGSize)size {
     

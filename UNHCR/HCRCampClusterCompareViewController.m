@@ -10,6 +10,8 @@
 #import "HCRTableFlowLayout.h"
 #import "HCRGraphCell.h"
 #import "HCRCampClusterDetailViewController.h"
+#import "HCRHeaderView.h"
+#import "HCRFooterView.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -58,32 +60,25 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
     NSParameterAssert(self.campDictionary);
     
     self.title = @"Compare Clusters";
-    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.85];
     
     [self.collectionView registerClass:[HCRGraphCell class]
             forCellWithReuseIdentifier:kCampClusterCompareCellIdentifier];
     
-    [self.collectionView registerClass:[UICollectionReusableView class]
+    [self.collectionView registerClass:[HCRHeaderView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                    withReuseIdentifier:kCampClusterCompareHeaderIdentifier];
     
-    [self.collectionView registerClass:[UICollectionReusableView class]
+    [self.collectionView registerClass:[HCRFooterView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
                    withReuseIdentifier:kCampClusterCompareFooterIdentifier];
     
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
-    [tableLayout setDisplayHeader:YES withSize:[HCRTableFlowLayout preferredHeaderSizeForCollectionView:self.collectionView]];
+    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
     tableLayout.itemSize = CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
                                       [HCRGraphCell preferredHeightForGraphCell]);
-    
-    // TODO: weird; not sure why self.view.frame is necessary instead of self.view.bounds..?
-    MKMapView *mapView = [MKMapView mapViewWithFrame:self.view.frame
-                                            latitude:[[self.campDictionary objectForKey:@"Latitude"] floatValue]
-                                           longitude:[[self.campDictionary objectForKey:@"Longitude"] floatValue]
-                                                span:[[self.campDictionary objectForKey:@"Span"] floatValue]];
-    
-    [self.view insertSubview:mapView atIndex:0];
+    tableLayout.footerReferenceSize = [HCRFooterView preferredFooterSizeWithGraphCellForCollectionView:self.collectionView];
+
 }
 
 #pragma mark - Class Methods
@@ -109,29 +104,26 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
         NSDictionary *clusterDictionary = [self.clusterCompareDataArray objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
         NSString *titleString = [clusterDictionary objectForKey:@"Name" ofClass:@"NSString"];
         
-        UICollectionReusableView *header = [UICollectionReusableView headerForUNHCRCollectionView:collectionView
-                                                                                       identifier:kCampClusterCompareHeaderIdentifier
-                                                                                        indexPath:indexPath
-                                                                                            title:titleString];
+        HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                   withReuseIdentifier:kCampClusterCompareHeaderIdentifier
+                                                                          forIndexPath:indexPath];
+        header.titleString = titleString;
         
         return header;
         
     } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
         
-        UICollectionReusableView *footer = [UICollectionReusableView footerForUNHCRGraphCellWithCollectionCollection:collectionView
-                                                                                                          identifier:kCampClusterCompareFooterIdentifier
-                                                                                                           indexPath:indexPath];
+        HCRFooterView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                   withReuseIdentifier:kCampClusterCompareFooterIdentifier
+                                                                          forIndexPath:indexPath];
         
-        if (indexPath.section != 0) {
-            UIButton *footerButton = [UIButton footerButtonForUNHCRGraphCellInFooter:footer title:@"See More"];
-            [footer addSubview:footerButton];
-            
-            footerButton.tag = indexPath.section;
-            
-            [footerButton addTarget:self
-                             action:@selector(_footerButtonPressed:)
-                   forControlEvents:UIControlEventTouchUpInside];
-        }
+        [footer setButtonType:HCRFooterButtonTypeRawData withButtonTitle:@"Raw Data"];
+        
+        footer.button.tag = indexPath.section;
+        
+        [footer.button addTarget:self
+                          action:@selector(_footerButtonPressed:)
+                forControlEvents:UIControlEventTouchUpInside];
         
         return footer;
         
@@ -150,18 +142,6 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
     cell.graphDelegate = self;
     
     return cell;
-    
-}
-
-#pragma mark - UICollectionView Delegate Flow Layout
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
-    
-    if (section == 0) {
-        return [HCRTableFlowLayout preferredFooterSizeForCollectionView:collectionView];
-    } else {
-        return [HCRTableFlowLayout preferredFooterSizeForGraphCellInCollectionView:collectionView];
-    }
     
 }
 

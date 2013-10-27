@@ -93,19 +93,4 @@
     
 }
 
-+ (UIButton *)footerButtonForUNHCRGraphCellInFooter:(UICollectionReusableView *)footer title:(NSString *)title {
-    
-    UIButton *footerButton = [UIButton buttonWithUNHCRTextStyleWithString:title
-                                                      horizontalAlignment:UIControlContentHorizontalAlignmentRight
-                                                               buttonSize:[UIButton preferredSizeForUNHCRGraphCellFooterButton]
-                                                                 fontSize:nil];
-    
-    CGFloat xButtonPadding = 8;
-    footerButton.center = CGPointMake(CGRectGetWidth(footer.bounds) - CGRectGetMidX(footerButton.bounds) - xButtonPadding,
-                                      CGRectGetMidY(footerButton.bounds));
-    
-    return footerButton;
-    
-}
-
 @end

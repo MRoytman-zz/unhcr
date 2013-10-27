@@ -12,11 +12,14 @@
 #import "HCRCampCollectionCell.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRClusterCollectionController.h"
+#import "HCRHeaderView.h"
+#import "HCRFooterView.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kCampCellIdentifier = @"kCampCellIdentifier";
 NSString *const kCampHeaderReuseIdentifier = @"kCampHeaderReuseIdentifier";
+NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -47,26 +50,22 @@ NSString *const kCampHeaderReuseIdentifier = @"kCampHeaderReuseIdentifier";
     NSParameterAssert(self.countryDictionary);
     
     self.title = [self.countryDictionary objectForKey:@"Name"];
-    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.85];
     
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
-    [tableLayout setDisplayHeader:YES withSize:[HCRTableFlowLayout preferredHeaderSizeForCollectionView:self.collectionView]];
+    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
+    [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithTopLineForCollectionView:self.collectionView]];
     
     [self.collectionView registerClass:[HCRCampCollectionCell class]
             forCellWithReuseIdentifier:kCampCellIdentifier];
     
-    [self.collectionView registerClass:[UICollectionReusableView class]
+    [self.collectionView registerClass:[HCRHeaderView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                    withReuseIdentifier:kCampHeaderReuseIdentifier];
-
-    // TODO: weird; not sure why self.view.frame is necessary instead of self.view.bounds..?
-    MKMapView *mapView = [MKMapView mapViewWithFrame:self.view.frame
-                                            latitude:[[self.countryDictionary objectForKey:@"Latitude"] floatValue]
-                                           longitude:[[self.countryDictionary objectForKey:@"Longitude"] floatValue]
-                                                span:[[self.countryDictionary objectForKey:@"Span"] floatValue]];
     
-    [self.view insertSubview:mapView atIndex:0];
+    [self.collectionView registerClass:[HCRFooterView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                   withReuseIdentifier:kCampFooterReuseIdentifier];    
     
 }
 
@@ -94,6 +93,10 @@ NSString *const kCampHeaderReuseIdentifier = @"kCampHeaderReuseIdentifier";
     NSArray *campsArray = [self.countryDictionary objectForKey:@"Camps"];
     cell.campDictionary = [campsArray objectAtIndex:indexPath.row];
     
+    if (indexPath.row == [collectionView numberOfItemsInSection:indexPath.section] - 1) {
+        cell.bottomLineView.hidden = YES;
+    }
+    
     return cell;
     
 }
@@ -102,13 +105,20 @@ NSString *const kCampHeaderReuseIdentifier = @"kCampHeaderReuseIdentifier";
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         
-        UICollectionReusableView *header = [UICollectionReusableView headerForUNHCRCollectionView:collectionView
-                                                                                       identifier:kCampHeaderReuseIdentifier
-                                                                                        indexPath:indexPath
-                                                                                            title:@"Refugee Camps"];
+        HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                   withReuseIdentifier:kCampHeaderReuseIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        header.titleString = @"Refugee Camps";
         
         return header;
         
+    } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        HCRFooterView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                   withReuseIdentifier:kCampFooterReuseIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        return footer;
     }
     
     return nil;
@@ -116,6 +126,22 @@ NSString *const kCampHeaderReuseIdentifier = @"kCampHeaderReuseIdentifier";
 }
 
 #pragma mark - UICollectionViewController Delegate
+
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    HCRCampCollectionCell *cell = (HCRCampCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    NSParameterAssert([cell isKindOfClass:[HCRCampCollectionCell class]]);
+    
+    cell.backgroundColor = [UIColor UNHCRBlue];
+    
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+    HCRCampCollectionCell *cell = (HCRCampCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    NSParameterAssert([cell isKindOfClass:[HCRCampCollectionCell class]]);
+    
+    cell.backgroundColor = [UIColor whiteColor];
+}
+
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     

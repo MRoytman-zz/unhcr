@@ -12,6 +12,6 @@
 
 + (UIFont *)helveticaNeueBoldFontOfSize:(CGFloat)size;
 + (UIFont *)helveticaNeueFontOfSize:(CGFloat)size;
-+ (UIFont *)helveticaNeueLightFontFontOfSize:(CGFloat)size;
++ (UIFont *)helveticaNeueLightFontOfSize:(CGFloat)size;
 
 @end

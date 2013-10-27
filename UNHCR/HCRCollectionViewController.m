@@ -18,6 +18,11 @@
 
 @implementation HCRCollectionViewController
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.collectionView.backgroundColor = [UIColor tableBackgroundColor];
+}
+
 + (UICollectionViewLayout *)preferredLayout {
     NSAssert(NO, @"Subclass must override this method. (TODO: Can this be done via protocol?)");
     return nil;

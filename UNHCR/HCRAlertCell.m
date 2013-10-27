@@ -44,6 +44,7 @@
 }
 
 - (void)prepareForReuse {
+    [super prepareForReuse];
     self.alertDictionary = nil;
 }
 
@@ -110,7 +111,7 @@
         self.fromLabel = [[UILabel alloc] initWithFrame:fromFrame];
         [self.contentView addSubview:self.fromLabel];
         
-        self.fromLabel.font = [UIFont helveticaNeueLightFontFontOfSize:kLabelFontSize];
+        self.fromLabel.font = [UIFont helveticaNeueLightFontOfSize:kLabelFontSize];
         self.fromLabel.textAlignment = NSTextAlignmentLeft;
         self.fromLabel.textColor = [UIColor UNHCRBlue];
         
@@ -131,11 +132,11 @@
 #pragma mark - Class Methods
 
 + (CGFloat)preferredCellHeight {
-    return 75.0;
+    return 95.0;
 }
 
 + (CGFloat)preferredCellHeightWithoutLocation {
-    return 55.0;
+    return 75.0;
 }
 
 #pragma mark - Getters & Setters

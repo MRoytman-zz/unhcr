@@ -9,6 +9,7 @@
 #import "HCRTallySheetDetailInputViewController.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRDataEntryCell.h"
+#import "HCRHeaderView.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -42,14 +43,9 @@ NSString *const kTallyDetailInputHeaderIdentifier = @"kTallyDetailInputHeaderIde
     NSParameterAssert(self.headerDictionary);
     NSParameterAssert(self.questionsArray);
     
-    self.title = [self.headerDictionary objectForKey:@"Header" ofClass:@"NSString"];
-    
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.925];
-    
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
-    [tableLayout setDisplayHeader:YES withSize:[HCRTableFlowLayout preferredHeaderSizeForCollectionView:self.collectionView]];
+    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
     tableLayout.sectionInset = UIEdgeInsetsMake(12, 0, 12, 0);
     tableLayout.minimumLineSpacing = 0;
     tableLayout.itemSize = [HCRTableFlowLayout preferredTableFlowCellSizeForCollectionView:self.collectionView numberOfLines:@2];
@@ -57,22 +53,22 @@ NSString *const kTallyDetailInputHeaderIdentifier = @"kTallyDetailInputHeaderIde
     [self.collectionView registerClass:[HCRDataEntryCell class]
             forCellWithReuseIdentifier:kTallyDetailInputCellIdentifier];
     
-    [self.collectionView registerClass:[UICollectionReusableView class]
+    [self.collectionView registerClass:[HCRHeaderView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                    withReuseIdentifier:kTallyDetailInputHeaderIdentifier];
     
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:backgroundImageView];
-    [self.view sendSubviewToBack:backgroundImageView];
-    
-    UIView *background = [[UIView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:background];
-    [self.view sendSubviewToBack:background];
-    
-    UIImage *clusterImage = [[UIImage imageNamed:[self.selectedClusterMetaData objectForKey:@"Image"]] colorImage:[UIColor lightGrayColor]
-                                                                                                    withBlendMode:kCGBlendModeNormal
-                                                                                                 withTransparency:YES];
-    background.backgroundColor = [UIColor colorWithPatternImage:clusterImage];
+//    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+//    [self.view addSubview:backgroundImageView];
+//    [self.view sendSubviewToBack:backgroundImageView];
+//    
+//    UIView *background = [[UIView alloc] initWithFrame:self.view.bounds];
+//    [self.view addSubview:background];
+//    [self.view sendSubviewToBack:background];
+//    
+//    UIImage *clusterImage = [[UIImage imageNamed:[self.selectedClusterMetaData objectForKey:@"Image"]] colorImage:[UIColor lightGrayColor]
+//                                                                                                    withBlendMode:kCGBlendModeNormal
+//                                                                                                 withTransparency:YES];
+//    background.backgroundColor = [UIColor colorWithPatternImage:clusterImage];
 }
 
 #pragma mark - Class Methods
@@ -111,11 +107,12 @@ NSString *const kTallyDetailInputHeaderIdentifier = @"kTallyDetailInputHeaderIde
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         
-        NSString *headerString = [self.headerDictionary objectForKey:@"Subheader" ofClass:@"NSString"];
-        UICollectionReusableView *header = [UICollectionReusableView headerForUNHCRCollectionView:collectionView
-                                                                                       identifier:kTallyDetailInputHeaderIdentifier
-                                                                                        indexPath:indexPath
-                                                                                            title:headerString];
+        NSString *headerString = [self.headerDictionary objectForKey:@"Header" ofClass:@"NSString"];
+        HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                   withReuseIdentifier:kTallyDetailInputHeaderIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        header.titleString = headerString;
         
         return header;
         

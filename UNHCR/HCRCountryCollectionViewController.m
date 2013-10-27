@@ -10,11 +10,14 @@
 #import "HCRCountryCollectionCell.h"
 #import "HCRCampCollectionViewController.h"
 #import "HCRTableFlowLayout.h"
+#import "HCRHeaderView.h"
+#import "HCRFooterView.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kCountryCellIdentifier = @"kCountryCellIdentifier";
 NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
+NSString *const kCountryFooterIdentifier = @"kCountryFooterIdentifier";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -44,32 +47,22 @@ NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
 	// Do any additional setup after loading the view.
     
     self.title = @"Countries";
-    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
     
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
-    [tableLayout setDisplayHeader:YES withSize:[HCRTableFlowLayout preferredHeaderSizeForCollectionView:self.collectionView]];
+    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
+    [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithTopLineForCollectionView:self.collectionView]];
     
     [self.collectionView registerClass:[HCRCountryCollectionCell class]
             forCellWithReuseIdentifier:kCountryCellIdentifier];
     
-    [self.collectionView registerClass:[UICollectionReusableView class]
+    [self.collectionView registerClass:[HCRHeaderView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                    withReuseIdentifier:kCountryHeaderIdentifier];
     
-//    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-//    NSString *imagePath = (screenBounds.size.height == 568) ? @"main-background-4in" : @"main-background";
-//    UIImage *launchImage = [UIImage imageNamed:imagePath];
-//    UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:launchImage];
-//    [self.view addSubview:backgroundImageView];
-//    [self.view sendSubviewToBack:backgroundImageView];
-    
-    MKMapView *mapView = [MKMapView mapViewWithFrame:self.view.frame
-                                            latitude:0
-                                           longitude:0
-                                                span:0];
-    
-    [self.view insertSubview:mapView atIndex:0];
+    [self.collectionView registerClass:[HCRFooterView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                   withReuseIdentifier:kCountryFooterIdentifier];
     
 }
 
@@ -101,6 +94,10 @@ NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
     NSDictionary *categoryDictionary = [[HCRDataSource globalDataArray] objectAtIndex:indexPath.section];
     cell.countryDictionary = [[categoryDictionary objectForKey:@"Countries"] objectAtIndex:indexPath.row];
     
+    if (indexPath.row == [collectionView numberOfItemsInSection:indexPath.section] - 1) {
+        cell.bottomLineView.hidden = YES;
+    }
+    
     return cell;
     
 }
@@ -110,12 +107,19 @@ NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         
         NSString *categoryString = [[[HCRDataSource globalDataArray] objectAtIndex:indexPath.section] objectForKey:@"Category"];
-        UICollectionReusableView *header = [UICollectionReusableView headerForUNHCRCollectionView:collectionView
-                                                                                       identifier:kCountryHeaderIdentifier
-                                                                                        indexPath:indexPath
-                                                                                            title:categoryString];
+        HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                   withReuseIdentifier:kCountryHeaderIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        header.titleString = categoryString;
         
         return header;
+    } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        HCRFooterView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                   withReuseIdentifier:kCountryFooterIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        return footer;
     }
     
     return nil;
@@ -136,7 +140,7 @@ NSString *const kCountryHeaderIdentifier = @"kCountryHeaderIdentifier";
     HCRCountryCollectionCell *cell = (HCRCountryCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
     NSParameterAssert([cell isKindOfClass:[HCRCountryCollectionCell class]]);
     
-    cell.backgroundColor = [UIColor clearColor];
+    cell.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {

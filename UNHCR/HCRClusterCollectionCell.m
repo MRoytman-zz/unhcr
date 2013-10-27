@@ -38,6 +38,7 @@ static const CGFloat kImageToTextRatio = 0.6;
 }
 
 - (void)prepareForReuse {
+    [super prepareForReuse];
     self.clusterDictionary = nil;
 }
 

@@ -10,9 +10,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-CGFloat const kTableCellHeight = 44;
-CGFloat const kTableCellHeightOffset = -10;
-CGFloat const kTableCellHeightIncremenetPerLine = 20;
+static const CGFloat kTableCellHeight = 54;
+static const CGFloat kTableCellHeightOffset = -10;
+static const CGFloat kTableCellHeightIncremenetPerLine = 20;
+
+static const CGFloat kTableMinimumLineSpacing = 0;
+
+static const CGFloat kTableDefaultLineSpacing = 10; // system default
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -39,7 +43,7 @@ CGFloat const kTableCellHeightIncremenetPerLine = 20;
     }
     
     self.minimumInteritemSpacing = (self.minimumInteritemSpacing != 0) ? self.minimumInteritemSpacing :  0;
-    self.minimumLineSpacing = (self.minimumLineSpacing != 0) ? self.minimumLineSpacing :  0;
+    self.minimumLineSpacing = (self.minimumLineSpacing != kTableDefaultLineSpacing) ? self.minimumLineSpacing :  kTableMinimumLineSpacing;
     
 //    if ( !self.dynamicAnimator ) {
 //        self.dynamicAnimator = [[UIDynamicAnimator alloc] initWithCollectionViewLayout:self];

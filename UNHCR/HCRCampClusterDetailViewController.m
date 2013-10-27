@@ -13,6 +13,8 @@
 #import "HCRTallySheetPickerViewController.h"
 #import "EAEmailUtilities.h"
 #import "HCRAlertCell.h"
+#import "HCRHeaderView.h"
+#import "HCRFooterView.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -120,17 +122,15 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     self.campClusterData = [[self.campDictionary objectForKey:@"Clusters" ofClass:@"NSDictionary"] objectForKey:selectedCluster ofClass:@"NSDictionary"];
     
     self.title = selectedCluster;
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.925];
     
     HCRFlowLayout *flowLayout = (HCRFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([flowLayout isKindOfClass:[HCRFlowLayout class]]);
-    [flowLayout setDisplayHeader:YES withSize:[HCRFlowLayout preferredHeaderSizeForCollectionView:self.collectionView]];
+    [flowLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
     
-    [self.collectionView registerClass:[UICollectionReusableView class]
+    [self.collectionView registerClass:[HCRHeaderView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                    withReuseIdentifier:kCampClusterHeaderIdentifier];
-    [self.collectionView registerClass:[UICollectionReusableView class]
+    [self.collectionView registerClass:[HCRFooterView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
                    withReuseIdentifier:kCampClusterFooterIdentifier];
     
@@ -142,19 +142,6 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
             forCellWithReuseIdentifier:kCampClusterAgenciesCellIdentifier];
     [self.collectionView registerClass:[HCRAlertCell class]
             forCellWithReuseIdentifier:kCampClusterAlertCellIdentifier];
-    
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:backgroundImageView];
-    [self.view sendSubviewToBack:backgroundImageView];
-    
-    UIView *background = [[UIView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:background];
-    [self.view sendSubviewToBack:background];
-    
-    UIImage *clusterImage = [[UIImage imageNamed:[self.selectedClusterMetaData objectForKey:@"Image"]] colorImage:[UIColor lightGrayColor]
-                                                                                                    withBlendMode:kCGBlendModeNormal
-                                                                                                 withTransparency:YES];
-    background.backgroundColor = [UIColor colorWithPatternImage:clusterImage];
     
 }
 
@@ -200,13 +187,16 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     
     NSString *cellType = [self _cellTypeForSection:indexPath.section];
     
+    HCRCollectionCell *cell;
+    
     if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
         HCRGraphCell *graphCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterGraphCellIdentifier forIndexPath:indexPath];
         
         graphCell.graphDelegate = self;
         graphCell.graphDataSource = self;
         
-        return graphCell;
+        cell = graphCell;
+        
     } else if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
         
         HCRButtonListCell *resourcesCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier forIndexPath:indexPath];
@@ -215,7 +205,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         NSArray *resourcesArray = [campClusterLayoutDictionary objectForKey:@"Resources" ofClass:@"NSArray"];
         resourcesCell.listButtonTitle = [resourcesArray objectAtIndex:indexPath.row ofClass:@"NSString"];
         
-        return resourcesCell;
+        cell = resourcesCell;
         
     } else if ([cellType isEqualToString:kCampClusterAgenciesCellIdentifier]) {
         HCRButtonListCell *agencyCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterAgenciesCellIdentifier forIndexPath:indexPath];
@@ -224,17 +214,21 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         NSDictionary *agencyDictionary = [agencyArray objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
         agencyCell.listButtonTitle = [agencyDictionary objectForKey:@"Abbr" ofClass:@"NSString"];
         
-        return agencyCell;
+        cell = agencyCell;
     } else if ([cellType isEqualToString:kCampClusterAlertCellIdentifier]) {
         HCRAlertCell *alertCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterAlertCellIdentifier forIndexPath:indexPath];
         
         alertCell.showLocation = NO;
         alertCell.alertDictionary = [self.localAlerts objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
         
-        return alertCell;
+        cell = alertCell;
     }
     
-    return nil;
+    if (indexPath.row == [collectionView numberOfItemsInSection:indexPath.section] - 1) {
+        cell.bottomLineView.hidden = YES;
+    }
+    
+    return cell;
     
 }
 
@@ -245,10 +239,11 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         NSDictionary *sectionData = [self.campClusterCollectionLayoutData objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
         NSString *titleString = [sectionData objectForKey:@"Section" ofClass:@"NSString"];
         
-        UICollectionReusableView *header = [UICollectionReusableView headerForUNHCRCollectionView:collectionView
-                                                                                       identifier:kCampClusterHeaderIdentifier
-                                                                                        indexPath:indexPath
-                                                                                            title:titleString];
+        HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                   withReuseIdentifier:kCampClusterHeaderIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        header.titleString = titleString;
         
         // check if it's alerts
         NSDictionary *layoutObject = [self.campClusterCollectionLayoutData objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
@@ -261,16 +256,17 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         
     } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
         
-        UICollectionReusableView *footer = [UICollectionReusableView footerForUNHCRGraphCellWithCollectionCollection:collectionView
-                                                                                                          identifier:kCampClusterFooterIdentifier
-                                                                                                           indexPath:indexPath];
+        HCRFooterView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                   withReuseIdentifier:kCampClusterFooterIdentifier
+                                                                          forIndexPath:indexPath];
         
-        UIButton *footerButton = [UIButton footerButtonForUNHCRGraphCellInFooter:footer title:@"Raw Data"];
-        [footer addSubview:footerButton];
-        
-        [footerButton addTarget:self
-                         action:@selector(_footerButtonPressed)
-               forControlEvents:UIControlEventTouchUpInside];
+        if ([self _sectionEqualToRefugeeRequestsSection:indexPath.section]) {
+            [footer setButtonType:HCRFooterButtonTypeRawData withButtonTitle:@"Raw Data"];
+            
+            [footer.button addTarget:self
+                              action:@selector(_footerButtonPressed)
+                    forControlEvents:UIControlEventTouchUpInside];
+        }
         
         return footer;
         
@@ -331,26 +327,6 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 
 #pragma mark - UICollectionView Delegate Flow Layout
 
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    
-    NSString *cellType = [self _cellTypeForSection:section];
-    
-    if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
-        
-        return UIEdgeInsetsZero;
-        
-    } else {
-        
-        return UIEdgeInsetsMake(kYListOffset, 0, kYListOffset, 0);
-        
-    }
-    
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return [HCRButtonListCell preferredButtonPadding];
-}
-
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     NSString *cellType = [self _cellTypeForSection:indexPath.section];
@@ -374,12 +350,10 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     
-    NSDictionary *layoutObject = [self.campClusterCollectionLayoutData objectAtIndex:section ofClass:@"NSDictionary"];
-    NSString *sectionTitle = [layoutObject objectForKey:@"Section" ofClass:@"NSString"];
-    if ([sectionTitle isEqualToString:@"Refugee Requests"]) {
-        return [HCRFlowLayout preferredFooterSizeForGraphCellInCollectionView:collectionView];
+    if ([self _sectionEqualToRefugeeRequestsSection:section]) {
+        return [HCRFooterView preferredFooterSizeWithGraphCellForCollectionView:collectionView];
     } else {
-        return CGSizeZero;
+        return [HCRFooterView preferredFooterSizeWithTopLineForCollectionView:collectionView];
     }
     
 }
@@ -509,6 +483,14 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 
 - (void)_footerButtonPressed {
     // TODO: footer button!
+}
+
+- (BOOL)_sectionEqualToRefugeeRequestsSection:(NSInteger)section {
+    
+    NSDictionary *layoutObject = [self.campClusterCollectionLayoutData objectAtIndex:section ofClass:@"NSDictionary"];
+    NSString *sectionTitle = [layoutObject objectForKey:@"Section" ofClass:@"NSString"];
+    return [sectionTitle isEqualToString:@"Refugee Requests"];
+    
 }
 
 @end

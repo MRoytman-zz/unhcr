@@ -26,11 +26,13 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
 
 - (void)prepareForReuse {
+    [super prepareForReuse];
     self.countryDictionary = nil;
 }
 

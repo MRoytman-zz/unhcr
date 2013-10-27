@@ -10,10 +10,22 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+static const CGFloat kLargeButtonWidth = 200.0;
+static const CGFloat kSharedButtonHeight = 54.0;
+
+static const CGFloat kSharedButtonFontSize = 23.0;
+
+static const CGFloat kXListOffset = 20;
+static const CGFloat kYListOffset = 12;
+static const CGFloat kYButtonPadding = 10;
+
+////////////////////////////////////////////////////////////////////////////////
+
 @interface HCRButtonListCell ()
 
 @property (nonatomic, readonly) CGSize sharedButtonSize;
 @property (nonatomic, readwrite) UIButton *listButton;
+@property (nonatomic, strong) UIView *cellDivider;
 
 @end
 
@@ -26,6 +38,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.backgroundColor = [UIColor whiteColor];
+        
     }
     return self;
 }
@@ -34,10 +48,6 @@
 
 + (CGFloat)preferredCellHeight {
     return kSharedButtonHeight;
-}
-
-+ (CGFloat)preferredButtonPadding {
-    return kYButtonPadding;
 }
 
 #pragma mark - Getters & Setters
@@ -64,6 +74,25 @@
         // workaround; convenience after a refactor
         self.listButton.userInteractionEnabled = NO;
         
+    }
+    
+}
+
+- (void)setShowCellDivider:(BOOL)showCellDivider {
+    
+    _showCellDivider = showCellDivider;
+    
+    if (showCellDivider && !self.cellDivider) {
+        
+        static const CGFloat kXLineOffset = 12.0;
+        static const CGFloat kLineWidth = 1.0;
+        self.cellDivider = [[UIView alloc] initWithFrame:CGRectMake(kXLineOffset,
+                                                                    CGRectGetHeight(self.bounds) - kLineWidth,
+                                                                    CGRectGetWidth(self.bounds) - kXLineOffset,
+                                                                    kLineWidth)];
+        [self addSubview:self.cellDivider];
+        
+        self.cellDivider.backgroundColor = [UIColor lightGrayColor];
     }
     
 }

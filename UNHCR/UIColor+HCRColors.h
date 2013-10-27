@@ -11,7 +11,10 @@
 @interface UIColor (HCRColors)
 
 + (UIColor *)UNHCRBlue;
-
 + (UIColor *)HMSPurple;
+
++ (UIColor *)tableBackgroundColor;
+
++ (UIColor *)tableDividerColor;
 
 @end

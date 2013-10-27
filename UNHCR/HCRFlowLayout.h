@@ -13,10 +13,6 @@
 @property (nonatomic, readonly) BOOL displayHeader;
 @property (nonatomic, readonly) BOOL displayFooter;
 
-+ (CGSize)preferredHeaderSizeForCollectionView:(UICollectionView *)collectionView;
-+ (CGSize)preferredFooterSizeForCollectionView:(UICollectionView *)collectionView;
-+ (CGSize)preferredFooterSizeForGraphCellInCollectionView:(UICollectionView *)collectionView;
-
 - (void)setDisplayHeader:(BOOL)displayHeader withSize:(CGSize)size;
 - (void)setDisplayFooter:(BOOL)displayFooter withSize:(CGSize)size;
 

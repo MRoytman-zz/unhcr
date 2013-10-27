@@ -57,7 +57,7 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
         self.labelColor = [UIColor lightGrayColor];
         self.horizontalGuideLineColor = [[UIColor darkGrayColor] colorWithAlphaComponent:0.25];
         
-        self.preferredLabelFont = [UIFont helveticaNeueLightFontFontOfSize:kGraphDateLabelFontSize];
+        self.preferredLabelFont = [UIFont helveticaNeueLightFontOfSize:kGraphDateLabelFontSize];
         
         self.displayTimePeriodLabels = YES;
         self.displayedTimePeriod = SCDataTimePeriod30Days; // TODO: not hooked up yet

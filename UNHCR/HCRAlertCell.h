@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "HCRCollectionCell.h"
 
-@interface HCRAlertCell : UICollectionViewCell
+@interface HCRAlertCell : HCRCollectionCell
 
 @property (nonatomic) BOOL showLocation;
 @property (nonatomic, strong) NSDictionary *alertDictionary;

@@ -20,7 +20,4 @@
                                       buttonSize:(CGSize)buttonSize
                                         fontSize:(NSNumber *)fontSize;
 
-+ (UIButton *)footerButtonForUNHCRGraphCellInFooter:(UICollectionReusableView *)footer
-                                              title:(NSString *)title;
-
 @end

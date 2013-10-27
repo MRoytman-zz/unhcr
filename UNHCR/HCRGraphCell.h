@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "HCRCollectionCell.h"
 
 #import "SCGraphView.h"
 
-@interface HCRGraphCell : UICollectionViewCell
+@interface HCRGraphCell : HCRCollectionCell
 
 + (CGFloat)preferredHeightForGraphCell;
 

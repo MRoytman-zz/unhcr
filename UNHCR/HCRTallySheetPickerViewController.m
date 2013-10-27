@@ -42,9 +42,6 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
     NSParameterAssert(self.campClusterData);
     NSParameterAssert(self.selectedClusterMetaData);
     
-    self.view.backgroundColor = [UIColor whiteColor];
-    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.925];
-    
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     tableLayout.sectionInset = UIEdgeInsetsMake(12, 0, 12, 0);
@@ -52,18 +49,18 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
     [self.collectionView registerClass:[HCRButtonListCell class]
             forCellWithReuseIdentifier:kTallySheetCellIdentifier];
     
-    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:backgroundImageView];
-    [self.view sendSubviewToBack:backgroundImageView];
-    
-    UIView *background = [[UIView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:background];
-    [self.view sendSubviewToBack:background];
-    
-    UIImage *clusterImage = [[UIImage imageNamed:[self.selectedClusterMetaData objectForKey:@"Image"]] colorImage:[UIColor lightGrayColor]
-                                                                                                    withBlendMode:kCGBlendModeNormal
-                                                                                                 withTransparency:YES];
-    background.backgroundColor = [UIColor colorWithPatternImage:clusterImage];
+//    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+//    [self.view addSubview:backgroundImageView];
+//    [self.view sendSubviewToBack:backgroundImageView];
+//    
+//    UIView *background = [[UIView alloc] initWithFrame:self.view.bounds];
+//    [self.view addSubview:background];
+//    [self.view sendSubviewToBack:background];
+//    
+//    UIImage *clusterImage = [[UIImage imageNamed:[self.selectedClusterMetaData objectForKey:@"Image"]] colorImage:[UIColor lightGrayColor]
+//                                                                                                    withBlendMode:kCGBlendModeNormal
+//                                                                                                 withTransparency:YES];
+//    background.backgroundColor = [UIColor colorWithPatternImage:clusterImage];
     
 }
 
@@ -94,6 +91,10 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
     NSDictionary *sheet = [tallySheets objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
     
     cell.listButtonTitle = [sheet objectForKey:@"Name" ofClass:@"NSString"];
+    
+    if (indexPath.row != [self.collectionView numberOfItemsInSection:indexPath.section] - 1) {
+        cell.showCellDivider = YES;
+    }
     
     return cell;
     

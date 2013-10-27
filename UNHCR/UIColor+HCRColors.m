@@ -26,4 +26,19 @@
                            alpha:1.0];
 }
 
++ (UIColor *)tableBackgroundColor {
+    
+    return [UIColor colorWithRed:239/255.0
+                           green:239/255.0
+                            blue:244/255.0
+                           alpha:1.0];
+    
+}
+
++ (UIColor *)tableDividerColor {
+    
+    return [UIColor colorWithWhite:0.6 alpha:0.7];
+    
+}
+
 @end

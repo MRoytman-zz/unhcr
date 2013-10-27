@@ -13,6 +13,8 @@
 #import "HCRClusterCollectionCell.h"
 #import "HCRCampClusterDetailViewController.h"
 #import "HCRCampClusterCompareViewController.h"
+#import "HCRHeaderView.h"
+#import "HCRFooterView.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -46,32 +48,26 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
     
     NSParameterAssert(self.campDictionary);
     
+    // TODO: background displays in white; make collection a single cell of a larger table collection? easier to show footer that way, too.
+    
     self.title = [self.campDictionary objectForKey:@"Name"];
-    self.collectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.85];
+    self.collectionView.backgroundColor = [UIColor whiteColor];
     
     HCRClusterFlowLayout *clusterLayout = (HCRClusterFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([clusterLayout isKindOfClass:[HCRClusterFlowLayout class]]);
-    [clusterLayout setDisplayHeader:YES withSize:[HCRClusterFlowLayout preferredHeaderSizeForCollectionView:self.collectionView]];
-    [clusterLayout setDisplayFooter:YES withSize:[HCRClusterFlowLayout preferredFooterSizeForCollectionView:self.collectionView]];
+    [clusterLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
+    [clusterLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeForCollectionView:self.collectionView]];
     
     [self.collectionView registerClass:[HCRClusterCollectionCell class]
             forCellWithReuseIdentifier:kClusterCellIdentifier];
     
-    [self.collectionView registerClass:[UICollectionReusableView class]
+    [self.collectionView registerClass:[HCRHeaderView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                    withReuseIdentifier:kClusterHeaderIdentifier];
     
-    [self.collectionView registerClass:[UICollectionReusableView class]
+    [self.collectionView registerClass:[HCRFooterView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
                    withReuseIdentifier:kClusterFooterIdentifier];
-    
-    // TODO: weird; not sure why self.view.frame is necessary instead of self.view.bounds..?
-    MKMapView *mapView = [MKMapView mapViewWithFrame:self.view.frame
-                                            latitude:[[self.campDictionary objectForKey:@"Latitude"] floatValue]
-                                           longitude:[[self.campDictionary objectForKey:@"Longitude"] floatValue]
-                                                span:[[self.campDictionary objectForKey:@"Span"] floatValue]];
-    
-    [self.view insertSubview:mapView atIndex:0];
     
 }
 
@@ -106,18 +102,19 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         
-        UICollectionReusableView *header = [UICollectionReusableView headerForUNHCRCollectionView:collectionView
-                                                                                       identifier:kClusterHeaderIdentifier
-                                                                                        indexPath:indexPath
-                                                                                            title:@"Clusters"];
+        HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                   withReuseIdentifier:kClusterHeaderIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        header.titleString = @"Clusters";
         
         return header;
         
     } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
         
-        UICollectionReusableView *footer = [UICollectionReusableView footerForUNHCRGraphCellWithCollectionCollection:collectionView
-                                                                                                          identifier:kClusterFooterIdentifier
-                                                                                                           indexPath:indexPath];
+        HCRFooterView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                   withReuseIdentifier:kClusterFooterIdentifier
+                                                                          forIndexPath:indexPath];
         
         CGSize buttonSize = CGSizeMake(180, CGRectGetHeight(footer.bounds));
         UIButton *footerButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Compare Clusters"

@@ -10,7 +10,7 @@
 #import "SCGraphView.h"
 
 @interface HCRCampClusterCompareViewController : HCRCollectionViewController
-<UICollectionViewDelegateFlowLayout,SCGraphViewDataSource,SCGraphViewDelegate>
+<SCGraphViewDataSource,SCGraphViewDelegate>
 
 @property (nonatomic, strong) NSString *countryName;
 @property (nonatomic, strong) NSDictionary *campDictionary;

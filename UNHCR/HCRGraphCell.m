@@ -26,6 +26,11 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        
+        self.backgroundColor = [UIColor whiteColor];
+        
+        self.bottomLineView.hidden = YES;
+        
         static const CGFloat kGraphOffset = 0.0;
         CGRect graphFrame = CGRectMake(kGraphOffset,
                                        kGraphOffset,
@@ -40,6 +45,8 @@
 }
 
 - (void)prepareForReuse {
+    [super prepareForReuse];
+    self.bottomLineView.hidden = YES;
     self.graphDataSource = nil;
     self.graphDelegate = nil;
 }
