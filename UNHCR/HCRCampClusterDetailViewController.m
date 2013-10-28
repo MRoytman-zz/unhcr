@@ -123,6 +123,8 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     
     self.title = selectedCluster;
     
+    self.highlightCells = YES;
+    
     HCRFlowLayout *flowLayout = (HCRFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([flowLayout isKindOfClass:[HCRFlowLayout class]]);
     [flowLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
@@ -303,24 +305,6 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         
         //
         
-    }
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    HCRButtonListCell *cell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    if ([cell isKindOfClass:[HCRButtonListCell class]]) {
-        [cell.listButton setHighlighted:YES];
-    }
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    HCRButtonListCell *cell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    if ([cell isKindOfClass:[HCRButtonListCell class]]) {
-        [cell.listButton setHighlighted:NO];
     }
     
 }

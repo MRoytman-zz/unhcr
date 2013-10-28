@@ -48,6 +48,8 @@ NSString *const kCountryFooterIdentifier = @"kCountryFooterIdentifier";
     
     self.title = @"Countries";
     
+    self.highlightCells = YES;
+    
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
@@ -127,21 +129,6 @@ NSString *const kCountryFooterIdentifier = @"kCountryFooterIdentifier";
 }
 
 #pragma mark - UICollectionViewController Delegate
-
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    HCRCountryCollectionCell *cell = (HCRCountryCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRCountryCollectionCell class]]);
-    
-    cell.backgroundColor = [UIColor UNHCRBlue];
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    HCRCountryCollectionCell *cell = (HCRCountryCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRCountryCollectionCell class]]);
-    
-    cell.backgroundColor = [UIColor whiteColor];
-}
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     

@@ -42,6 +42,8 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
     NSParameterAssert(self.campClusterData);
     NSParameterAssert(self.selectedClusterMetaData);
     
+    self.highlightCells = YES;
+    
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     tableLayout.sectionInset = UIEdgeInsetsMake(12, 0, 12, 0);
@@ -117,24 +119,6 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
     UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:tallyDetail];
     
     [self presentViewController:navigation animated:YES completion:nil];
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    HCRButtonListCell *cell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRButtonListCell class]]);
-    
-    [cell.listButton setHighlighted:YES];
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    HCRButtonListCell *cell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRButtonListCell class]]);
-    
-    [cell.listButton setHighlighted:NO];
     
 }
 

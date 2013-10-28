@@ -62,6 +62,8 @@ NSString *const kTallyOrganization = @"Organization";
     NSParameterAssert(self.tallySheetData);
     NSParameterAssert(self.selectedClusterMetaData);
     
+    self.highlightCells = YES;
+    
     self.tallyResources = [self.tallySheetData objectForKey:@"Resources" ofClass:@"NSArray"];
     
 //    self.view.backgroundColor = [UIColor whiteColor];
@@ -276,24 +278,6 @@ NSString *const kTallyOrganization = @"Organization";
         [self.navigationController pushViewController:tallyInput animated:YES];
         
 //    }
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    HCRDataEntryCell *cell = (HCRDataEntryCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRDataEntryCell class]]);
-    
-    [cell.dataEntryButton setHighlighted:YES];
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    HCRDataEntryCell *cell = (HCRDataEntryCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRDataEntryCell class]]);
-    
-    [cell.dataEntryButton setHighlighted:NO];
     
 }
 

@@ -10,6 +10,9 @@
 #import <MapKit/MapKit.h>
 
 @interface HCRCollectionViewController : UICollectionViewController
+<UICollectionViewDelegate>
+
+@property (nonatomic) BOOL highlightCells;
 
 + (UICollectionViewLayout *)preferredLayout;
 

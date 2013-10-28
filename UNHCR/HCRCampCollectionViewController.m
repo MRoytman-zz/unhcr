@@ -51,6 +51,8 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
     
     self.title = [self.countryDictionary objectForKey:@"Name"];
     
+    self.highlightCells = YES;
+    
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
@@ -126,22 +128,6 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
 }
 
 #pragma mark - UICollectionViewController Delegate
-
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    HCRCampCollectionCell *cell = (HCRCampCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRCampCollectionCell class]]);
-    
-    cell.backgroundColor = [UIColor UNHCRBlue];
-    
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-    HCRCampCollectionCell *cell = (HCRCampCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRCampCollectionCell class]]);
-    
-    cell.backgroundColor = [UIColor whiteColor];
-}
-
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
