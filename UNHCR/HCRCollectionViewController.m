@@ -7,9 +7,11 @@
 //
 
 #import "HCRCollectionViewController.h"
-#import "HCRButtonListCell.h"
+#import "HCRTableButtonCell.h"
 #import "HCRGraphCell.h"
 #import "HCRDataEntryCell.h"
+#import "HCRCollectionCell.h"
+#import "HCRSignInFieldCell.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -38,13 +40,18 @@
     if (self.highlightCells) {
         UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
         
-        if ([cell isKindOfClass:[HCRButtonListCell class]]) {
-            HCRButtonListCell *buttonCell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
-            [buttonCell.listButton setHighlighted:YES];
+        if ([cell isKindOfClass:[HCRGraphCell class]] ||
+            [cell isKindOfClass:[HCRSignInFieldCell class]]) {
+            return;
+        }
+        
+        if ([cell isKindOfClass:[HCRTableButtonCell class]]) {
+            HCRTableButtonCell *buttonCell = (HCRTableButtonCell *)[collectionView cellForItemAtIndexPath:indexPath];
+            [buttonCell.tableButton setHighlighted:YES];
         } else if ([cell isKindOfClass:[HCRDataEntryCell class]]) {
             HCRDataEntryCell *dataCell = (HCRDataEntryCell *)cell;
             [dataCell.dataEntryButton setHighlighted:YES];
-        } else if ([cell isKindOfClass:[HCRGraphCell class]] == NO) {
+        } else {
             cell.backgroundColor = [UIColor UNHCRBlue];
         }
     }
@@ -55,13 +62,18 @@
     if (self.highlightCells) {
         UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
         
-        if ([cell isKindOfClass:[HCRButtonListCell class]]) {
-            HCRButtonListCell *buttonCell = (HCRButtonListCell *)cell;
-            [buttonCell.listButton setHighlighted:NO];
+        if ([cell isKindOfClass:[HCRGraphCell class]] ||
+            [cell isKindOfClass:[HCRSignInFieldCell class]]) {
+            return;
+        }
+        
+        if ([cell isKindOfClass:[HCRTableButtonCell class]]) {
+            HCRTableButtonCell *buttonCell = (HCRTableButtonCell *)cell;
+            [buttonCell.tableButton setHighlighted:NO];
         } else if ([cell isKindOfClass:[HCRDataEntryCell class]]) {
             HCRDataEntryCell *dataCell = (HCRDataEntryCell *)cell;
             [dataCell.dataEntryButton setHighlighted:NO];
-        } else if ([cell isKindOfClass:[HCRGraphCell class]] == NO) {
+        } else {
             cell.backgroundColor = [UIColor whiteColor];
         }
     }

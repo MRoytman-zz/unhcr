@@ -17,5 +17,7 @@
 @property (nonatomic, strong) NSString *thirdTitleString;
 
 + (CGSize)preferredHeaderSizeForCollectionView:(UICollectionView *)collectionView;
++ (CGSize)preferredHeaderSizeWithoutTitleForCollectionView:(UICollectionView *)collectionView;
++ (CGSize)preferredHeaderSizeWithoutTitleSmallForCollectionView:(UICollectionView *)collectionView;
 
 @end

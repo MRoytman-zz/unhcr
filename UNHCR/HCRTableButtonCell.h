@@ -8,12 +8,12 @@
 
 #import "HCRCollectionCell.h"
 
-@interface HCRButtonListCell : HCRCollectionCell
+@interface HCRTableButtonCell : HCRCollectionCell
 
-@property (nonatomic, readonly) UIButton *listButton;
-@property (nonatomic, strong) NSString *listButtonTitle;
+@property (nonatomic, readonly) UIButton *tableButton;
+@property (nonatomic, strong) NSString *tableButtonTitle;
 
-@property (nonatomic) BOOL showCellDivider;
+@property (nonatomic) BOOL processingAction;
 
 + (CGFloat)preferredCellHeight;
 

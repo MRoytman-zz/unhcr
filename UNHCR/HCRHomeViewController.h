@@ -6,8 +6,10 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "HCRCollectionViewController.h"
+#import "HCRSignInFieldCell.h"
 
-@interface HCRHomeViewController : UIViewController
+@interface HCRHomeViewController : HCRCollectionViewController
+<UICollectionViewDelegateFlowLayout, HCRSignInFieldCellDelegate>
 
 @end

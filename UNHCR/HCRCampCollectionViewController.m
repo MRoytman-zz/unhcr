@@ -95,9 +95,7 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
     NSArray *campsArray = [self.countryDictionary objectForKey:@"Camps"];
     cell.campDictionary = [campsArray objectAtIndex:indexPath.row];
     
-    if (indexPath.row == [collectionView numberOfItemsInSection:indexPath.section] - 1) {
-        cell.bottomLineView.hidden = YES;
-    }
+    [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
     return cell;
     

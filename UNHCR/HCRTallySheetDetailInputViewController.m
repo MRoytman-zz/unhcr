@@ -99,6 +99,8 @@ NSString *const kTallyDetailInputHeaderIdentifier = @"kTallyDetailInputHeaderIde
     dataCell.cellStatus = HCRDataEntryCellStatusStepperInputReady;
     dataCell.dataDictionary = @{@"Title": questionString};
     
+    [dataCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
+    
     return dataCell;
     
 }

@@ -20,6 +20,7 @@
 		4F1C940817FCB8010003AA21 /* Common.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F1C940717FCB8010003AA21 /* Common.xcassets */; };
 		4F1C940B17FCBE640003AA21 /* HCRHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */; };
 		4F6137CE181DBBE200FF982F /* HCRCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */; };
+		4F6137D1181EF6C400FF982F /* HCRSignInFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */; };
 		4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
 		4F866AC317F9E022000350E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC217F9E022000350E4 /* Foundation.framework */; };
 		4F866AC517F9E022000350E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC417F9E022000350E4 /* CoreGraphics.framework */; };
@@ -38,7 +39,7 @@
 		4F866B1117FAB83B000350E4 /* HCRClusterCollectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866B1017FAB83B000350E4 /* HCRClusterCollectionController.m */; };
 		4FD838E81800D88200B49498 /* EAEmailUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838E71800D88200B49498 /* EAEmailUtilities.m */; };
 		4FD838EB1800D95000B49498 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838EA1800D95000B49498 /* UIAlertView+Blocks.m */; };
-		4FD838EE1800DFB200B49498 /* HCRButtonListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838ED1800DFB200B49498 /* HCRButtonListCell.m */; };
+		4FD838EE1800DFB200B49498 /* HCRTableButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838ED1800DFB200B49498 /* HCRTableButtonCell.m */; };
 		4FD838F518011BB300B49498 /* HCRCampClusterCompareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838F418011BB300B49498 /* HCRCampClusterCompareViewController.m */; };
 		4FD838F8180121EF00B49498 /* HCRGraphCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838F7180121EF00B49498 /* HCRGraphCell.m */; };
 		4FD838FE18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838FD18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m */; };
@@ -83,6 +84,8 @@
 		4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRHomeViewController.m; sourceTree = "<group>"; };
 		4F6137CC181DBBE200FF982F /* HCRCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCollectionCell.h; sourceTree = "<group>"; };
 		4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCollectionCell.m; sourceTree = "<group>"; };
+		4F6137CF181EF6C400FF982F /* HCRSignInFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSignInFieldCell.h; sourceTree = "<group>"; };
+		4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSignInFieldCell.m; sourceTree = "<group>"; };
 		4F71C0EF18133D0B00672C6A /* SCGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGraphView.h; sourceTree = "<group>"; };
 		4F71C0F018133D0B00672C6A /* SCGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGraphView.m; sourceTree = "<group>"; };
 		4F866ABF17F9E022000350E4 /* RIS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RIS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,8 +119,8 @@
 		4FD838E71800D88200B49498 /* EAEmailUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EAEmailUtilities.m; sourceTree = "<group>"; };
 		4FD838E91800D95000B49498 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		4FD838EA1800D95000B49498 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
-		4FD838EC1800DFB200B49498 /* HCRButtonListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRButtonListCell.h; sourceTree = "<group>"; };
-		4FD838ED1800DFB200B49498 /* HCRButtonListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRButtonListCell.m; sourceTree = "<group>"; };
+		4FD838EC1800DFB200B49498 /* HCRTableButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTableButtonCell.h; sourceTree = "<group>"; };
+		4FD838ED1800DFB200B49498 /* HCRTableButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTableButtonCell.m; sourceTree = "<group>"; };
 		4FD838F318011BB300B49498 /* HCRCampClusterCompareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCampClusterCompareViewController.h; sourceTree = "<group>"; };
 		4FD838F418011BB300B49498 /* HCRCampClusterCompareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCampClusterCompareViewController.m; sourceTree = "<group>"; };
 		4FD838F6180121EF00B49498 /* HCRGraphCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRGraphCell.h; sourceTree = "<group>"; };
@@ -292,8 +295,8 @@
 				4F866AF517F9EC0C000350E4 /* HCRTableFlowLayout.m */,
 				4F1C93F717FC06D00003AA21 /* HCRClusterFlowLayout.h */,
 				4F1C93F817FC06D00003AA21 /* HCRClusterFlowLayout.m */,
-				4FD838EC1800DFB200B49498 /* HCRButtonListCell.h */,
-				4FD838ED1800DFB200B49498 /* HCRButtonListCell.m */,
+				4FD838EC1800DFB200B49498 /* HCRTableButtonCell.h */,
+				4FD838ED1800DFB200B49498 /* HCRTableButtonCell.m */,
 				4FD838F6180121EF00B49498 /* HCRGraphCell.h */,
 				4FD838F7180121EF00B49498 /* HCRGraphCell.m */,
 				4FD8390C1801EB5F00B49498 /* HCRDataEntryCell.h */,
@@ -306,6 +309,8 @@
 				4FD93092181A01E200B107ED /* HCRFooterView.m */,
 				4F6137CC181DBBE200FF982F /* HCRCollectionCell.h */,
 				4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */,
+				4F6137CF181EF6C400FF982F /* HCRSignInFieldCell.h */,
+				4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */,
 			);
 			name = "Shared UI";
 			sourceTree = "<group>";
@@ -534,13 +539,14 @@
 				4F866B0817FAA09B000350E4 /* HCRCampCollectionCell.m in Sources */,
 				4F1C93FF17FC0B150003AA21 /* HCRClusterCollectionCell.m in Sources */,
 				4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */,
+				4F6137D1181EF6C400FF982F /* HCRSignInFieldCell.m in Sources */,
 				4FD8391918032B6300B49498 /* HCRAlertsViewController.m in Sources */,
 				4FD8391118020D4E00B49498 /* UIFont+HCRCommonFonts.m in Sources */,
 				4FD839081801E59500B49498 /* HCRTallySheetDetailViewController.m in Sources */,
 				4F0C702A17FF4BE70081F201 /* HCRCollectionViewController.m in Sources */,
 				4F866B0417FAA07D000350E4 /* HCRCampCollectionViewController.m in Sources */,
 				4FD838F8180121EF00B49498 /* HCRGraphCell.m in Sources */,
-				4FD838EE1800DFB200B49498 /* HCRButtonListCell.m in Sources */,
+				4FD838EE1800DFB200B49498 /* HCRTableButtonCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

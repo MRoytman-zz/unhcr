@@ -17,6 +17,8 @@ static const CGFloat kTitleLabelFontSize = 18.0;
 static const CGFloat kSubtitleLabelFontSize = 15.0;
 
 static const CGFloat kHeaderHeightDefault = 64.0;
+static const CGFloat kHeaderHeightNoText = 34.0;
+static const CGFloat kHeaderHeightNoTextSmall = 8.0;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -64,6 +66,16 @@ static const CGFloat kHeaderHeightDefault = 64.0;
     return CGSizeMake(CGRectGetWidth(collectionView.bounds),
                       kHeaderHeightDefault);
     
+}
+
++ (CGSize)preferredHeaderSizeWithoutTitleForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      kHeaderHeightNoText);
+}
+
++ (CGSize)preferredHeaderSizeWithoutTitleSmallForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      kHeaderHeightNoTextSmall);
 }
 
 #pragma mark - Getters & Setters

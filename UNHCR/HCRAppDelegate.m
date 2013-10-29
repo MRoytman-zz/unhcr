@@ -18,7 +18,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    HCRHomeViewController *homeView = [[HCRHomeViewController alloc] initWithNibName:nil bundle:nil];
+    HCRHomeViewController *homeView = [[HCRHomeViewController alloc] initWithCollectionViewLayout:[HCRHomeViewController preferredLayout]];
     UINavigationController *rootNavigationController = [[UINavigationController alloc] initWithRootViewController:homeView];
     rootNavigationController.interactivePopGestureRecognizer.enabled = NO;
     

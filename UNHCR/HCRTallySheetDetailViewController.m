@@ -185,6 +185,8 @@ NSString *const kTallyOrganization = @"Organization";
         
         dataCell.cellStatus = HCRDataEntryCellStatusChildNotCompleted;
         dataCell.dataDictionary = [NSDictionary dictionaryWithDictionary:mutableData];
+    
+    [dataCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
         
 //    }
     

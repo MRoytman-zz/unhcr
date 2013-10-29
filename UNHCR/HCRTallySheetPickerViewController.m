@@ -8,7 +8,7 @@
 
 #import "HCRTallySheetPickerViewController.h"
 #import "HCRTableFlowLayout.h"
-#import "HCRButtonListCell.h"
+#import "HCRTableButtonCell.h"
 #import "HCRTallySheetDetailViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     tableLayout.sectionInset = UIEdgeInsetsMake(12, 0, 12, 0);
     
-    [self.collectionView registerClass:[HCRButtonListCell class]
+    [self.collectionView registerClass:[HCRTableButtonCell class]
             forCellWithReuseIdentifier:kTallySheetCellIdentifier];
     
 //    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
@@ -87,12 +87,12 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRButtonListCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kTallySheetCellIdentifier forIndexPath:indexPath];
+    HCRTableButtonCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kTallySheetCellIdentifier forIndexPath:indexPath];
     
     NSArray *tallySheets = [self.campClusterData objectForKey:@"TallySheets" ofClass:@"NSArray"];
     NSDictionary *sheet = [tallySheets objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
     
-    cell.listButtonTitle = [sheet objectForKey:@"Name" ofClass:@"NSString"];
+    cell.tableButtonTitle = [sheet objectForKey:@"Name" ofClass:@"NSString"];
     
     if (indexPath.row != [self.collectionView numberOfItemsInSection:indexPath.section] - 1) {
         cell.showCellDivider = YES;

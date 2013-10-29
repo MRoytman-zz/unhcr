@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MapKit/MapKit.h>
+
+@class HCRCollectionCell;
 
 @interface HCRCollectionViewController : UICollectionViewController
 <UICollectionViewDelegate>

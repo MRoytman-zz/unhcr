@@ -10,6 +10,13 @@
 
 @interface HCRCollectionCell : UICollectionViewCell
 
+@property (nonatomic) BOOL showCellDivider;
 @property (nonatomic, readonly) UIView *bottomLineView;
+
++ (CGFloat)preferredIndentForContent;
++ (CGSize)preferredSizeForCollectionView:(UICollectionView *)collectionView;
++ (CGSize)preferredSizeForAppDescriptionCollectionCellForCollectionView:(UICollectionView *)collectionView;
+
+- (void)setBottomLineStatusForCollectionView:(UICollectionView *)collectionView atIndexPath:(NSIndexPath *)indexPath;
 
 @end

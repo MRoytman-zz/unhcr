@@ -10,7 +10,10 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const CGFloat kBottomLineOffset = 14.0;
+static const CGFloat kPreferredIndent = 20.0;
+
+static const CGFloat kDefaultCellHeight = 44.0;
+static const CGFloat kAppDescriptionHeight = 210.0;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -33,10 +36,10 @@ static const CGFloat kBottomLineOffset = 14.0;
         
         // bottom line
         static const CGFloat kLineHeight = 0.5;
-        self.bottomLineView = [[UIView alloc] initWithFrame:CGRectMake(kBottomLineOffset,
-                                                                          CGRectGetHeight(self.bounds) - kLineHeight,
-                                                                          CGRectGetWidth(self.bounds) - kBottomLineOffset,
-                                                                          kLineHeight)];
+        self.bottomLineView = [[UIView alloc] initWithFrame:CGRectMake(kPreferredIndent,
+                                                                       CGRectGetHeight(self.bounds) - kLineHeight,
+                                                                       CGRectGetWidth(self.bounds) - kPreferredIndent,
+                                                                       kLineHeight)];
         [self addSubview:self.bottomLineView];
         
         self.bottomLineView.backgroundColor = [UIColor tableDividerColor];
@@ -48,6 +51,32 @@ static const CGFloat kBottomLineOffset = 14.0;
 - (void)prepareForReuse {
     [super prepareForReuse];
     self.bottomLineView.hidden = NO;
+}
+
+#pragma mark - Class Methods
+
++ (CGFloat)preferredIndentForContent {
+    return kPreferredIndent;
+}
+
++ (CGSize)preferredSizeForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      kDefaultCellHeight);
+}
+
++ (CGSize)preferredSizeForAppDescriptionCollectionCellForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      kAppDescriptionHeight);
+}
+
+#pragma mark - Public Methods
+
+- (void)setBottomLineStatusForCollectionView:(UICollectionView *)collectionView atIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row == [collectionView numberOfItemsInSection:indexPath.section] - 1) {
+        self.bottomLineView.hidden = YES;
+    }
+    
 }
 
 @end

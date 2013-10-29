@@ -96,9 +96,7 @@ NSString *const kCountryFooterIdentifier = @"kCountryFooterIdentifier";
     NSDictionary *categoryDictionary = [[HCRDataSource globalDataArray] objectAtIndex:indexPath.section];
     cell.countryDictionary = [[categoryDictionary objectForKey:@"Countries"] objectAtIndex:indexPath.row];
     
-    if (indexPath.row == [collectionView numberOfItemsInSection:indexPath.section] - 1) {
-        cell.bottomLineView.hidden = YES;
-    }
+    [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
     return cell;
     

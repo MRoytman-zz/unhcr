@@ -9,7 +9,7 @@
 #import "HCRCampClusterDetailViewController.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRGraphCell.h"
-#import "HCRButtonListCell.h"
+#import "HCRTableButtonCell.h"
 #import "HCRTallySheetPickerViewController.h"
 #import "EAEmailUtilities.h"
 #import "HCRAlertCell.h"
@@ -138,9 +138,9 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     
     [self.collectionView registerClass:[HCRGraphCell class]
             forCellWithReuseIdentifier:kCampClusterGraphCellIdentifier];
-    [self.collectionView registerClass:[HCRButtonListCell class]
+    [self.collectionView registerClass:[HCRTableButtonCell class]
             forCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier];
-    [self.collectionView registerClass:[HCRButtonListCell class]
+    [self.collectionView registerClass:[HCRTableButtonCell class]
             forCellWithReuseIdentifier:kCampClusterAgenciesCellIdentifier];
     [self.collectionView registerClass:[HCRAlertCell class]
             forCellWithReuseIdentifier:kCampClusterAlertCellIdentifier];
@@ -201,20 +201,20 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         
     } else if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
         
-        HCRButtonListCell *resourcesCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier forIndexPath:indexPath];
+        HCRTableButtonCell *resourcesCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier forIndexPath:indexPath];
         
         NSDictionary *campClusterLayoutDictionary = [self.campClusterCollectionLayoutData objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
         NSArray *resourcesArray = [campClusterLayoutDictionary objectForKey:@"Resources" ofClass:@"NSArray"];
-        resourcesCell.listButtonTitle = [resourcesArray objectAtIndex:indexPath.row ofClass:@"NSString"];
+        resourcesCell.tableButtonTitle = [resourcesArray objectAtIndex:indexPath.row ofClass:@"NSString"];
         
         cell = resourcesCell;
         
     } else if ([cellType isEqualToString:kCampClusterAgenciesCellIdentifier]) {
-        HCRButtonListCell *agencyCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterAgenciesCellIdentifier forIndexPath:indexPath];
+        HCRTableButtonCell *agencyCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterAgenciesCellIdentifier forIndexPath:indexPath];
         
         NSArray *agencyArray = [self.campClusterData objectForKey:@"Agencies" ofClass:@"NSArray"];
         NSDictionary *agencyDictionary = [agencyArray objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
-        agencyCell.listButtonTitle = [agencyDictionary objectForKey:@"Abbr" ofClass:@"NSString"];
+        agencyCell.tableButtonTitle = [agencyDictionary objectForKey:@"Abbr" ofClass:@"NSString"];
         
         cell = agencyCell;
     } else if ([cellType isEqualToString:kCampClusterAlertCellIdentifier]) {
@@ -226,9 +226,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         cell = alertCell;
     }
     
-    if (indexPath.row == [collectionView numberOfItemsInSection:indexPath.section] - 1) {
-        cell.bottomLineView.hidden = YES;
-    }
+    [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
     return cell;
     
@@ -290,14 +288,14 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         
     } else if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
         
-        HCRButtonListCell *cell = (HCRButtonListCell *)[collectionView cellForItemAtIndexPath:indexPath];
-        NSParameterAssert([cell isKindOfClass:[HCRButtonListCell class]]);
+        HCRTableButtonCell *cell = (HCRTableButtonCell *)[collectionView cellForItemAtIndexPath:indexPath];
+        NSParameterAssert([cell isKindOfClass:[HCRTableButtonCell class]]);
         
-        if ([cell.listButtonTitle isEqualToString:kResourceNameSupplies]) {
+        if ([cell.tableButtonTitle isEqualToString:kResourceNameSupplies]) {
             [self _requestSuppliesButtonPressed];
-        } else if ([cell.listButtonTitle isEqualToString:kResourceNameSitReps]) {
+        } else if ([cell.tableButtonTitle isEqualToString:kResourceNameSitReps]) {
             [self _sitRepsButtonPressed];
-        } else if ([cell.listButtonTitle isEqualToString:kResourceNameTallySheets]) {
+        } else if ([cell.tableButtonTitle isEqualToString:kResourceNameTallySheets]) {
             [self _tallySheetsButtonPressed];
         }
         
@@ -326,7 +324,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     } else {
         
         return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                          [HCRButtonListCell preferredCellHeight]);
+                          [HCRTableButtonCell preferredCellHeight]);
         
     }
     
