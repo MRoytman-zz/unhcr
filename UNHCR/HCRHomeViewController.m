@@ -15,6 +15,7 @@
 #import "HCRFooterView.h"
 #import "HCRCollectionCell.h"
 #import "HCRTableButtonCell.h"
+#import "HCRTableCell.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -131,49 +132,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     [self.collectionView registerClass:[HCRTableButtonCell class]
             forCellWithReuseIdentifier:kHomeViewSignInButtonCellIdentifier];
     
-//
-//    CGRect scrollFrame = CGRectMake(0,
-//                                    CGRectGetMaxY(bodyLabel.frame),
-//                                    CGRectGetWidth(self.view.bounds),
-//                                    CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(bodyLabel.frame));
-//    self.scrollView = [[HCRHomeLoginMenuScrollView alloc] initWithFrame:scrollFrame];
-//    [self.view addSubview:self.scrollView];
-//    
-//    self.scrollView.alertsUnread = ([HCRDataSource globalAlertsData].count > 0);
-//    
-//    [self.scrollView.alertsButton addTarget:self
-//                                     action:@selector(_alertsButtonPressed)
-//                           forControlEvents:UIControlEventTouchUpInside];
-//    
-//    [self.scrollView.conflictsButton addTarget:self
-//                                        action:@selector(_conflictsButtonPressed)
-//                              forControlEvents:UIControlEventTouchUpInside];
-//    
-//    [self.scrollView.countriesButton addTarget:self
-//                                   action:@selector(_countryButtonPressed)
-//                         forControlEvents:UIControlEventTouchUpInside];
-//    
-//    [self.scrollView.campsButton addTarget:self
-//                               action:@selector(_campsButtonPressed)
-//                     forControlEvents:UIControlEventTouchUpInside];
-//    
-//    [self.scrollView.loginButton addTarget:self
-//                                    action:@selector(_loginButtonPressed)
-//                          forControlEvents:UIControlEventTouchUpInside];
-//    
-//    [self.scrollView.signOutButton addTarget:self
-//                                      action:@selector(_logoutButtonPressed)
-//                            forControlEvents:UIControlEventTouchUpInside];
-//    
-//    [self.scrollView.settingsButton addTarget:self
-//                                       action:@selector(_optionsButtonPressed)
-//                             forControlEvents:UIControlEventTouchUpInside];
-//    
-//    double delayInSeconds = 2.0;
-//    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-//    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-//        self.scrollView.loginState = HCRHomeLoginMenuStateSignedIn;
-//    });
+    [self.collectionView registerClass:[HCRTableCell class]
+            forCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier];
     
 }
 
@@ -222,6 +182,9 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     HCRCollectionCell *cell;
     
     if (self.signedIn) {
+        
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier
+                                                         forIndexPath:indexPath];
         
     } else {
         
@@ -412,7 +375,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)_startSignInWithCompletion:(void (^)(BOOL success))completionBlock {
     
-    self.collectionView.userInteractionEnabled = NO;
+    self.collectionView.scrollEnabled = NO;
     self.signInButtonCell.processingAction = YES;
     self.signInButtonCell.tableButton.enabled = NO;
     
@@ -423,7 +386,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         self.signedIn = YES;
         [self.collectionView reloadData];
         
-        self.collectionView.userInteractionEnabled = YES;
+        self.collectionView.scrollEnabled = YES;
         self.signInButtonCell.processingAction = NO;
         self.signInButtonCell.tableButton.enabled = YES;
         

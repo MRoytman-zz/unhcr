@@ -19,6 +19,7 @@
 		4F1C940517FC28C40003AA21 /* HCRCampClusterDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940417FC28C40003AA21 /* HCRCampClusterDetailViewController.m */; };
 		4F1C940817FCB8010003AA21 /* Common.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F1C940717FCB8010003AA21 /* Common.xcassets */; };
 		4F1C940B17FCBE640003AA21 /* HCRHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */; };
+		4F3D962D181F36D9008128B6 /* HCRTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3D962C181F36D9008128B6 /* HCRTableCell.m */; };
 		4F6137CE181DBBE200FF982F /* HCRCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */; };
 		4F6137D1181EF6C400FF982F /* HCRSignInFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */; };
 		4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
@@ -82,6 +83,8 @@
 		4F1C940717FCB8010003AA21 /* Common.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Common.xcassets; sourceTree = "<group>"; };
 		4F1C940917FCBE640003AA21 /* HCRHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRHomeViewController.h; sourceTree = "<group>"; };
 		4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRHomeViewController.m; sourceTree = "<group>"; };
+		4F3D962B181F36D9008128B6 /* HCRTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTableCell.h; sourceTree = "<group>"; };
+		4F3D962C181F36D9008128B6 /* HCRTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTableCell.m; sourceTree = "<group>"; };
 		4F6137CC181DBBE200FF982F /* HCRCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCollectionCell.h; sourceTree = "<group>"; };
 		4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCollectionCell.m; sourceTree = "<group>"; };
 		4F6137CF181EF6C400FF982F /* HCRSignInFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSignInFieldCell.h; sourceTree = "<group>"; };
@@ -188,6 +191,40 @@
 			name = "Home View";
 			sourceTree = "<group>";
 		};
+		4F3D962E181F3807008128B6 /* Collection Cells */ = {
+			isa = PBXGroup;
+			children = (
+				4F3D962B181F36D9008128B6 /* HCRTableCell.h */,
+				4F3D962C181F36D9008128B6 /* HCRTableCell.m */,
+				4FD838EC1800DFB200B49498 /* HCRTableButtonCell.h */,
+				4FD838ED1800DFB200B49498 /* HCRTableButtonCell.m */,
+				4FD838F6180121EF00B49498 /* HCRGraphCell.h */,
+				4FD838F7180121EF00B49498 /* HCRGraphCell.m */,
+				4FD8390C1801EB5F00B49498 /* HCRDataEntryCell.h */,
+				4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */,
+				4FD839131803197200B49498 /* HCRAlertCell.h */,
+				4FD839141803197200B49498 /* HCRAlertCell.m */,
+				4F6137CC181DBBE200FF982F /* HCRCollectionCell.h */,
+				4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */,
+				4F6137CF181EF6C400FF982F /* HCRSignInFieldCell.h */,
+				4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */,
+			);
+			name = "Collection Cells";
+			sourceTree = "<group>";
+		};
+		4F3D962F181F3858008128B6 /* Collection Layouts */ = {
+			isa = PBXGroup;
+			children = (
+				4F1C93FA17FC09190003AA21 /* HCRFlowLayout.h */,
+				4F1C93FB17FC09190003AA21 /* HCRFlowLayout.m */,
+				4F866AF417F9EC0C000350E4 /* HCRTableFlowLayout.h */,
+				4F866AF517F9EC0C000350E4 /* HCRTableFlowLayout.m */,
+				4F1C93F717FC06D00003AA21 /* HCRClusterFlowLayout.h */,
+				4F1C93F817FC06D00003AA21 /* HCRClusterFlowLayout.m */,
+			);
+			name = "Collection Layouts";
+			sourceTree = "<group>";
+		};
 		4F71C0DD1811B84900672C6A /* Vendors */ = {
 			isa = PBXGroup;
 			children = (
@@ -287,30 +324,14 @@
 		4F866B0117FA9F8B000350E4 /* Shared UI */ = {
 			isa = PBXGroup;
 			children = (
+				4F3D962F181F3858008128B6 /* Collection Layouts */,
+				4F3D962E181F3807008128B6 /* Collection Cells */,
 				4F0C702817FF4BE70081F201 /* HCRCollectionViewController.h */,
 				4F0C702917FF4BE70081F201 /* HCRCollectionViewController.m */,
-				4F1C93FA17FC09190003AA21 /* HCRFlowLayout.h */,
-				4F1C93FB17FC09190003AA21 /* HCRFlowLayout.m */,
-				4F866AF417F9EC0C000350E4 /* HCRTableFlowLayout.h */,
-				4F866AF517F9EC0C000350E4 /* HCRTableFlowLayout.m */,
-				4F1C93F717FC06D00003AA21 /* HCRClusterFlowLayout.h */,
-				4F1C93F817FC06D00003AA21 /* HCRClusterFlowLayout.m */,
-				4FD838EC1800DFB200B49498 /* HCRTableButtonCell.h */,
-				4FD838ED1800DFB200B49498 /* HCRTableButtonCell.m */,
-				4FD838F6180121EF00B49498 /* HCRGraphCell.h */,
-				4FD838F7180121EF00B49498 /* HCRGraphCell.m */,
-				4FD8390C1801EB5F00B49498 /* HCRDataEntryCell.h */,
-				4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */,
-				4FD839131803197200B49498 /* HCRAlertCell.h */,
-				4FD839141803197200B49498 /* HCRAlertCell.m */,
 				4FD9308E181A01AC00B107ED /* HCRHeaderView.h */,
 				4FD9308F181A01AC00B107ED /* HCRHeaderView.m */,
 				4FD93091181A01E200B107ED /* HCRFooterView.h */,
 				4FD93092181A01E200B107ED /* HCRFooterView.m */,
-				4F6137CC181DBBE200FF982F /* HCRCollectionCell.h */,
-				4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */,
-				4F6137CF181EF6C400FF982F /* HCRSignInFieldCell.h */,
-				4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */,
 			);
 			name = "Shared UI";
 			sourceTree = "<group>";
@@ -514,6 +535,7 @@
 				4F1C93FC17FC09190003AA21 /* HCRFlowLayout.m in Sources */,
 				4F6137CE181DBBE200FF982F /* HCRCollectionCell.m in Sources */,
 				4F0C701B17FF482B0081F201 /* AssertionCategories.m in Sources */,
+				4F3D962D181F36D9008128B6 /* HCRTableCell.m in Sources */,
 				4F866B1117FAB83B000350E4 /* HCRClusterCollectionController.m in Sources */,
 				4FD9308D1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m in Sources */,
 				4F866B0017FA8350000350E4 /* HCRCountryCollectionCell.m in Sources */,

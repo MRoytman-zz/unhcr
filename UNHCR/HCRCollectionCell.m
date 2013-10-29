@@ -20,6 +20,7 @@ static const CGFloat kAppDescriptionHeight = 210.0;
 @interface HCRCollectionCell ()
 
 @property (nonatomic, readwrite) UIView *bottomLineView;
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 
 @end
 
@@ -50,7 +51,11 @@ static const CGFloat kAppDescriptionHeight = 210.0;
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    
     self.bottomLineView.hidden = NO;
+    
+    [self.spinner removeFromSuperview];
+    self.spinner = nil;
 }
 
 #pragma mark - Class Methods
@@ -67,6 +72,33 @@ static const CGFloat kAppDescriptionHeight = 210.0;
 + (CGSize)preferredSizeForAppDescriptionCollectionCellForCollectionView:(UICollectionView *)collectionView {
     return CGSizeMake(CGRectGetWidth(collectionView.bounds),
                       kAppDescriptionHeight);
+}
+
+#pragma mark - Getters & Setters
+
+- (void)setProcessingAction:(BOOL)processingAction {
+    
+    _processingAction = processingAction;
+    
+    if (processingAction) {
+        
+        if (!self.spinner) {
+            self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+            [self.contentView addSubview:self.spinner];
+        }
+        
+        self.spinner.center = CGPointMake(CGRectGetMidX(self.contentView.bounds),
+                                          CGRectGetMidY(self.contentView.bounds));
+        
+        self.spinner.color = [UIColor UNHCRBlue];
+        
+        self.spinner.hidesWhenStopped = YES;
+        [self.spinner startAnimating];
+        
+    } else {
+        [self.spinner stopAnimating];
+    }
+    
 }
 
 #pragma mark - Public Methods

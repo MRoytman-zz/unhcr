@@ -10,7 +10,8 @@
 
 @interface HCRCollectionCell : UICollectionViewCell
 
-@property (nonatomic) BOOL showCellDivider;
+@property (nonatomic) BOOL processingAction;
+
 @property (nonatomic, readonly) UIView *bottomLineView;
 
 + (CGFloat)preferredIndentForContent;

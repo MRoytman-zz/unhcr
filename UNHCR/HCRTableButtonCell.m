@@ -25,7 +25,6 @@ static const CGFloat kYButtonPadding = 10;
 @property (nonatomic, readonly) CGSize sharedButtonSize;
 
 @property (nonatomic, readwrite) UIButton *tableButton;
-@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 
 @end
 
@@ -42,13 +41,6 @@ static const CGFloat kYButtonPadding = 10;
         
     }
     return self;
-}
-
-- (void)prepareForReuse {
-    [super prepareForReuse];
-    
-    [self.spinner removeFromSuperview];
-    self.spinner = nil;
 }
 
 #pragma mark - Class Methods
@@ -83,31 +75,6 @@ static const CGFloat kYButtonPadding = 10;
         // buttons don't actually act as buttons - they are just visual on the table cell
         self.tableButton.userInteractionEnabled = NO;
         
-    }
-    
-}
-
-- (void)setProcessingAction:(BOOL)processingAction {
-    
-    _processingAction = processingAction;
-    
-    if (processingAction) {
-        
-        if (!self.spinner) {
-            self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-            [self.contentView addSubview:self.spinner];
-        }
-        
-        self.spinner.center = CGPointMake(CGRectGetMidX(self.contentView.bounds),
-                                          CGRectGetMidY(self.contentView.bounds));
-        
-        self.spinner.color = [UIColor UNHCRBlue];
-        
-        self.spinner.hidesWhenStopped = YES;
-        [self.spinner startAnimating];
-        
-    } else {
-        [self.spinner stopAnimating];
     }
     
 }

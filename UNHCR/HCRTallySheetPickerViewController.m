@@ -94,9 +94,7 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
     
     cell.tableButtonTitle = [sheet objectForKey:@"Name" ofClass:@"NSString"];
     
-    if (indexPath.row != [self.collectionView numberOfItemsInSection:indexPath.section] - 1) {
-        cell.showCellDivider = YES;
-    }
+    [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
     return cell;
     

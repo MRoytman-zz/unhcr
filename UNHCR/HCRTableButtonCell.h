@@ -13,8 +13,6 @@
 @property (nonatomic, readonly) UIButton *tableButton;
 @property (nonatomic, strong) NSString *tableButtonTitle;
 
-@property (nonatomic) BOOL processingAction;
-
 + (CGFloat)preferredCellHeight;
 
 @end
