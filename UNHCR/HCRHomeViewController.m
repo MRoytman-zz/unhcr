@@ -332,6 +332,9 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                 
                 buttonCell.tableButtonTitle = @"Sign In";
                 
+                buttonCell.tableButtonStyle = HCRTableButtonStyleForward;
+                buttonCell.processingViewPosition = HCRCollectionCellProcessingViewPositionLeft;
+                
                 self.signInButtonCell = buttonCell;
                 
                 break;

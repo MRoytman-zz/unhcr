@@ -43,6 +43,14 @@ static const CGFloat kYButtonPadding = 10;
     return self;
 }
 
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    
+    self.tableButtonTitle = nil;
+    self.tableButtonStyle = HCRTableButtonStyleDefault;
+    
+}
+
 #pragma mark - Class Methods
 
 + (CGFloat)preferredCellHeight {
@@ -60,33 +68,56 @@ static const CGFloat kYButtonPadding = 10;
     
     _tableButtonTitle = tableButtonTitle;
     
-    [self.tableButton removeFromSuperview];
-    
     if (tableButtonTitle) {
-        
-        self.tableButton = [self _tableButtonWithTitle:tableButtonTitle];
-        [self.contentView addSubview:self.tableButton];
-        
-        CGFloat preferredOffset = [HCRCollectionCell preferredIndentForContent];
-        self.tableButton.center = CGPointMake(preferredOffset + CGRectGetMidX(self.tableButton.bounds),
-                                             CGRectGetMidY(self.bounds));
-        
-        // workaround; convenience after a refactor
-        // buttons don't actually act as buttons - they are just visual on the table cell
-        self.tableButton.userInteractionEnabled = NO;
-        
+        [self _reloadTableButton];
     }
     
+}
+
+- (void)setTableButtonStyle:(HCRTableButtonStyle)tableButtonStyle {
+    _tableButtonStyle = tableButtonStyle;
+    [self _reloadTableButton];
 }
 
 #pragma mark - Private Methods
 
 - (UIButton *)_tableButtonWithTitle:(NSString *)titleString {
     
-    return [UIButton buttonWithUNHCRTextStyleWithString:titleString
-                                    horizontalAlignment:UIControlContentHorizontalAlignmentLeft
-                                             buttonSize:self.sharedButtonSize
-                                               fontSize:[NSNumber numberWithFloat:kSharedButtonFontSize]];
+    UIButton *button;
+    
+    if (self.tableButtonStyle == HCRTableButtonStyleForward) {
+        button = [UIButton buttonWithUNHCRTextStyleWithString:titleString
+                                          horizontalAlignment:UIControlContentHorizontalAlignmentLeft
+                                                   buttonSize:self.sharedButtonSize
+                                                     fontSize:[NSNumber numberWithFloat:kSharedButtonFontSize]];
+    } else {
+        button = [UIButton buttonWithType:UIButtonTypeSystem];
+        button.frame = CGRectMake(0, 0, self.sharedButtonSize.width, self.sharedButtonSize.height);
+        
+        button.tintColor = [UIColor UNHCRBlue];
+        
+        [button setTitle:titleString forState:UIControlStateNormal];
+        button.titleLabel.font = [UIFont fontWithName:[UIButton preferredFontNameForUNHCRButton]
+                                                 size:kSharedButtonFontSize];
+    }
+    
+    return button;
+    
+}
+
+- (void)_reloadTableButton {
+    
+    [self.tableButton removeFromSuperview];
+    
+    self.tableButton = [self _tableButtonWithTitle:self.tableButtonTitle];
+    [self.contentView addSubview:self.tableButton];
+    
+    // TODO: handle different positions/sizes for various button types
+    self.tableButton.center = self.contentView.center;
+    
+    // workaround; convenience after a refactor
+    // buttons don't actually act as buttons - they are just visual on the table cell
+    self.tableButton.userInteractionEnabled = NO;
     
 }
 

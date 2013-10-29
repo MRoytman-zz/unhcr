@@ -101,8 +101,7 @@ static const CGFloat kAppDescriptionHeight = 210.0;
             [self.contentView addSubview:self.spinner];
         }
         
-        self.spinner.center = CGPointMake(CGRectGetMidX(self.contentView.bounds),
-                                          CGRectGetMidY(self.contentView.bounds));
+        self.spinner.center = [self _centerForProcessingView];
         
         self.spinner.color = [UIColor UNHCRBlue];
         
@@ -130,6 +129,31 @@ static const CGFloat kAppDescriptionHeight = 210.0;
     if (indexPath.row == [collectionView numberOfItemsInSection:indexPath.section] - 1) {
         self.bottomLineView.hidden = YES;
     }
+    
+}
+
+#pragma mark - Private Methods
+
+- (CGPoint)_centerForProcessingView {
+    
+    CGFloat xPosition;
+    
+    switch (self.processingViewPosition) {
+        case HCRCollectionCellProcessingViewPositionLeft:
+            xPosition = self.indentForContent + CGRectGetMidX(self.spinner.bounds);
+            break;
+            
+        case HCRCollectionCellProcessingViewPositionCenter:
+            xPosition = CGRectGetMidX(self.contentView.bounds);
+            break;
+            
+        case HCRCollectionCellProcessingViewPositionRight:
+            xPosition = CGRectGetWidth(self.contentView.bounds) - CGRectGetMidX(self.spinner.bounds) - [HCRCollectionCell preferredIndentForContent];
+            break;
+    }
+    
+    return CGPointMake(xPosition,
+                       CGRectGetMidY(self.contentView.bounds));
     
 }
 

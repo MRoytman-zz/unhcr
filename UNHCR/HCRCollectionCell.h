@@ -8,9 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
+////////////////////////////////////////////////////////////////////////////////
+
+typedef NS_ENUM(NSInteger, HCRCollectionCellProcessingViewPosition) {
+    HCRCollectionCellProcessingViewPositionLeft,
+    HCRCollectionCellProcessingViewPositionCenter,
+    HCRCollectionCellProcessingViewPositionRight
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
 @interface HCRCollectionCell : UICollectionViewCell
 
 @property (nonatomic) BOOL processingAction;
+@property (nonatomic) HCRCollectionCellProcessingViewPosition processingViewPosition;
+
 @property (nonatomic) CGFloat indentForContent;
 
 @property (nonatomic, strong) UIColor *highlightedColor;
