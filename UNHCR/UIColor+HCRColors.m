@@ -41,4 +41,11 @@
     
 }
 
++ (UIColor *)tableSelectedCellColor {
+    return [UIColor colorWithRed:217/255.0
+                           green:217/255.0
+                            blue:217/255.0
+                           alpha:1.0];
+}
+
 @end

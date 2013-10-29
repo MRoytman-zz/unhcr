@@ -10,9 +10,13 @@
 
 @interface HCRTableCell : HCRCollectionCell
 
++ (CGFloat)preferredIndentForContentWithBadgeImage;
++ (CGFloat)preferredTrailingSpaceForContent;
+
 @property (nonatomic, strong) UIImage *badgeImage;
 @property (nonatomic, readonly) UIImageView *badgeImageView;
 
-@property (nonatomic, strong) NSString *labelTitle;
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, readonly) UILabel *titleLabel;
 
 @end

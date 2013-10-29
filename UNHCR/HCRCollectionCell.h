@@ -11,6 +11,9 @@
 @interface HCRCollectionCell : UICollectionViewCell
 
 @property (nonatomic) BOOL processingAction;
+@property (nonatomic) CGFloat indentForContent;
+
+@property (nonatomic, strong) UIColor *highlightedColor;
 
 @property (nonatomic, readonly) UIView *bottomLineView;
 

@@ -11,7 +11,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+static const CGFloat kDefaultGraphPadding = 0.0;
+
+////////////////////////////////////////////////////////////////////////////////
+
 @interface HCRGraphCell ()
+
+@property (nonatomic, readonly) CGRect graphViewFrame;
 
 @property (nonatomic, readwrite) SCGraphView *graphView;
 
@@ -27,18 +33,15 @@
     if (self) {
         // Initialization code
         
-        self.backgroundColor = [UIColor whiteColor];
+        self.contentView.backgroundColor = [UIColor whiteColor];
         
         self.bottomLineView.hidden = YES;
         
-        static const CGFloat kGraphOffset = 0.0;
-        CGRect graphFrame = CGRectMake(kGraphOffset,
-                                       kGraphOffset,
-                                       CGRectGetWidth(self.bounds) - 2 * kGraphOffset,
-                                       CGRectGetHeight(self.bounds) - 2 * kGraphOffset);
+        self.xGraphPadding = kDefaultGraphPadding;
+        self.yGraphPadding = kDefaultGraphPadding;
         
-        self.graphView = [[SCGraphView alloc] initWithFrame:graphFrame];
-        [self addSubview:self.graphView];
+        self.graphView = [[SCGraphView alloc] initWithFrame:self.graphViewFrame];
+        [self.contentView addSubview:self.graphView];
         
     }
     return self;
@@ -51,13 +54,70 @@
     self.graphDelegate = nil;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    self.graphView.frame = self.graphViewFrame;
+    [self.graphView setNeedsDisplay];
+    
+}
+
 #pragma mark - Class Methods
 
 + (CGFloat)preferredHeightForGraphCell {
     return 200;
 }
 
++ (CGSize)preferredSizeForGraphCellInCollectionView:(UICollectionView *)collectionView {
+    
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      [HCRGraphCell preferredHeightForGraphCell]);
+    
+}
+
 #pragma mark - Getters & Setters
+
+- (CGRect)graphViewFrame {
+    return CGRectMake(self.indentForContent + self.xGraphOffset + self.xGraphPadding,
+                      self.yGraphOffset + self.yGraphPadding,
+                      CGRectGetWidth(self.bounds) - self.indentForContent - self.xGraphOffset - 2 * self.xGraphPadding - self.xGraphTrailingSpace,
+                      CGRectGetHeight(self.bounds) - self.yGraphOffset - 2 * self.yGraphPadding - self.yGraphTrailingSpace);
+}
+
+- (void)setIndentForContent:(CGFloat)indentForContent {
+    [super setIndentForContent:indentForContent];
+    [self setNeedsDisplay];
+}
+
+- (void)setXGraphOffset:(CGFloat)xGraphOffset {
+    _xGraphOffset = xGraphOffset;
+    [self setNeedsDisplay];
+}
+
+- (void)setYGraphOffset:(CGFloat)yGraphOffset {
+    _yGraphOffset = yGraphOffset;
+    [self setNeedsDisplay];
+}
+
+- (void)setXGraphPadding:(CGFloat)xGraphPadding {
+    _xGraphPadding = xGraphPadding;
+    [self setNeedsDisplay];
+}
+
+- (void)setYGraphPadding:(CGFloat)yGraphPadding {
+    _yGraphPadding = yGraphPadding;
+    [self setNeedsDisplay];
+}
+
+- (void)setXGraphTrailingSpace:(CGFloat)xGraphTrailingSpace {
+    _xGraphTrailingSpace = xGraphTrailingSpace;
+    [self setNeedsDisplay];
+}
+
+- (void)setYGraphTrailingSpace:(CGFloat)yGraphTrailingSpace {
+    _yGraphTrailingSpace = yGraphTrailingSpace;
+    [self setNeedsDisplay];
+}
 
 - (void)setGraphDelegate:(id<SCGraphViewDelegate>)graphDelegate {
     

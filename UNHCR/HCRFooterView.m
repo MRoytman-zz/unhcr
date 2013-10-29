@@ -10,7 +10,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const CGFloat kFooterHeight = 30.0;
+const CGFloat kFooterHeight = 14.0;
 const CGFloat kFooterHeightForGraphCell = 50.0;
 const CGFloat kFooterHeightForTopLine = 0.5;
 
@@ -32,7 +32,7 @@ const CGFloat kFooterHeightForTopLine = 0.5;
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor tableBackgroundColor];
         
         // bottom line
         UIView *bottomLineView = [[UIView alloc] initWithFrame:CGRectMake(0,

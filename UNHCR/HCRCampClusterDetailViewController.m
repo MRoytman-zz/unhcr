@@ -378,8 +378,8 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 - (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index {
     
     // go back [index] days since today
-    NSTimeInterval numberOfSecondsToTargetDate = -1 * ((self.messagesReceivedArray.count - (index + 1)) * 60 * 60 * 24);
-    NSDate *targetDate = [NSDate dateWithTimeIntervalSinceNow:numberOfSecondsToTargetDate];
+    NSTimeInterval numberOfSecondsToTargetDate = ((self.messagesReceivedArray.count - (index + 1)) * 60 * 60 * 24);
+    NSDate *targetDate = [NSDate dateWithTimeIntervalSinceNow:(-1 * numberOfSecondsToTargetDate)];
 
     NSString *dateString = [self.dateFormatter stringFromDate:targetDate];
     

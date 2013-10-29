@@ -8,8 +8,9 @@
 
 #import "HCRCollectionViewController.h"
 #import "HCRSignInFieldCell.h"
+#import "HCRGraphCell.h"
 
 @interface HCRHomeViewController : HCRCollectionViewController
-<UICollectionViewDelegateFlowLayout, HCRSignInFieldCellDelegate>
+<UICollectionViewDelegateFlowLayout, HCRSignInFieldCellDelegate, SCGraphViewDataSource, SCGraphViewDelegate>
 
 @end

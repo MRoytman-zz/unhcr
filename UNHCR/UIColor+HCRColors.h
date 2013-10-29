@@ -14,7 +14,7 @@
 + (UIColor *)HMSPurple;
 
 + (UIColor *)tableBackgroundColor;
-
 + (UIColor *)tableDividerColor;
++ (UIColor *)tableSelectedCellColor;
 
 @end

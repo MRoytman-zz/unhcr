@@ -38,7 +38,8 @@
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     
     if (self.highlightCells) {
-        UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+        HCRCollectionCell *cell = (HCRCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
+        NSParameterAssert([cell isKindOfClass:[HCRCollectionCell class]]);
         
         if ([cell isKindOfClass:[HCRGraphCell class]] ||
             [cell isKindOfClass:[HCRSignInFieldCell class]]) {
@@ -52,7 +53,7 @@
             HCRDataEntryCell *dataCell = (HCRDataEntryCell *)cell;
             [dataCell.dataEntryButton setHighlighted:YES];
         } else {
-            cell.backgroundColor = [UIColor UNHCRBlue];
+            cell.contentView.backgroundColor = cell.highlightedColor;
         }
     }
 }
@@ -60,7 +61,8 @@
 - (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath {
     
     if (self.highlightCells) {
-        UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+        HCRCollectionCell *cell = (HCRCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
+        NSParameterAssert([cell isKindOfClass:[HCRCollectionCell class]]);
         
         if ([cell isKindOfClass:[HCRGraphCell class]] ||
             [cell isKindOfClass:[HCRSignInFieldCell class]]) {
@@ -74,7 +76,7 @@
             HCRDataEntryCell *dataCell = (HCRDataEntryCell *)cell;
             [dataCell.dataEntryButton setHighlighted:NO];
         } else {
-            cell.backgroundColor = [UIColor whiteColor];
+            cell.contentView.backgroundColor = [UIColor whiteColor];
         }
     }
 }

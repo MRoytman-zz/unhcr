@@ -20,6 +20,7 @@
 		4F1C940817FCB8010003AA21 /* Common.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F1C940717FCB8010003AA21 /* Common.xcassets */; };
 		4F1C940B17FCBE640003AA21 /* HCRHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */; };
 		4F3D962D181F36D9008128B6 /* HCRTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3D962C181F36D9008128B6 /* HCRTableCell.m */; };
+		4F3D9631181F6D5B008128B6 /* Scratch.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F3D9630181F6D5B008128B6 /* Scratch.xcassets */; };
 		4F6137CE181DBBE200FF982F /* HCRCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */; };
 		4F6137D1181EF6C400FF982F /* HCRSignInFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */; };
 		4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
@@ -85,6 +86,7 @@
 		4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRHomeViewController.m; sourceTree = "<group>"; };
 		4F3D962B181F36D9008128B6 /* HCRTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTableCell.h; sourceTree = "<group>"; };
 		4F3D962C181F36D9008128B6 /* HCRTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTableCell.m; sourceTree = "<group>"; };
+		4F3D9630181F6D5B008128B6 /* Scratch.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Scratch.xcassets; sourceTree = "<group>"; };
 		4F6137CC181DBBE200FF982F /* HCRCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCollectionCell.h; sourceTree = "<group>"; };
 		4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCollectionCell.m; sourceTree = "<group>"; };
 		4F6137CF181EF6C400FF982F /* HCRSignInFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSignInFieldCell.h; sourceTree = "<group>"; };
@@ -194,6 +196,8 @@
 		4F3D962E181F3807008128B6 /* Collection Cells */ = {
 			isa = PBXGroup;
 			children = (
+				4F6137CC181DBBE200FF982F /* HCRCollectionCell.h */,
+				4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */,
 				4F3D962B181F36D9008128B6 /* HCRTableCell.h */,
 				4F3D962C181F36D9008128B6 /* HCRTableCell.m */,
 				4FD838EC1800DFB200B49498 /* HCRTableButtonCell.h */,
@@ -204,8 +208,6 @@
 				4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */,
 				4FD839131803197200B49498 /* HCRAlertCell.h */,
 				4FD839141803197200B49498 /* HCRAlertCell.m */,
-				4F6137CC181DBBE200FF982F /* HCRCollectionCell.h */,
-				4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */,
 				4F6137CF181EF6C400FF982F /* HCRSignInFieldCell.h */,
 				4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */,
 			);
@@ -283,6 +285,7 @@
 				4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */,
 				4F866AFB17FA7D0D000350E4 /* UNHCR.xcassets */,
 				4F1C940717FCB8010003AA21 /* Common.xcassets */,
+				4F3D9630181F6D5B008128B6 /* Scratch.xcassets */,
 				4F866B0C17FAA5FE000350E4 /* Categories */,
 				4F866B0117FA9F8B000350E4 /* Shared UI */,
 				4F1C940C17FCBE6A0003AA21 /* Home View */,
@@ -482,6 +485,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F3D9631181F6D5B008128B6 /* Scratch.xcassets in Resources */,
 				4F866AFC17FA7D0D000350E4 /* UNHCR.xcassets in Resources */,
 				4F866ACD17F9E022000350E4 /* InfoPlist.strings in Resources */,
 				4F1C940817FCB8010003AA21 /* Common.xcassets in Resources */,
@@ -603,6 +607,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -621,6 +626,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "C68C38DB-E826-46AA-861C-8C67D87463BD";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -643,7 +649,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -654,6 +661,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PROVISIONING_PROFILE = "B36F7CE2-C90F-4A12-9EE4-942F51FD2476";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

@@ -9,7 +9,6 @@
 #import "HCRHomeViewController.h"
 #import "HCRCountryCollectionViewController.h"
 #import "HCRTableFlowLayout.h"
-#import "HCRHomeLoginMenuScrollView.h"
 #import "HCRAlertsViewController.h"
 #import "HCRHeaderView.h"
 #import "HCRFooterView.h"
@@ -26,7 +25,9 @@ NSString *const kHomeViewDefaultCellIdentifier = @"kHomeViewDefaultCellIdentifie
 NSString *const kHomeViewSignInFieldCellIdentifier = @"kHomeViewSignInFieldCellIdentifier";
 NSString *const kHomeViewSignInButtonCellIdentifier = @"kHomeViewSignInButtonCellIdentifier";
 NSString *const kHomeViewBadgeCellIdentifier = @"kHomeViewBadgeCellIdentifier";
-NSString *const kHomeViewButtonGraphCellIdentifier = @"kHomeViewButtonGraphCellIdentifier";
+NSString *const kHomeViewGraphCellIdentifier = @"kHomeViewGraphCellIdentifier";
+
+NSString *const kGraphCellPlaceholderLabel = @"kGraphCellPlaceholderLabel";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -50,8 +51,16 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 @property UIView *masterHeader;
 
-@property HCRHomeLoginMenuScrollView *scrollView;
 @property NSMutableParagraphStyle *baseParagraphStyle;
+
+@property NSArray *signedInLabelsArray;
+@property NSArray *signedInIconsArray;
+
+@property NSDateFormatter *dateFormatter;
+
+// DEBUG ONLY //
+@property (nonatomic) NSArray *messagesReceivedArray;
+// DEBUG ONLY //
 
 @end
 
@@ -70,6 +79,35 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         self.baseParagraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
         self.baseParagraphStyle.firstLineHeadIndent = kXIndentation;
         self.baseParagraphStyle.headIndent = kXIndentation;
+        
+        self.signedIn = YES;
+        
+        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd];
+        
+        self.signedInIconsArray = @[
+                                    @[@"evilapples-icon",
+                                      @"mixture-icon",
+                                      @"ris-icon"],
+                                    @[@"evilapples-icon",
+                                      @"mixture-icon",
+                                      @"ris-icon"],
+                                    @[@"evilapples-icon",
+                                      @"mixture-icon",
+                                      @"ris-icon"]
+                                    ];
+        
+        self.signedInLabelsArray = @[
+                                     @[@"Emergencies",
+                                       @"Direct Messages",
+                                       @"Refugee Camps"],
+                                     @[@"Domiz, Iraq",
+                                       kGraphCellPlaceholderLabel,
+                                       @"Bulletin Board"],
+                                     @[@"About",
+                                       @"Settings",
+                                       @"Sign Out"]
+                                     ];
+                                       
     }
 
     return self;
@@ -135,6 +173,9 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     [self.collectionView registerClass:[HCRTableCell class]
             forCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier];
     
+    [self.collectionView registerClass:[HCRGraphCell class]
+            forCellWithReuseIdentifier:kHomeViewGraphCellIdentifier];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -151,7 +192,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     
-    NSInteger numberOfSectionsSignedIn = 3;
+    NSInteger numberOfSectionsSignedIn = self.signedInLabelsArray.count;
     NSInteger numberOfSectionsNotSignedIn = 3;
     
     return (self.signedIn) ? numberOfSectionsSignedIn : numberOfSectionsNotSignedIn;
@@ -162,11 +203,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     if (self.signedIn) {
         
-        if (section == 1) { // TODO: make dynamic match to bookmarked section
-            return 3; // TODO: make dynamic based on # of bookmarks
-        } else {
-            return 3;
-        }
+        NSArray *labelsForSection = [self.signedInLabelsArray objectAtIndex:section];
+        return labelsForSection.count;
         
     } else {
         
@@ -183,8 +221,75 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     if (self.signedIn) {
         
-        cell = [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier
-                                                         forIndexPath:indexPath];
+        NSArray *labelsForSection = [self.signedInLabelsArray objectAtIndex:indexPath.section ofClass:@"NSArray"];
+        NSArray *iconsForSection = [self.signedInIconsArray objectAtIndex:indexPath.section ofClass:@"NSArray"];
+        
+        switch (indexPath.section) {
+            case 0:
+            case 2:
+            {
+                // TODO: duplicate code below
+                HCRTableCell *tableCell =
+                (HCRTableCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier
+                                                                          forIndexPath:indexPath];
+                
+                tableCell.badgeImage = [UIImage imageNamed:[iconsForSection objectAtIndex:indexPath.row ofClass:@"NSString"]];
+                tableCell.title = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
+                
+                cell = tableCell;
+                break;
+            }
+                
+            case 1:
+            {
+                
+                switch (indexPath.row) {
+                    case 0:
+                    case 2:
+                    {
+                        // TODO: duplicate code above
+                        HCRTableCell *tableCell =
+                        (HCRTableCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier
+                                                                                  forIndexPath:indexPath];
+                        
+                        tableCell.badgeImage = [UIImage imageNamed:[iconsForSection objectAtIndex:indexPath.row ofClass:@"NSString"]];
+                        tableCell.title = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
+                        
+                        cell = tableCell;
+                        break;
+                    }
+                        
+                    case 1:
+                    {
+                        HCRGraphCell *graphCell =
+                        (HCRGraphCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewGraphCellIdentifier
+                                                                                  forIndexPath:indexPath];
+                        
+                        graphCell.graphDataSource = self;
+                        graphCell.graphDelegate = self;
+                        
+                        graphCell.indentForContent = [HCRTableCell preferredIndentForContentWithBadgeImage];
+                        
+                        static const CGFloat manualAdjustment = 6.0;
+                        graphCell.xGraphTrailingSpace = [HCRTableCell preferredTrailingSpaceForContent] + manualAdjustment;
+                        
+                        cell = graphCell;
+                        break;
+                    }
+                        
+                    default:
+                        NSAssert(NO, @"Unhandled collection cell row.");
+                        break;
+                }
+                
+                cell.bottomLineView.hidden = YES;
+                break;
+            }
+                
+            default:
+                NSAssert(NO, @"Unhandled collection cell section.");
+                break;
+        }
         
     } else {
         
@@ -267,11 +372,114 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (self.signedIn == NO &&
-        indexPath.section == 2) {
+    if (self.signedIn) {
         
-        if (self.signInFieldsComplete) {
-            [self _startSignInWithCompletion:nil];
+        switch (indexPath.section) {
+            case 0:
+            {
+                
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        [self _emergenciesButtonPressed];
+                        break;
+                    }
+                        
+                    case 1:
+                    {
+                        [self _directMessagesButtonPressed];
+                        break;
+                    }
+                        
+                    case 2:
+                    {
+                        [self _campsButtonPressed];
+                        break;
+                    }
+                        
+                    default:
+                        NSAssert(NO, @"Unhandled collection view row.");
+                        break;
+                }
+                
+                break;
+            }
+                
+            case 1:
+            {
+                
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        [self _bookmarkedCampButtonPressed];
+                        break;
+                    }
+                        
+                    case 1:
+                        // do nothing
+                        break;
+                        
+                    case 2:
+                    {
+                        [self _bookmarkedBulletinBoardButtonPressed];
+                        break;
+                    }
+                        
+                    default:
+                        NSAssert(NO, @"Unhandled collection view row.");
+                        break;
+                }
+                
+                break;
+            }
+                
+            case 2:
+            {
+                switch (indexPath.row) {
+                    case 0:
+                    {
+                        [self _aboutButtonPressed];
+                        break;
+                    }
+                        
+                    case 1:
+                    {
+                        [self _settingsButtonPressed];
+                        break;
+                    }
+                        
+                    case 2:
+                    {
+                        [self _signoutButtonPressed];
+                        break;
+                    }
+                        
+                    default:
+                        NSAssert(NO, @"Unhandled collection view row.");
+                        break;
+                }
+                
+                break;
+            }
+                
+            default:
+                NSAssert(NO, @"Unhandled collection view section.");
+                break;
+        }
+        
+    } else {
+        
+        [self.emailField resignFirstResponder];
+        [self.passwordField resignFirstResponder];
+        [self _resetCollectionContentOffset];
+        
+        if (self.signedIn == NO &&
+            indexPath.section == 2) {
+            
+            if (self.signInFieldsComplete) {
+                [self _startSignInWithCompletion:nil];
+            }
+            
         }
         
     }
@@ -284,7 +492,11 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     if (self.signedIn) {
         
-        return [HCRCollectionCell preferredSizeForCollectionView:collectionView];
+        NSArray *labelsForSection = [self.signedInLabelsArray objectAtIndex:indexPath.section ofClass:@"NSArray"];
+        NSString *itemLabel = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
+        BOOL isGraphCell = ([itemLabel isEqualToString:kGraphCellPlaceholderLabel]);
+        
+        return (isGraphCell) ? [HCRGraphCell preferredSizeForGraphCellInCollectionView:collectionView] : [HCRCollectionCell preferredSizeForCollectionView:collectionView];
         
     } else {
         
@@ -313,8 +525,56 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     
-    return [HCRFooterView preferredFooterSizeWithTopLineForCollectionView:collectionView];
+    BOOL lastSection = (section == self.collectionView.numberOfSections - 1);
     
+    return (lastSection) ? [HCRFooterView preferredFooterSizeForCollectionView:collectionView] : [HCRFooterView preferredFooterSizeWithTopLineForCollectionView:collectionView];
+    
+}
+
+#pragma mark - SCGraphView Delegate
+
+- (void)graphViewBeganTouchingData:(SCGraphView *)graphView withTouches:(NSSet *)touches {
+    self.collectionView.scrollEnabled = NO;
+}
+
+- (void)graphViewStoppedTouchingData:(SCGraphView *)graphView {
+    self.collectionView.scrollEnabled = YES;
+}
+
+#pragma mark - SCGraphView Data Source
+
+- (NSInteger)numberOfDataPointsInGraphView:(SCGraphView *)graphView {
+    return self.messagesReceivedArray.count;
+}
+
+- (CGFloat)graphViewMinYValue:(SCGraphView *)graphView {
+    return 0;
+}
+
+- (CGFloat)graphViewMaxYValue:(SCGraphView *)graphView {
+    
+    // http://stackoverflow.com/questions/3080540/finding-maximum-numeric-value-in-nsarray
+    NSNumber *largestNumber = [self.messagesReceivedArray valueForKeyPath:@"@max.intValue"];
+    CGFloat maxNumberWithPadding = largestNumber.floatValue * 1.1;
+    
+    return maxNumberWithPadding;
+}
+
+- (NSNumber *)graphView:(SCGraphView *)graphView dataPointForIndex:(NSInteger)index {
+    
+    return [self.messagesReceivedArray objectAtIndex:index];
+    
+}
+
+- (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index {
+    
+    // go back [index] days since today
+    NSTimeInterval numberOfSecondsToTargetDate = ((self.messagesReceivedArray.count - (index + 1)) * 60 * 60 * 24);
+    NSDate *targetDate = [NSDate dateWithTimeIntervalSinceNow:(-1 * numberOfSecondsToTargetDate)];
+    
+    NSString *dateString = [self.dateFormatter stringFromDate:targetDate];
+    
+    return dateString;
 }
 
 #pragma mark - HCRSignInFieldCell Delegate
@@ -352,23 +612,86 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         }
         
         [self.passwordField resignFirstResponder];
-        [UIView animateWithDuration:kKeyboardAnimationTime
-                              delay:0.0
-                            options:kKeyboardAnimationOptions
-                         animations:^{
-                             
-                             self.collectionView.contentOffset = CGPointMake(0, -1 * kMasterHeaderHeight);
-                             
-                         } completion:nil];
         
+        [self _resetCollectionContentOffset];
     }
     
 }
 
 #pragma mark - Getters & Setters
 
+- (NSArray *)messagesReceivedArray {
+    
+    // TODO: debug only - need to retrieve live data
+    static const NSInteger kNumberOfDataPoints = 30;
+    static const CGFloat kDataPointBaseline = 50.0;
+    static const CGFloat kDataPointRange = 50.0;
+    static const CGFloat kDataPointIncrement = 6.0;
+    
+    if ( ! _messagesReceivedArray ) {
+        
+        NSMutableArray *randomMessagesArray = @[].mutableCopy;
+        
+        for (NSInteger i = 0; i < kNumberOfDataPoints; i++) {
+            CGFloat nextValue = kDataPointBaseline + (i * kDataPointIncrement) + arc4random_uniform(kDataPointRange);
+            [randomMessagesArray addObject:@(nextValue)];
+        }
+        
+        _messagesReceivedArray = randomMessagesArray;
+    }
+    
+    return _messagesReceivedArray;
+    
+}
+
 - (BOOL)signInFieldsComplete {
     return(self.emailField.text.length > 0 && self.passwordField.text.length > 0);
+}
+
+#pragma mark - Private Methods (Buttons)
+
+- (void)_emergenciesButtonPressed {
+    HCRAlertsViewController *alertsController = [[HCRAlertsViewController alloc] initWithCollectionViewLayout:[HCRAlertsViewController preferredLayout]];
+    
+    [self.navigationController pushViewController:alertsController animated:YES];
+}
+
+- (void)_directMessagesButtonPressed {
+    // TODO: direct messages
+}
+
+- (void)_campsButtonPressed {
+    
+    // TODO: refugee camps
+    
+    //    HCRCountryCollectionViewController *countryCollection = [[HCRCountryCollectionViewController alloc] initWithCollectionViewLayout:[HCRCountryCollectionViewController preferredLayout]];
+    //
+    //    [self.navigationController pushViewController:countryCollection animated:YES];
+    
+}
+
+- (void)_bookmarkedCampButtonPressed {
+    // TODO: bookmarked camp
+}
+
+- (void)_bookmarkedBulletinBoardButtonPressed {
+    // TODO: bookmarked bulletin board
+}
+
+- (void)_aboutButtonPressed {
+    // TODO: about button
+}
+
+- (void)_settingsButtonPressed {
+    // TODO: options button
+}
+
+- (void)_signoutButtonPressed {
+    
+    self.signedIn = NO;
+    
+    [self _reloadSectionsAnimated];
+    
 }
 
 #pragma mark - Private Methods
@@ -384,7 +707,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         
         self.signedIn = YES;
-        [self.collectionView reloadData];
+        
+        [self _reloadSectionsAnimated];
         
         self.collectionView.scrollEnabled = YES;
         self.signInButtonCell.processingAction = NO;
@@ -396,51 +720,6 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         
     });
     
-}
-
-- (void)_alertsButtonPressed {
-    HCRAlertsViewController *alertsController = [[HCRAlertsViewController alloc] initWithCollectionViewLayout:[HCRAlertsViewController preferredLayout]];
-    
-    [self.navigationController pushViewController:alertsController animated:YES];
-}
-
-- (void)_conflictsButtonPressed {
-    
-    HCRCountryCollectionViewController *countryCollection = [[HCRCountryCollectionViewController alloc] initWithCollectionViewLayout:[HCRCountryCollectionViewController preferredLayout]];
-    
-    [self.navigationController pushViewController:countryCollection animated:YES];
-    
-}
-
-- (void)_countryButtonPressed {
-    
-    // TODO: countries view
-    
-}
-
-- (void)_campsButtonPressed {
-    
-    // TODO: camps button
-    
-}
-
-- (void)_loginButtonPressed {
-    self.scrollView.loginState = HCRHomeLoginMenuStateSignedIn;
-}
-
-- (void)_logoutButtonPressed {
-    self.scrollView.loginState = HCRHomeLoginMenuStateNotSignedIn;
-    
-    double delayInSeconds = 2.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        self.scrollView.loginState = HCRHomeLoginMenuStateSignedIn;
-    });
-    
-}
-
-- (void)_optionsButtonPressed {
-    // TODO: options button
 }
 
 - (UIView *)_expandedTextViewForSignInWithFrame:(CGRect)frame {
@@ -498,6 +777,29 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     bodyLabel.attributedText = attributedBodyString;
     
     return expandedTextView;
+    
+}
+
+- (void)_resetCollectionContentOffset {
+    
+    [UIView animateWithDuration:kKeyboardAnimationTime
+                          delay:0.0
+                        options:kKeyboardAnimationOptions
+                     animations:^{
+                         
+                         self.collectionView.contentOffset = CGPointMake(0, -1 * kMasterHeaderHeight);
+                         
+                     } completion:nil];
+    
+}
+
+- (void)_reloadSectionsAnimated {
+    
+    [self.collectionView performBatchUpdates:^{
+        [self.collectionView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)]];
+    } completion:^(BOOL finished) {
+        //
+    }];
     
 }
 

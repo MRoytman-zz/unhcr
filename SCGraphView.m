@@ -18,7 +18,7 @@ static const CGFloat kDataLineWidth = 1.0;
 static const CGFloat kDataDotWidth = 4.0;
 static const CGFloat kDataDotWidthHighlighted = 8.0;
 
-static const CGFloat kGraphDataPointHighlightFontSize = 16.0;
+static const CGFloat kGraphDataPointHighlightFontSize = 14.0;
 static const CGFloat kGraphDataPointHighlightLabelHeight = 25.0;
 
 static const CGFloat kGraphDateLabelHeight = 20.0;
@@ -28,6 +28,7 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
 
 @interface SCGraphView ()
 
+@property UILabel *highlightedHeaderLabel;
 @property UILabel *highlightedDataPointLabel;
 @property NSNumber *highlightedDataPointIndex;
 
@@ -257,13 +258,34 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
 
 - (void)_drawHighlightedDataPointInRect:(CGRect)labelRect forDataPointAtIndex:(NSInteger)index {
     
-    // write the string
+    UIFont *sharedFont = [UIFont helveticaNeueFontOfSize:kGraphDataPointHighlightFontSize];
+    UIColor *sharedColor = [UIColor colorWithWhite:0.3 alpha:1.0];
+    
+    // write the static string
+    // TODO: hacky to use same rect for both labels
+    if (!self.highlightedHeaderLabel) {
+        self.highlightedHeaderLabel = [[UILabel alloc] initWithFrame:labelRect];
+        [self addSubview:self.highlightedHeaderLabel];
+        
+//        self.highlightedHeaderLabel.backgroundColor = [UIColor clearColor];
+        
+        self.highlightedHeaderLabel.font = sharedFont;
+        self.highlightedHeaderLabel.textAlignment = NSTextAlignmentLeft;
+        self.highlightedHeaderLabel.textColor = sharedColor;
+        
+        self.highlightedHeaderLabel.text = @"Refugee Requests";
+    }
+    
+    // write the data string
     if (!self.highlightedDataPointLabel) {
         self.highlightedDataPointLabel = [[UILabel alloc] initWithFrame:labelRect];
         [self addSubview:self.highlightedDataPointLabel];
         
-        self.highlightedDataPointLabel.font = [UIFont helveticaNeueFontOfSize:kGraphDataPointHighlightFontSize];
+//        self.highlightedHeaderLabel.backgroundColor = [UIColor clearColor];
+        
+        self.highlightedDataPointLabel.font = sharedFont;
         self.highlightedDataPointLabel.textAlignment = NSTextAlignmentRight;
+        self.highlightedDataPointLabel.textColor = sharedColor;
     }
     
     [self _updateHighlightedDataPointLabelForIndex:index]; // this method sets text directly
@@ -326,19 +348,16 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     
+    UIColor *defaultColor = [UIColor whiteColor];
+    
     CGContextSetStrokeColorWithColor(context, self.dotColor.CGColor);
-    CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+    CGContextSetFillColorWithColor(context, defaultColor.CGColor);
     
     [self _performBlockInRect:rect atDataPoints:^(NSInteger index, CGFloat xValue, CGFloat yValue) {
         
-        CGFloat dotWidth = kDataDotWidth;
+        BOOL highlightedDot = self.highlightedDataPointIndex && self.highlightedDataPointIndex.integerValue == index;
         
-        if (self.highlightedDataPointIndex &&
-            self.highlightedDataPointIndex.integerValue == index) {
-            
-            dotWidth = kDataDotWidthHighlighted;
-            
-        }
+        CGFloat dotWidth = (highlightedDot) ? kDataDotWidthHighlighted : kDataDotWidth;
         
         CGRect rect = CGRectMake(xValue - dotWidth * 0.5,
                                  yValue - dotWidth * 0.5,
@@ -368,7 +387,7 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
                 [path moveToPoint:CGPointMake(xValue, CGRectGetMinY(rect))];
                 [path addLineToPoint:CGPointMake(xValue, CGRectGetMaxY(rect))];
                 
-                [[UIColor redColor] setStroke];
+                [[UIColor orangeColor] setStroke];
                 [path stroke];
                 
             }
@@ -702,10 +721,9 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     NSNumber *dataValue = [self.dataSource graphView:self dataPointForIndex:index];
     NSString *dataDate = [self.dataSource graphView:self labelForDataPointAtIndex:index];
     
-    self.highlightedDataPointLabel.text = [NSString stringWithFormat:@"%@: %@ %@",
+    self.highlightedDataPointLabel.text = [NSString stringWithFormat:@"%@: %@",
                                            dataDate,
-                                           dataValue,
-                                           @"messages"];
+                                           dataValue];
     
 }
 
@@ -718,7 +736,9 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     UITouch *touch = touches.anyObject;
     CGFloat xTouchFactor = [touch locationInView:self].x;
     
-    NSInteger highlightedIndex = [self _indexOfDataAtXPosition:xTouchFactor withRoundingMode:self.roundingMode];
+    NSInteger highlightedIndex = MAX(0,
+                                     MIN([self _indexOfDataAtXPosition:xTouchFactor withRoundingMode:self.roundingMode],
+                                         [self.dataSource numberOfDataPointsInGraphView:self] - 1));
     [self _updateHighlightedDataPointLabelForIndex:highlightedIndex];
     
     // update line

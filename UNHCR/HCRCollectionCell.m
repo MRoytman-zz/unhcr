@@ -10,14 +10,18 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+static const CGFloat kBottomLineHeight = 0.5;
+
 static const CGFloat kPreferredIndent = 20.0;
 
-static const CGFloat kDefaultCellHeight = 44.0;
+static const CGFloat kDefaultCellHeight = 48.0;
 static const CGFloat kAppDescriptionHeight = 210.0;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRCollectionCell ()
+
+@property (nonatomic, readonly) CGRect bottomLineFrame;
 
 @property (nonatomic, readwrite) UIView *bottomLineView;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
@@ -33,14 +37,15 @@ static const CGFloat kAppDescriptionHeight = 210.0;
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.backgroundColor = [UIColor whiteColor];
+        self.contentView.backgroundColor = [UIColor whiteColor];
+        
+        self.highlightedColor = [UIColor UNHCRBlue];
+        
+        // set initial indent
+        self.indentForContent = [HCRCollectionCell preferredIndentForContent];
         
         // bottom line
-        static const CGFloat kLineHeight = 0.5;
-        self.bottomLineView = [[UIView alloc] initWithFrame:CGRectMake(kPreferredIndent,
-                                                                       CGRectGetHeight(self.bounds) - kLineHeight,
-                                                                       CGRectGetWidth(self.bounds) - kPreferredIndent,
-                                                                       kLineHeight)];
+        self.bottomLineView = [[UIView alloc] initWithFrame:self.bottomLineFrame];
         [self addSubview:self.bottomLineView];
         
         self.bottomLineView.backgroundColor = [UIColor tableDividerColor];
@@ -76,6 +81,15 @@ static const CGFloat kAppDescriptionHeight = 210.0;
 
 #pragma mark - Getters & Setters
 
+- (CGRect)bottomLineFrame {
+    
+    return CGRectMake(self.indentForContent,
+                      CGRectGetHeight(self.bounds) - kBottomLineHeight,
+                      CGRectGetWidth(self.bounds) - self.indentForContent,
+                      kBottomLineHeight);
+    
+}
+
 - (void)setProcessingAction:(BOOL)processingAction {
     
     _processingAction = processingAction;
@@ -98,6 +112,14 @@ static const CGFloat kAppDescriptionHeight = 210.0;
     } else {
         [self.spinner stopAnimating];
     }
+    
+}
+
+- (void)setIndentForContent:(CGFloat)indentForContent {
+    
+    _indentForContent = indentForContent;
+    
+    self.bottomLineView.frame = self.bottomLineFrame;
     
 }
 

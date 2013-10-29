@@ -63,7 +63,7 @@
                                        kTitleWidth,
                                        CGRectGetHeight(self.bounds));
     
-    self.titleLabel.backgroundColor = self.backgroundColor;
+    self.titleLabel.backgroundColor = self.contentView.backgroundColor;
     
     static const CGFloat kXIndent = 8.0;
     CGFloat xInputOrigin = CGRectGetMaxX(self.titleLabel.frame);
@@ -72,7 +72,7 @@
                                        CGRectGetWidth(self.bounds) - xInputOrigin - (2 * kXIndent),
                                        CGRectGetHeight(self.bounds));
     
-    self.inputField.backgroundColor = self.backgroundColor;
+    self.inputField.backgroundColor = self.contentView.backgroundColor;
     
     [self bringSubviewToFront:self.bottomLineView];
     
