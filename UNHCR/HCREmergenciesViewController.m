@@ -7,7 +7,7 @@
 //
 
 #import "HCREmergenciesViewController.h"
-#import "HCRAlertCell.h"
+#import "HCREmergencyCell.h"
 #import "HCRTableFlowLayout.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -51,9 +51,9 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
     [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithTopLineForCollectionView:self.collectionView]];
     
     tableLayout.itemSize = CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
-                                      [HCRAlertCell preferredCellHeight]);
+                                      [HCREmergencyCell preferredCellHeight]);
     
-    [self.collectionView registerClass:[HCRAlertCell class]
+    [self.collectionView registerClass:[HCREmergencyCell class]
             forCellWithReuseIdentifier:kEmergencyCellIdentifier];
     
     [self.collectionView registerClass:[HCRHeaderView class]
@@ -84,13 +84,39 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRAlertCell *alertCell = [collectionView dequeueReusableCellWithReuseIdentifier:kEmergencyCellIdentifier
+    HCREmergencyCell *alertCell = [collectionView dequeueReusableCellWithReuseIdentifier:kEmergencyCellIdentifier
                                                                         forIndexPath:indexPath];
     
     alertCell.showLocation = YES;
-    alertCell.alertDictionary = [self.alertsList objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+    alertCell.emergencyDictionary = [self.alertsList objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+    
+    [alertCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
     return alertCell;
+    
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        
+        HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                   withReuseIdentifier:kEmergencyHeaderIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        return header;
+        
+    } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        
+        HCRFooterView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                   withReuseIdentifier:kEmergencyFooterIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        return footer;
+        
+    }
+    
+    return nil;
     
 }
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import "HCRAlertCell.h"
+#import "HCREmergencyCell.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -21,17 +21,17 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface HCRAlertCell ()
+@interface HCREmergencyCell ()
 
 @property UILabel *fromLabel;
 @property UILabel *locationClusterLabel;
-@property UILabel *alertLabel;
+@property UILabel *messageLabel;
 
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@implementation HCRAlertCell
+@implementation HCREmergencyCell
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -45,23 +45,22 @@
 
 - (void)prepareForReuse {
     [super prepareForReuse];
-    self.alertDictionary = nil;
+    self.emergencyDictionary = nil;
 }
 
 - (void)layoutSubviews {
     
-    static const CGFloat kTwoLineLabelHeight = 35.0;
+    static const CGFloat kMultiLineLabelHeight = 55.0;
     static const CGFloat kOneLineLabelHeight = 20.0;
     static const CGFloat kYLabelPadding = 0.0;
     static const CGFloat kLabelFontSize = 14.0;
-    static const CGFloat kXLabelOffset = 8.0;
     
-    CGFloat sharedLabelWidth = CGRectGetWidth(self.contentView.bounds) - 2 * kXLabelOffset;
+    CGFloat sharedLabelWidth = CGRectGetWidth(self.contentView.bounds) - 2 * self.indentForContent;
     
     // LOCATION
     if (self.showLocation) {
         if (!self.locationClusterLabel) {
-            CGRect locationFrame = CGRectMake(kXLabelOffset,
+            CGRect locationFrame = CGRectMake(self.indentForContent,
                                               0,
                                               sharedLabelWidth,
                                               kOneLineLabelHeight);
@@ -74,9 +73,9 @@
             self.locationClusterLabel.textColor = [UIColor redColor];
         }
         
-        NSString *alertCountry = [self.alertDictionary objectForKey:@"Country" ofClass:@"NSString"];
-        NSString *alertCamp = [self.alertDictionary objectForKey:@"Camp" ofClass:@"NSString"];
-        NSString *alertCluster = [self.alertDictionary objectForKey:@"Cluster" ofClass:@"NSString"];
+        NSString *alertCountry = [self.emergencyDictionary objectForKey:@"Country" ofClass:@"NSString"];
+        NSString *alertCamp = [self.emergencyDictionary objectForKey:@"Camp" ofClass:@"NSString"];
+        NSString *alertCluster = [self.emergencyDictionary objectForKey:@"Cluster" ofClass:@"NSString"];
         NSString *locationString = [NSString stringWithFormat:@"%@ > %@ > %@",
                                     alertCountry,
                                     alertCamp,
@@ -86,26 +85,26 @@
     }
     
     // ALERT
-    if (!self.alertLabel) {
-        CGRect alertFrame = CGRectMake(kXLabelOffset,
+    if (!self.messageLabel) {
+        CGRect alertFrame = CGRectMake(self.indentForContent,
                                        (self.showLocation) ? CGRectGetMaxY(self.locationClusterLabel.frame) + kYLabelPadding : 0,
                                        sharedLabelWidth,
-                                       kTwoLineLabelHeight);
-        self.alertLabel = [[UILabel alloc] initWithFrame:alertFrame];
-        [self.contentView addSubview:self.alertLabel];
+                                       kMultiLineLabelHeight);
+        self.messageLabel = [[UILabel alloc] initWithFrame:alertFrame];
+        [self.contentView addSubview:self.messageLabel];
         
-        self.alertLabel.font = [UIFont helveticaNeueBoldFontOfSize:kLabelFontSize];
-        self.alertLabel.textAlignment = NSTextAlignmentLeft;
-        self.alertLabel.textColor = [UIColor darkGrayColor];
-        self.alertLabel.numberOfLines = 2;
+        self.messageLabel.font = [UIFont helveticaNeueBoldFontOfSize:kLabelFontSize];
+        self.messageLabel.textAlignment = NSTextAlignmentLeft;
+        self.messageLabel.textColor = [UIColor darkGrayColor];
+        self.messageLabel.numberOfLines = 3;
     }
     
-    self.alertLabel.text = [self.alertDictionary objectForKey:@"Alert" ofClass:@"NSString"];
+    self.messageLabel.text = [self.emergencyDictionary objectForKey:@"Alert" ofClass:@"NSString"];
     
     // FROM
     if (!self.fromLabel) {
-        CGRect fromFrame = CGRectMake(kXLabelOffset,
-                                      CGRectGetMaxY(self.alertLabel.frame) + kYLabelPadding,
+        CGRect fromFrame = CGRectMake(self.indentForContent,
+                                      CGRectGetMaxY(self.messageLabel.frame) + kYLabelPadding,
                                       sharedLabelWidth,
                                       kOneLineLabelHeight);
         self.fromLabel = [[UILabel alloc] initWithFrame:fromFrame];
@@ -118,7 +117,7 @@
         self.fromLabel.adjustsFontSizeToFitWidth = YES;
     }
     
-    NSDictionary *contactDictionary = [self.alertDictionary objectForKey:@"Contact" ofClass:@"NSDictionary"];
+    NSDictionary *contactDictionary = [self.emergencyDictionary objectForKey:@"Contact" ofClass:@"NSDictionary"];
     NSString *name = [contactDictionary objectForKey:@"Name" ofClass:@"NSString"];
 //    NSString *cluster = [contactDictionary objectForKey:@"Cluster" ofClass:@"NSString"];
     NSString *email = [contactDictionary objectForKey:@"Email" ofClass:@"NSString"];
@@ -141,8 +140,8 @@
 
 #pragma mark - Getters & Setters
 
-- (void)setAlertDictionary:(NSDictionary *)alertDictionary {
-    _alertDictionary = alertDictionary;
+- (void)setEmergencyDictionary:(NSDictionary *)alertDictionary {
+    _emergencyDictionary = alertDictionary;
     [self setNeedsLayout];
     
 }

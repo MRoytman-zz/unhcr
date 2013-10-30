@@ -8,10 +8,10 @@
 
 #import "HCRCollectionCell.h"
 
-@interface HCRAlertCell : HCRCollectionCell
+@interface HCREmergencyCell : HCRCollectionCell
 
 @property (nonatomic) BOOL showLocation;
-@property (nonatomic, strong) NSDictionary *alertDictionary;
+@property (nonatomic, strong) NSDictionary *emergencyDictionary;
 
 + (CGFloat)preferredCellHeight;
 + (CGFloat)preferredCellHeightWithoutLocation;

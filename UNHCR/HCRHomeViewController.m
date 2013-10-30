@@ -712,7 +712,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 - (void)_emergenciesButtonPressed {
     HCREmergenciesViewController *alertsController = [[HCREmergenciesViewController alloc] initWithCollectionViewLayout:[HCREmergenciesViewController preferredLayout]];
     
-    [self.navigationController pushViewController:alertsController animated:YES];
+    [self _pushViewController:alertsController];
 }
 
 - (void)_directMessagesButtonPressed {

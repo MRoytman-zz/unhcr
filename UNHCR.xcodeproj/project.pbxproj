@@ -53,7 +53,7 @@
 		4FD8390B1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390A1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m */; };
 		4FD8390E1801EB5F00B49498 /* HCRDataEntryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */; };
 		4FD8391118020D4E00B49498 /* UIFont+HCRCommonFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */; };
-		4FD839151803197200B49498 /* HCRAlertCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839141803197200B49498 /* HCRAlertCell.m */; };
+		4FD839151803197200B49498 /* HCREmergencyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839141803197200B49498 /* HCREmergencyCell.m */; };
 		4FD8391918032B6300B49498 /* HCREmergenciesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391818032B6300B49498 /* HCREmergenciesViewController.m */; };
 		4FD9308D1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9308C1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m */; };
 		4FD93090181A01AC00B107ED /* HCRHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9308F181A01AC00B107ED /* HCRHeaderView.m */; };
@@ -150,8 +150,8 @@
 		4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDataEntryCell.m; sourceTree = "<group>"; };
 		4FD8390F18020D4E00B49498 /* UIFont+HCRCommonFonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+HCRCommonFonts.h"; sourceTree = "<group>"; };
 		4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+HCRCommonFonts.m"; sourceTree = "<group>"; };
-		4FD839131803197200B49498 /* HCRAlertCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRAlertCell.h; sourceTree = "<group>"; };
-		4FD839141803197200B49498 /* HCRAlertCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRAlertCell.m; sourceTree = "<group>"; };
+		4FD839131803197200B49498 /* HCREmergencyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCREmergencyCell.h; sourceTree = "<group>"; };
+		4FD839141803197200B49498 /* HCREmergencyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCREmergencyCell.m; sourceTree = "<group>"; };
 		4FD8391718032B6300B49498 /* HCREmergenciesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCREmergenciesViewController.h; sourceTree = "<group>"; };
 		4FD8391818032B6300B49498 /* HCREmergenciesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCREmergenciesViewController.m; sourceTree = "<group>"; };
 		4FD9308B1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+HCRAdditions.h"; sourceTree = "<group>"; };
@@ -221,8 +221,8 @@
 				4FD838F7180121EF00B49498 /* HCRGraphCell.m */,
 				4FD8390C1801EB5F00B49498 /* HCRDataEntryCell.h */,
 				4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */,
-				4FD839131803197200B49498 /* HCRAlertCell.h */,
-				4FD839141803197200B49498 /* HCRAlertCell.m */,
+				4FD839131803197200B49498 /* HCREmergencyCell.h */,
+				4FD839141803197200B49498 /* HCREmergencyCell.m */,
 				4F6137CF181EF6C400FF982F /* HCRSignInFieldCell.h */,
 				4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */,
 			);
@@ -570,7 +570,7 @@
 				4FD838EB1800D95000B49498 /* UIAlertView+Blocks.m in Sources */,
 				4F866AF617F9EC0C000350E4 /* HCRTableFlowLayout.m in Sources */,
 				4F866ACF17F9E022000350E4 /* main.m in Sources */,
-				4FD839151803197200B49498 /* HCRAlertCell.m in Sources */,
+				4FD839151803197200B49498 /* HCREmergencyCell.m in Sources */,
 				4F0C702D17FF56680081F201 /* MKMapView+HCRMapView.m in Sources */,
 				4F1C940517FC28C40003AA21 /* HCRCampClusterDetailViewController.m in Sources */,
 				4FD8390B1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m in Sources */,

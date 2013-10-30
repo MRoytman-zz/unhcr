@@ -12,7 +12,7 @@
 #import "HCRTableButtonCell.h"
 #import "HCRTallySheetPickerViewController.h"
 #import "EAEmailUtilities.h"
-#import "HCRAlertCell.h"
+#import "HCREmergencyCell.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -140,7 +140,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
             forCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier];
     [self.collectionView registerClass:[HCRTableButtonCell class]
             forCellWithReuseIdentifier:kCampClusterAgenciesCellIdentifier];
-    [self.collectionView registerClass:[HCRAlertCell class]
+    [self.collectionView registerClass:[HCREmergencyCell class]
             forCellWithReuseIdentifier:kCampClusterAlertCellIdentifier];
     
 }
@@ -216,10 +216,10 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         
         cell = agencyCell;
     } else if ([cellType isEqualToString:kCampClusterAlertCellIdentifier]) {
-        HCRAlertCell *alertCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterAlertCellIdentifier forIndexPath:indexPath];
+        HCREmergencyCell *alertCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterAlertCellIdentifier forIndexPath:indexPath];
         
         alertCell.showLocation = NO;
-        alertCell.alertDictionary = [self.localAlerts objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+        alertCell.emergencyDictionary = [self.localAlerts objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
         
         cell = alertCell;
     }
@@ -317,7 +317,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     } else if ([cellType isEqualToString:kCampClusterAlertCellIdentifier]) {
         
         return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                          [HCRAlertCell preferredCellHeightWithoutLocation]);
+                          [HCREmergencyCell preferredCellHeightWithoutLocation]);
         
     } else {
         
