@@ -7,8 +7,6 @@
 //
 
 #import "HCRAppDelegate.h"
-//#import "HCRCountryCollectionViewController.h"
-//#import "HCRTableFlowLayout.h"
 #import "HCRHomeViewController.h"
 
 @implementation HCRAppDelegate

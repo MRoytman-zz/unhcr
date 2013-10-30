@@ -7,9 +7,8 @@
 //
 
 #import "HCRHomeViewController.h"
-#import "HCRCountryCollectionViewController.h"
 #import "HCRTableFlowLayout.h"
-#import "HCRAlertsViewController.h"
+#import "HCREmergenciesViewController.h"
 #import "HCRHeaderView.h"
 #import "HCRFooterView.h"
 #import "HCRCollectionCell.h"
@@ -262,7 +261,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                         tableCell.highlightDetail = YES;
                         tableCell.detailNumber = @([HCRDataSource globalEmergenciesData].count);
                     } else if (indexPath.row == 1) {
-                        tableCell.detailNumber = @16;
+                        tableCell.detailNumber = @([HCRDataSource globalMessagesData].count);
                     }
                     
                 }
@@ -711,7 +710,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 #pragma mark - Private Methods (Buttons)
 
 - (void)_emergenciesButtonPressed {
-    HCRAlertsViewController *alertsController = [[HCRAlertsViewController alloc] initWithCollectionViewLayout:[HCRAlertsViewController preferredLayout]];
+    HCREmergenciesViewController *alertsController = [[HCREmergenciesViewController alloc] initWithCollectionViewLayout:[HCREmergenciesViewController preferredLayout]];
     
     [self.navigationController pushViewController:alertsController animated:YES];
 }

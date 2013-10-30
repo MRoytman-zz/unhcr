@@ -6,17 +6,19 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import "HCRAlertsViewController.h"
+#import "HCREmergenciesViewController.h"
 #import "HCRAlertCell.h"
 #import "HCRTableFlowLayout.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
-NSString *const kAlertsCellIdentifier = @"kAlertsCellIdentifier";
+NSString *const kEmergencyCellIdentifier = @"kEmergencyCellIdentifier";
+NSString *const kEmergencyHeaderIdentifier = @"kEmergencyHeaderIdentifier";
+NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface HCRAlertsViewController ()
+@interface HCREmergenciesViewController ()
 
 @property (nonatomic, strong) NSArray *alertsList;
 
@@ -24,7 +26,7 @@ NSString *const kAlertsCellIdentifier = @"kAlertsCellIdentifier";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@implementation HCRAlertsViewController
+@implementation HCREmergenciesViewController
 
 - (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
@@ -40,20 +42,28 @@ NSString *const kAlertsCellIdentifier = @"kAlertsCellIdentifier";
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.title = @"Alerts";
+    self.title = @"Emergencies";
     
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
-    tableLayout.sectionInset = UIEdgeInsetsMake(12, 0, 0, 0);
+    
+    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeWithLineOnlyForCollectionView:self.collectionView]];
+    [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithTopLineForCollectionView:self.collectionView]];
+    
     tableLayout.itemSize = CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
                                       [HCRAlertCell preferredCellHeight]);
     
-    [self.collectionView registerClass:[HCRAlertCell class] forCellWithReuseIdentifier:kAlertsCellIdentifier];
+    [self.collectionView registerClass:[HCRAlertCell class]
+            forCellWithReuseIdentifier:kEmergencyCellIdentifier];
     
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [self.collectionView registerClass:[HCRHeaderView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                   withReuseIdentifier:kEmergencyHeaderIdentifier];
+    
+    [self.collectionView registerClass:[HCRFooterView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                   withReuseIdentifier:kEmergencyFooterIdentifier];
+    
 }
 
 #pragma mark - Class Methods
@@ -74,7 +84,8 @@ NSString *const kAlertsCellIdentifier = @"kAlertsCellIdentifier";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRAlertCell *alertCell = [collectionView dequeueReusableCellWithReuseIdentifier:kAlertsCellIdentifier forIndexPath:indexPath];
+    HCRAlertCell *alertCell = [collectionView dequeueReusableCellWithReuseIdentifier:kEmergencyCellIdentifier
+                                                                        forIndexPath:indexPath];
     
     alertCell.showLocation = YES;
     alertCell.alertDictionary = [self.alertsList objectAtIndex:indexPath.row ofClass:@"NSDictionary"];

@@ -29,5 +29,6 @@ typedef NS_ENUM(NSInteger, HCRHeaderTitleStyle) {
 + (CGSize)preferredHeaderSizeForCollectionView:(UICollectionView *)collectionView;
 + (CGSize)preferredHeaderSizeWithoutTitleForCollectionView:(UICollectionView *)collectionView;
 + (CGSize)preferredHeaderSizeWithoutTitleSmallForCollectionView:(UICollectionView *)collectionView;
++ (CGSize)preferredHeaderSizeWithLineOnlyForCollectionView:(UICollectionView *)collectionView;
 
 @end

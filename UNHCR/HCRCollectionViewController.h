@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+#import "HCRHeaderView.h"
+#import "HCRFooterView.h"
+
 @class HCRCollectionCell;
 
 @interface HCRCollectionViewController : UICollectionViewController

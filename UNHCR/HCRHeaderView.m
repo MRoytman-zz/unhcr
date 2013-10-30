@@ -22,6 +22,8 @@ static const CGFloat kHeaderHeightDefault = 64.0;
 static const CGFloat kHeaderHeightNoText = 34.0;
 static const CGFloat kHeaderHeightNoTextSmall = 8.0;
 
+static const CGFloat kBottomLineHeight = 0.5;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRHeaderView ()
@@ -43,11 +45,10 @@ static const CGFloat kHeaderHeightNoTextSmall = 8.0;
         self.backgroundColor = [UIColor tableBackgroundColor];
         
         // bottom line
-        static const CGFloat kLineHeight = 0.5;
         UIView *bottomLineView = [[UIView alloc] initWithFrame:CGRectMake(0,
-                                                                          CGRectGetHeight(self.bounds) - kLineHeight,
+                                                                          CGRectGetHeight(self.bounds) - kBottomLineHeight,
                                                                           CGRectGetWidth(self.bounds),
-                                                                          kLineHeight)];
+                                                                          kBottomLineHeight)];
         [self addSubview:bottomLineView];
         
         bottomLineView.backgroundColor = [UIColor tableDividerColor];
@@ -81,6 +82,11 @@ static const CGFloat kHeaderHeightNoTextSmall = 8.0;
 + (CGSize)preferredHeaderSizeWithoutTitleSmallForCollectionView:(UICollectionView *)collectionView {
     return CGSizeMake(CGRectGetWidth(collectionView.bounds),
                       kHeaderHeightNoTextSmall);
+}
+
++ (CGSize)preferredHeaderSizeWithLineOnlyForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      kBottomLineHeight);
 }
 
 #pragma mark - Getters & Setters

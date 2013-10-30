@@ -25,6 +25,8 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
 
 @interface HCRCampCollectionViewController ()
 
+@property NSArray *campDataArray;
+
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +38,7 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
-        
+        self.campDataArray = [HCRDataSource globalCampDataArray];
     }
     
     return self;
@@ -138,7 +140,7 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
 #pragma mark - Private Methods
 
 - (NSDictionary *)_countryDictionaryForIndexPathSection:(NSInteger)section {
-    return [[HCRDataSource globalCampDataArray] objectAtIndex:section ofClass:@"NSDictionary"];
+    return [self.campDataArray objectAtIndex:section ofClass:@"NSDictionary"];
 }
 
 - (NSArray *)_campsArrayForIndexPathSection:(NSInteger)section {

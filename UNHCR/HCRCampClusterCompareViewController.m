@@ -10,8 +10,6 @@
 #import "HCRTableFlowLayout.h"
 #import "HCRGraphCell.h"
 #import "HCRCampClusterDetailViewController.h"
-#import "HCRHeaderView.h"
-#import "HCRFooterView.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 

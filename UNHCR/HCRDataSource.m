@@ -160,6 +160,27 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
              ];
 }
 
++ (NSArray *)globalMessagesData {
+    
+    return @[
+             @{@"From": @"Jesse Birns",
+               @"Messages": @[
+                       @{@"Time": @"",
+                         @"Message": @"",
+                         @"Read": @YES}
+                       ]
+               },
+             @{@"From": @"Ndola Prata",
+               @"Messages": @[
+                       @{@"Time": @"",
+                         @"Message": @"",
+                         @"Read": @YES}
+                       ]
+               }
+             ];
+    
+}
+
 + (NSArray *)globalEmergenciesData {
     return @[
              @{@"Country": @"Iraq",

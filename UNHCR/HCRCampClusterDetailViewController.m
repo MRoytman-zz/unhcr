@@ -13,8 +13,6 @@
 #import "HCRTallySheetPickerViewController.h"
 #import "EAEmailUtilities.h"
 #import "HCRAlertCell.h"
-#import "HCRHeaderView.h"
-#import "HCRFooterView.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
