@@ -10,8 +10,8 @@
 
 @interface HCRDataSource : NSObject
 
-+ (NSArray *)globalDataArray;
-+ (NSArray *)globalAlertsData;
++ (NSArray *)globalCampDataArray;
++ (NSArray *)globalEmergenciesData;
 + (NSArray *)clusterLayoutMetaDataArray;
 
 @end

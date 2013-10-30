@@ -93,9 +93,9 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     
     // finish data source
     NSString *selectedCluster = [self.selectedClusterMetaData objectForKey:@"Name"];
-    if ([HCRDataSource globalAlertsData].count > 0) {
+    if ([HCRDataSource globalEmergenciesData].count > 0) {
         
-        for (NSDictionary *alertsDictionary in [HCRDataSource globalAlertsData]) {
+        for (NSDictionary *alertsDictionary in [HCRDataSource globalEmergenciesData]) {
             
             NSString *alertCluster = [alertsDictionary objectForKey:@"Cluster" ofClass:@"NSString"];
             if ([alertCluster isEqualToString:selectedCluster]) {

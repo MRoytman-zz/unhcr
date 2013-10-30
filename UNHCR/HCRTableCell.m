@@ -15,7 +15,7 @@ static const CGFloat kBadgeDimension = 29.0;
 
 static const CGFloat kForwardButtonPadding = 10.0;
 static const CGFloat kForwardButtonDimension = 20.0;
-static const CGFloat kForwardButtonWidthRatio = 1.0;
+static const CGFloat kForwardButtonWidthRatio = 0.75;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -28,6 +28,7 @@ static const CGFloat kForwardButtonWidthRatio = 1.0;
 @property (nonatomic, readwrite) UIImageView *badgeImageView;
 @property (nonatomic, readwrite) UILabel *titleLabel;
 
+@property UILabel *detailLabel;
 @property UIImageView *forwardImage;
 
 @end
@@ -55,6 +56,9 @@ static const CGFloat kForwardButtonWidthRatio = 1.0;
         [self.contentView addSubview:self.forwardImage];
         
         self.forwardImage.contentMode = UIViewContentModeScaleAspectFit;
+        
+        self.titleLabel.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.5];
+        self.forwardImage.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
         
     }
     return self;
@@ -105,10 +109,12 @@ static const CGFloat kForwardButtonWidthRatio = 1.0;
 - (CGRect)titleLabelFrame {
     
     CGFloat baseImageViewIndent = CGRectGetMaxX(self.badgeImageView.frame);
-    CGFloat titleOrigin = MAX(baseImageViewIndent + kBadgePadding,[HCRCollectionCell preferredIndentForContent]);
+    CGFloat titleOrigin = MAX(baseImageViewIndent + kBadgePadding,
+                              [HCRCollectionCell preferredIndentForContent]);
+    
     return CGRectMake(titleOrigin,
                       0,
-                      CGRectGetWidth(self.contentView.bounds) - baseImageViewIndent - CGRectGetMinX(self.forwardImage.bounds) - 2 * kForwardButtonPadding,
+                      CGRectGetMinX(self.forwardImage.frame) - titleOrigin,
                       CGRectGetHeight(self.contentView.bounds));
     
 }

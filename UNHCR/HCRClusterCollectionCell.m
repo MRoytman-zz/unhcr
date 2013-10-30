@@ -111,11 +111,11 @@ static const CGFloat kImageToTextRatio = 0.6;
     self.clusterLabel.center = CGPointMake(CGRectGetMidX(self.bounds),
                                            CGRectGetHeight(self.bounds) * kImageToTextRatio + CGRectGetMidY(self.clusterLabel.bounds) + 4);
     
-    if ([HCRDataSource globalAlertsData].count > 0) {
+    if ([HCRDataSource globalEmergenciesData].count > 0) {
         
         BOOL showDisclosure = NO;
         
-        for (NSDictionary *alertsDictionary in [HCRDataSource globalAlertsData]) {
+        for (NSDictionary *alertsDictionary in [HCRDataSource globalEmergenciesData]) {
             
             NSString *alertCluster = [alertsDictionary objectForKey:@"Cluster" ofClass:@"NSString"];
             if ([alertCluster isEqualToString:clusterName]) {

@@ -81,11 +81,11 @@ NSString *const kCountryFooterIdentifier = @"kCountryFooterIdentifier";
 #pragma mark - UICollectionViewController Data Source
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return [HCRDataSource globalDataArray].count;
+    return [HCRDataSource globalCampDataArray].count;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSArray *countriesArray = [[[HCRDataSource globalDataArray] objectAtIndex:section] objectForKey:@"Countries"];
+    NSArray *countriesArray = [[[HCRDataSource globalCampDataArray] objectAtIndex:section] objectForKey:@"Countries"];
     return countriesArray.count;
 }
 
@@ -93,7 +93,7 @@ NSString *const kCountryFooterIdentifier = @"kCountryFooterIdentifier";
     
     HCRCountryCollectionCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kCountryCellIdentifier forIndexPath:indexPath];
     
-    NSDictionary *categoryDictionary = [[HCRDataSource globalDataArray] objectAtIndex:indexPath.section];
+    NSDictionary *categoryDictionary = [[HCRDataSource globalCampDataArray] objectAtIndex:indexPath.section];
     cell.countryDictionary = [[categoryDictionary objectForKey:@"Countries"] objectAtIndex:indexPath.row];
     
     [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
@@ -106,7 +106,7 @@ NSString *const kCountryFooterIdentifier = @"kCountryFooterIdentifier";
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         
-        NSString *categoryString = [[[HCRDataSource globalDataArray] objectAtIndex:indexPath.section] objectForKey:@"Category"];
+        NSString *categoryString = [[[HCRDataSource globalCampDataArray] objectAtIndex:indexPath.section] objectForKey:@"Category"];
         HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                                                                    withReuseIdentifier:kCountryHeaderIdentifier
                                                                           forIndexPath:indexPath];

@@ -31,7 +31,7 @@ NSString *const kAlertsCellIdentifier = @"kAlertsCellIdentifier";
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
-        self.alertsList = [HCRDataSource globalAlertsData];
+        self.alertsList = [HCRDataSource globalEmergenciesData];
     }
     return self;
 }

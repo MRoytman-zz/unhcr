@@ -94,11 +94,11 @@
     
     self.campNameLabel.attributedText = campLabelString;
     
-    if ([HCRDataSource globalAlertsData].count > 0) {
+    if ([HCRDataSource globalEmergenciesData].count > 0) {
         
         BOOL showDisclosure = NO;
         
-        for (NSDictionary *alertsDictionary in [HCRDataSource globalAlertsData]) {
+        for (NSDictionary *alertsDictionary in [HCRDataSource globalEmergenciesData]) {
             
             NSString *alertCamp = [alertsDictionary objectForKey:@"Camp" ofClass:@"NSString"];
             if ([alertCamp isEqualToString:name]) {

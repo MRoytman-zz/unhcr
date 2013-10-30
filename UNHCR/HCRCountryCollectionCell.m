@@ -114,11 +114,11 @@
     
     self.countryNameLabel.attributedText = countryLabelString;
     
-    if ([HCRDataSource globalAlertsData].count > 0) {
+    if ([HCRDataSource globalEmergenciesData].count > 0) {
         
         BOOL showDisclosure = NO;
         
-        for (NSDictionary *alertsDictionary in [HCRDataSource globalAlertsData]) {
+        for (NSDictionary *alertsDictionary in [HCRDataSource globalEmergenciesData]) {
             
             NSString *alertCountry = [alertsDictionary objectForKey:@"Country" ofClass:@"NSString"];
             if ([alertCountry isEqualToString:countryName]) {
