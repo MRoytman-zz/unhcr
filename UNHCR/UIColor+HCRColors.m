@@ -26,6 +26,10 @@
                            alpha:1.0];
 }
 
++ (UIColor *)midGrayColor {
+    return [UIColor colorWithWhite:0.4 alpha:1.0];
+}
+
 + (UIColor *)tableBackgroundColor {
     
     return [UIColor colorWithRed:239/255.0

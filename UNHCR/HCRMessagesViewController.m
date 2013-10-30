@@ -7,6 +7,14 @@
 //
 
 #import "HCRMessagesViewController.h"
+#import "HCRTableFlowLayout.h"
+#import "HCRDirectMessageCell.h"
+
+////////////////////////////////////////////////////////////////////////////////
+
+NSString *const kMessagesCellIdentifier = @"kMessagesCellIdentifier";
+NSString *const kMessagesHeaderIdentifier = @"kMessagesHeaderIdentifier";
+NSString *const kMessagesFooterIdentifier = @"kMessagesFooterIdentifier";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -20,9 +28,9 @@
 
 @implementation HCRMessagesViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
         self.messagesArray = [HCRDataSource globalMessagesData];
@@ -34,8 +42,93 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    self.title = @"Direct Messages";
+    
+    // LAYOUT AND REUSABLES
+    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
+    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
+    
+    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeWithLineOnlyForCollectionView:self.collectionView]];
+    [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithTopLineForCollectionView:self.collectionView]];
+    
+    tableLayout.itemSize = [HCRDirectMessageCell preferredSizeForCollectionView:self.collectionView];
+    
+    [self.collectionView registerClass:[HCRDirectMessageCell class]
+            forCellWithReuseIdentifier:kMessagesCellIdentifier];
+    
+    [self.collectionView registerClass:[HCRHeaderView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                   withReuseIdentifier:kMessagesHeaderIdentifier];
+    
+    [self.collectionView registerClass:[HCRFooterView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                   withReuseIdentifier:kMessagesFooterIdentifier];
+    
+    // BAR BUTTONS
+    UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                                                   target:self
+                                                                                   action:@selector(_composeButtonPressed)];
+    [self.navigationItem setRightBarButtonItem:composeButton];
+    
 }
 
+#pragma mark - Class Methods
 
++ (UICollectionViewLayout *)preferredLayout {
+    return [[HCRTableFlowLayout alloc] init];
+}
+
+#pragma mark - UICollectionView Data Source
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.messagesArray.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    HCRDirectMessageCell *messageCell = (HCRDirectMessageCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kMessagesCellIdentifier forIndexPath:indexPath];
+    
+    messageCell.messageDictionary = [self.messagesArray objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+    
+    [messageCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
+    
+    return messageCell;
+    
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        
+        HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                   withReuseIdentifier:kMessagesHeaderIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        return header;
+        
+    } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        
+        HCRFooterView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                   withReuseIdentifier:kMessagesFooterIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        return footer;
+        
+    }
+    
+    return nil;
+    
+}
+
+#pragma mark - Private Methods
+
+- (void)_composeButtonPressed {
+    // TODO: compose
+}
 
 @end

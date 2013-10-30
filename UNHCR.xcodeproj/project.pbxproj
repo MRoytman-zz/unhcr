@@ -58,6 +58,7 @@
 		4FD9308D1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9308C1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m */; };
 		4FD93090181A01AC00B107ED /* HCRHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9308F181A01AC00B107ED /* HCRHeaderView.m */; };
 		4FD93093181A01E200B107ED /* HCRFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD93092181A01E200B107ED /* HCRFooterView.m */; };
+		4FDD8A3B18218B67002B717E /* HCRDirectMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDD8A3A18218B67002B717E /* HCRDirectMessageCell.m */; };
 		C1FCCA2A37DE44BABAAEC9EC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04773A9AD17C462187CA1561 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -160,6 +161,8 @@
 		4FD9308F181A01AC00B107ED /* HCRHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRHeaderView.m; sourceTree = "<group>"; };
 		4FD93091181A01E200B107ED /* HCRFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRFooterView.h; sourceTree = "<group>"; };
 		4FD93092181A01E200B107ED /* HCRFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRFooterView.m; sourceTree = "<group>"; };
+		4FDD8A3918218B67002B717E /* HCRDirectMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRDirectMessageCell.h; sourceTree = "<group>"; };
+		4FDD8A3A18218B67002B717E /* HCRDirectMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDirectMessageCell.m; sourceTree = "<group>"; };
 		D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -225,6 +228,8 @@
 				4FD839141803197200B49498 /* HCREmergencyCell.m */,
 				4F6137CF181EF6C400FF982F /* HCRSignInFieldCell.h */,
 				4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */,
+				4FDD8A3918218B67002B717E /* HCRDirectMessageCell.h */,
+				4FDD8A3A18218B67002B717E /* HCRDirectMessageCell.m */,
 			);
 			name = "Collection Cells";
 			sourceTree = "<group>";
@@ -552,6 +557,7 @@
 			files = (
 				4F0D7B611820C14B007A22D8 /* HCRMessagesViewController.m in Sources */,
 				4FD839051801DF8900B49498 /* HCRTallySheetPickerViewController.m in Sources */,
+				4FDD8A3B18218B67002B717E /* HCRDirectMessageCell.m in Sources */,
 				4FD838F518011BB300B49498 /* HCRCampClusterCompareViewController.m in Sources */,
 				4F866AD317F9E022000350E4 /* HCRAppDelegate.m in Sources */,
 				4F1C940217FC17770003AA21 /* UIImage+RMImageManipulation.m in Sources */,

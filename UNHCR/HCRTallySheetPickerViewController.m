@@ -25,9 +25,9 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
 
 @implementation HCRTallySheetPickerViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
     }

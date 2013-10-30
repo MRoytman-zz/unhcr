@@ -13,6 +13,8 @@
 + (UIColor *)UNHCRBlue;
 + (UIColor *)HMSPurple;
 
++ (UIColor *)midGrayColor;
+
 + (UIColor *)tableBackgroundColor;
 + (UIColor *)tableDividerColor;
 + (UIColor *)tableSelectedCellColor;

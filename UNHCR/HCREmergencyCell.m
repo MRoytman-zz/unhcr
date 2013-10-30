@@ -94,9 +94,9 @@
         self.messageLabel = [[UILabel alloc] initWithFrame:alertFrame];
         [self.contentView addSubview:self.messageLabel];
         
-        self.messageLabel.font = [UIFont helveticaNeueBoldFontOfSize:kLabelFontSize];
+        self.messageLabel.font = [UIFont boldSystemFontOfSize:kLabelFontSize];
         self.messageLabel.textAlignment = NSTextAlignmentLeft;
-        self.messageLabel.textColor = [UIColor darkGrayColor];
+        self.messageLabel.textColor = [UIColor darkTextColor];
         self.messageLabel.numberOfLines = 3;
     }
     
@@ -131,8 +131,9 @@
 
 #pragma mark - Class Methods
 
-+ (CGFloat)preferredCellHeight {
-    return 149.0;
++ (CGSize)preferredSizeForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      149.0);
 }
 
 #pragma mark - Getters & Setters

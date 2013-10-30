@@ -44,16 +44,14 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
 	// Do any additional setup after loading the view.
     self.title = @"Emergencies";
     
-    self.collectionView.backgroundColor = [UIColor tableBackgroundColor];
-    
+    // LAYOUT AND REUSABLES
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     
     [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
-    [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithTopLineForCollectionView:self.collectionView]];
+    [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeForCollectionView:self.collectionView]];
     
-    tableLayout.itemSize = CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
-                                      [HCREmergencyCell preferredCellHeight]);
+    tableLayout.itemSize = [HCREmergencyCell preferredSizeForCollectionView:self.collectionView];
     
     [self.collectionView registerClass:[HCREmergencyCell class]
             forCellWithReuseIdentifier:kEmergencyCellIdentifier];
@@ -65,6 +63,12 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
     [self.collectionView registerClass:[HCRFooterView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
                    withReuseIdentifier:kEmergencyFooterIdentifier];
+    
+    // BAR BUTTONS
+    UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                                                   target:self
+                                                                                   action:@selector(_composeButtonPressed)];
+    [self.navigationItem setRightBarButtonItem:composeButton];
     
 }
 
@@ -121,6 +125,12 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
     
     return nil;
     
+}
+
+#pragma mark - Private Methods
+
+- (void)_composeButtonPressed {
+    // TODO: compose
 }
 
 @end

@@ -315,8 +315,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
                           [HCRGraphCell preferredHeightForGraphCell]);
     } else if ([cellType isEqualToString:kCampClusterAlertCellIdentifier]) {
         
-        return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                          [HCREmergencyCell preferredCellHeight]);
+        return [HCREmergencyCell preferredSizeForCollectionView:collectionView];
         
     } else {
         

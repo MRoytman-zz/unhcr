@@ -164,19 +164,53 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
     
     return @[
              @{@"From": @"Jesse Birns",
-               @"Messages": @[
-                       @{@"Time": @"",
-                         @"Message": @"",
-                         @"Read": @YES}
-                       ]
-               },
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:0]],
+               @"Message": @"Sounds great. Thank you!",
+               @"Read": @NO},
              @{@"From": @"Ndola Prata",
-               @"Messages": @[
-                       @{@"Time": @"",
-                         @"Message": @"",
-                         @"Read": @YES}
-                       ]
-               }
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:1]],
+               @"Message": @"Sean - Please send the HIS tally sheet data to me by end of today. I need it for a research project that directly impacts our next funding cycle. Thank you!",
+               @"Read": @YES},
+             @{@"From": @"Emily Dakin",
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:2]],
+               @"Message": @"In case you didn't see it, don't drink the water in sector Q. I know you spend time down there in the evenings a lot.",
+               @"Read": @YES},
+             @{@"From": @"Antoine Grand",
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:3]],
+               @"Message": @"Sorry to interrupt, but can you come by the tent later? 4pm? It's quite urgent and I couldn't find you in your usual spot.",
+               @"Read": @YES},
+             @{@"From": @"Caterina Mecozzi",
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:4]],
+               @"Message": @"Ciao Sean. Grazie per il vostro aiuto ieri. Siamo davvero grati a UPP!",
+               @"Read": @YES},
+             @{@"From": @"Taban Lakonga",
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:5]],
+               @"Message": @"Come get some of that food later if you want. There's plenty.",
+               @"Read": @YES},
+             @{@"From": @"Chelsea Moore",
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:6]],
+               @"Message": @"A package arrived for you - I think it's that mobile phone you ordered. It's in Roger's tent in phase 6.",
+               @"Read": @YES},
+             @{@"From": @"Mike Pillinger",
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:7]],
+               @"Message": @"Your phone service is hooked up. You should get the handset tomorrow or the next day.",
+               @"Read": @YES},
+             @{@"From": @"Sarah Ireland",
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:8]],
+               @"Message": @"Those kids LOVED the pens you dropped by. THANK YOU!",
+               @"Read": @YES},
+             @{@"From": @"Dr Marzio Babille",
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:9]],
+               @"Message": @"Do you guys have any extra paper? Sarah's asking for some.",
+               @"Read": @YES},
+             @{@"From": @"Edrees Nabi Salih",
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:10]],
+               @"Message": @"Yes please.",
+               @"Read": @YES},
+             @{@"From": @"Tucker Cottingham",
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:11]],
+               @"Message": @"Really good to see you yesterday, my friend. See you in Geneva in March!",
+               @"Read": @YES}
              ];
     
 }
@@ -214,7 +248,7 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                              @"Agency": @"SAVE Iraq"},
                @"Alert": @"My clinic is out of blood. Resupply needed desperately. Who can take patients?",
                @"Severity": @1,
-               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:2]]},
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:5]]},
              @{@"Country": @"Iraq",
                @"Camp": @"Domiz",
                @"Cluster": @"Education",
@@ -225,7 +259,7 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                              @"Agency": @"SAVE Iraq"},
                @"Alert": @"Education providers are all unavailable today. Please redirect all inquiries to me in the mean time.",
                @"Severity": @1,
-               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:3]]}
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:8]]}
              ];
 }
 

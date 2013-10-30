@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, HCRCollectionCellProcessingViewPosition) {
 @property (nonatomic, readonly) UIView *bottomLineView;
 
 + (CGFloat)preferredIndentForContent;
+
 + (CGSize)preferredSizeForCollectionView:(UICollectionView *)collectionView;
 + (CGSize)preferredSizeForAppDescriptionCollectionCellForCollectionView:(UICollectionView *)collectionView;
 

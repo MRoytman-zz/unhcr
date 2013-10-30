@@ -16,6 +16,7 @@
 #import "HCRTableCell.h"
 #import "HCRClusterCollectionController.h"
 #import "HCRCampCollectionViewController.h"
+#import "HCRMessagesViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -716,7 +717,10 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 }
 
 - (void)_directMessagesButtonPressed {
-    // TODO: direct messages
+    
+    HCRMessagesViewController *messagesController = [[HCRMessagesViewController alloc] initWithCollectionViewLayout:[HCRMessagesViewController preferredLayout]];
+    
+    [self _pushViewController:messagesController];
 }
 
 - (void)_campsButtonPressed {
