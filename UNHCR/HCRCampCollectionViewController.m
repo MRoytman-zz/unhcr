@@ -9,11 +9,11 @@
 #import <MapKit/MapKit.h>
 
 #import "HCRCampCollectionViewController.h"
-#import "HCRCampCollectionCell.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRClusterCollectionController.h"
 #import "HCRHeaderView.h"
 #import "HCRFooterView.h"
+#import "HCRTableCell.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -47,9 +47,7 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    NSParameterAssert(self.countryDictionary);
-    
-    self.title = [self.countryDictionary objectForKey:@"Name"];
+    self.title = @"Refugee Camps";
     
     self.highlightCells = YES;
     
@@ -58,7 +56,7 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
     [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
     [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithTopLineForCollectionView:self.collectionView]];
     
-    [self.collectionView registerClass:[HCRCampCollectionCell class]
+    [self.collectionView registerClass:[HCRTableCell class]
             forCellWithReuseIdentifier:kCampCellIdentifier];
     
     [self.collectionView registerClass:[HCRHeaderView class]
@@ -80,20 +78,19 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
 #pragma mark - UICollectionViewController Data Source
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+    return [HCRDataSource globalCampDataArray].count;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSArray *campsArray = [self.countryDictionary objectForKey:@"Camps"];
-    return campsArray.count;
+    return [self _campsArrayForIndexPathSection:section].count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRCampCollectionCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kCampCellIdentifier forIndexPath:indexPath];
+    HCRTableCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kCampCellIdentifier
+                                                                                 forIndexPath:indexPath];
     
-    NSArray *campsArray = [self.countryDictionary objectForKey:@"Camps"];
-    cell.campDictionary = [campsArray objectAtIndex:indexPath.row];
+    cell.title = [[self _campDictionaryForIndexPath:indexPath] objectForKey:@"Name" ofClass:@"NSString"];
     
     [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
@@ -109,7 +106,7 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
                                                                    withReuseIdentifier:kCampHeaderReuseIdentifier
                                                                           forIndexPath:indexPath];
         
-        header.titleString = @"Refugee Camps";
+        header.titleString = [[self _countryDictionaryForIndexPathSection:indexPath.section] objectForKey:@"Name" ofClass:@"NSString"];
         
         return header;
         
@@ -129,15 +126,29 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRCampCollectionCell *cell = (HCRCampCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRCampCollectionCell class]]);
-    
     HCRClusterCollectionController *campDetail = [[HCRClusterCollectionController alloc] initWithCollectionViewLayout:[HCRClusterCollectionController preferredLayout]];
     
-    campDetail.countryName = [self.countryDictionary objectForKey:@"Name" ofClass:@"NSString"];
-    campDetail.campDictionary = cell.campDictionary;
+    campDetail.countryName = [[self _countryDictionaryForIndexPathSection:indexPath.section] objectForKey:@"Name" ofClass:@"NSString"];
+    campDetail.campDictionary = [self _campDictionaryForIndexPath:indexPath];
     
     [self.navigationController pushViewController:campDetail animated:YES];
+    
+}
+
+#pragma mark - Private Methods
+
+- (NSDictionary *)_countryDictionaryForIndexPathSection:(NSInteger)section {
+    return [[HCRDataSource globalCampDataArray] objectAtIndex:section ofClass:@"NSDictionary"];
+}
+
+- (NSArray *)_campsArrayForIndexPathSection:(NSInteger)section {
+    return [[self _countryDictionaryForIndexPathSection:section] objectForKey:@"Camps" ofClass:@"NSArray"];
+}
+
+- (NSDictionary *)_campDictionaryForIndexPath:(NSIndexPath *)indexPath {
+    
+    NSArray *campsArray = [[self _countryDictionaryForIndexPathSection:indexPath.section] objectForKey:@"Camps" ofClass:@"NSArray"];
+    return [campsArray objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
     
 }
 

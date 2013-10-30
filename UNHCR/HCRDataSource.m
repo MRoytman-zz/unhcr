@@ -47,14 +47,26 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                           @"Longitude": @45.4365392,
                           @"Span": @20000,
                           @"Persons": @19693}]},
-             @{ @"Name": @"Turkey",
-                @"Persons": @494361},
-             @{ @"Name": @"Lebanon",
-                @"Persons": @773281},
-             @{ @"Name": @"Jordan",
-                @"Persons": @525231},
-             @{ @"Name": @"Egypt",
-                @"Persons": @126727},
+//             @{ @"Name": @"Turkey",
+//                @"Persons": @494361,
+//                @"Camps": @[
+//                        @{@"Name": @""}
+//                        ]},
+//             @{ @"Name": @"Lebanon",
+//                @"Persons": @773281,
+//                @"Camps": @[
+//                        @{@"Name": @""}
+//                        ]},
+//             @{ @"Name": @"Jordan",
+//                @"Persons": @525231,
+//                @"Camps": @[
+//                        @{@"Name": @""}
+//                        ]},
+//             @{ @"Name": @"Egypt",
+//                @"Persons": @126727,
+//                @"Camps": @[
+//                        @{@"Name": @""}
+//                        ]},
              @{ @"Name": @"Uganda",
                 @"Latitude": @1,
                 @"Longitude": @32,
@@ -66,20 +78,41 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                           @"Longitude": @30.6517214,
                           @"Span": @10000,
                           @"Persons": @18253}]},
-             @{ @"Name": @"Kenya",
-                @"Persons": @474602},
-             @{ @"Name": @"Ethiopia",
-                @"Persons": @245068},
-             @{ @"Name": @"Yemen",
-                @"Persons": @230855},
-             @{ @"Name": @"Djibouti",
-                @"Persons": @18725},
-             @{ @"Name": @"Egypt",
-                @"Persons": @7957},
-             @{ @"Name": @"Eritrea",
-                @"Persons": @3468},
-             @{ @"Name": @"Tanzania",
-                @"Persons": @2103},
+//             @{ @"Name": @"Kenya",
+//                @"Persons": @474602,
+//                @"Camps": @[
+//                        @{@"Name": @""}
+//                        ]},
+//             @{ @"Name": @"Ethiopia",
+//                @"Persons": @245068,
+//                @"Camps": @[
+//                        @{@"Name": @""}
+//                        ]},
+//             @{ @"Name": @"Yemen",
+//                @"Persons": @230855,
+//                @"Camps": @[
+//                        @{@"Name": @""}
+//                        ]},
+//             @{ @"Name": @"Djibouti",
+//                @"Persons": @18725,
+//                @"Camps": @[
+//                        @{@"Name": @""}
+//                        ]},
+//             @{ @"Name": @"Egypt",
+//                @"Persons": @7957,
+//                @"Camps": @[
+//                        @{@"Name": @""}
+//                        ]},
+//             @{ @"Name": @"Eritrea",
+//                @"Persons": @3468,
+//                @"Camps": @[
+//                        @{@"Name": @""}
+//                        ]},
+//             @{ @"Name": @"Tanzania",
+//                @"Persons": @2103,
+//                @"Camps": @[
+//                        @{@"Name": @""}
+//                        ]},
              @{ @"Name": @"Thailand",
                 @"Latitude": @15,
                 @"Longitude": @101.5,

@@ -15,6 +15,8 @@
 #import "HCRCollectionCell.h"
 #import "HCRTableButtonCell.h"
 #import "HCRTableCell.h"
+#import "HCRClusterCollectionController.h"
+#import "HCRCampCollectionViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -41,7 +43,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 @interface HCRHomeViewController ()
 
-@property BOOL signedIn;
+@property (nonatomic) BOOL signedIn;
 
 @property (nonatomic, readonly) BOOL signInFieldsComplete;
 
@@ -50,6 +52,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 @property (nonatomic, weak) HCRTableButtonCell *signInButtonCell;
 
 @property UIView *masterHeader;
+@property UIView *masterHeaderBottomLine;
 
 @property NSMutableParagraphStyle *baseParagraphStyle;
 
@@ -57,6 +60,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 @property NSArray *signedInIconsArray;
 
 @property NSDateFormatter *dateFormatter;
+
+@property NSArray *bookmarkedCamps;
 
 // DEBUG ONLY //
 @property (nonatomic) NSArray *messagesReceivedArray;
@@ -107,6 +112,12 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                                        @"Settings",
                                        @"Sign Out"]
                                      ];
+        
+        NSDictionary *countryDictionary = [[HCRDataSource globalCampDataArray] objectAtIndex:0 ofClass:@"NSDictionary"];
+        NSArray *camps = [countryDictionary objectForKey:@"Camps" ofClass:@"NSArray"];
+        NSDictionary *campDictionary = [camps objectAtIndex:0 ofClass:@"NSDictionary"];
+        
+        self.bookmarkedCamps = @[campDictionary];
                                        
     }
 
@@ -136,12 +147,21 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     self.masterHeader.backgroundColor = [UIColor whiteColor];
     
+    static const CGFloat kLineHeight = 0.5;
+    self.masterHeaderBottomLine = [[UIView alloc] initWithFrame:CGRectMake(0,
+                                                                      CGRectGetHeight(self.masterHeader.bounds) - kLineHeight,
+                                                                      CGRectGetWidth(self.masterHeader.bounds),
+                                                                      kLineHeight)];
+    [self.masterHeader addSubview:self.masterHeaderBottomLine];
+    
+    self.masterHeaderBottomLine.backgroundColor = [UIColor tableDividerColor];
+    
     static const CGFloat kTitleLabelHeight = 80.0;
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
                                                                     CGRectGetHeight(self.masterHeader.bounds) - kTitleLabelHeight,
                                                                     CGRectGetWidth(self.masterHeader.bounds),
                                                                     kTitleLabelHeight)];
-    [self.masterHeader addSubview:titleLabel];
+    [self.masterHeader insertSubview:titleLabel belowSubview:self.masterHeaderBottomLine];
     
     titleLabel.backgroundColor = [UIColor whiteColor];
     titleLabel.numberOfLines = 3;
@@ -228,13 +248,24 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
             case 0:
             case 2:
             {
-                // TODO: duplicate code below
+                // TODO: some duplicate code below
                 HCRTableCell *tableCell =
                 (HCRTableCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier
                                                                           forIndexPath:indexPath];
                 
                 tableCell.badgeImage = [UIImage imageNamed:[iconsForSection objectAtIndex:indexPath.row ofClass:@"NSString"]];
                 tableCell.title = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
+                
+                if (indexPath.section == 0) {
+                    
+                    if (indexPath.row == 0) {
+                        tableCell.highlightDetail = YES;
+                        tableCell.detailNumber = @([HCRDataSource globalEmergenciesData].count);
+                    } else if (indexPath.row == 1) {
+                        tableCell.detailNumber = @16;
+                    }
+                    
+                }
                 
                 cell = tableCell;
                 break;
@@ -247,13 +278,17 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                     case 0:
                     case 2:
                     {
-                        // TODO: duplicate code above
+                        // TODO: some duplicate code above
                         HCRTableCell *tableCell =
                         (HCRTableCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier
                                                                                   forIndexPath:indexPath];
                         
                         tableCell.badgeImage = [UIImage imageNamed:[iconsForSection objectAtIndex:indexPath.row ofClass:@"NSString"]];
                         tableCell.title = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
+                        
+                        if (indexPath.row == 0) {
+                            tableCell.detailString = @"Clusters";
+                        }
                         
                         cell = tableCell;
                         break;
@@ -358,6 +393,11 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                                                                    withReuseIdentifier:kHomeViewHeaderIdentifier
                                                                           forIndexPath:indexPath];
+        
+        if (self.signedIn && indexPath.section == 1) {
+            header.titleString = @"Bookmarked Camps";
+        }
+        
         return header;
     } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
         HCRFooterView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
@@ -516,12 +556,23 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     
-    BOOL topSectionNotSignedIn = (self.signedIn == NO && section == 0);
-    BOOL tallScreen = [UIDevice isFourInch];
+    CGSize idealSizeForNotSignedInView = ([UIDevice isFourInch]) ? [HCRHeaderView preferredHeaderSizeWithoutTitleForCollectionView:collectionView] : [HCRHeaderView preferredHeaderSizeWithoutTitleSmallForCollectionView:collectionView];
     
-    CGSize idealSize = (tallScreen) ? [HCRHeaderView preferredHeaderSizeWithoutTitleForCollectionView:collectionView] : [HCRHeaderView preferredHeaderSizeWithoutTitleSmallForCollectionView:collectionView];
-    
-    return (topSectionNotSignedIn) ? CGSizeZero : idealSize;
+    if (self.signedIn) {
+        
+        if (section == 1) {
+            return [HCRHeaderView preferredHeaderSizeForCollectionView:collectionView];
+        } else {
+            return [HCRHeaderView preferredHeaderSizeWithoutTitleForCollectionView:collectionView];
+        }
+        
+    } else {
+        if (section == 0) {
+            return CGSizeZero;
+        } else {
+            return idealSizeForNotSignedInView;
+        }
+    }
     
 }
 
@@ -622,6 +673,13 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 #pragma mark - Getters & Setters
 
+- (void)setSignedIn:(BOOL)signedIn {
+    _signedIn = signedIn;
+    
+    self.masterHeaderBottomLine.hidden = !signedIn;
+    
+}
+
 - (NSArray *)messagesReceivedArray {
     
     // TODO: debug only - need to retrieve live data
@@ -664,16 +722,20 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)_campsButtonPressed {
     
-    // TODO: refugee camps
+    HCRCampCollectionViewController *campPicker = [[HCRCampCollectionViewController alloc] initWithCollectionViewLayout:[HCRCampCollectionViewController preferredLayout]];
     
-    //    HCRCountryCollectionViewController *countryCollection = [[HCRCountryCollectionViewController alloc] initWithCollectionViewLayout:[HCRCountryCollectionViewController preferredLayout]];
-    //
-    //    [self.navigationController pushViewController:countryCollection animated:YES];
-    
+    [self _pushViewController:campPicker];
 }
 
 - (void)_bookmarkedCampButtonPressed {
-    // TODO: bookmarked camp
+    
+    HCRClusterCollectionController *campDetail = [[HCRClusterCollectionController alloc] initWithCollectionViewLayout:[HCRClusterCollectionController preferredLayout]];
+    
+    campDetail.countryName = @"Iraq";
+    campDetail.campDictionary = [self.bookmarkedCamps objectAtIndex:0 ofClass:@"NSDictionary"];
+    
+    [self _pushViewController:campDetail];
+    
 }
 
 - (void)_bookmarkedBulletinBoardButtonPressed {
@@ -802,6 +864,13 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     } completion:^(BOOL finished) {
         //
     }];
+    
+}
+
+- (void)_pushViewController:(UIViewController *)controller {
+    
+    [self.navigationController pushViewController:controller animated:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     
 }
 

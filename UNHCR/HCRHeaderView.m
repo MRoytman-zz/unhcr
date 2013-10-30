@@ -10,8 +10,10 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const CGFloat kXLabelPadding = 8.0;
-static const CGFloat kLabelHeight = 44.0;
+static const CGFloat kXLabelPadding = 20.0;
+static const CGFloat kLabelHeight = 39.0;
+
+static const CGFloat kTitleLabelDefaultFontSize = 15.0;
 
 static const CGFloat kTitleLabelFontSize = 18.0;
 static const CGFloat kSubtitleLabelFontSize = 15.0;
@@ -56,7 +58,10 @@ static const CGFloat kHeaderHeightNoTextSmall = 8.0;
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    
     self.backgroundColor = [UIColor tableBackgroundColor];
+    self.titleString = nil;
+    
 }
 
 #pragma mark - Class Methods
@@ -84,7 +89,12 @@ static const CGFloat kHeaderHeightNoTextSmall = 8.0;
     
     _titleString = titleString;
     
-    if (!self.titleLabel && titleString) {
+    NSString *newString = titleString;
+    
+    if (!titleString) {
+        [self.titleLabel removeFromSuperview];
+        self.titleLabel = nil;
+    } else if (!self.titleLabel) {
         
         CGRect labelRect = CGRectMake(kXLabelPadding,
                                       CGRectGetHeight(self.bounds) - kLabelHeight,
@@ -94,13 +104,18 @@ static const CGFloat kHeaderHeightNoTextSmall = 8.0;
         self.titleLabel = [[UILabel alloc] initWithFrame:labelRect];
         [self addSubview:self.titleLabel];
         
-        self.titleLabel.font = [UIFont helveticaNeueFontOfSize:kTitleLabelFontSize];
+        if (self.titleStyle == HCRHeaderTitleStyleDefault) {
+            self.titleLabel.font = [UIFont helveticaNeueFontOfSize:kTitleLabelDefaultFontSize];
+            newString = [newString uppercaseString];
+        } else {
+            self.titleLabel.font = [UIFont helveticaNeueFontOfSize:kTitleLabelFontSize];
+        }
         
-        self.titleLabel.textColor = [UIColor darkGrayColor];
+        self.titleLabel.textColor = [UIColor tableHeaderTitleColor];
         self.titleLabel.textAlignment = NSTextAlignmentLeft;
     }
     
-    self.titleLabel.text = titleString;
+    self.titleLabel.text = newString;
     
 }
 

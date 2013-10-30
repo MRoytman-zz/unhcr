@@ -86,37 +86,37 @@ static const CGFloat kDefaultGraphPadding = 0.0;
 
 - (void)setIndentForContent:(CGFloat)indentForContent {
     [super setIndentForContent:indentForContent];
-    [self setNeedsDisplay];
+    [self setNeedsLayout];
 }
 
 - (void)setXGraphOffset:(CGFloat)xGraphOffset {
     _xGraphOffset = xGraphOffset;
-    [self setNeedsDisplay];
+    [self setNeedsLayout];
 }
 
 - (void)setYGraphOffset:(CGFloat)yGraphOffset {
     _yGraphOffset = yGraphOffset;
-    [self setNeedsDisplay];
+    [self setNeedsLayout];
 }
 
 - (void)setXGraphPadding:(CGFloat)xGraphPadding {
     _xGraphPadding = xGraphPadding;
-    [self setNeedsDisplay];
+    [self setNeedsLayout];
 }
 
 - (void)setYGraphPadding:(CGFloat)yGraphPadding {
     _yGraphPadding = yGraphPadding;
-    [self setNeedsDisplay];
+    [self setNeedsLayout];
 }
 
 - (void)setXGraphTrailingSpace:(CGFloat)xGraphTrailingSpace {
     _xGraphTrailingSpace = xGraphTrailingSpace;
-    [self setNeedsDisplay];
+    [self setNeedsLayout];
 }
 
 - (void)setYGraphTrailingSpace:(CGFloat)yGraphTrailingSpace {
     _yGraphTrailingSpace = yGraphTrailingSpace;
-    [self setNeedsDisplay];
+    [self setNeedsLayout];
 }
 
 - (void)setGraphDelegate:(id<SCGraphViewDelegate>)graphDelegate {

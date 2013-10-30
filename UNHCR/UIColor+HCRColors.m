@@ -48,4 +48,11 @@
                            alpha:1.0];
 }
 
++ (UIColor *)tableHeaderTitleColor {
+    return [UIColor colorWithRed:109/255.0
+                           green:109/255.0
+                            blue:114/255.0
+                           alpha:1.0];
+}
+
 @end

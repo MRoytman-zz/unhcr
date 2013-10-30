@@ -10,6 +10,4 @@
 
 @interface HCRCampCollectionViewController : HCRCollectionViewController
 
-@property (nonatomic, strong) NSDictionary *countryDictionary;
-
 @end

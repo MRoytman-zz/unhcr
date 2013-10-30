@@ -16,5 +16,6 @@
 + (UIColor *)tableBackgroundColor;
 + (UIColor *)tableDividerColor;
 + (UIColor *)tableSelectedCellColor;
++ (UIColor *)tableHeaderTitleColor;
 
 @end

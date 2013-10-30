@@ -68,10 +68,6 @@ NSString *const kCountryFooterIdentifier = @"kCountryFooterIdentifier";
     
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-}
-
 #pragma mark - Class Methods
 
 + (UICollectionViewLayout *)preferredLayout {
@@ -134,7 +130,7 @@ NSString *const kCountryFooterIdentifier = @"kCountryFooterIdentifier";
     NSParameterAssert([cell isKindOfClass:[HCRCountryCollectionCell class]]);
     
     HCRCampCollectionViewController *campCollection = [[HCRCampCollectionViewController alloc] initWithCollectionViewLayout:[HCRCampCollectionViewController preferredLayout]];
-    campCollection.countryDictionary = cell.countryDictionary;
+//    campCollection.countryDictionary = cell.countryDictionary;
     
     [self.navigationController pushViewController:campCollection animated:YES];
     

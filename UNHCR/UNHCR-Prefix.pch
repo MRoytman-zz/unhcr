@@ -23,4 +23,5 @@
     #import "UIDevice+EAAdditions.h"
     #import "UIFont+HCRCommonFonts.h"
     #import "NSDateFormatter+HCRAdditions.h"
+    #import "NSNumberFormatter+HCRAdditions.h"
 #endif

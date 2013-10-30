@@ -19,6 +19,7 @@
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, readonly) UILabel *titleLabel;
 
+@property (nonatomic) BOOL highlightDetail;
 @property (nonatomic, strong) NSString *detailString;
 @property (nonatomic, strong) NSNumber *detailNumber;
 

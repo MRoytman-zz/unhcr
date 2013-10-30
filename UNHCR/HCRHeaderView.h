@@ -10,7 +10,17 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+typedef NS_ENUM(NSInteger, HCRHeaderTitleStyle) {
+    HCRHeaderTitleStyleDefault,
+    HCRHeaderTitleStyleSubtitle,
+    HCRHeaderTitleStyleThreeLine
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
 @interface HCRHeaderView : UICollectionReusableView
+
+@property (nonatomic) HCRHeaderTitleStyle titleStyle;
 
 @property (nonatomic, strong) NSString *titleString;
 @property (nonatomic, strong) NSString *subtitleString;

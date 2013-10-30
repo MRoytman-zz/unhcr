@@ -11,6 +11,7 @@
 		4F0C702A17FF4BE70081F201 /* HCRCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702917FF4BE70081F201 /* HCRCollectionViewController.m */; };
 		4F0C702D17FF56680081F201 /* MKMapView+HCRMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702C17FF56680081F201 /* MKMapView+HCRMapView.m */; };
 		4F0C703018009C850081F201 /* UIButton+UNHCRButtonStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702F18009C850081F201 /* UIButton+UNHCRButtonStyles.m */; };
+		4F0D7B5E18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */; };
 		4F1C93F617FBF6EB0003AA21 /* HCRDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */; };
 		4F1C93F917FC06D00003AA21 /* HCRClusterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93F817FC06D00003AA21 /* HCRClusterFlowLayout.m */; };
 		4F1C93FC17FC09190003AA21 /* HCRFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93FB17FC09190003AA21 /* HCRFlowLayout.m */; };
@@ -69,6 +70,8 @@
 		4F0C702C17FF56680081F201 /* MKMapView+HCRMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+HCRMapView.m"; sourceTree = "<group>"; };
 		4F0C702E18009C850081F201 /* UIButton+UNHCRButtonStyles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+UNHCRButtonStyles.h"; sourceTree = "<group>"; };
 		4F0C702F18009C850081F201 /* UIButton+UNHCRButtonStyles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+UNHCRButtonStyles.m"; sourceTree = "<group>"; };
+		4F0D7B5C18209498007A22D8 /* NSNumberFormatter+HCRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumberFormatter+HCRAdditions.h"; sourceTree = "<group>"; };
+		4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumberFormatter+HCRAdditions.m"; sourceTree = "<group>"; };
 		4F1C93F417FBF6EB0003AA21 /* HCRDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRDataSource.h; sourceTree = "<group>"; };
 		4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDataSource.m; sourceTree = "<group>"; };
 		4F1C93F717FC06D00003AA21 /* HCRClusterFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRClusterFlowLayout.h; sourceTree = "<group>"; };
@@ -373,6 +376,8 @@
 				4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */,
 				4FD9308B1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.h */,
 				4FD9308C1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m */,
+				4F0D7B5C18209498007A22D8 /* NSNumberFormatter+HCRAdditions.h */,
+				4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -564,6 +569,7 @@
 				4F1C93F917FC06D00003AA21 /* HCRClusterFlowLayout.m in Sources */,
 				4F866B0817FAA09B000350E4 /* HCRCampCollectionCell.m in Sources */,
 				4F1C93FF17FC0B150003AA21 /* HCRClusterCollectionCell.m in Sources */,
+				4F0D7B5E18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m in Sources */,
 				4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */,
 				4F6137D1181EF6C400FF982F /* HCRSignInFieldCell.m in Sources */,
 				4FD8391918032B6300B49498 /* HCRAlertsViewController.m in Sources */,
@@ -607,8 +613,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sean Conrad (TC6DBCMRS6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sean Conrad (TC6DBCMRS6)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -626,7 +632,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "C68C38DB-E826-46AA-861C-8C67D87463BD";
+				PROVISIONING_PROFILE = "F776400E-E1DA-4E26-9C4E-A56E587D0325";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -649,8 +655,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sean Conrad (TC6DBCMRS6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sean Conrad (TC6DBCMRS6)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -661,7 +667,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PROVISIONING_PROFILE = "B36F7CE2-C90F-4A12-9EE4-942F51FD2476";
+				PROVISIONING_PROFILE = "F776400E-E1DA-4E26-9C4E-A56E587D0325";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
