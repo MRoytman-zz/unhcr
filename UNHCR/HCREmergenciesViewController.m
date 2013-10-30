@@ -44,10 +44,12 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
 	// Do any additional setup after loading the view.
     self.title = @"Emergencies";
     
+    self.collectionView.backgroundColor = [UIColor tableBackgroundColor];
+    
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     
-    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeWithLineOnlyForCollectionView:self.collectionView]];
+    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
     [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithTopLineForCollectionView:self.collectionView]];
     
     tableLayout.itemSize = CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
@@ -87,7 +89,6 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
     HCREmergencyCell *alertCell = [collectionView dequeueReusableCellWithReuseIdentifier:kEmergencyCellIdentifier
                                                                         forIndexPath:indexPath];
     
-    alertCell.showLocation = YES;
     alertCell.emergencyDictionary = [self.alertsList objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
     
     [alertCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
@@ -103,6 +104,8 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
         HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                                                                    withReuseIdentifier:kEmergencyHeaderIdentifier
                                                                           forIndexPath:indexPath];
+        
+        header.titleString = @"Domiz, Iraq";
         
         return header;
         

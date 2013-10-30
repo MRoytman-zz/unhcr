@@ -188,36 +188,44 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                @"Cluster": @"Health",
                @"Contact": @{@"Name": @"Edrees Nabi Salih",
                              @"Email": @"edress.salih@qandil.org",
-                             @"Cluster": @"Education"},
-               @"Alert": @"Half the kids I work with are suffering from severe diarrhea. Are you guys aware of this?",
-               @"Severity": @1},
-             @{@"Country": @"Uganda",
-               @"Camp": @"Nakivale",
+                             @"Cluster": @"Education",
+                             @"Agency": @"Quandil Iraq"},
+               @"Alert": @"Half the kids I work with are suffering from severe diarrhea. Are others seeing the same?",
+               @"Severity": @1,
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:0]]},
+             @{@"Country": @"Iraq",
+               @"Camp": @"Domiz",
                @"Cluster": @"Water/Sanitation",
                @"Contact": @{@"Name": @"Dr Marzio Babille",
                              @"Phone": @"00962796111946",
                              @"Email": @"mbabille@unicef.org",
-                             @"Cluster": @"Health"},
-               @"Alert": @"My patients are reporting muddy water in sector Q. Someone investigate please.",
-               @"Severity": @1},
+                             @"Cluster": @"Health",
+                             @"Agency": @"UNICEF Iraq"},
+               @"Alert": @"Contaminated water has been detected in sector Q. Do not drink the water. We will send another alert when it is resolved.",
+               @"Severity": @1,
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:1]]},
              @{@"Country": @"Iraq",
                @"Camp": @"Domiz",
                @"Cluster": @"Health",
                @"Contact": @{@"Name": @"Sarah Ireland",
                              @"Phone": @"00964 07710252207",
                              @"Email": @"sarah.ireland@savethechildren.org.au",
-                             @"Cluster": @"Health"},
+                             @"Cluster": @"Health",
+                             @"Agency": @"SAVE Iraq"},
                @"Alert": @"My clinic is out of blood. Resupply needed desperately. Who can take patients?",
-               @"Severity": @1},
+               @"Severity": @1,
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:2]]},
              @{@"Country": @"Iraq",
                @"Camp": @"Domiz",
                @"Cluster": @"Education",
                @"Contact": @{@"Name": @"Sarah Ireland",
                              @"Phone": @"00964 07710252207",
                              @"Email": @"sarah.ireland@savethechildren.org.au",
-                             @"Cluster": @"Health"},
-               @"Alert": @"Education providers are all unavailable today. Please redirect all inquiries to me.",
-               @"Severity": @1}
+                             @"Cluster": @"Health",
+                             @"Agency": @"SAVE Iraq"},
+               @"Alert": @"Education providers are all unavailable today. Please redirect all inquiries to me in the mean time.",
+               @"Severity": @1,
+               @"Time": [[self _dateFormatter] stringFromDate:[self _randomTimeForNumberOfDaysAgo:3]]}
              ];
 }
 
@@ -700,6 +708,21 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                            @"Phone": @"00964 0751155420",
                            @"Email": @"samana@reach-iraq.org"},
              @"Website": @"http://www.reach-iraq.org"};
+}
+
+#pragma mark - Private Methods
+
++ (NSDateFormatter *)_dateFormatter {
+    return [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMddHHmm];
+}
+
++ (NSDate *)_randomTimeForNumberOfDaysAgo:(NSInteger)numberOfDays {
+    
+    NSInteger numberOfSecondsInOneDay = 60 * 60 * 24;
+    NSTimeInterval randomTimeInOneDay = arc4random_uniform(numberOfSecondsInOneDay);
+    
+    return [[NSDate date] dateByAddingTimeInterval:(-1 * numberOfDays * numberOfSecondsInOneDay) - randomTimeInOneDay];
+    
 }
 
 @end

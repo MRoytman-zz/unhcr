@@ -50,46 +50,47 @@
 
 - (void)layoutSubviews {
     
-    static const CGFloat kMultiLineLabelHeight = 55.0;
+    // TODO: refactor - see HCRTableCell
+    
+    static const CGFloat kThreeLabelHeight = 55.0;
+    static const CGFloat kTwoLineLabelHeight = 35.0;
     static const CGFloat kOneLineLabelHeight = 20.0;
     static const CGFloat kYLabelPadding = 0.0;
+    static const CGFloat kYLabelOffset = 12.0;
     static const CGFloat kLabelFontSize = 14.0;
     
     CGFloat sharedLabelWidth = CGRectGetWidth(self.contentView.bounds) - 2 * self.indentForContent;
     
     // LOCATION
-    if (self.showLocation) {
-        if (!self.locationClusterLabel) {
-            CGRect locationFrame = CGRectMake(self.indentForContent,
-                                              0,
-                                              sharedLabelWidth,
-                                              kOneLineLabelHeight);
-            self.locationClusterLabel = [[UILabel alloc] initWithFrame:locationFrame];
-            
-            [self.contentView addSubview:self.locationClusterLabel];
-            
-            self.locationClusterLabel.font = [UIFont helveticaNeueFontOfSize:kLabelFontSize];
-            self.locationClusterLabel.textAlignment = NSTextAlignmentLeft;
-            self.locationClusterLabel.textColor = [UIColor redColor];
-        }
+    if (!self.locationClusterLabel) {
+        CGRect locationFrame = CGRectMake(self.indentForContent,
+                                          kYLabelOffset,
+                                          sharedLabelWidth,
+                                          kOneLineLabelHeight);
+        self.locationClusterLabel = [[UILabel alloc] initWithFrame:locationFrame];
         
-        NSString *alertCountry = [self.emergencyDictionary objectForKey:@"Country" ofClass:@"NSString"];
-        NSString *alertCamp = [self.emergencyDictionary objectForKey:@"Camp" ofClass:@"NSString"];
-        NSString *alertCluster = [self.emergencyDictionary objectForKey:@"Cluster" ofClass:@"NSString"];
-        NSString *locationString = [NSString stringWithFormat:@"%@ > %@ > %@",
-                                    alertCountry,
-                                    alertCamp,
-                                    alertCluster];
+        [self.contentView addSubview:self.locationClusterLabel];
         
-        self.locationClusterLabel.text = locationString;
+        self.locationClusterLabel.font = [UIFont helveticaNeueFontOfSize:kLabelFontSize];
+        self.locationClusterLabel.textAlignment = NSTextAlignmentLeft;
+        self.locationClusterLabel.textColor = [UIColor redColor];
+        self.locationClusterLabel.numberOfLines = 1;
+        self.locationClusterLabel.textAlignment = NSTextAlignmentLeft;
     }
     
-    // ALERT
+    NSString *targetTime = [self.emergencyDictionary objectForKey:@"Time" ofClass:@"NSString"];
+    NSString *locationString = [NSString stringWithFormat:@"%@",
+                                targetTime];
+    
+    self.locationClusterLabel.text = locationString;
+
+    
+    // MESSAGE
     if (!self.messageLabel) {
         CGRect alertFrame = CGRectMake(self.indentForContent,
-                                       (self.showLocation) ? CGRectGetMaxY(self.locationClusterLabel.frame) + kYLabelPadding : 0,
+                                       CGRectGetMaxY(self.locationClusterLabel.frame) + kYLabelPadding,
                                        sharedLabelWidth,
-                                       kMultiLineLabelHeight);
+                                       kThreeLabelHeight);
         self.messageLabel = [[UILabel alloc] initWithFrame:alertFrame];
         [self.contentView addSubview:self.messageLabel];
         
@@ -106,24 +107,24 @@
         CGRect fromFrame = CGRectMake(self.indentForContent,
                                       CGRectGetMaxY(self.messageLabel.frame) + kYLabelPadding,
                                       sharedLabelWidth,
-                                      kOneLineLabelHeight);
+                                      kTwoLineLabelHeight);
         self.fromLabel = [[UILabel alloc] initWithFrame:fromFrame];
         [self.contentView addSubview:self.fromLabel];
         
         self.fromLabel.font = [UIFont helveticaNeueLightFontOfSize:kLabelFontSize];
-        self.fromLabel.textAlignment = NSTextAlignmentLeft;
+        self.fromLabel.textAlignment = NSTextAlignmentRight;
         self.fromLabel.textColor = [UIColor UNHCRBlue];
         
-        self.fromLabel.adjustsFontSizeToFitWidth = YES;
+        self.fromLabel.numberOfLines = 2;
     }
     
     NSDictionary *contactDictionary = [self.emergencyDictionary objectForKey:@"Contact" ofClass:@"NSDictionary"];
     NSString *name = [contactDictionary objectForKey:@"Name" ofClass:@"NSString"];
-//    NSString *cluster = [contactDictionary objectForKey:@"Cluster" ofClass:@"NSString"];
+    NSString *agency = [contactDictionary objectForKey:@"Agency" ofClass:@"NSString"];
     NSString *email = [contactDictionary objectForKey:@"Email" ofClass:@"NSString"];
-    self.fromLabel.text = [NSString stringWithFormat:@"%@ | %@",
+    self.fromLabel.text = [NSString stringWithFormat:@"%@ | %@\n%@",
                            name,
-//                           cluster,
+                           agency,
                            email];
     
 }
@@ -131,11 +132,7 @@
 #pragma mark - Class Methods
 
 + (CGFloat)preferredCellHeight {
-    return 95.0;
-}
-
-+ (CGFloat)preferredCellHeightWithoutLocation {
-    return 75.0;
+    return 149.0;
 }
 
 #pragma mark - Getters & Setters
@@ -144,11 +141,6 @@
     _emergencyDictionary = alertDictionary;
     [self setNeedsLayout];
     
-}
-
-- (void)setShowLocation:(BOOL)showLocation {
-    _showLocation = showLocation;
-    [self setNeedsLayout];
 }
 
 @end

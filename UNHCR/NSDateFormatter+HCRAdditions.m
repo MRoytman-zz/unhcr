@@ -18,6 +18,13 @@
         case HCRDateFormatMMMdd:
             dateFormatter.dateFormat = @"MMM dd";
             break;
+            
+        case HCRDateFormatMMMddHHmm:
+            dateFormatter.dateFormat = @"MMM dd, HH:mm";
+            break;
+            
+        case HCRDateFormatMMMddhmma:
+            dateFormatter.dateFormat = @"MMM dd, h:mm a";
     }
     
     return dateFormatter;

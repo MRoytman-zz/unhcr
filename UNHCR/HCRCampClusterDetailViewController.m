@@ -218,7 +218,6 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     } else if ([cellType isEqualToString:kCampClusterAlertCellIdentifier]) {
         HCREmergencyCell *alertCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterAlertCellIdentifier forIndexPath:indexPath];
         
-        alertCell.showLocation = NO;
         alertCell.emergencyDictionary = [self.localAlerts objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
         
         cell = alertCell;
@@ -317,7 +316,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     } else if ([cellType isEqualToString:kCampClusterAlertCellIdentifier]) {
         
         return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                          [HCREmergencyCell preferredCellHeightWithoutLocation]);
+                          [HCREmergencyCell preferredCellHeight]);
         
     } else {
         
