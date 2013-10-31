@@ -87,7 +87,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         
         self.signedIn = YES;
         
-        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd];
+        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd forceEuropeanFormat:YES];
         
         self.signedInIconsArray = @[
                                     @[@"evilapples-icon",

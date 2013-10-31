@@ -11,15 +11,18 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 typedef NS_ENUM(NSInteger, HCRDateFormat) {
+    HCRDateFormatHHmm,
     HCRDateFormatMMMdd,
     HCRDateFormatMMMddHHmm,
-    HCRDateFormatMMMddhmma
+    HCRDateFormatMMMddhmma,
+    HCRDateFormatSMSDates,
+    HCRDateFormatSMSDatesWithTime
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface NSDateFormatter (HCRAdditions)
 
-+ (NSDateFormatter *)dateFormatterWithFormat:(HCRDateFormat)dateFormat;
++ (NSDateFormatter *)dateFormatterWithFormat:(HCRDateFormat)dateFormat forceEuropeanFormat:(BOOL)forceFormat;
 
 @end

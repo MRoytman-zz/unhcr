@@ -61,7 +61,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         self.alertsAdded = NO;
         self.localAlerts = @[].mutableCopy;
         
-        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd];
+        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd forceEuropeanFormat:YES];
         
         self.campClusterCollectionLayoutData = @[
                                       @{@"Section": @"Refugee Requests",

@@ -20,9 +20,9 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const CGFloat kDefaultCellHeight = 76.0;
+static const CGFloat kDefaultCellHeight = 82.0;
 
-static const CGFloat kYPadding = 8.0;
+static const CGFloat kYPadding = 12.0;
 static const CGFloat kXTrailingSpace = 12.0;
 static const CGFloat kXPadding = 10.0;
 
@@ -35,7 +35,7 @@ static const CGFloat kForwardButtonWidthRatio = 0.75;
 
 static const CGFloat kTimeTrailingSpace = 4.0;
 
-static const CGFloat kYMessagePadding = 4.0;
+static const CGFloat kYMessagePadding = 6.0;
 
 static const CGFloat kFontSizeDefault = 14.0;
 static const CGFloat kFontSizeName = 16.0;
@@ -72,7 +72,7 @@ static const CGFloat kFontSizeName = 16.0;
         // message text attributes
         NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
         paragraphStyle.alignment = NSTextAlignmentLeft;
-        paragraphStyle.lineSpacing = 2.5;
+        paragraphStyle.lineSpacing = 3.0;
         paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
         self.messageTextAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:kFontSizeDefault],
                                        NSForegroundColorAttributeName: [UIColor midGrayColor],

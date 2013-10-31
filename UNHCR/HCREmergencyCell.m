@@ -55,7 +55,7 @@
     static const CGFloat kThreeLabelHeight = 55.0;
     static const CGFloat kTwoLineLabelHeight = 35.0;
     static const CGFloat kOneLineLabelHeight = 20.0;
-    static const CGFloat kYLabelPadding = 0.0;
+    static const CGFloat kYLabelPadding = 6.0;
     static const CGFloat kYLabelOffset = 12.0;
     static const CGFloat kLabelFontSize = 14.0;
     
@@ -88,7 +88,7 @@
     // MESSAGE
     if (!self.messageLabel) {
         CGRect alertFrame = CGRectMake(self.indentForContent,
-                                       CGRectGetMaxY(self.locationClusterLabel.frame) + kYLabelPadding,
+                                       CGRectGetMaxY(self.locationClusterLabel.frame),
                                        sharedLabelWidth,
                                        kThreeLabelHeight);
         self.messageLabel = [[UILabel alloc] initWithFrame:alertFrame];
@@ -120,11 +120,11 @@
     
     NSDictionary *contactDictionary = [self.emergencyDictionary objectForKey:@"Contact" ofClass:@"NSDictionary"];
     NSString *name = [contactDictionary objectForKey:@"Name" ofClass:@"NSString"];
-    NSString *agency = [contactDictionary objectForKey:@"Agency" ofClass:@"NSString"];
+//    NSString *agency = [contactDictionary objectForKey:@"Agency" ofClass:@"NSString"];
     NSString *email = [contactDictionary objectForKey:@"Email" ofClass:@"NSString"];
-    self.fromLabel.text = [NSString stringWithFormat:@"%@ | %@\n%@",
+    self.fromLabel.text = [NSString stringWithFormat:@"%@\n%@",
                            name,
-                           agency,
+//                           agency,
                            email];
     
 }

@@ -10,11 +10,15 @@
 
 @implementation NSDateFormatter (HCRAdditions)
 
-+ (NSDateFormatter *)dateFormatterWithFormat:(HCRDateFormat)dateFormat {
++ (NSDateFormatter *)dateFormatterWithFormat:(HCRDateFormat)dateFormat forceEuropeanFormat:(BOOL)forceFormat {
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     
     switch (dateFormat) {
+        case HCRDateFormatHHmm:
+            dateFormatter.dateFormat = @"HH:mm";
+            break;
+            
         case HCRDateFormatMMMdd:
             dateFormatter.dateFormat = @"MMM dd";
             break;
@@ -25,6 +29,15 @@
             
         case HCRDateFormatMMMddhmma:
             dateFormatter.dateFormat = @"MMM dd, h:mm a";
+            break;
+            
+        case HCRDateFormatSMSDates:
+        case HCRDateFormatSMSDatesWithTime:
+            dateFormatter.timeStyle = (dateFormat == HCRDateFormatSMSDatesWithTime) ? NSDateFormatterShortStyle : NSDateFormatterNoStyle;
+            dateFormatter.dateStyle = NSDateFormatterShortStyle;
+            dateFormatter.locale = (forceFormat) ? [NSLocale localeWithLocaleIdentifier:@"en_GB"] : [NSLocale currentLocale];
+            dateFormatter.doesRelativeDateFormatting = YES;
+            break;
     }
     
     return dateFormatter;
