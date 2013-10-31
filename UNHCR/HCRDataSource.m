@@ -128,38 +128,6 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
 
 }
 
-+ (NSArray *)clusterLayoutMetaDataArray {
-    
-    // https://clusters.humanitarianresponse.info/sites/clusters.humanitarianresponse.info/files/clusterapproach.png
-    // http://business.un.org/en/documents/249
-    // http://www.unocha.org/what-we-do/coordination-tools/cluster-coordination
-    
-    return @[
-             @{@"Name": @"Protection",
-               @"Image": @"cluster-protection"},
-             @{@"Name": @"Food Security",
-               @"Image": @"cluster-food"},
-             @{@"Name": @"Health",
-               @"Image": @"cluster-health"},
-             @{@"Name": @"Emergency Telecom",
-               @"Image": @"cluster-telecoms"},
-             @{@"Name": @"Camp Coordination",
-               @"Image": @"cluster-coordination"},
-             @{@"Name": @"Early Recovery",
-               @"Image": @"cluster-recovery"},
-             @{@"Name": @"Emergency Shelter",
-               @"Image": @"cluster-shelter"},
-             @{@"Name": @"Education",
-               @"Image": @"cluster-education"},
-             @{@"Name": @"Nutrition",
-               @"Image": @"cluster-nutrition"},
-             @{@"Name": @"Water/Sanitation",
-               @"Image": @"cluster-water"},
-             @{@"Name": @"Logistics",
-               @"Image": @"cluster-logistics"}
-             ];
-}
-
 + (NSArray *)globalMessagesData {
     
     return @[
@@ -215,52 +183,173 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
     
 }
 
-+ (NSArray *)globalEmergenciesData {
++ (NSArray *)globalBulletinsData {
     return @[
              @{@"Country": @"Iraq",
                @"Camp": @"Domiz",
                @"Cluster": @"Health",
                @"Contact": @{@"Name": @"Edrees Nabi Salih",
                              @"Email": @"edress.salih@qandil.org",
-                             @"Cluster": @"Education",
                              @"Agency": @"Quandil Iraq"},
-               @"Alert": @"Half the kids I work with are suffering from severe diarrhea. Are others seeing the same?",
-               @"Severity": @1,
-               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:0]]},
+               @"Message": @"Half the kids I work with are suffering from severe diarrhea. Are others seeing the same?",
+               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:0]],
+               @"Emergency": @YES},
+             @{@"Country": @"Iraq",
+               @"Camp": @"Domiz",
+               @"Cluster": @"Protection",
+               @"Contact": @{@"Name": @"Sarah Ireland",
+                             @"Phone": @"00964 07710252207",
+                             @"Email": @"sarah.ireland@savethechildren.org.au",
+                             @"Agency": @"SAVE Iraq"},
+               @"Message": @"I've heard reports of violence on the north side of the camp. Please exercise caution.",
+               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:1]],
+               @"Emergency": @NO},
+             @{@"Country": @"Iraq",
+               @"Camp": @"Domiz",
+               @"Cluster": @"Emergency Telecom",
+               @"Contact": @{@"Name": @"Nadine Flache",
+                             @"Email": @"flache@rirp.org",
+                             @"Agency": @"ICRC Iraq"},
+               @"Message": @"Phones are up in the majority of the camp. If anyone has any problems, let me know and we will fix it ASAP! Thanks for your patience, everyone.",
+               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:2]],
+               @"Emergency": @NO},
              @{@"Country": @"Iraq",
                @"Camp": @"Domiz",
                @"Cluster": @"Water/Sanitation",
                @"Contact": @{@"Name": @"Dr Marzio Babille",
                              @"Phone": @"00962796111946",
                              @"Email": @"mbabille@unicef.org",
-                             @"Cluster": @"Health",
                              @"Agency": @"UNICEF Iraq"},
-               @"Alert": @"Contaminated water has been detected in sector Q. Do not drink the water. We will send another alert when it is resolved.",
-               @"Severity": @1,
-               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:1]]},
+               @"Message": @"Contaminated water has been detected in sector Q. Do not drink the water. We will send follow-up when resolved.",
+               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:3]],
+               @"Emergency": @YES},
+             @{@"Country": @"Iraq",
+               @"Camp": @"Domiz",
+               @"Cluster": @"Nutrition",
+               @"Contact": @{@"Name": @"Dr Marzio Babille",
+                             @"Phone": @"00962796111946",
+                             @"Email": @"mbabille@unicef.org",
+                             @"Agency": @"UNICEF Iraq"},
+               @"Message": @"Esteemed colleagues,\n\nI brought some candy in to country from home. If there are any refugees that could use a treat, come by my tent and grab one or two pieces.\n\nEnjoy.",
+               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:4]],
+               @"Emergency": @NO},
              @{@"Country": @"Iraq",
                @"Camp": @"Domiz",
                @"Cluster": @"Health",
                @"Contact": @{@"Name": @"Sarah Ireland",
                              @"Phone": @"00964 07710252207",
                              @"Email": @"sarah.ireland@savethechildren.org.au",
-                             @"Cluster": @"Health",
                              @"Agency": @"SAVE Iraq"},
-               @"Alert": @"My clinic is out of blood. Resupply won't be here until tomorrow. Can anyone take my patients today?",
-               @"Severity": @1,
-               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:5]]},
+               @"Message": @"My clinic is out of blood. Resupply won't be here until tomorrow. Can anyone take my patients today?",
+               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:5]],
+               @"Emergency": @YES},
+             @{@"Country": @"Iraq",
+               @"Camp": @"Domiz",
+               @"Cluster": @"Education",
+               @"Contact": @{@"Name": @"Mohammed M. Hamo",
+                             @"Phone": @"7504502395",
+                             @"Email": @"ddm.duhok@gmail.com",
+                             @"Agency": @"DDM"},
+               @"Message": @"Continuing education for teenage children will begin this week for phases 4, 5, and 6.\n\nPlease observe children in this age group and location carefully, and report directly to me with any anecdotal feedback you hear during the course of your routine.\n\nThank you for your assistance in this matter.",
+               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:6]],
+               @"Emergency": @NO},
+             @{@"Country": @"Iraq",
+               @"Camp": @"Domiz",
+               @"Cluster": @"Food Security",
+               @"Contact": @{@"Name": @"Salah. Y. Majid",
+                             @"Phone": @"00964(0)7503404543",
+                             @"Email": @"harikar_harikar@yahoo.com",
+                             @"Agency": @"Harikar"},
+               @"Message": @"There was a theft or loss of several hundred kilos of rice this morning. Please come to me directly if you have any leads on how this might have happened.",
+               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:7]],
+               @"Emergency": @NO},
              @{@"Country": @"Iraq",
                @"Camp": @"Domiz",
                @"Cluster": @"Education",
                @"Contact": @{@"Name": @"Sarah Ireland",
                              @"Phone": @"00964 07710252207",
                              @"Email": @"sarah.ireland@savethechildren.org.au",
-                             @"Cluster": @"Health",
                              @"Agency": @"SAVE Iraq"},
-               @"Alert": @"Education providers are all unavailable today. Please redirect all inquiries to me in the mean time.",
-               @"Severity": @1,
-               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:8]]}
+               @"Message": @"Education providers are all unavailable today. Please redirect all inquiries to me in the mean time.",
+               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:8]],
+               @"Emergency": @YES},
+             @{@"Country": @"Iraq",
+               @"Camp": @"Domiz",
+               @"Cluster": @"Early Recovery",
+               @"Contact": @{@"Name": @"Muntajab Ibraheem Al Ruwaih",
+                             @"Phone": @"00964 7801018111",
+                             @"Email": @"muntajab_iraq@yahoo.com",
+                             @"Agency": @"ISHO Iraq"},
+               @"Message": @"Hi everyone-\n\nWelcome to Domiz, Iraq. We have completed setup of the initial camp layout and will be rapidly expanding to meet refugee needs as the crisis in Syria worsens.\n\nWe are available to help with any immediate or long-term needs. You will find our tent at the entrance to phase 1.\n\nGood luck, everyone, and thank you.",
+               @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:9]],
+               @"Emergency": @NO}
              ];
+}
+
++ (NSArray *)globalEmergenciesData {
+    NSArray *allBulletins = [HCRDataSource globalBulletinsData];
+    NSMutableArray *emergenciesArray = @[].mutableCopy;
+    
+    for (NSDictionary *dictionary in allBulletins) {
+        if ([[dictionary objectForKey:@"Emergency" ofClass:@"NSNumber" mustExist:NO] boolValue]) {
+            [emergenciesArray addObject:dictionary];
+        }
+    }
+    
+    return emergenciesArray;
+}
+
+#pragma mark - Convenience
+
++ (NSArray *)clusterLayoutMetaDataArray {
+    
+    // https://clusters.humanitarianresponse.info/sites/clusters.humanitarianresponse.info/files/clusterapproach.png
+    // http://business.un.org/en/documents/249
+    // http://www.unocha.org/what-we-do/coordination-tools/cluster-coordination
+    
+    return @[
+             @{@"Name": @"Protection",
+               @"Image": @"cluster-protection"},
+             @{@"Name": @"Food Security",
+               @"Image": @"cluster-food"},
+             @{@"Name": @"Health",
+               @"Image": @"cluster-health"},
+             @{@"Name": @"Emergency Telecom",
+               @"Image": @"cluster-telecoms"},
+             @{@"Name": @"Camp Coordination",
+               @"Image": @"cluster-coordination"},
+             @{@"Name": @"Early Recovery",
+               @"Image": @"cluster-recovery"},
+             @{@"Name": @"Emergency Shelter",
+               @"Image": @"cluster-shelter"},
+             @{@"Name": @"Education",
+               @"Image": @"cluster-education"},
+             @{@"Name": @"Nutrition",
+               @"Image": @"cluster-nutrition"},
+             @{@"Name": @"Water/Sanitation",
+               @"Image": @"cluster-water"},
+             @{@"Name": @"Logistics",
+               @"Image": @"cluster-logistics"}
+             ];
+}
+
++ (UIImage *)imageForClusterName:(NSString *)clusterName {
+    
+    NSString *imageName;
+    
+    for (NSDictionary *clusterDictionary in [HCRDataSource clusterLayoutMetaDataArray]) {
+        
+        NSString *loopName = [clusterDictionary objectForKey:@"Name" ofClass:@"NSString"];
+        
+        if ([loopName isEqualToString:clusterName]) {
+            imageName = [clusterDictionary objectForKey:@"Image" ofClass:@"NSString"];
+            break;
+        }
+        
+    }
+    
+    return [UIImage imageNamed:imageName];
+    
 }
 
 #pragma mark - Camps

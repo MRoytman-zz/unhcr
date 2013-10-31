@@ -97,6 +97,7 @@ static const CGFloat kFontSizeName = 16.0;
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    self.messageDictionary = nil;
 }
 
 - (void)layoutSubviews {
@@ -168,22 +169,14 @@ static const CGFloat kFontSizeName = 16.0;
 
 - (void)setMessageDictionary:(NSDictionary *)messageDictionary {
     
+    // TODO: refactor - don't nil out labels unless actually needed
     _messageDictionary = messageDictionary;
     
     NSString *timeString = [messageDictionary objectForKey:@"Time" ofClass:@"NSString"];
     NSString *nameString = [messageDictionary objectForKey:@"From" ofClass:@"NSString"];
     NSString *messageString = [messageDictionary objectForKey:@"Message" ofClass:@"NSString"];
     
-    if (!messageDictionary) {
-        [self.timeLabel removeFromSuperview];
-        self.timeLabel = nil;
-        
-        [self.nameLabel removeFromSuperview];
-        self.nameLabel = nil;
-        
-        [self.messageLabel removeFromSuperview];
-        self.messageLabel = nil;
-    } else {
+    if (messageDictionary) {
         
         if (!self.timeLabel) {
             self.timeLabel = [[UILabel alloc] init];
@@ -220,9 +213,8 @@ static const CGFloat kFontSizeName = 16.0;
         self.messageLabel.attributedText = [[NSAttributedString alloc] initWithString:messageString
                                                                            attributes:self.messageTextAttributes];
         
+        [self setNeedsLayout];
     }
-    
-    [self setNeedsLayout];
     
 }
 

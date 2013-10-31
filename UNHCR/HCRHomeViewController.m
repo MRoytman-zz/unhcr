@@ -17,6 +17,7 @@
 #import "HCRClusterCollectionController.h"
 #import "HCRCampCollectionViewController.h"
 #import "HCRMessagesViewController.h"
+#import "HCRBulletinViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -108,9 +109,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                                      @[@"Domiz, Iraq",
                                        kGraphCellPlaceholderLabel,
                                        @"Bulletin Board"],
-                                     @[@"About",
-                                       @"Settings",
-                                       @"Sign Out"]
+                                     @[@"Sign Out"]
                                      ];
         
         NSDictionary *countryDictionary = [[HCRDataSource globalCampDataArray] objectAtIndex:0 ofClass:@"NSDictionary"];
@@ -246,7 +245,6 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         
         switch (indexPath.section) {
             case 0:
-            case 2:
             {
                 // TODO: some duplicate code below
                 HCRTableCell *tableCell =
@@ -256,15 +254,11 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                 tableCell.badgeImage = [UIImage imageNamed:[iconsForSection objectAtIndex:indexPath.row ofClass:@"NSString"]];
                 tableCell.title = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
                 
-                if (indexPath.section == 0) {
-                    
-                    if (indexPath.row == 0) {
-                        tableCell.highlightDetail = YES;
-                        tableCell.detailNumber = @([HCRDataSource globalEmergenciesData].count);
-                    } else if (indexPath.row == 1) {
-                        tableCell.detailNumber = @([HCRDataSource globalMessagesData].count);
-                    }
-                    
+                if (indexPath.row == 0) {
+                    tableCell.highlightDetail = YES;
+                    tableCell.detailNumber = @([HCRDataSource globalEmergenciesData].count);
+                } else if (indexPath.row == 1) {
+                    tableCell.detailNumber = @([HCRDataSource globalMessagesData].count);
                 }
                 
                 cell = tableCell;
@@ -318,6 +312,21 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                 }
                 
                 cell.bottomLineView.hidden = YES;
+                break;
+            }
+                
+            case 2:
+            {
+                HCRTableButtonCell *buttonCell =
+                [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewSignInButtonCellIdentifier
+                                                          forIndexPath:indexPath];
+                
+                buttonCell.tableButtonTitle = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
+                
+                buttonCell.processingViewPosition = HCRCollectionCellProcessingViewPositionLeft;
+                
+                cell = buttonCell;
+                
                 break;
             }
                 
@@ -479,18 +488,6 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
             {
                 switch (indexPath.row) {
                     case 0:
-                    {
-                        [self _aboutButtonPressed];
-                        break;
-                    }
-                        
-                    case 1:
-                    {
-                        [self _settingsButtonPressed];
-                        break;
-                    }
-                        
-                    case 2:
                     {
                         [self _signoutButtonPressed];
                         break;
@@ -742,16 +739,18 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 }
 
 - (void)_bookmarkedBulletinBoardButtonPressed {
-    // TODO: bookmarked bulletin board
+    HCRBulletinViewController *bulletinController = [[HCRBulletinViewController alloc] initWithCollectionViewLayout:[HCRBulletinViewController preferredLayout]];
+    
+    [self _pushViewController:bulletinController];
 }
 
-- (void)_aboutButtonPressed {
-    // TODO: about button
-}
-
-- (void)_settingsButtonPressed {
-    // TODO: options button
-}
+//- (void)_aboutButtonPressed {
+//    // TODO: about button
+//}
+//
+//- (void)_settingsButtonPressed {
+//    // TODO: options button
+//}
 
 - (void)_signoutButtonPressed {
     

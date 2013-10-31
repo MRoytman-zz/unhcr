@@ -31,6 +31,8 @@ static const CGFloat kBottomLineHeight = 0.5;
 @property UILabel *titleLabel;
 @property UILabel *subtitleLabel;
 
+@property UIView *headerBottomLineView;
+
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -45,13 +47,10 @@ static const CGFloat kBottomLineHeight = 0.5;
         self.backgroundColor = [UIColor tableBackgroundColor];
         
         // bottom line
-        UIView *bottomLineView = [[UIView alloc] initWithFrame:CGRectMake(0,
-                                                                          CGRectGetHeight(self.bounds) - kBottomLineHeight,
-                                                                          CGRectGetWidth(self.bounds),
-                                                                          kBottomLineHeight)];
-        [self addSubview:bottomLineView];
+        self.headerBottomLineView = [[UIView alloc] initWithFrame:CGRectZero];
+        [self addSubview:self.headerBottomLineView];
         
-        bottomLineView.backgroundColor = [UIColor tableDividerColor];
+        self.headerBottomLineView.backgroundColor = [UIColor tableDividerColor];
         
     }
     return self;
@@ -62,6 +61,16 @@ static const CGFloat kBottomLineHeight = 0.5;
     
     self.backgroundColor = [UIColor tableBackgroundColor];
     self.titleString = nil;
+    
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    self.headerBottomLineView.frame = CGRectMake(0,
+                                                 CGRectGetHeight(self.bounds) - kBottomLineHeight,
+                                                 CGRectGetWidth(self.bounds),
+                                                 kBottomLineHeight);
     
 }
 

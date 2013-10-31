@@ -21,6 +21,8 @@ const CGFloat kFooterHeightForTopLine = 0.5;
 @property (nonatomic, readwrite) UIButton *button;
 @property (nonatomic, readwrite) HCRFooterButtonType buttonType;
 
+@property UIView *footerTopLineView;
+
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -35,13 +37,10 @@ const CGFloat kFooterHeightForTopLine = 0.5;
         self.backgroundColor = [UIColor tableBackgroundColor];
         
         // bottom line
-        UIView *bottomLineView = [[UIView alloc] initWithFrame:CGRectMake(0,
-                                                                          0,
-                                                                          CGRectGetWidth(self.bounds),
-                                                                          kFooterHeightForTopLine)];
-        [self addSubview:bottomLineView];
+        self.footerTopLineView = [[UIView alloc] initWithFrame:CGRectZero];
+        [self addSubview:self.footerTopLineView];
         
-        bottomLineView.backgroundColor = [UIColor tableDividerColor];
+        self.footerTopLineView.backgroundColor = [UIColor tableDividerColor];
         
     }
     return self;
@@ -52,6 +51,16 @@ const CGFloat kFooterHeightForTopLine = 0.5;
     
     [self.button removeFromSuperview];
     self.button = nil;
+    
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    self.footerTopLineView.frame = CGRectMake(0,
+                                              0,
+                                              CGRectGetWidth(self.bounds),
+                                              kFooterHeightForTopLine);
     
 }
 

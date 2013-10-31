@@ -41,10 +41,6 @@
     return self;
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (void)prepareForReuse {
     [super prepareForReuse];
     

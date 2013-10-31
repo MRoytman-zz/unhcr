@@ -175,12 +175,11 @@ static const CGFloat kDetailXPadding = 4.0;
 }
 
 - (void)setDetailString:(NSString *)detailString {
+    
+    // TODO: refactor - don't nil out labels unless actually needed
     _detailString = detailString;
     
-    if (!detailString) {
-        [self.detailLabel removeFromSuperview];
-        self.detailLabel = nil;
-    } else if (!self.detailLabel) {
+    if (!self.detailLabel && detailString) {
         [self _createDetailLabelWithFontSize:kDetailStringFontSize];
     }
     
@@ -192,12 +191,10 @@ static const CGFloat kDetailXPadding = 4.0;
 
 - (void)setDetailNumber:(NSNumber *)detailNumber {
     
+    // TODO: refactor - don't nil out labels unless actually needed
     _detailNumber = detailNumber;
     
-    if (!detailNumber) {
-        [self.detailLabel removeFromSuperview];
-        self.detailLabel = nil;
-    } else if (!self.detailLabel) {
+    if (!self.detailLabel && detailNumber) {
         [self _createDetailLabelWithFontSize:kDetailNumberFontSize];
     }
     
@@ -217,6 +214,7 @@ static const CGFloat kDetailXPadding = 4.0;
 
 - (void)setBadgeImage:(UIImage *)badgeImage {
     
+    // TODO: refactor - don't nil out labels unless actually needed
     _badgeImage = badgeImage;
     
     if (!badgeImage) {

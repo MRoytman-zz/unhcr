@@ -12,8 +12,10 @@
 
 + (NSArray *)globalCampDataArray;
 + (NSArray *)globalMessagesData;
++ (NSArray *)globalBulletinsData;
 + (NSArray *)globalEmergenciesData;
 
 + (NSArray *)clusterLayoutMetaDataArray;
++ (UIImage *)imageForClusterName:(NSString *)clusterName;
 
 @end

@@ -10,6 +10,9 @@
 
 @interface HCREmergencyCell : HCRCollectionCell
 
+@property (nonatomic) BOOL showEmergencyBanner;
 @property (nonatomic, strong) NSDictionary *emergencyDictionary;
+
++ (CGSize)preferredSizeWithEmergencyBannerForCollectionView:(UICollectionView *)collectionView;
 
 @end
