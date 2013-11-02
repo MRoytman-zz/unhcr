@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import "HCRCampClusterCompareViewController.h"
+#import "HCRRequestsDataViewController.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRGraphCell.h"
 #import "HCRCampClusterDetailViewController.h"
@@ -19,7 +19,7 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface HCRCampClusterCompareViewController ()
+@interface HCRRequestsDataViewController ()
 
 @property NSArray *clusterCompareDataArray;
 
@@ -31,7 +31,7 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@implementation HCRCampClusterCompareViewController
+@implementation HCRRequestsDataViewController
 
 - (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
@@ -57,7 +57,11 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
     
     NSParameterAssert(self.campDictionary);
     
-    self.title = @"Compare Clusters";
+    self.title = @"Refugee Requests";
+    
+    // LAYOUS AND REUSABLES
+    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
+    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     
     [self.collectionView registerClass:[HCRGraphCell class]
             forCellWithReuseIdentifier:kCampClusterCompareCellIdentifier];
@@ -69,13 +73,6 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
     [self.collectionView registerClass:[HCRFooterView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
                    withReuseIdentifier:kCampClusterCompareFooterIdentifier];
-    
-    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
-    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
-    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
-    tableLayout.itemSize = CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
-                                      [HCRGraphCell preferredHeightForGraphCell]);
-    tableLayout.footerReferenceSize = [HCRFooterView preferredFooterSizeWithGraphCellForCollectionView:self.collectionView];
 
 }
 
@@ -88,47 +85,11 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
 #pragma mark - UICollectionViewController Data Source
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return self.clusterCompareDataArray.count;
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return 1;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    
-    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-        
-        NSDictionary *clusterDictionary = [self.clusterCompareDataArray objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
-        NSString *titleString = [clusterDictionary objectForKey:@"Name" ofClass:@"NSString"];
-        
-        HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                   withReuseIdentifier:kCampClusterCompareHeaderIdentifier
-                                                                          forIndexPath:indexPath];
-        header.titleString = titleString;
-        
-        return header;
-        
-    } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
-        
-        HCRFooterView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
-                                                                   withReuseIdentifier:kCampClusterCompareFooterIdentifier
-                                                                          forIndexPath:indexPath];
-        
-        [footer setButtonType:HCRFooterButtonTypeRawData withButtonTitle:@"Raw Data"];
-        
-        footer.button.tag = indexPath.section;
-        
-        [footer.button addTarget:self
-                          action:@selector(_footerButtonPressed:)
-                forControlEvents:UIControlEventTouchUpInside];
-        
-        return footer;
-        
-    }
-    
-    return nil;
-    
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return 2; // table view and 
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -237,7 +198,6 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
     
     HCRCampClusterDetailViewController *campClusterDetail = [[HCRCampClusterDetailViewController alloc] initWithCollectionViewLayout:[HCRCampClusterDetailViewController preferredLayout]];
     
-    campClusterDetail.countryName = self.countryName;
     campClusterDetail.campDictionary = self.campDictionary;
     campClusterDetail.selectedClusterMetaData = [self.clusterCompareDataArray objectAtIndex:button.tag ofClass:@"NSDictionary"];
     

@@ -30,13 +30,13 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
 
 @property UILabel *highlightedHeaderLabel;
 @property UILabel *highlightedDataPointLabel;
-@property NSNumber *highlightedDataPointIndex;
 
 @property CGRect dataRect;
 @property BOOL displayTimePeriodLabels;
 @property CGPoint initialDataPointLocation;
 @property UIFont *preferredLabelFont;
 
+@property (nonatomic) NSNumber *highlightedDataPointIndex;
 @property (nonatomic) CGGradientRef backgroundGradientRef;
 @property (nonatomic) CGGradientRef blueGradientRef;
 
@@ -175,6 +175,24 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     [self setNeedsDisplay];
 }
 
+- (void)setHighlightedDataPointIndex:(NSNumber *)highlightedDataPointIndex {
+    
+    NSInteger oldValue = _highlightedDataPointIndex.integerValue;
+    NSInteger newValue = highlightedDataPointIndex.integerValue;
+    
+    _highlightedDataPointIndex = highlightedDataPointIndex;
+    
+    if (highlightedDataPointIndex &&
+        oldValue != newValue) {
+        
+        if ([self.delegate respondsToSelector:@selector(graphView:didChangeSelectedIndex:)]) {
+            [self.delegate graphView:self didChangeSelectedIndex:newValue];
+        }
+        
+    }
+    
+}
+
 /*
  * This method creates the blue gradient used behind the 'programmer art' pattern
  */
@@ -261,7 +279,7 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     UIFont *sharedFont = [UIFont helveticaNeueFontOfSize:kGraphDataPointHighlightFontSize];
     UIColor *sharedColor = [UIColor colorWithWhite:0.3 alpha:1.0];
     
-    // write the static string
+    // write the label string
     // TODO: hacky to use same rect for both labels
     if (!self.highlightedHeaderLabel) {
         self.highlightedHeaderLabel = [[UILabel alloc] initWithFrame:labelRect];
@@ -273,8 +291,9 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
         self.highlightedHeaderLabel.textAlignment = NSTextAlignmentLeft;
         self.highlightedHeaderLabel.textColor = sharedColor;
         
-        self.highlightedHeaderLabel.text = @"Refugee Requests";
     }
+    
+    self.highlightedHeaderLabel.text = self.dataLabelString;
     
     // write the data string
     if (!self.highlightedDataPointLabel) {

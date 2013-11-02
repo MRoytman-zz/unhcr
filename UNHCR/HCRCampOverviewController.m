@@ -11,6 +11,8 @@
 #import "HCRCollectionCell.h"
 #import "HCREmergencyCell.h"
 #import "HCRBulletinCell.h"
+#import "HCRTableCell.h"
+#import "HCRRequestDataViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -19,7 +21,8 @@ NSString *const kOverviewFooterIdentifier = @"kOverviewFooterIdentifier";
 
 NSString *const kOverviewEmergencyCellIdentifier = @"kOverviewEmergencyCellIdentifier";
 NSString *const kOverviewBulletinCellIdentifier = @"kOverviewBulletinCellIdentifier";
-NSString *const kOverviewRequestsCellIdentifier = @"kOverviewRequestsCellIdentifier";
+NSString *const kOverviewRequestsGraphCellIdentifier = @"kOverviewRequestsGraphCellIdentifier";
+NSString *const kOverviewRequestsMoreInfoCellIdentifier = @"kOverviewRequestsMoreInfoCellIdentifier";
 NSString *const kOverviewClusterCellIdentifier = @"kOverviewClusterCellIdentifier";
 
 NSString *const kHeaderTitleEmergencies = @"Emergencies";
@@ -35,6 +38,10 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
 @property NSArray *bulletinData;
 @property NSArray *emergencyData;
 
+// DEBUG only?
+@property (nonatomic, strong) NSArray *allMessagesDataArray;
+@property NSDateFormatter *dateFormatter;
+
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -48,13 +55,18 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
         // Custom initialization
         self.layoutData = @[
                             @{@"Header": kHeaderTitleEmergencies},
-                            @{@"Header": kHeaderTitleBulletins},
                             @{@"Header": kHeaderTitleRequests},
+                            @{@"Header": kHeaderTitleBulletins},
                             @{@"Header": kHeaderTitleAgencies}
                             ];
         
         self.bulletinData = [HCRDataSource globalOnlyBulletinsData];
         self.emergencyData = [HCRDataSource globalEmergenciesData];
+        
+        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd forceEuropeanFormat:NO];
+        
+        self.highlightCells = YES;
+        
     }
     return self;
 }
@@ -78,8 +90,11 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     [self.collectionView registerClass:[HCRBulletinCell class]
             forCellWithReuseIdentifier:kOverviewBulletinCellIdentifier];
     
-    [self.collectionView registerClass:[HCRCollectionCell class]
-            forCellWithReuseIdentifier:kOverviewRequestsCellIdentifier];
+    [self.collectionView registerClass:[HCRGraphCell class]
+            forCellWithReuseIdentifier:kOverviewRequestsGraphCellIdentifier];
+    
+    [self.collectionView registerClass:[HCRTableCell class]
+            forCellWithReuseIdentifier:kOverviewRequestsMoreInfoCellIdentifier];
     
     [self.collectionView registerClass:[HCRCollectionCell class]
             forCellWithReuseIdentifier:kOverviewClusterCellIdentifier];
@@ -109,8 +124,10 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     
     NSString *sectionHeader = [self _headerForSection:section];
     
-    if ([sectionHeader isEqualToString:kOverviewBulletinCellIdentifier]) {
+    if ([sectionHeader isEqualToString:kHeaderTitleBulletins]) {
         return 3;
+    } else if ([sectionHeader isEqualToString:kHeaderTitleRequests]) {
+        return 2;
     } else {
         return 1;
     }
@@ -141,8 +158,29 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
         
     } else if ([sectionHeader isEqualToString:kHeaderTitleRequests]) {
         
-        cell = [collectionView dequeueReusableCellWithReuseIdentifier:kOverviewRequestsCellIdentifier
-                                                         forIndexPath:indexPath];
+        if (indexPath.row == 0) {
+            
+            HCRGraphCell *graphCell = [collectionView dequeueReusableCellWithReuseIdentifier:kOverviewRequestsGraphCellIdentifier forIndexPath:indexPath];
+            
+            graphCell.graphDataSource = self;
+            graphCell.graphDelegate = self;
+            
+            graphCell.dataLabel = @"All Requests";
+            
+            graphCell.xGraphTrailingSpace = 8.0; // hard-coded
+            
+            cell = graphCell;
+            
+        } else {
+            
+            HCRTableCell *tableCell = [collectionView dequeueReusableCellWithReuseIdentifier:kOverviewRequestsMoreInfoCellIdentifier forIndexPath:indexPath];
+            
+            tableCell.title = @"Explore Data";
+            
+            tableCell.badgeImage = [UIImage imageNamed:@"mixture-icon"];
+            
+            cell = tableCell;
+        }
         
     } else if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
         
@@ -186,6 +224,23 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     
 }
 
+#pragma mark - UICollectionView Delegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSString *sectionHeader = [self _headerForSection:indexPath.section];
+    if ([sectionHeader isEqualToString:kHeaderTitleRequests]) {
+        if (indexPath.row == 1) {
+            
+            HCRRequestDataViewController *dataRequests = [[HCRRequestDataViewController alloc] initWithNibName:nil bundle:nil];
+            
+            dataRequests.campDictionary = [HCRDataSource iraqDomizCampData];
+            
+            [self.navigationController pushViewController:dataRequests animated:YES];
+        }
+    }
+}
+
 #pragma mark - UICollectionView Delegate Flow Layout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
@@ -212,9 +267,92 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     } else if ([sectionHeader isEqualToString:kHeaderTitleBulletins]) {
         return [HCRBulletinCell sizeForCellInCollectionView:collectionView
                                      withBulletinDictionary:[self.bulletinData objectAtIndex:indexPath.row ofClass:@"NSDictionary"]];
+    } else if ([sectionHeader isEqualToString:kHeaderTitleRequests]) {
+        
+        if (indexPath.row == 0) {
+            return [HCRGraphCell preferredSizeForCollectionView:collectionView];
+        } else {
+            return [HCRTableCell preferredSizeForCollectionView:collectionView];
+        }
+        
     } else {
         return CGSizeZero;
     }
+    
+}
+
+#pragma mark - SCGraphView Delegate
+
+- (void)graphViewBeganTouchingData:(SCGraphView *)graphView withTouches:(NSSet *)touches {
+    self.collectionView.scrollEnabled = NO;
+}
+
+- (void)graphViewStoppedTouchingData:(SCGraphView *)graphView {
+    self.collectionView.scrollEnabled = YES;
+}
+
+#pragma mark - SCGraphView DataSource
+
+- (NSInteger)numberOfDataPointsInGraphView:(SCGraphView *)graphView {
+    
+    return self.allMessagesDataArray.count;
+    
+}
+
+- (CGFloat)graphViewMinYValue:(SCGraphView *)graphView {
+    return 0;
+}
+
+- (CGFloat)graphViewMaxYValue:(SCGraphView *)graphView {
+    
+    // http://stackoverflow.com/questions/3080540/finding-maximum-numeric-value-in-nsarray
+    NSNumber *largestNumber = [self.allMessagesDataArray valueForKeyPath:@"@max.intValue"];
+    CGFloat maxNumberWithPadding = largestNumber.floatValue * 1.1;
+    
+    return maxNumberWithPadding;
+}
+
+- (NSNumber *)graphView:(SCGraphView *)graphView dataPointForIndex:(NSInteger)index {
+    
+    return [self.allMessagesDataArray objectAtIndex:index ofClass:@"NSNumber"];
+    
+}
+
+- (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index {
+    
+    // go back [index] days since today
+    NSTimeInterval numberOfSecondsToTargetDate = ((self.allMessagesDataArray.count - (index + 1)) * 60 * 60 * 24);
+    NSDate *targetDate = [NSDate dateWithTimeIntervalSinceNow:(-1 * numberOfSecondsToTargetDate)];
+    
+    NSString *dateString = [self.dateFormatter stringFromDate:targetDate];
+    
+    return dateString;
+    
+}
+
+#pragma mark - Getters & Setters
+
+- (NSArray *)allMessagesDataArray {
+    
+    // TODO: debug only - need to retrieve live data
+    static const NSInteger kNumberOfDataPoints = 30;
+    static const CGFloat kDataPointBaseline = 50.0;
+    static const CGFloat kDataPointRange = 50.0;
+    static const CGFloat kDataPointIncrement = 6.0;
+    
+    if ( ! _allMessagesDataArray ) {
+        
+        NSMutableArray *randomMessagesArray = @[].mutableCopy;
+            
+        for (NSInteger i = 0; i < kNumberOfDataPoints; i++) {
+            CGFloat nextValue = kDataPointBaseline + (i * kDataPointIncrement) + arc4random_uniform(kDataPointRange);
+            [randomMessagesArray addObject:@(nextValue)];
+        }
+        
+        _allMessagesDataArray = randomMessagesArray;
+    }
+    
+    return _allMessagesDataArray;
     
 }
 

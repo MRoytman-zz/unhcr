@@ -370,6 +370,10 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
 
 #pragma mark - Camps
 
++ (NSDictionary *)iraqDomizCampData {
+    return [self _domizData];
+}
+
 + (NSDictionary *)_domizData {
     
     // http://data.unhcr.org/

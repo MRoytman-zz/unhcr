@@ -12,6 +12,8 @@
 #import "HCRDataEntryCell.h"
 #import "HCRCollectionCell.h"
 #import "HCRSignInFieldCell.h"
+#import "HCREmergencyCell.h"
+#import "HCRBulletinCell.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -42,7 +44,9 @@
         NSParameterAssert([cell isKindOfClass:[HCRCollectionCell class]]);
         
         if ([cell isKindOfClass:[HCRGraphCell class]] ||
-            [cell isKindOfClass:[HCRSignInFieldCell class]]) {
+            [cell isKindOfClass:[HCRSignInFieldCell class]] ||
+            [cell isKindOfClass:[HCREmergencyCell class]] ||
+            [cell isKindOfClass:[HCRBulletinCell class]]) {
             return;
         }
         

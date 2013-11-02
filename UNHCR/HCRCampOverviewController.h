@@ -7,9 +7,10 @@
 //
 
 #import "HCRCollectionViewController.h"
+#import "HCRGraphCell.h"
 
 @interface HCRCampOverviewController : HCRCollectionViewController
-<UICollectionViewDelegateFlowLayout>
+<UICollectionViewDelegateFlowLayout,SCGraphViewDataSource,SCGraphViewDelegate>
 
 @property (nonatomic, strong) NSString *campName;
 

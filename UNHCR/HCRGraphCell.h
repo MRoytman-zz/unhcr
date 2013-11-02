@@ -13,7 +13,6 @@
 @interface HCRGraphCell : HCRCollectionCell
 
 + (CGFloat)preferredHeightForGraphCell;
-+ (CGSize)preferredSizeForGraphCellInCollectionView:(UICollectionView *)collectionView;
 
 @property (nonatomic) CGFloat xGraphOffset;
 @property (nonatomic) CGFloat yGraphOffset;
@@ -28,5 +27,7 @@
 @property (nonatomic, weak) id<SCGraphViewDataSource> graphDataSource;
 
 @property (nonatomic, readonly) SCGraphView *graphView;
+
+@property (nonatomic, strong) NSString *dataLabel;
 
 @end

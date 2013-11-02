@@ -303,6 +303,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                         static const CGFloat manualAdjustment = 6.0;
                         graphCell.xGraphTrailingSpace = [HCRTableCell preferredTrailingSpaceForContent] + manualAdjustment;
                         
+                        graphCell.dataLabel = @"Refugee Requests";
+                        
                         cell = graphCell;
                         break;
                     }
@@ -536,7 +538,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         NSString *itemLabel = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
         BOOL isGraphCell = ([itemLabel isEqualToString:kGraphCellPlaceholderLabel]);
         
-        return (isGraphCell) ? [HCRGraphCell preferredSizeForGraphCellInCollectionView:collectionView] : [HCRCollectionCell preferredSizeForCollectionView:collectionView];
+        return (isGraphCell) ? [HCRGraphCell preferredSizeForCollectionView:collectionView] : [HCRCollectionCell preferredSizeForCollectionView:collectionView];
         
     } else {
         

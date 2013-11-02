@@ -40,6 +40,7 @@ typedef NS_ENUM(NSInteger, SCDataTimePeriod) {
 @protocol SCGraphViewDelegate <NSObject>
 @optional
 - (void)graphViewBeganTouchingData:(SCGraphView *)graphView withTouches:(NSSet *)touches;
+- (void)graphView:(SCGraphView *)graphView didChangeSelectedIndex:(NSInteger)selectedIndex;
 - (void)graphViewStoppedTouchingData:(SCGraphView *)graphView;
 @end
 
@@ -68,6 +69,8 @@ typedef NS_ENUM(NSInteger, SCDataTimePeriod) {
 
 @property (nonatomic) SCDataTimePeriod displayedTimePeriod;
 @property (nonatomic) SCGraphIndexRoundingMode roundingMode;
+
+@property (nonatomic, strong) NSString *dataLabelString;
 
 @property (nonatomic, strong) UIColor *dataLineColor;
 @property (nonatomic, strong) UIColor *dotColor;

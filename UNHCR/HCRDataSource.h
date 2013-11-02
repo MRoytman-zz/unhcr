@@ -16,6 +16,7 @@
 + (NSArray *)globalEmergenciesData;
 + (NSArray *)globalOnlyBulletinsData;
 
++ (NSDictionary *)iraqDomizCampData;
 + (NSArray *)iraqDomizAgenciesData;
 
 + (NSArray *)clusterLayoutMetaDataArray;

@@ -68,7 +68,7 @@ static const CGFloat kDefaultGraphPadding = 0.0;
     return 200;
 }
 
-+ (CGSize)preferredSizeForGraphCellInCollectionView:(UICollectionView *)collectionView {
++ (CGSize)preferredSizeForCollectionView:(UICollectionView *)collectionView {
     
     return CGSizeMake(CGRectGetWidth(collectionView.bounds),
                       [HCRGraphCell preferredHeightForGraphCell]);
@@ -117,6 +117,14 @@ static const CGFloat kDefaultGraphPadding = 0.0;
 - (void)setYGraphTrailingSpace:(CGFloat)yGraphTrailingSpace {
     _yGraphTrailingSpace = yGraphTrailingSpace;
     [self setNeedsLayout];
+}
+
+- (void)setDataLabel:(NSString *)dataLabel {
+    _dataLabel = dataLabel;
+    
+    self.graphView.dataLabelString = dataLabel;
+    [self setNeedsLayout];
+    
 }
 
 - (void)setGraphDelegate:(id<SCGraphViewDelegate>)graphDelegate {
