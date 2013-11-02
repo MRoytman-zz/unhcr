@@ -108,8 +108,12 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
 //    [self _drawBackgroundGradient];
 //    [self _drawVerticalGridInRect:dataRect];
     
+    if (!self.highlightedDataPointIndex) {
+        self.highlightedDataPointIndex = @([self.dataSource numberOfDataPointsInGraphView:self] - 1);
+    }
+    
     if (CGRectContainsRect(rect, highlightedDataPointLabelRect)) {
-        NSInteger index = [self.dataSource numberOfDataPointsInGraphView:self] - 1;
+        NSInteger index = self.highlightedDataPointIndex.integerValue;
         [self _drawHighlightedDataPointInRect:highlightedDataPointLabelRect forDataPointAtIndex:index];
     }
     
@@ -773,7 +777,7 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     }
     
     // reset line and label
-    self.highlightedDataPointIndex = nil;
+//    self.highlightedDataPointIndex = nil;
     [self setNeedsDisplay];
 }
 
