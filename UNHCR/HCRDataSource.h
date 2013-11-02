@@ -15,6 +15,8 @@
 + (NSArray *)globalBulletinsData;
 + (NSArray *)globalEmergenciesData;
 
++ (NSArray *)iraqDomizAgenciesData;
+
 + (NSArray *)clusterLayoutMetaDataArray;
 + (UIImage *)imageForClusterName:(NSString *)clusterName;
 

@@ -577,7 +577,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     BOOL lastSection = (section == self.collectionView.numberOfSections - 1);
     
-    return (lastSection) ? [HCRFooterView preferredFooterSizeForCollectionView:collectionView] : [HCRFooterView preferredFooterSizeWithTopLineForCollectionView:collectionView];
+    return (lastSection) ? [HCRFooterView preferredFooterSizeForCollectionView:collectionView] : [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
     
 }
 

@@ -71,7 +71,7 @@ const CGFloat kFooterHeightForTopLine = 0.5;
                       kFooterHeight);
 }
 
-+ (CGSize)preferredFooterSizeWithTopLineForCollectionView:(UICollectionView *)collectionView {
++ (CGSize)preferredFooterSizeWithBottomLineOnlyForCollectionView:(UICollectionView *)collectionView {
     return CGSizeMake(CGRectGetWidth(collectionView.bounds),
                       kFooterHeightForTopLine);
 }

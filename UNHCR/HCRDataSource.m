@@ -131,13 +131,13 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
 + (NSArray *)globalMessagesData {
     
     return @[
-             @{@"From": @"Jesse Birns",
+             @{@"From": @"Jesse Berns",
                @"Time": [[self _dateFormatterWithTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:0]],
                @"Message": @"Sounds great. Thank you!",
                @"Read": @NO},
              @{@"From": @"Ndola Prata",
                @"Time": [[self _dateFormatterWithRelativeDate] stringFromDate:[self _randomTimeForNumberOfDaysAgo:1]],
-               @"Message": @"Sean - Please send the HIS tally sheet data to me by end of today. I need it for a research project that directly impacts our next funding cycle. Thank you!",
+               @"Message": @"Sean - Please send your reporting form to me by end of today. I need it for a research project that directly impacts our next funding cycle. Thank you!",
                @"Read": @YES},
              @{@"From": @"Emily Dakin",
                @"Time": [[self _dateFormatterWithRelativeDate] stringFromDate:[self _randomTimeForNumberOfDaysAgo:2]],
@@ -157,7 +157,7 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                @"Read": @YES},
              @{@"From": @"Chelsea Moore",
                @"Time": [[self _dateFormatterWithRelativeDate] stringFromDate:[self _randomTimeForNumberOfDaysAgo:6]],
-               @"Message": @"A package arrived for you - I think it's that mobile phone you ordered. It's in Roger's tent in phase 6.",
+               @"Message": @"A package arrived for you - I think it's that mobile phone you ordered. It's in Roger's office in phase 5 row 3.",
                @"Read": @YES},
              @{@"From": @"Mike Pillinger",
                @"Time": [[self _dateFormatterWithRelativeDate] stringFromDate:[self _randomTimeForNumberOfDaysAgo:7]],
@@ -169,7 +169,7 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                @"Read": @YES},
              @{@"From": @"Dr Marzio Babille",
                @"Time": [[self _dateFormatterWithRelativeDate] stringFromDate:[self _randomTimeForNumberOfDaysAgo:9]],
-               @"Message": @"Do you guys have any extra paper? Sarah's asking for some.",
+               @"Message": @"Do you guys have any extra paper? Sarah needs some.",
                @"Read": @YES},
              @{@"From": @"Edrees Nabi Salih",
                @"Time": [[self _dateFormatterWithRelativeDate] stringFromDate:[self _randomTimeForNumberOfDaysAgo:10]],
@@ -210,7 +210,7 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                @"Contact": @{@"Name": @"Nadine Flache",
                              @"Email": @"flache@rirp.org",
                              @"Agency": @"ICRC Iraq"},
-               @"Message": @"Phones are up in the majority of the camp. If anyone has any problems, let me know and we will fix it ASAP! Thanks for your patience, everyone.",
+               @"Message": @"Phones are up in the majority of the camp. If anyone has any problems, let me know and we will fix it ASAP! Thank you for your patience.",
                @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:2]],
                @"Emergency": @NO},
              @{@"Country": @"Iraq",
@@ -220,7 +220,7 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                              @"Phone": @"00962796111946",
                              @"Email": @"mbabille@unicef.org",
                              @"Agency": @"UNICEF Iraq"},
-               @"Message": @"Contaminated water has been detected in sector Q. Do not drink the water. We will send follow-up when resolved.",
+               @"Message": @"Reports of contaminated water at the WASH distribution point in phase 2 row 8. Avoid this point until WASH resolves.",
                @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:3]],
                @"Emergency": @YES},
              @{@"Country": @"Iraq",
@@ -230,7 +230,7 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                              @"Phone": @"00962796111946",
                              @"Email": @"mbabille@unicef.org",
                              @"Agency": @"UNICEF Iraq"},
-               @"Message": @"Esteemed colleagues,\n\nI brought some candy in to country from home. If there are any refugees that could use a treat, come by my tent and grab one or two pieces.\n\nEnjoy.",
+               @"Message": @"Esteemed colleagues,\n\nI brought some candy in to country from home. If there are any staff that could use a treat, come by my tent and grab one or two pieces.\n\nEnjoy.",
                @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:4]],
                @"Emergency": @NO},
              @{@"Country": @"Iraq",
@@ -250,7 +250,7 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                              @"Phone": @"7504502395",
                              @"Email": @"ddm.duhok@gmail.com",
                              @"Agency": @"DDM"},
-               @"Message": @"Continuing education for teenage children will begin this week for phases 4, 5, and 6.\n\nPlease observe children in this age group and location carefully, and report directly to me with any anecdotal feedback you hear during the course of your routine.\n\nThank you for your assistance in this matter.",
+               @"Message": @"Continuing secondary education for children 12-17 years of age will begin this week for phases 4, 5, and 6.\n\nPlease observe children in this age group and location carefully, and report directly to me with any feedback you hear during the course of your routine.\n\nThank you for your assistance in this matter.",
                @"Time": [[self _dateFormatterWithRelativeDateAndTime] stringFromDate:[self _randomTimeForNumberOfDaysAgo:6]],
                @"Emergency": @NO},
              @{@"Country": @"Iraq",
@@ -527,6 +527,24 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
 }
 
 #pragma mark - Iraq Agencies
+
++ (NSArray *)iraqDomizAgenciesData {
+    
+    NSMutableArray *domizAgencies = @[].mutableCopy;
+    
+    for (NSString *key in [self _iraqAgenciesData].allKeys) {
+        
+        NSDictionary *keyDictionary = [[self _iraqAgenciesData] objectForKey:key ofClass:@"NSDictionary"];
+        NSDictionary *agencies = [keyDictionary objectForKey:@"Agencies" ofClass:@"NSArray"];
+        NSDictionary *agencyDictionary = @{@"Name": key,
+                                           @"Agencies": agencies};
+        
+        [domizAgencies addObject:agencyDictionary];
+        
+    }
+    
+    return domizAgencies;
+}
 
 + (NSDictionary *)_iraqAgenciesData {
     return @{

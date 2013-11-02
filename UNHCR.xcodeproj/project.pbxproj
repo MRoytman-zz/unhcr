@@ -27,6 +27,8 @@
 		4F6137CE181DBBE200FF982F /* HCRCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */; };
 		4F6137D1181EF6C400FF982F /* HCRSignInFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */; };
 		4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
+		4F75888B18243B1800ECE9CE /* HCRInformationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F75888A18243B1800ECE9CE /* HCRInformationCell.m */; };
+		4F75888E18243B3D00ECE9CE /* HCRContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F75888D18243B3D00ECE9CE /* HCRContactViewController.m */; };
 		4F866AC317F9E022000350E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC217F9E022000350E4 /* Foundation.framework */; };
 		4F866AC517F9E022000350E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC417F9E022000350E4 /* CoreGraphics.framework */; };
 		4F866AC717F9E022000350E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC617F9E022000350E4 /* UIKit.framework */; };
@@ -105,6 +107,10 @@
 		4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSignInFieldCell.m; sourceTree = "<group>"; };
 		4F71C0EF18133D0B00672C6A /* SCGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGraphView.h; sourceTree = "<group>"; };
 		4F71C0F018133D0B00672C6A /* SCGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGraphView.m; sourceTree = "<group>"; };
+		4F75888918243B1800ECE9CE /* HCRInformationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRInformationCell.h; sourceTree = "<group>"; };
+		4F75888A18243B1800ECE9CE /* HCRInformationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRInformationCell.m; sourceTree = "<group>"; };
+		4F75888C18243B3D00ECE9CE /* HCRContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRContactViewController.h; sourceTree = "<group>"; };
+		4F75888D18243B3D00ECE9CE /* HCRContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRContactViewController.m; sourceTree = "<group>"; };
 		4F866ABF17F9E022000350E4 /* RIS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RIS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F866AC217F9E022000350E4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4F866AC417F9E022000350E4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -241,6 +247,8 @@
 				4FDD8A3A18218B67002B717E /* HCRDirectMessageCell.m */,
 				4FDD8A3E18220423002B717E /* HCRBulletinCell.h */,
 				4FDD8A3F18220423002B717E /* HCRBulletinCell.m */,
+				4F75888918243B1800ECE9CE /* HCRInformationCell.h */,
+				4F75888A18243B1800ECE9CE /* HCRInformationCell.m */,
 			);
 			name = "Collection Cells";
 			sourceTree = "<group>";
@@ -273,6 +281,15 @@
 				4F71C0F018133D0B00672C6A /* SCGraphView.m */,
 			);
 			name = SCGraphView;
+			sourceTree = "<group>";
+		};
+		4F75888518243A7100ECE9CE /* Directory Detail */ = {
+			isa = PBXGroup;
+			children = (
+				4F75888C18243B3D00ECE9CE /* HCRContactViewController.h */,
+				4F75888D18243B3D00ECE9CE /* HCRContactViewController.m */,
+			);
+			name = "Directory Detail";
 			sourceTree = "<group>";
 		};
 		4F866AB617F9E022000350E4 = {
@@ -328,6 +345,7 @@
 				4F866B1217FAB840000350E4 /* Cluster Selection */,
 				4FD838EF18011B5A00B49498 /* Camp-Cluster Compare */,
 				4F1C940617FC28C80003AA21 /* Camp-Cluster Detail */,
+				4F75888518243A7100ECE9CE /* Directory Detail */,
 				4FD839021801DF6200B49498 /* Tally Sheet Picker */,
 				4FD8391218025C0700B49498 /* Tally Sheet Detail */,
 				4F866AC917F9E022000350E4 /* Supporting Files */,
@@ -619,6 +637,8 @@
 				4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */,
 				4F6137D1181EF6C400FF982F /* HCRSignInFieldCell.m in Sources */,
 				4FD8391918032B6300B49498 /* HCREmergenciesViewController.m in Sources */,
+				4F75888B18243B1800ECE9CE /* HCRInformationCell.m in Sources */,
+				4F75888E18243B3D00ECE9CE /* HCRContactViewController.m in Sources */,
 				4FD8391118020D4E00B49498 /* UIFont+HCRCommonFonts.m in Sources */,
 				4FD839081801E59500B49498 /* HCRTallySheetDetailViewController.m in Sources */,
 				4F0C702A17FF4BE70081F201 /* HCRCollectionViewController.m in Sources */,
@@ -678,7 +698,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "F776400E-E1DA-4E26-9C4E-A56E587D0325";
+				PROVISIONING_PROFILE = "36D83D85-29CF-4DAF-A82D-0D194B1D1D1F";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -701,8 +721,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Sean Conrad (TC6DBCMRS6)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sean Conrad (TC6DBCMRS6)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Sean Conrad (ZBR4CWAWXC)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sean Conrad (ZBR4CWAWXC)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -713,7 +733,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PROVISIONING_PROFILE = "F776400E-E1DA-4E26-9C4E-A56E587D0325";
+				PROVISIONING_PROFILE = "A9F89929-CF65-48F5-AD67-D5E104E7E45E";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

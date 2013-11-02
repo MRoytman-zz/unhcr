@@ -50,7 +50,7 @@ NSString *const kMessagesFooterIdentifier = @"kMessagesFooterIdentifier";
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     
     [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeWithLineOnlyForCollectionView:self.collectionView]];
-    [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithTopLineForCollectionView:self.collectionView]];
+    [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:self.collectionView]];
     
     tableLayout.itemSize = [HCRDirectMessageCell preferredSizeForCollectionView:self.collectionView];
     

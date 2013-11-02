@@ -13,6 +13,8 @@
 #import "HCRTallySheetPickerViewController.h"
 #import "EAEmailUtilities.h"
 #import "HCREmergencyCell.h"
+#import "HCRContactViewController.h"
+#import "HCRTableCell.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -138,7 +140,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
             forCellWithReuseIdentifier:kCampClusterGraphCellIdentifier];
     [self.collectionView registerClass:[HCRTableButtonCell class]
             forCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier];
-    [self.collectionView registerClass:[HCRTableButtonCell class]
+    [self.collectionView registerClass:[HCRTableCell class]
             forCellWithReuseIdentifier:kCampClusterAgenciesCellIdentifier];
     [self.collectionView registerClass:[HCREmergencyCell class]
             forCellWithReuseIdentifier:kCampClusterAlertCellIdentifier];
@@ -208,13 +210,14 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         cell = resourcesCell;
         
     } else if ([cellType isEqualToString:kCampClusterAgenciesCellIdentifier]) {
-        HCRTableButtonCell *agencyCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterAgenciesCellIdentifier forIndexPath:indexPath];
+        HCRTableCell *agencyCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterAgenciesCellIdentifier forIndexPath:indexPath];
         
         NSArray *agencyArray = [self.campClusterData objectForKey:@"Agencies" ofClass:@"NSArray"];
         NSDictionary *agencyDictionary = [agencyArray objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
-        agencyCell.tableButtonTitle = [agencyDictionary objectForKey:@"Abbr" ofClass:@"NSString"];
+        agencyCell.title = [agencyDictionary objectForKey:@"Abbr" ofClass:@"NSString"];
         
         cell = agencyCell;
+        
     } else if ([cellType isEqualToString:kCampClusterAlertCellIdentifier]) {
         HCREmergencyCell *alertCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterAlertCellIdentifier forIndexPath:indexPath];
         
@@ -298,7 +301,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         
     } else if ([cellType isEqualToString:kCampClusterAgenciesCellIdentifier]) {
         
-        //
+        [self _agencyButtonPressedAtIndexPath:indexPath];
         
     }
     
@@ -331,7 +334,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     if ([self _sectionEqualToRefugeeRequestsSection:section]) {
         return [HCRFooterView preferredFooterSizeWithGraphCellForCollectionView:collectionView];
     } else {
-        return [HCRFooterView preferredFooterSizeWithTopLineForCollectionView:collectionView];
+        return [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
     }
     
 }
@@ -461,6 +464,19 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 
 - (void)_footerButtonPressed {
     // TODO: footer button!
+}
+
+- (void)_agencyButtonPressedAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSArray *agencyArray = [self.campClusterData objectForKey:@"Agencies" ofClass:@"NSArray"];
+    NSDictionary *agencyDictionary = [agencyArray objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+    
+    HCRContactViewController *contactController = [[HCRContactViewController alloc] initWithCollectionViewLayout:[HCRContactViewController preferredLayout]];
+    
+    contactController.agencyDictionary = agencyDictionary;
+    
+    [self.navigationController pushViewController:contactController animated:YES];
+    
 }
 
 - (BOOL)_sectionEqualToRefugeeRequestsSection:(NSInteger)section {
