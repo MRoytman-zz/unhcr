@@ -14,6 +14,7 @@
 #import "HCRHeaderView.h"
 #import "HCRFooterView.h"
 #import "HCRTableCell.h"
+#import "HCRCampOverviewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -94,6 +95,12 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
     
     cell.title = [[self _campDictionaryForIndexPath:indexPath] objectForKey:@"Name" ofClass:@"NSString"];
     
+    // TODO: REMOVE DEBUG
+    if (indexPath.section != 0 || indexPath.row != 0) {
+        cell.detailString = @"No Data";
+    }
+    // DEBUG
+    
     [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
     return cell;
@@ -128,12 +135,14 @@ NSString *const kCampFooterReuseIdentifier = @"kCampFooterReuseIdentifier";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRClusterCollectionController *campDetail = [[HCRClusterCollectionController alloc] initWithCollectionViewLayout:[HCRClusterCollectionController preferredLayout]];
-    
-    campDetail.countryName = [[self _countryDictionaryForIndexPathSection:indexPath.section] objectForKey:@"Name" ofClass:@"NSString"];
-    campDetail.campDictionary = [self _campDictionaryForIndexPath:indexPath];
-    
-    [self.navigationController pushViewController:campDetail animated:YES];
+    // TODO: hook up rest of cells
+    if (indexPath.section == 0 && indexPath.row == 0) {
+        HCRCampOverviewController *campOverview = [[HCRCampOverviewController alloc] initWithCollectionViewLayout:[HCRCampOverviewController preferredLayout]];
+        
+        campOverview.campName = [[self _campDictionaryForIndexPath:indexPath] objectForKey:@"Name" ofClass:@"NSString"];
+        
+        [self.navigationController pushViewController:campOverview animated:YES];
+    }
     
 }
 

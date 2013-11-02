@@ -36,7 +36,7 @@ NSString *const kBulletinEmergencyCellIdentifier = @"kBulletinEmergencyCellIdent
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
-        self.bulletinArray = [HCRDataSource globalBulletinsData];
+        self.bulletinArray = [HCRDataSource globalAllBulletinsData];
         
     }
     return self;

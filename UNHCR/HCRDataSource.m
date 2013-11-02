@@ -183,7 +183,7 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
     
 }
 
-+ (NSArray *)globalBulletinsData {
++ (NSArray *)globalAllBulletinsData {
     return @[
              @{@"Country": @"Iraq",
                @"Camp": @"Domiz",
@@ -287,7 +287,7 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
 }
 
 + (NSArray *)globalEmergenciesData {
-    NSArray *allBulletins = [HCRDataSource globalBulletinsData];
+    NSArray *allBulletins = [HCRDataSource globalAllBulletinsData];
     NSMutableArray *emergenciesArray = @[].mutableCopy;
     
     for (NSDictionary *dictionary in allBulletins) {
@@ -297,6 +297,22 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
     }
     
     return emergenciesArray;
+}
+
++ (NSArray *)globalOnlyBulletinsData {
+    
+    // TODO: duplicated from above, but probably OK since this is all prototype data only
+    NSArray *allBulletins = [HCRDataSource globalAllBulletinsData];
+    NSMutableArray *bulletinsArray = @[].mutableCopy;
+    
+    for (NSDictionary *dictionary in allBulletins) {
+        if ([[dictionary objectForKey:@"Emergency" ofClass:@"NSNumber" mustExist:NO] boolValue] == NO) {
+            [bulletinsArray addObject:dictionary];
+        }
+    }
+    
+    return bulletinsArray;
+    
 }
 
 #pragma mark - Convenience

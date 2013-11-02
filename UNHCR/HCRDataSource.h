@@ -12,8 +12,9 @@
 
 + (NSArray *)globalCampDataArray;
 + (NSArray *)globalMessagesData;
-+ (NSArray *)globalBulletinsData;
++ (NSArray *)globalAllBulletinsData;
 + (NSArray *)globalEmergenciesData;
++ (NSArray *)globalOnlyBulletinsData;
 
 + (NSArray *)iraqDomizAgenciesData;
 

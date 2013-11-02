@@ -29,6 +29,7 @@
 		4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
 		4F75888B18243B1800ECE9CE /* HCRInformationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F75888A18243B1800ECE9CE /* HCRInformationCell.m */; };
 		4F75888E18243B3D00ECE9CE /* HCRContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F75888D18243B3D00ECE9CE /* HCRContactViewController.m */; };
+		4F7588931824C45E00ECE9CE /* HCRCampOverviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7588921824C45E00ECE9CE /* HCRCampOverviewController.m */; };
 		4F866AC317F9E022000350E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC217F9E022000350E4 /* Foundation.framework */; };
 		4F866AC517F9E022000350E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC417F9E022000350E4 /* CoreGraphics.framework */; };
 		4F866AC717F9E022000350E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC617F9E022000350E4 /* UIKit.framework */; };
@@ -111,6 +112,8 @@
 		4F75888A18243B1800ECE9CE /* HCRInformationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRInformationCell.m; sourceTree = "<group>"; };
 		4F75888C18243B3D00ECE9CE /* HCRContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRContactViewController.h; sourceTree = "<group>"; };
 		4F75888D18243B3D00ECE9CE /* HCRContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRContactViewController.m; sourceTree = "<group>"; };
+		4F7588911824C45E00ECE9CE /* HCRCampOverviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCampOverviewController.h; sourceTree = "<group>"; };
+		4F7588921824C45E00ECE9CE /* HCRCampOverviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCampOverviewController.m; sourceTree = "<group>"; };
 		4F866ABF17F9E022000350E4 /* RIS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RIS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F866AC217F9E022000350E4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4F866AC417F9E022000350E4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -292,6 +295,25 @@
 			name = "Directory Detail";
 			sourceTree = "<group>";
 		};
+		4F75888F1824C42A00ECE9CE /* Camp Overview */ = {
+			isa = PBXGroup;
+			children = (
+				4F7588911824C45E00ECE9CE /* HCRCampOverviewController.h */,
+				4F7588921824C45E00ECE9CE /* HCRCampOverviewController.m */,
+			);
+			name = "Camp Overview";
+			sourceTree = "<group>";
+		};
+		4F7588901824C43B00ECE9CE /* [[DEPRECATE?]] */ = {
+			isa = PBXGroup;
+			children = (
+				4F866B1217FAB840000350E4 /* Cluster Selection */,
+				4FD838EF18011B5A00B49498 /* Camp-Cluster Compare */,
+				4F1C940617FC28C80003AA21 /* Camp-Cluster Detail */,
+			);
+			name = "[[DEPRECATE?]]";
+			sourceTree = "<group>";
+		};
 		4F866AB617F9E022000350E4 = {
 			isa = PBXGroup;
 			children = (
@@ -342,9 +364,8 @@
 				4F0D7B621820C14E007A22D8 /* Messages View */,
 				4FDD8A4418220E08002B717E /* Bulletin Board */,
 				4F866B0517FAA083000350E4 /* Camp Selection */,
-				4F866B1217FAB840000350E4 /* Cluster Selection */,
-				4FD838EF18011B5A00B49498 /* Camp-Cluster Compare */,
-				4F1C940617FC28C80003AA21 /* Camp-Cluster Detail */,
+				4F75888F1824C42A00ECE9CE /* Camp Overview */,
+				4F7588901824C43B00ECE9CE /* [[DEPRECATE?]] */,
 				4F75888518243A7100ECE9CE /* Directory Detail */,
 				4FD839021801DF6200B49498 /* Tally Sheet Picker */,
 				4FD8391218025C0700B49498 /* Tally Sheet Detail */,
@@ -617,6 +638,7 @@
 				4F1C940B17FCBE640003AA21 /* HCRHomeViewController.m in Sources */,
 				4FD8390118013F5200B49498 /* UIDevice+EAAdditions.m in Sources */,
 				4FD838EB1800D95000B49498 /* UIAlertView+Blocks.m in Sources */,
+				4F7588931824C45E00ECE9CE /* HCRCampOverviewController.m in Sources */,
 				4F866AF617F9EC0C000350E4 /* HCRTableFlowLayout.m in Sources */,
 				4F866ACF17F9E022000350E4 /* main.m in Sources */,
 				4FD839151803197200B49498 /* HCREmergencyCell.m in Sources */,

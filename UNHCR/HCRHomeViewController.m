@@ -18,6 +18,7 @@
 #import "HCRCampCollectionViewController.h"
 #import "HCRMessagesViewController.h"
 #import "HCRBulletinViewController.h"
+#import "HCRCampOverviewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -729,12 +730,19 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)_bookmarkedCampButtonPressed {
     
-    HCRClusterCollectionController *campDetail = [[HCRClusterCollectionController alloc] initWithCollectionViewLayout:[HCRClusterCollectionController preferredLayout]];
+//    HCRClusterCollectionController *campDetail = [[HCRClusterCollectionController alloc] initWithCollectionViewLayout:[HCRClusterCollectionController preferredLayout]];
+//    
+//    campDetail.countryName = @"Iraq";
+//    campDetail.campDictionary = [self.bookmarkedCamps objectAtIndex:0 ofClass:@"NSDictionary"];
+//
+//    [self _pushViewController:campDetail];
     
-    campDetail.countryName = @"Iraq";
-    campDetail.campDictionary = [self.bookmarkedCamps objectAtIndex:0 ofClass:@"NSDictionary"];
+    HCRCampOverviewController *campOverview = [[HCRCampOverviewController alloc] initWithCollectionViewLayout:[HCRCampOverviewController preferredLayout]];
     
-    [self _pushViewController:campDetail];
+    NSDictionary *campDictionary = [self.bookmarkedCamps objectAtIndex:0 ofClass:@"NSDictionary"];
+    campOverview.campName = [campDictionary objectForKey:@"Name" ofClass:@"NSString"];
+    
+    [self _pushViewController:campOverview];
     
 }
 
