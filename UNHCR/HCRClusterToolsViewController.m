@@ -88,6 +88,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     [self.collectionView registerClass:[HCRHeaderView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                    withReuseIdentifier:kCampClusterHeaderIdentifier];
+    
     [self.collectionView registerClass:[HCRFooterView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
                    withReuseIdentifier:kCampClusterFooterIdentifier];
@@ -240,6 +241,18 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         
         return [HCRTableCell preferredSizeForCollectionView:collectionView];
         
+    }
+    
+    return CGSizeZero;
+    
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    
+    if (section == [collectionView numberOfSections] - 1) {
+        [HCRFooterView preferredFooterSizeForCollectionView:collectionView];
+    } else {
+        [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
     }
     
     return CGSizeZero;
