@@ -63,6 +63,13 @@ static const CGFloat kAppDescriptionHeight = 210.0;
     self.spinner = nil;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    self.bottomLineView.frame = self.bottomLineFrame;
+    
+}
+
 #pragma mark - Class Methods
 
 + (CGFloat)preferredIndentForContent {

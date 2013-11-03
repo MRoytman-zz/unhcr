@@ -127,7 +127,7 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     NSString *sectionHeader = [self _headerForSection:section];
     
     if ([sectionHeader isEqualToString:kHeaderTitleBulletins]) {
-        return 3;
+        return self.bulletinData.count;
     } else if ([sectionHeader isEqualToString:kHeaderTitleRequests]) {
         return 2;
     } else if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
@@ -285,9 +285,15 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     
     NSString *sectionHeader = [self _headerForSection:indexPath.section];
     
+    NSLog(@"indexPath: %@",indexPath);
+    NSLog(@"sectionHeader: %@",sectionHeader);
+    
     if ([sectionHeader isEqualToString:kHeaderTitleEmergencies]) {
         return [HCREmergencyCell preferredSizeWithEmergencyBannerForCollectionView:collectionView];
     } else if ([sectionHeader isEqualToString:kHeaderTitleBulletins]) {
+        
+        NSLog(@"height: %@",NSStringFromCGSize([HCRBulletinCell sizeForCellInCollectionView:collectionView
+                                                                     withBulletinDictionary:[self.bulletinData objectAtIndex:indexPath.row ofClass:@"NSDictionary"]]));
         return [HCRBulletinCell sizeForCellInCollectionView:collectionView
                                      withBulletinDictionary:[self.bulletinData objectAtIndex:indexPath.row ofClass:@"NSDictionary"]];
     } else if ([sectionHeader isEqualToString:kHeaderTitleRequests]) {

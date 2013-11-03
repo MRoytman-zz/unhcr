@@ -110,7 +110,7 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
     CGFloat height = kYOffset + messageSize.height + kYTimePadding + kThreeLineLabelHeight + kYButtonPadding + kButtonHeight;
     
     return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                      height); // TODO:
+                      height);
     
 }
 

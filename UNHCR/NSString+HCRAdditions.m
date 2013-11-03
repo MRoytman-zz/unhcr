@@ -15,7 +15,7 @@
     NSAssert(font, @"Font must not be nil!");
     
     CGRect stringRect = [self boundingRectWithSize:boundingSize
-                                           options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading
+                                           options:NSStringDrawingUsesLineFragmentOrigin
                                         attributes:@{NSFontAttributeName: font}
                                            context:nil];
     
