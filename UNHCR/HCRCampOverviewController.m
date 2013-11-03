@@ -411,12 +411,8 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
     NSIndexPath *triggerIndexPath = [NSIndexPath indexPathForItem:triggerItem inSection:triggerSection];
     UICollectionViewCell *triggerCell = [self.collectionView cellForItemAtIndexPath:triggerIndexPath];
     
-    CGPoint triggerPoint = CGPointMake(0,
-                                       CGRectGetMaxY(triggerCell.frame));
-    
     if (triggerCell &&
-        !self.hackyWorkaroundView &&
-        CGRectContainsPoint(scrollView.frame, triggerPoint)) {
+        !self.hackyWorkaroundView) {
         
         // ADD WHITE BACKGROUND TO CLUSTER PICKER SECTION
         // TODO: make not hacky; is there a way to show background on just one section of UICollectionView?

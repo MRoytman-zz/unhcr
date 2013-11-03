@@ -578,9 +578,13 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     
-    BOOL lastSection = (section == self.collectionView.numberOfSections - 1);
-    
-    return (lastSection) ? [HCRFooterView preferredFooterSizeForCollectionView:collectionView] : [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
+    if (self.signedIn) {
+        BOOL lastSection = (section == self.collectionView.numberOfSections - 1);
+        
+        return (lastSection) ? [HCRFooterView preferredFooterSizeForCollectionView:collectionView] : [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
+    } else {
+        return [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
+    }
     
 }
 

@@ -20,7 +20,7 @@ static const CGFloat kSubtitleLabelFontSize = 15.0;
 
 static const CGFloat kHeaderHeightDefault = 64.0;
 static const CGFloat kHeaderHeightNoText = 34.0;
-static const CGFloat kHeaderHeightNoTextSmall = 8.0;
+static const CGFloat kHeaderHeightNoTextSmall = 2.25;
 
 static const CGFloat kBottomLineHeight = 0.5;
 

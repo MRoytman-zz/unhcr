@@ -10,6 +10,7 @@
 #import "HCRCollectionViewController.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRTableCell.h"
+#import "EASoundManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -52,6 +53,8 @@ static const CGFloat kGraphContainerPadding = 8.0;
         self.clusterCompareDataArray = clusterData;
         
         self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:NO];
+        
+        [[EASoundManager sharedSoundManager] registerSoundIDs:@[@(EASoundIDClick1)]];
         
     }
     return self;
@@ -193,6 +196,8 @@ static const CGFloat kGraphContainerPadding = 8.0;
     
     self.selectedClusterIndexPath = indexPath;
     [self _highlightCellInCollectionView:collectionView atIndexPath:indexPath];
+    
+    [[EASoundManager sharedSoundManager] playSoundOnce:EASoundIDClick1];
     
 }
 
