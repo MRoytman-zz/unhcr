@@ -466,13 +466,13 @@ NSString *const kQuantityDistributed = @"Quantity of each method distributed dur
                        @"Lines": @2},
                      @{@"Text": @"New Users < 18"},
                      @{@"Text": @"New Users ≥ 18"},
-                     @{@"Text": @"Repeat Users < 18"},
-                     @{@"Text": @"Repeat Users ≥ 18"},
-                     @{@"Text": @"Discontinued < 18"},
-                     @{@"Text": @"Discontinued ≥ 18"},
+                     @{@"Text": kRepeatUserUnder18},
+                     @{@"Text": kRepeatUserOver18},
+                     @{@"Text": kDiscontinuedUnder18},
+                     @{@"Text": kDiscontinuedOver18},
                      @{@"Text": @"Cumulative number at end of period",
                        @"Lines": @2},
-                     @{@"Text": @"Quantity of each method distributed during period",
+                     @{@"Text": kQuantityDistributed,
                        @"Lines": @3},
                      ]};
 }

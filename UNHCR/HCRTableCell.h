@@ -11,7 +11,6 @@
 @interface HCRTableCell : HCRCollectionCell
 
 + (CGFloat)preferredIndentForContentWithBadgeImage;
-+ (CGFloat)preferredTrailingSpaceForContent;
 
 @property (nonatomic, strong) UIImage *badgeImage;
 @property (nonatomic, readonly) UIImageView *badgeImageView;
@@ -22,5 +21,7 @@
 @property (nonatomic) BOOL highlightDetail;
 @property (nonatomic, strong) NSString *detailString;
 @property (nonatomic, strong) NSNumber *detailNumber;
+
+@property (nonatomic, readonly) UIImageView *forwardImage;
 
 @end

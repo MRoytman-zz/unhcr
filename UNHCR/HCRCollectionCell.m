@@ -13,6 +13,7 @@
 static const CGFloat kBottomLineHeight = 0.5;
 
 static const CGFloat kPreferredIndent = 20.0;
+static const CGFloat kPreferredTrailingSpace = 10.0;
 
 static const CGFloat kDefaultCellHeight = 48.0;
 static const CGFloat kAppDescriptionHeight = 210.0;
@@ -43,6 +44,7 @@ static const CGFloat kAppDescriptionHeight = 210.0;
         
         // set initial indent
         self.indentForContent = [HCRCollectionCell preferredIndentForContent];
+        self.trailingSpaceForContent = [HCRCollectionCell preferredTrailingSpaceForContent];
         
         // bottom line
         self.bottomLineView = [[UIView alloc] initWithFrame:self.bottomLineFrame];
@@ -74,6 +76,10 @@ static const CGFloat kAppDescriptionHeight = 210.0;
 
 + (CGFloat)preferredIndentForContent {
     return kPreferredIndent;
+}
+
++ (CGFloat)preferredTrailingSpaceForContent {
+    return kPreferredTrailingSpace;
 }
 
 + (CGSize)preferredSizeForCollectionView:(UICollectionView *)collectionView {

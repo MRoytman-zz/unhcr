@@ -12,12 +12,14 @@
 #import "HCRTableFlowLayout.h"
 #import "HCRDataEntryCell.h"
 #import "HCRTallySheetDetailInputViewController.h"
-#import "HCRHeaderView.h"
+#import "HCRTableTallyCell.h"
+#import "HCRHeaderTallyView.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kTallyDetailCellIdentifier = @"kTallyDetailCellIdentifier";
 NSString *const kTallyDetailHeaderIdentifier = @"kTallyDetailHeaderIdentifier";
+NSString *const kTallyDetailFooterIdentifier = @"kTallyDetailFooterIdentifier";
 
 NSString *const kTallyReportingPeriod = @"Reporting Period";
 NSString *const kTallyLocation = @"Location";
@@ -62,9 +64,25 @@ NSString *const kTallyOrganization = @"Organization";
     NSParameterAssert(self.tallySheetData);
     
     self.highlightCells = YES;
-    
     self.tallyResources = [self.tallySheetData objectForKey:@"Resources" ofClass:@"NSArray"];
     
+    // LAYOUT & REUSABLES
+    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
+    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
+    [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:self.collectionView]];
+    
+    [self.collectionView registerClass:[HCRTableTallyCell class]
+            forCellWithReuseIdentifier:kTallyDetailCellIdentifier];
+    
+    [self.collectionView registerClass:[HCRHeaderTallyView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                   withReuseIdentifier:kTallyDetailHeaderIdentifier];
+    
+    [self.collectionView registerClass:[HCRFooterView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                   withReuseIdentifier:kTallyDetailFooterIdentifier];
+    
+    // BAR ITEMS
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                   target:self
                                                                                   action:@selector(_cancelButtonPressed)];
@@ -75,20 +93,6 @@ NSString *const kTallyOrganization = @"Organization";
                                                                     target:self
                                                                     action:@selector(_submitButtonPressed)];
     [self.navigationItem setRightBarButtonItem:submitButton];
-    
-    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
-    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
-    tableLayout.minimumLineSpacing = 0;
-    tableLayout.sectionInset = UIEdgeInsetsMake(15, 0, 0, 0);
-    
-    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
-    
-    [self.collectionView registerClass:[HCRDataEntryCell class]
-            forCellWithReuseIdentifier:kTallyDetailCellIdentifier];
-    
-    [self.collectionView registerClass:[HCRHeaderView class]
-            forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                   withReuseIdentifier:kTallyDetailHeaderIdentifier];
     
 }
 
@@ -112,25 +116,27 @@ NSString *const kTallyOrganization = @"Organization";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRDataEntryCell *dataCell = [collectionView dequeueReusableCellWithReuseIdentifier:kTallyDetailCellIdentifier
-                                                                           forIndexPath:indexPath];
+    HCRTableTallyCell *tallyCell = [collectionView dequeueReusableCellWithReuseIdentifier:kTallyDetailCellIdentifier
+                                                                             forIndexPath:indexPath];
     
-    NSDictionary *resourceDictionary = [self.tallyResources objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+//    NSDictionary *resourceDictionary = [self.tallyResources objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+//    
+//    NSMutableDictionary *mutableData = @{@"Title": [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"],
+//                                         @"Input": @"enter"}.mutableCopy;
+//    
+//    NSString *subtitle = [resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
+//    if (subtitle) {
+//        [mutableData setObject:subtitle forKey:@"Subtitle"];
+//    }
     
-    NSMutableDictionary *mutableData = @{@"Title": [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"],
-                                         @"Input": @"enter"}.mutableCopy;
+//    tallyCell.cellStatus = HCRDataEntryCellStatusChildNotCompleted;
+//    tallyCell.dataDictionary = [NSDictionary dictionaryWithDictionary:mutableData];
     
-    NSString *subtitle = [resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
-    if (subtitle) {
-        [mutableData setObject:subtitle forKey:@"Subtitle"];
-    }
+    tallyCell.title = @"TEST";
     
-    dataCell.cellStatus = HCRDataEntryCellStatusChildNotCompleted;
-    dataCell.dataDictionary = [NSDictionary dictionaryWithDictionary:mutableData];
+    [tallyCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
-    [dataCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
-    
-    return dataCell;
+    return tallyCell;
     
 }
 
@@ -138,15 +144,22 @@ NSString *const kTallyOrganization = @"Organization";
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         
+        HCRHeaderTallyView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                        withReuseIdentifier:kTallyDetailHeaderIdentifier
+                                                                               forIndexPath:indexPath];
+        
         NSString *title = [self.tallySheetData objectForKey:@"Name" ofClass:@"NSString"];
-        
-        HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                   withReuseIdentifier:kTallyDetailHeaderIdentifier
-                                                                          forIndexPath:indexPath];
-        
         header.titleString = title;
         
         return header;
+        
+    } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        
+        HCRFooterView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                   withReuseIdentifier:kTallyDetailFooterIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        return footer;
         
     }
     
@@ -177,9 +190,9 @@ NSString *const kTallyOrganization = @"Organization";
     
     HCRTallySheetDetailInputViewController *tallyInput = [[HCRTallySheetDetailInputViewController alloc] initWithCollectionViewLayout:[HCRTallySheetDetailInputViewController preferredLayout]];
     
-    NSString *title = [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"];
-    NSString *subtitle = [resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
-    NSString *headerString = (subtitle) ? [NSString stringWithFormat:@"%@ %@",title, subtitle] : title;
+//    NSString *title = [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"];
+//    NSString *subtitle = [resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
+//    NSString *headerString = (subtitle) ? [NSString stringWithFormat:@"%@ %@",title, subtitle] : title;
 //    tallyInput.headerDictionary = @{@"Header": headerString,
 //                                    @"Subheader": [NSString stringWithFormat:@"%@ > %@ @ %@",
 //                                                   self.countryName,
@@ -193,6 +206,12 @@ NSString *const kTallyOrganization = @"Organization";
 }
 
 #pragma mark - UICollectionView Delegate Flow Layout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    
+    return [HCRHeaderTallyView preferredHeaderSizeForCollectionView:collectionView];
+    
+}
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     

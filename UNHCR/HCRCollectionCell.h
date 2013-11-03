@@ -24,12 +24,14 @@ typedef NS_ENUM(NSInteger, HCRCollectionCellProcessingViewPosition) {
 @property (nonatomic) HCRCollectionCellProcessingViewPosition processingViewPosition;
 
 @property (nonatomic) CGFloat indentForContent;
+@property (nonatomic) CGFloat trailingSpaceForContent;
 
 @property (nonatomic, strong) UIColor *highlightedColor;
 
 @property (nonatomic, readonly) UIView *bottomLineView;
 
 + (CGFloat)preferredIndentForContent;
++ (CGFloat)preferredTrailingSpaceForContent;
 
 + (CGSize)preferredSizeForCollectionView:(UICollectionView *)collectionView;
 + (CGSize)preferredSizeForAppDescriptionCollectionCellForCollectionView:(UICollectionView *)collectionView;

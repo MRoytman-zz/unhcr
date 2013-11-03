@@ -35,9 +35,9 @@ static const CGFloat kDetailXPadding = 4.0;
 
 @property (nonatomic, readwrite) UIImageView *badgeImageView;
 @property (nonatomic, readwrite) UILabel *titleLabel;
+@property (nonatomic, readwrite) UIImageView *forwardImage;
 
 @property UILabel *detailLabel;
-@property UIImageView *forwardImage;
 
 @property NSNumberFormatter *numberFormatter;
 
@@ -110,10 +110,6 @@ static const CGFloat kDetailXPadding = 4.0;
     
     return 2 * kBadgePadding + kBadgeDimension;
     
-}
-
-+ (CGFloat)preferredTrailingSpaceForContent {
-    return kForwardButtonPadding;
 }
 
 #pragma mark - Getters & Setters

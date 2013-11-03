@@ -9,6 +9,7 @@
 #import "HCRCollectionViewController.h"
 
 @interface HCRTallySheetDetailViewController : HCRCollectionViewController
+<UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) NSDictionary *tallySheetData;
 
