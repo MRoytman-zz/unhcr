@@ -21,8 +21,6 @@ static const CGFloat kDefaultItemSize = 93.0;
 @property UILabel *clusterLabel;
 @property UIImageView *clusterImageView;
 
-@property UIButton *disclosureButton;
-
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -62,9 +60,6 @@ static const CGFloat kDefaultItemSize = 93.0;
         
         self.clusterImageView.image = nil;
         self.clusterLabel.text = nil;
-        
-        [self.disclosureButton removeFromSuperview];
-        self.disclosureButton = nil;
         
         return;
     }
@@ -119,36 +114,6 @@ static const CGFloat kDefaultItemSize = 93.0;
     [self.clusterLabel sizeToFit];
     self.clusterLabel.center = CGPointMake(CGRectGetMidX(self.bounds),
                                            CGRectGetHeight(self.bounds) * kImageToTextRatio + CGRectGetMidY(self.clusterLabel.bounds) + 4);
-    
-    if ([HCRDataSource globalEmergenciesData].count > 0) {
-        
-        BOOL showDisclosure = NO;
-        
-        for (NSDictionary *alertsDictionary in [HCRDataSource globalEmergenciesData]) {
-            
-            NSString *alertCluster = [alertsDictionary objectForKey:@"Cluster" ofClass:@"NSString"];
-            if ([alertCluster isEqualToString:clusterName]) {
-                showDisclosure = YES;
-                break;
-            }
-            
-        }
-        
-        if (showDisclosure) {
-            
-            if (!self.disclosureButton) {
-                self.disclosureButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-                [self addSubview:self.disclosureButton];
-                
-                self.disclosureButton.tintColor = [UIColor redColor];
-                self.disclosureButton.userInteractionEnabled = NO;
-            }
-            
-            self.disclosureButton.center = CGPointMake(CGRectGetMaxX(self.bounds) - CGRectGetMidX(self.disclosureButton.bounds),
-                                                       CGRectGetMidY(self.disclosureButton.bounds));
-        }
-        
-    }
     
 }
 

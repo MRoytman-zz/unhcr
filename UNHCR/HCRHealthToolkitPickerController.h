@@ -8,13 +8,9 @@
 
 #import "HCRCollectionViewController.h"
 
-@interface HCRTallySheetPickerViewController : HCRCollectionViewController
+@interface HCRHealthToolkitPickerController : HCRCollectionViewController
 <UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) NSString *countryName;
-
-@property (nonatomic, strong) NSDictionary *campData;
 @property (nonatomic, strong) NSDictionary *campClusterData;
-@property (nonatomic, strong) NSDictionary *selectedClusterMetaData;
 
 @end

@@ -6,24 +6,26 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import "HCRTallySheetPickerViewController.h"
+#import "HCRHealthToolkitPickerController.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRTableButtonCell.h"
 #import "HCRTallySheetDetailViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
-NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
+NSString *const kHealthToolkitCellIdentifier = @"kHealthToolkitCellIdentifier";
+NSString *const kHealthToolkitHeaderIdentifier = @"kHealthToolkitHeaderIdentifier";
+NSString *const kHealthToolkitFooterIdentifier = @"kHealthToolkitFooterIdentifier";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface HCRTallySheetPickerViewController ()
+@interface HCRHealthToolkitPickerController ()
 
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@implementation HCRTallySheetPickerViewController
+@implementation HCRHealthToolkitPickerController
 
 - (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
@@ -40,29 +42,23 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
 	// Do any additional setup after loading the view.
     
     NSParameterAssert(self.campClusterData);
-//    NSParameterAssert(self.selectedClusterMetaData);
     
     self.highlightCells = YES;
     
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
-    tableLayout.sectionInset = UIEdgeInsetsMake(12, 0, 12, 0);
+    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
     
     [self.collectionView registerClass:[HCRTableButtonCell class]
-            forCellWithReuseIdentifier:kTallySheetCellIdentifier];
+            forCellWithReuseIdentifier:kHealthToolkitCellIdentifier];
     
-//    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-//    [self.view addSubview:backgroundImageView];
-//    [self.view sendSubviewToBack:backgroundImageView];
-//    
-//    UIView *background = [[UIView alloc] initWithFrame:self.view.bounds];
-//    [self.view addSubview:background];
-//    [self.view sendSubviewToBack:background];
-//    
-//    UIImage *clusterImage = [[UIImage imageNamed:[self.selectedClusterMetaData objectForKey:@"Image"]] colorImage:[UIColor lightGrayColor]
-//                                                                                                    withBlendMode:kCGBlendModeNormal
-//                                                                                                 withTransparency:YES];
-//    background.backgroundColor = [UIColor colorWithPatternImage:clusterImage];
+    [self.collectionView registerClass:[HCRHeaderView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                   withReuseIdentifier:kHealthToolkitHeaderIdentifier];
+    
+    [self.collectionView registerClass:[HCRFooterView class]
+            forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                   withReuseIdentifier:kHealthToolkitFooterIdentifier];
     
 }
 
@@ -87,7 +83,8 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRTableButtonCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kTallySheetCellIdentifier forIndexPath:indexPath];
+    HCRTableButtonCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kHealthToolkitCellIdentifier
+                                                                         forIndexPath:indexPath];
     
     NSArray *tallySheets = [self.campClusterData objectForKey:@"TallySheets" ofClass:@"NSArray"];
     NSDictionary *sheet = [tallySheets objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
@@ -100,6 +97,32 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
     
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        
+        HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                   withReuseIdentifier:kHealthToolkitHeaderIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        header.titleString = @"Tally Sheets";
+        
+        return header;
+        
+    } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        
+        HCRFooterView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                   withReuseIdentifier:kHealthToolkitFooterIdentifier
+                                                                          forIndexPath:indexPath];
+        
+        return footer;
+        
+    }
+    
+    return nil;
+    
+}
+
 #pragma mark - UICollectionView Delegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -109,14 +132,22 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
     NSArray *tallySheets = [self.campClusterData objectForKey:@"TallySheets" ofClass:@"NSArray"];
     
     tallyDetail.tallySheetData = [tallySheets objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
-    tallyDetail.selectedClusterMetaData = self.selectedClusterMetaData;
-    tallyDetail.countryName = self.countryName;
-    tallyDetail.campName = [self.campData objectForKey:@"Name" ofClass:@"NSString"];
-    tallyDetail.campClusterData = self.campClusterData;
     
     UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:tallyDetail];
     
     [self presentViewController:navigation animated:YES completion:nil];
+    
+}
+
+#pragma mark - UICollectionView Delegate Flow Layout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    
+    if (section == [collectionView numberOfSections] - 1) {
+        return [HCRFooterView preferredFooterSizeForCollectionView:collectionView];
+    }
+    
+    return [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
     
 }
 

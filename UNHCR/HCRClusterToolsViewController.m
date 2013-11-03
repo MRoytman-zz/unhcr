@@ -9,7 +9,7 @@
 #import "HCRClusterToolsViewController.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRTableButtonCell.h"
-#import "HCRTallySheetPickerViewController.h"
+#import "HCRHealthToolkitPickerController.h"
 #import "EAEmailUtilities.h"
 #import "HCREmergencyCell.h"
 #import "HCRContactViewController.h"
@@ -25,7 +25,7 @@ NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellI
 
 NSString *const kResourceNameSupplies = @"Request Supplies";
 NSString *const kResourceNameSitReps = @"Situation Reports";
-NSString *const kResourceNameTallySheets = @"Tally Sheets";
+NSString *const kResourceNameTallySheets = @"HIS Toolkit";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -300,13 +300,10 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 
 - (void)_tallySheetsButtonPressed {
     
-    HCRTallySheetPickerViewController *healthTallySheet = [[HCRTallySheetPickerViewController alloc] initWithCollectionViewLayout:[HCRTallySheetPickerViewController preferredLayout]];
+    HCRHealthToolkitPickerController *healthTallySheet = [[HCRHealthToolkitPickerController alloc] initWithCollectionViewLayout:[HCRHealthToolkitPickerController preferredLayout]];
     
     healthTallySheet.title = kResourceNameTallySheets;
-//    healthTallySheet.countryName = self.countryName;
-    healthTallySheet.campData = self.campDictionary;
     healthTallySheet.campClusterData = self.campClusterData;
-//    healthTallySheet.selectedClusterMetaData = self.selectedClusterMetaData;
     
     [self.navigationController pushViewController:healthTallySheet animated:YES];
     

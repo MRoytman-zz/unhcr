@@ -57,7 +57,7 @@
 		4FD838F8180121EF00B49498 /* HCRGraphCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838F7180121EF00B49498 /* HCRGraphCell.m */; };
 		4FD838FE18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838FD18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m */; };
 		4FD8390118013F5200B49498 /* UIDevice+EAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390018013F5200B49498 /* UIDevice+EAAdditions.m */; };
-		4FD839051801DF8900B49498 /* HCRTallySheetPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839041801DF8900B49498 /* HCRTallySheetPickerViewController.m */; };
+		4FD839051801DF8900B49498 /* HCRHealthToolkitPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839041801DF8900B49498 /* HCRHealthToolkitPickerController.m */; };
 		4FD839081801E59500B49498 /* HCRTallySheetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839071801E59500B49498 /* HCRTallySheetDetailViewController.m */; };
 		4FD8390B1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390A1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m */; };
 		4FD8390E1801EB5F00B49498 /* HCRDataEntryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */; };
@@ -166,8 +166,8 @@
 		4FD838FD18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRHomeLoginMenuScrollView.m; sourceTree = "<group>"; };
 		4FD838FF18013F5200B49498 /* UIDevice+EAAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+EAAdditions.h"; sourceTree = "<group>"; };
 		4FD8390018013F5200B49498 /* UIDevice+EAAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+EAAdditions.m"; sourceTree = "<group>"; };
-		4FD839031801DF8900B49498 /* HCRTallySheetPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTallySheetPickerViewController.h; sourceTree = "<group>"; };
-		4FD839041801DF8900B49498 /* HCRTallySheetPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTallySheetPickerViewController.m; sourceTree = "<group>"; };
+		4FD839031801DF8900B49498 /* HCRHealthToolkitPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRHealthToolkitPickerController.h; sourceTree = "<group>"; };
+		4FD839041801DF8900B49498 /* HCRHealthToolkitPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRHealthToolkitPickerController.m; sourceTree = "<group>"; };
 		4FD839061801E59500B49498 /* HCRTallySheetDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTallySheetDetailViewController.h; sourceTree = "<group>"; };
 		4FD839071801E59500B49498 /* HCRTallySheetDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTallySheetDetailViewController.m; sourceTree = "<group>"; };
 		4FD839091801E5B200B49498 /* HCRTallySheetDetailInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTallySheetDetailInputViewController.h; sourceTree = "<group>"; };
@@ -229,13 +229,6 @@
 				4F1C940417FC28C40003AA21 /* HCRClusterToolsViewController.m */,
 			);
 			name = "Cluster Tools View";
-			sourceTree = "<group>";
-		};
-		4F1C940617FC28C80003AA21 /* Camp-Cluster Detail */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Camp-Cluster Detail";
 			sourceTree = "<group>";
 		};
 		4F1C940C17FCBE6A0003AA21 /* Home View */ = {
@@ -348,16 +341,6 @@
 			name = "Camp Overview";
 			sourceTree = "<group>";
 		};
-		4F7588901824C43B00ECE9CE /* [[DEPRECATE?]] */ = {
-			isa = PBXGroup;
-			children = (
-				4F866B0F17FAB83B000350E4 /* HCRClusterPickerController.h */,
-				4F866B1017FAB83B000350E4 /* HCRClusterPickerController.m */,
-				4F1C940617FC28C80003AA21 /* Camp-Cluster Detail */,
-			);
-			name = "[[DEPRECATE?]]";
-			sourceTree = "<group>";
-		};
 		4F866AB617F9E022000350E4 = {
 			isa = PBXGroup;
 			children = (
@@ -411,10 +394,9 @@
 				4F75888F1824C42A00ECE9CE /* Camp Overview */,
 				4FD838EF18011B5A00B49498 /* Requests Data Explorer */,
 				4F1445BF1825E57C005078F3 /* Cluster Tools View */,
-				4F7588901824C43B00ECE9CE /* [[DEPRECATE?]] */,
 				4F75888518243A7100ECE9CE /* Directory Detail */,
-				4FD839021801DF6200B49498 /* Tally Sheet Picker */,
-				4FD8391218025C0700B49498 /* Tally Sheet Detail */,
+				4FD839021801DF6200B49498 /* HIS Toolkit Picker */,
+				4FD8391218025C0700B49498 /* HIS Tally Sheets */,
 				4F866AC917F9E022000350E4 /* Supporting Files */,
 			);
 			path = UNHCR;
@@ -434,6 +416,8 @@
 		4F866AFD17FA8324000350E4 /* (DEPRECATED) delete these */ = {
 			isa = PBXGroup;
 			children = (
+				4F866B0F17FAB83B000350E4 /* HCRClusterPickerController.h */,
+				4F866B1017FAB83B000350E4 /* HCRClusterPickerController.m */,
 				4F866B0617FAA09B000350E4 /* HCRCampCollectionCell.h */,
 				4F866B0717FAA09B000350E4 /* HCRCampCollectionCell.m */,
 				4F866AF117F9EB8C000350E4 /* HCRCountryCollectionViewController.h */,
@@ -508,16 +492,16 @@
 			name = "Requests Data Explorer";
 			sourceTree = "<group>";
 		};
-		4FD839021801DF6200B49498 /* Tally Sheet Picker */ = {
+		4FD839021801DF6200B49498 /* HIS Toolkit Picker */ = {
 			isa = PBXGroup;
 			children = (
-				4FD839031801DF8900B49498 /* HCRTallySheetPickerViewController.h */,
-				4FD839041801DF8900B49498 /* HCRTallySheetPickerViewController.m */,
+				4FD839031801DF8900B49498 /* HCRHealthToolkitPickerController.h */,
+				4FD839041801DF8900B49498 /* HCRHealthToolkitPickerController.m */,
 			);
-			name = "Tally Sheet Picker";
+			name = "HIS Toolkit Picker";
 			sourceTree = "<group>";
 		};
-		4FD8391218025C0700B49498 /* Tally Sheet Detail */ = {
+		4FD8391218025C0700B49498 /* HIS Tally Sheets */ = {
 			isa = PBXGroup;
 			children = (
 				4FD839061801E59500B49498 /* HCRTallySheetDetailViewController.h */,
@@ -525,7 +509,7 @@
 				4FD839091801E5B200B49498 /* HCRTallySheetDetailInputViewController.h */,
 				4FD8390A1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m */,
 			);
-			name = "Tally Sheet Detail";
+			name = "HIS Tally Sheets";
 			sourceTree = "<group>";
 		};
 		4FD8391618032B4100B49498 /* Emergencies View */ = {
@@ -655,7 +639,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F0D7B611820C14B007A22D8 /* HCRMessagesViewController.m in Sources */,
-				4FD839051801DF8900B49498 /* HCRTallySheetPickerViewController.m in Sources */,
+				4FD839051801DF8900B49498 /* HCRHealthToolkitPickerController.m in Sources */,
 				4FDD8A3B18218B67002B717E /* HCRDirectMessageCell.m in Sources */,
 				4F866AD317F9E022000350E4 /* HCRAppDelegate.m in Sources */,
 				4F59A7C01825BE7B006EFE41 /* EASoundManager.m in Sources */,

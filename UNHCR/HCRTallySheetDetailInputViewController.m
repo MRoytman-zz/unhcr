@@ -57,18 +57,6 @@ NSString *const kTallyDetailInputHeaderIdentifier = @"kTallyDetailInputHeaderIde
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                    withReuseIdentifier:kTallyDetailInputHeaderIdentifier];
     
-//    UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-//    [self.view addSubview:backgroundImageView];
-//    [self.view sendSubviewToBack:backgroundImageView];
-//    
-//    UIView *background = [[UIView alloc] initWithFrame:self.view.bounds];
-//    [self.view addSubview:background];
-//    [self.view sendSubviewToBack:background];
-//    
-//    UIImage *clusterImage = [[UIImage imageNamed:[self.selectedClusterMetaData objectForKey:@"Image"]] colorImage:[UIColor lightGrayColor]
-//                                                                                                    withBlendMode:kCGBlendModeNormal
-//                                                                                                 withTransparency:YES];
-//    background.backgroundColor = [UIColor colorWithPatternImage:clusterImage];
 }
 
 #pragma mark - Class Methods
