@@ -62,6 +62,16 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
     if (self) {
         // Initialization code
         self.indentForContent = kIndentGlobalCustom;
+        
+        self.replyButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.contentView addSubview:self.replyButton];
+        
+        [self.replyButton setTitle:@"Reply" forState:UIControlStateNormal];
+        
+        self.forwardButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.contentView addSubview:self.forwardButton];
+        
+        [self.forwardButton setTitle:@"Forward" forState:UIControlStateNormal];
     }
     return self;
 }
@@ -253,21 +263,6 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
                            nameString,
                            emailString,
                            timeString];
-    
-    // BUTTONS YAY
-    if (!self.replyButton) {
-        self.replyButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.contentView addSubview:self.replyButton];
-        
-        [self.replyButton setTitle:@"Reply" forState:UIControlStateNormal];
-    }
-    
-    if (!self.forwardButton) {
-        self.forwardButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.contentView addSubview:self.forwardButton];
-        
-        [self.forwardButton setTitle:@"Forward" forState:UIControlStateNormal];
-    }
     
     [self setNeedsLayout];
 }

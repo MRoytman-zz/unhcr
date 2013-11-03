@@ -47,7 +47,10 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
 
 // DEBUG only?
 @property (nonatomic, strong) NSArray *allMessagesDataArray;
-@property NSDateFormatter *dateFormatter;
+// DEBUG
+
+@property NSDateFormatter *dateFormatterPlain;
+@property NSDateFormatter *dateFormatterTimeStamp;
 
 @end
 
@@ -70,7 +73,8 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
         self.bulletinData = [HCRDataSource globalOnlyBulletinsData];
         self.emergencyData = [HCRDataSource globalEmergenciesData];
         
-        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:NO];
+        self.dateFormatterPlain = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
+        self.dateFormatterTimeStamp = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMMHHmm forceEuropeanFormat:YES];
         
         self.highlightCells = YES;
         
@@ -387,13 +391,14 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
     
 }
 
-- (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index {
+- (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index withTimeStamp:(BOOL)showTimeStamp {
     
     // go back [index] days since today
-    NSTimeInterval numberOfSecondsToTargetDate = ((self.allMessagesDataArray.count - (index + 1)) * 60 * 60 * 24);
+    NSTimeInterval numberOfSecondsToTargetDate = ((self.allMessagesDataArray.count - (index + 1)) * 60 * 60 * 24) / 4.5;
     NSDate *targetDate = [NSDate dateWithTimeIntervalSinceNow:(-1 * numberOfSecondsToTargetDate)];
     
-    NSString *dateString = [self.dateFormatter stringFromDate:targetDate];
+    NSDateFormatter *formatter = (showTimeStamp) ? self.dateFormatterTimeStamp : self.dateFormatterPlain;
+    NSString *dateString = [formatter stringFromDate:targetDate];
     
     return dateString;
     
@@ -403,29 +408,28 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    // TODO: make this less hacky or get rid of it.. not sure how else to solve this problem, sadly
-    NSInteger triggerSection = [self _sectionForHeader:kHeaderTitleAgencies];
-    triggerSection = (triggerSection == 0) ? 0 : triggerSection - 1;
-    
-    NSInteger triggerItem = [self.collectionView numberOfItemsInSection:triggerSection] - 1;
-    NSIndexPath *triggerIndexPath = [NSIndexPath indexPathForItem:triggerItem inSection:triggerSection];
-    UICollectionViewCell *triggerCell = [self.collectionView cellForItemAtIndexPath:triggerIndexPath];
-    
-    if (triggerCell &&
-        !self.hackyWorkaroundView) {
+    if (!self.hackyWorkaroundView) {
+        // TODO: make this less hacky or get rid of it.. not sure how else to solve this problem, sadly
+        NSInteger triggerSection = [self _sectionForHeader:kHeaderTitleAgencies];
+        triggerSection = (triggerSection == 0) ? 0 : triggerSection - 1;
         
-        // ADD WHITE BACKGROUND TO CLUSTER PICKER SECTION
-        // TODO: make not hacky; is there a way to show background on just one section of UICollectionView?
-        CGFloat yOffsetForHackyView = CGRectGetMaxY(triggerCell.frame) + [HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView].height;
+        NSInteger triggerItem = [self.collectionView numberOfItemsInSection:triggerSection] - 1;
+        NSIndexPath *triggerIndexPath = [NSIndexPath indexPathForItem:triggerItem inSection:triggerSection];
+        UICollectionViewCell *triggerCell = [self.collectionView cellForItemAtIndexPath:triggerIndexPath];
         
-        self.hackyWorkaroundView = [[UIView alloc] initWithFrame:[self _hackyWorkaroundFrameAtYOffset:yOffsetForHackyView]];
-        [self.collectionView insertSubview:self.hackyWorkaroundView atIndex:0];
-        
-        self.hackyWorkaroundView.backgroundColor = [UIColor whiteColor];
-        
+        if (triggerCell) {
+            
+            // ADD WHITE BACKGROUND TO CLUSTER PICKER SECTION
+            // TODO: make not hacky; is there a way to show background on just one section of UICollectionView?
+            CGFloat yOffsetForHackyView = CGRectGetMaxY(triggerCell.frame) + [HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView].height;
+            
+            self.hackyWorkaroundView = [[UIView alloc] initWithFrame:[self _hackyWorkaroundFrameAtYOffset:yOffsetForHackyView]];
+            [self.collectionView insertSubview:self.hackyWorkaroundView atIndex:0];
+            
+            self.hackyWorkaroundView.backgroundColor = [UIColor whiteColor];
+            
+        }
     }
-    
-    
     
 }
 
@@ -434,7 +438,8 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
 - (NSArray *)allMessagesDataArray {
     
     // TODO: debug only - need to retrieve live data
-    static const NSInteger kNumberOfDataPoints = 7;
+    static const NSInteger kNumberOfDaysToShow = 7;
+    static const NSInteger kNumberOfDataPoints = kNumberOfDaysToShow * 4.5;
     static const CGFloat kDataPointBaseline = 50.0;
     static const CGFloat kDataPointRange = 50.0;
     static const CGFloat kDataPointIncrement = 6.0;

@@ -60,11 +60,8 @@ static const CGFloat kDefaultItemSize = 93.0;
     
     if ( clusterDictionary == nil ) {
         
-        [self.clusterImageView removeFromSuperview];
-        self.clusterImageView = nil;
-        
-        [self.clusterLabel removeFromSuperview];
-        self.clusterLabel = nil;
+        self.clusterImageView.image = nil;
+        self.clusterLabel.text = nil;
         
         [self.disclosureButton removeFromSuperview];
         self.disclosureButton = nil;

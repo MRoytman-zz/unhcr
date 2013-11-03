@@ -26,7 +26,9 @@ static const CGFloat kGraphContainerPadding = 8.0;
 @interface HCRRequestDataViewController ()
 
 @property NSArray *clusterCompareDataArray;
-@property NSDateFormatter *dateFormatter;
+
+@property NSDateFormatter *dateFormatterPlain;
+@property NSDateFormatter *dateFormatterTimeStamp;
 
 @property HCRCollectionViewController *dataPicker;
 @property SCGraphView *graphView;
@@ -52,7 +54,8 @@ static const CGFloat kGraphContainerPadding = 8.0;
         
         self.clusterCompareDataArray = clusterData;
         
-        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:NO];
+        self.dateFormatterPlain = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
+        self.dateFormatterTimeStamp = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMMHHmm forceEuropeanFormat:YES];
         
         [[EASoundManager sharedSoundManager] registerSoundIDs:@[@(EASoundIDClick1)]];
         
@@ -269,15 +272,16 @@ static const CGFloat kGraphContainerPadding = 8.0;
     
 }
 
-- (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index {
+- (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index withTimeStamp:(BOOL)showTimeStamp {
     
     NSArray *dataPointArray = [self.messagesReceivedArrays objectAtIndex:graphView.tag];
     
     // go back [index] days since today
-    NSTimeInterval numberOfSecondsToTargetDate = ((dataPointArray.count - (index + 1)) * 60 * 60 * 24);
+    NSTimeInterval numberOfSecondsToTargetDate = ((dataPointArray.count - (index + 1)) * 60 * 60 * 24) / 4.5;
     NSDate *targetDate = [NSDate dateWithTimeIntervalSinceNow:(-1 * numberOfSecondsToTargetDate)];
     
-    NSString *dateString = [self.dateFormatter stringFromDate:targetDate];
+    NSDateFormatter *formatter = (showTimeStamp) ? self.dateFormatterTimeStamp : self.dateFormatterPlain;
+    NSString *dateString = [formatter stringFromDate:targetDate];
     
     return dateString;
     
@@ -303,7 +307,8 @@ static const CGFloat kGraphContainerPadding = 8.0;
 - (NSArray *)messagesReceivedArrays {
     
     // TODO: debug only - need to retrieve live data
-    static const NSInteger kNumberOfDataPoints = 7;
+    static const NSInteger kNumberOfDaysToShow = 7;
+    static const NSInteger kNumberOfDataPoints = kNumberOfDaysToShow * 4.5;
     static const CGFloat kDataPointBaseline = 50.0;
     static const CGFloat kDataPointRange = 50.0;
     static const CGFloat kDataPointIncrement = 6.0;

@@ -12,7 +12,6 @@
 #import "HCRClusterFlowLayout.h"
 #import "HCRClusterPickerCell.h"
 #import "HCRClusterToolsViewController.h"
-#import "HCRRequestsDataViewController.h"
 #import "HCRHeaderView.h"
 #import "HCRFooterView.h"
 
@@ -154,10 +153,10 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
 
 - (void)_footerButtonPressed {
     
-    HCRRequestsDataViewController *campClusterCompareController = [[HCRRequestsDataViewController alloc] initWithCollectionViewLayout:[HCRRequestsDataViewController preferredLayout]];
-    campClusterCompareController.campDictionary = self.campDictionary;
-    
-    [self.navigationController pushViewController:campClusterCompareController animated:YES];
+//    HCRRequestsDataViewController *campClusterCompareController = [[HCRRequestsDataViewController alloc] initWithCollectionViewLayout:[HCRRequestsDataViewController preferredLayout]];
+//    campClusterCompareController.campDictionary = self.campDictionary;
+//    
+//    [self.navigationController pushViewController:campClusterCompareController animated:YES];
     
 }
 

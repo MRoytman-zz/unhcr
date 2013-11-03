@@ -13,8 +13,8 @@
 typedef NS_ENUM(NSInteger, HCRDateFormat) {
     HCRDateFormatHHmm,
     HCRDateFormatddMMM,
+    HCRDateFormatddMMMHHmm,
     HCRDateFormatMMMdd,
-    HCRDateFormatMMMddHHmm,
     HCRDateFormatMMMddhmma,
     HCRDateFormatSMSDates,
     HCRDateFormatSMSDatesWithTime

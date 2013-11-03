@@ -109,6 +109,17 @@ NSString *const kBulletinEmergencyCellIdentifier = @"kBulletinEmergencyCellIdent
                                                                                   forIndexPath:indexPath];
         bulletinCell.bulletinDictionary = cellDictionary;
         
+        bulletinCell.replyButton.tag = indexPath.section;
+        bulletinCell.forwardButton.tag = indexPath.section;
+        
+        [bulletinCell.replyButton addTarget:self
+                                     action:@selector(_replyButtonPressed:)
+                           forControlEvents:UIControlEventTouchUpInside];
+        
+        [bulletinCell.forwardButton addTarget:self
+                                       action:@selector(_forwardButtonPressed:)
+                             forControlEvents:UIControlEventTouchUpInside];
+        
         cell = bulletinCell;
     }
     
@@ -184,6 +195,14 @@ NSString *const kBulletinEmergencyCellIdentifier = @"kBulletinEmergencyCellIdent
     NSDictionary *cellDictionary = [self.bulletinArray objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
     
     return [[cellDictionary objectForKey:@"Emergency" ofClass:@"NSNumber" mustExist:NO] boolValue];
+    
+}
+
+- (void)_replyButtonPressed:(UIButton *)sender {
+    
+}
+
+- (void)_forwardButtonPressed:(UIButton *)sender {
     
 }
 

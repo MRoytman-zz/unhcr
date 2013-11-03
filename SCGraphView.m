@@ -193,7 +193,7 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     _highlightedDataPointIndex = highlightedDataPointIndex;
     
     if (highlightedDataPointIndex &&
-        oldValue != newValue) {
+        oldValue.integerValue != newValue.integerValue) {
         
         if (oldValue) {
             [[EASoundManager sharedSoundManager] playSoundOnce:EASoundIDClick0];
@@ -345,8 +345,8 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     for (NSInteger i = 0; i < labelsToDisplay; i++) {
         
         CGFloat actualLabelXPosition = i * baseLabelGap + baseLabelGap;
-        NSInteger indexToUse = [self _indexOfDataAtXPosition:actualLabelXPosition withRoundingMode:self.roundingMode];
-        NSString *labelStringToUse = [self.dataSource graphView:self labelForDataPointAtIndex:indexToUse];
+        NSInteger indexToUse = (i == 0) ? 0 : [self _indexOfDataAtXPosition:actualLabelXPosition withRoundingMode:self.roundingMode];
+        NSString *labelStringToUse = [self.dataSource graphView:self labelForDataPointAtIndex:indexToUse withTimeStamp:NO];
         
         // write the string
         CGSize labelSize = [labelStringToUse sizeWithAttributes:@{NSFontAttributeName: self.preferredLabelFont}];
@@ -680,7 +680,7 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     
     CGFloat maxWidth = 0;
     for (NSInteger i = 0; i < numberOfDataPoints; i++) {
-        NSString *labelString = [self.dataSource graphView:self labelForDataPointAtIndex:i];
+        NSString *labelString = [self.dataSource graphView:self labelForDataPointAtIndex:i withTimeStamp:NO];
         CGSize projectedLabelSize = [labelString sizeWithAttributes:@{NSFontAttributeName: labelFont}];
         CGFloat projectedLabelWidth = projectedLabelSize.width;
         maxWidth = MAX(maxWidth,projectedLabelWidth);
@@ -754,9 +754,9 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
     NSNumber *dataValue = [self.dataSource graphView:self dataPointForIndex:index];
     NSString *dataValueString = [self.numberFormatter stringFromNumber:dataValue];
     
-    NSString *dataDate = [self.dataSource graphView:self labelForDataPointAtIndex:index];
+    NSString *dataDate = [self.dataSource graphView:self labelForDataPointAtIndex:index withTimeStamp:YES];
     
-    self.highlightedDataPointLabel.text = [NSString stringWithFormat:@"%@: %@",
+    self.highlightedDataPointLabel.text = [NSString stringWithFormat:@"%@ | %@",
                                            dataDate,
                                            dataValueString];
     

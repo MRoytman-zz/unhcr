@@ -61,7 +61,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 @property NSArray *signedInLabelsArray;
 @property NSArray *signedInIconsArray;
 
-@property NSDateFormatter *dateFormatter;
+@property NSDateFormatter *dateFormatterPlain;
+@property NSDateFormatter *dateFormatterTimeStamp;
 
 @property NSArray *bookmarkedCamps;
 
@@ -89,7 +90,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         
         self.signedIn = YES;
         
-        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
+        self.dateFormatterPlain = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
+        self.dateFormatterTimeStamp = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMMHHmm forceEuropeanFormat:YES];
         
         self.signedInIconsArray = @[
                                     @[@"evilapples-icon",
@@ -623,13 +625,14 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
 }
 
-- (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index {
+- (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index withTimeStamp:(BOOL)showTimeStamp {
     
     // go back [index] days since today
-    NSTimeInterval numberOfSecondsToTargetDate = ((self.messagesReceivedArray.count - (index + 1)) * 60 * 60 * 24);
+    NSTimeInterval numberOfSecondsToTargetDate = ((self.messagesReceivedArray.count - (index + 1)) * 60 * 60 * 24) / 4.0;
     NSDate *targetDate = [NSDate dateWithTimeIntervalSinceNow:(-1 * numberOfSecondsToTargetDate)];
     
-    NSString *dateString = [self.dateFormatter stringFromDate:targetDate];
+    NSDateFormatter *formatter = (showTimeStamp) ? self.dateFormatterTimeStamp : self.dateFormatterPlain;
+    NSString *dateString = [formatter stringFromDate:targetDate];
     
     return dateString;
 }
@@ -687,7 +690,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 - (NSArray *)messagesReceivedArray {
     
     // TODO: debug only - need to retrieve live data
-    static const NSInteger kNumberOfDataPoints = 7;
+    static const NSInteger kNumberOfDaysToShow = 7;
+    static const NSInteger kNumberOfDataPoints = kNumberOfDaysToShow * 4.0;
     static const CGFloat kDataPointBaseline = 50.0;
     static const CGFloat kDataPointRange = 50.0;
     static const CGFloat kDataPointIncrement = 6.0;

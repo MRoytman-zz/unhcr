@@ -54,7 +54,7 @@ typedef NS_ENUM(NSInteger, SCDataTimePeriod) {
 - (CGFloat)graphViewMinYValue:(SCGraphView *)graphView;
 - (NSNumber *)graphView:(SCGraphView *)graphView dataPointForIndex:(NSInteger)index;
 - (NSInteger)numberOfDataPointsInGraphView:(SCGraphView *)graphView;
-- (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index;
+- (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index withTimeStamp:(BOOL)showTimeStamp;
 @end
                                                                            
 ////////////////////////////////////////////////////////////////////////////////

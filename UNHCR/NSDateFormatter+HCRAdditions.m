@@ -23,12 +23,12 @@
             dateFormatter.dateFormat = @"dd MMM";
             break;
             
-        case HCRDateFormatMMMdd:
-            dateFormatter.dateFormat = @"MMM dd";
+        case HCRDateFormatddMMMHHmm:
+            dateFormatter.dateFormat = @"dd MMM HH:mm";
             break;
             
-        case HCRDateFormatMMMddHHmm:
-            dateFormatter.dateFormat = @"MMM dd, HH:mm";
+        case HCRDateFormatMMMdd:
+            dateFormatter.dateFormat = @"MMM dd";
             break;
             
         case HCRDateFormatMMMddhmma:

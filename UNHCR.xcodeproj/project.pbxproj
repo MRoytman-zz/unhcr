@@ -54,7 +54,6 @@
 		4FD838E81800D88200B49498 /* EAEmailUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838E71800D88200B49498 /* EAEmailUtilities.m */; };
 		4FD838EB1800D95000B49498 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838EA1800D95000B49498 /* UIAlertView+Blocks.m */; };
 		4FD838EE1800DFB200B49498 /* HCRTableButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838ED1800DFB200B49498 /* HCRTableButtonCell.m */; };
-		4FD838F518011BB300B49498 /* HCRRequestsDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838F418011BB300B49498 /* HCRRequestsDataViewController.m */; };
 		4FD838F8180121EF00B49498 /* HCRGraphCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838F7180121EF00B49498 /* HCRGraphCell.m */; };
 		4FD838FE18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838FD18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m */; };
 		4FD8390118013F5200B49498 /* UIDevice+EAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390018013F5200B49498 /* UIDevice+EAAdditions.m */; };
@@ -161,8 +160,6 @@
 		4FD838EA1800D95000B49498 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		4FD838EC1800DFB200B49498 /* HCRTableButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTableButtonCell.h; sourceTree = "<group>"; };
 		4FD838ED1800DFB200B49498 /* HCRTableButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTableButtonCell.m; sourceTree = "<group>"; };
-		4FD838F318011BB300B49498 /* HCRRequestsDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRRequestsDataViewController.h; sourceTree = "<group>"; };
-		4FD838F418011BB300B49498 /* HCRRequestsDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRRequestsDataViewController.m; sourceTree = "<group>"; };
 		4FD838F6180121EF00B49498 /* HCRGraphCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRGraphCell.h; sourceTree = "<group>"; };
 		4FD838F7180121EF00B49498 /* HCRGraphCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRGraphCell.m; sourceTree = "<group>"; };
 		4FD838FC18013F1F00B49498 /* HCRHomeLoginMenuScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRHomeLoginMenuScrollView.h; sourceTree = "<group>"; };
@@ -354,8 +351,6 @@
 		4F7588901824C43B00ECE9CE /* [[DEPRECATE?]] */ = {
 			isa = PBXGroup;
 			children = (
-				4FD838F318011BB300B49498 /* HCRRequestsDataViewController.h */,
-				4FD838F418011BB300B49498 /* HCRRequestsDataViewController.m */,
 				4F866B0F17FAB83B000350E4 /* HCRClusterPickerController.h */,
 				4F866B1017FAB83B000350E4 /* HCRClusterPickerController.m */,
 				4F1C940617FC28C80003AA21 /* Camp-Cluster Detail */,
@@ -662,7 +657,6 @@
 				4F0D7B611820C14B007A22D8 /* HCRMessagesViewController.m in Sources */,
 				4FD839051801DF8900B49498 /* HCRTallySheetPickerViewController.m in Sources */,
 				4FDD8A3B18218B67002B717E /* HCRDirectMessageCell.m in Sources */,
-				4FD838F518011BB300B49498 /* HCRRequestsDataViewController.m in Sources */,
 				4F866AD317F9E022000350E4 /* HCRAppDelegate.m in Sources */,
 				4F59A7C01825BE7B006EFE41 /* EASoundManager.m in Sources */,
 				4F1C940217FC17770003AA21 /* UIImage+RMImageManipulation.m in Sources */,
