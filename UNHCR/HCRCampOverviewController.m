@@ -15,6 +15,7 @@
 #import "HCRRequestDataViewController.h"
 #import "HCRClusterPickerCell.h"
 #import "HCRClusterToolsViewController.h"
+#import "EAEmailUtilities.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -166,6 +167,17 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
         HCRBulletinCell *bulletinCell = [collectionView dequeueReusableCellWithReuseIdentifier:kOverviewBulletinCellIdentifier forIndexPath:indexPath];
         
         bulletinCell.bulletinDictionary = [self.bulletinData objectAtIndex:indexPath.row];
+        
+        bulletinCell.replyButton.tag = indexPath.row;
+        bulletinCell.forwardButton.tag = indexPath.row;
+        
+        [bulletinCell.replyButton addTarget:self
+                                     action:@selector(_replyButtonPressed:)
+                           forControlEvents:UIControlEventTouchUpInside];
+        
+        [bulletinCell.forwardButton addTarget:self
+                                       action:@selector(_forwardButtonPressed:)
+                             forControlEvents:UIControlEventTouchUpInside];
         
         cell = bulletinCell;
         
@@ -499,6 +511,30 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
                                   hackySize.height);
     
     return hackyRect;
+    
+}
+
+- (void)_replyButtonPressed:(UIButton *)sender {
+    
+    HCRBulletinCell *bulletinCell = (HCRBulletinCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:sender.tag inSection:[self _sectionForHeader:kHeaderTitleBulletins]]];
+    
+    [[EAEmailUtilities sharedUtilities] emailFromViewController:self
+                                               withToRecipients:@[[bulletinCell emailSenderString]]
+                                                withSubjectText:[bulletinCell emailSubjectStringWithPrefix:@"[RIS] RE:"]
+                                                   withBodyText:[bulletinCell emailBodyString]
+                                                 withCompletion:nil];
+    
+}
+
+- (void)_forwardButtonPressed:(UIButton *)sender {
+    
+    HCRBulletinCell *bulletinCell = (HCRBulletinCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:sender.tag inSection:[self _sectionForHeader:kHeaderTitleBulletins]]];
+    
+    [[EAEmailUtilities sharedUtilities] emailFromViewController:self
+                                               withToRecipients:nil
+                                                withSubjectText:[bulletinCell emailSubjectStringWithPrefix:@"[RIS] FWD:"]
+                                                   withBodyText:[bulletinCell emailBodyString]
+                                                 withCompletion:nil];
     
 }
 

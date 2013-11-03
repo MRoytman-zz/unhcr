@@ -267,10 +267,62 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
     [self setNeedsLayout];
 }
 
+#pragma mark - Public Methods
+
+- (NSString *)emailSenderString {
+    
+    NSDictionary *contactDictionary = [self.bulletinDictionary objectForKey:@"Contact" ofClass:@"NSDictionary"];
+    return [[contactDictionary objectForKey:@"Email" ofClass:@"NSString"] stringByAppendingString:@".test"];
+    
+}
+
+- (NSString *)emailSubjectStringWithPrefix:(NSString *)prefix {
+    
+    NSString *message = [self.bulletinDictionary objectForKey:@"Message"];
+    return [self _subjectStringFromMessage:message withPrefixString:prefix];
+    
+}
+
+- (NSString *)emailBodyString {
+    
+    NSString *message = [self.bulletinDictionary objectForKey:@"Message"];
+    
+    NSDictionary *contactDictionary = [self.bulletinDictionary objectForKey:@"Contact" ofClass:@"NSDictionary"];
+    NSString *senderName = [contactDictionary objectForKey:@"Name" ofClass:@"NSString"];
+    return [self _bodyStringFromMessage:message withSender:senderName];
+}
+
 #pragma mark - Private Methods
 
 + (UIFont *)_preferredFontForMessageText {
     return [UIFont systemFontOfSize:kFontSizeDefault];
+}
+
+- (NSString *)_subjectStringFromMessage:(NSString *)message withPrefixString:(NSString *)prefix {
+    
+    NSString *subject = [message stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+    subject = [NSString stringWithFormat:@"%@ %@",
+               prefix,
+               subject];
+    
+    static const NSInteger maxSubjectLength = 100;
+    if (subject.length > maxSubjectLength) {
+        subject = [subject stringByReplacingCharactersInRange:NSMakeRange(maxSubjectLength,
+                                                                          subject.length - maxSubjectLength)
+                                                   withString:@"..."];
+    }
+    
+    return subject;
+}
+
+- (NSString *)_bodyStringFromMessage:(NSString *)message withSender:(NSString *)sender {
+    
+    NSString *body = [NSString stringWithFormat:@"\n\n\n\n\nOriginal Message by %@:\n\n%@",
+                      sender,
+                      message];
+    
+    return body;
+    
 }
 
 @end

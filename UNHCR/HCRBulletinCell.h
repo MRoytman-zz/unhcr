@@ -17,4 +17,8 @@
 
 + (CGSize)sizeForCellInCollectionView:(UICollectionView *)collectionView withBulletinDictionary:(NSDictionary *)bulletinDictionary;
 
+- (NSString *)emailSenderString;
+- (NSString *)emailSubjectStringWithPrefix:(NSString *)prefix;
+- (NSString *)emailBodyString;
+
 @end

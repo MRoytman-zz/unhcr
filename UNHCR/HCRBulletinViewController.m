@@ -10,6 +10,7 @@
 #import "HCRTableFlowLayout.h"
 #import "HCRBulletinCell.h"
 #import "HCREmergencyCell.h"
+#import "EAEmailUtilities.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -200,9 +201,25 @@ NSString *const kBulletinEmergencyCellIdentifier = @"kBulletinEmergencyCellIdent
 
 - (void)_replyButtonPressed:(UIButton *)sender {
     
+    HCRBulletinCell *bulletinCell = (HCRBulletinCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:sender.tag]];
+    
+    [[EAEmailUtilities sharedUtilities] emailFromViewController:self
+                                               withToRecipients:@[[bulletinCell emailSenderString]]
+                                                withSubjectText:[bulletinCell emailSubjectStringWithPrefix:@"[RIS] RE:"]
+                                                   withBodyText:[bulletinCell emailBodyString]
+                                                 withCompletion:nil];
+    
 }
 
 - (void)_forwardButtonPressed:(UIButton *)sender {
+    
+    HCRBulletinCell *bulletinCell = (HCRBulletinCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:sender.tag]];
+    
+    [[EAEmailUtilities sharedUtilities] emailFromViewController:self
+                                               withToRecipients:nil
+                                                withSubjectText:[bulletinCell emailSubjectStringWithPrefix:@"[RIS] FWD:"]
+                                                   withBodyText:[bulletinCell emailBodyString]
+                                                 withCompletion:nil];
     
 }
 
