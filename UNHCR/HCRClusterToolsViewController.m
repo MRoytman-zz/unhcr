@@ -250,9 +250,9 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     
     if (section == [collectionView numberOfSections] - 1) {
-        [HCRFooterView preferredFooterSizeForCollectionView:collectionView];
+        return [HCRFooterView preferredFooterSizeForCollectionView:collectionView];
     } else {
-        [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
+        return [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
     }
     
     return CGSizeZero;
