@@ -7,6 +7,7 @@
 //
 
 #import "SCGraphView.h"
+#import "EASoundManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -30,6 +31,7 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
 
 @property UILabel *highlightedHeaderLabel;
 @property UILabel *highlightedDataPointLabel;
+@property NSNumberFormatter *numberFormatter;
 
 @property CGRect dataRect;
 @property BOOL displayTimePeriodLabels;
@@ -60,10 +62,14 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
         
         self.preferredLabelFont = [UIFont helveticaNeueLightFontOfSize:kGraphDateLabelFontSize];
         
+        self.numberFormatter = [NSNumberFormatter numberFormatterWithFormat:HCRNumberFormatThousandsSeparated forceEuropeanFormat:YES];
+        
         self.displayTimePeriodLabels = YES;
         self.displayedTimePeriod = SCDataTimePeriod30Days; // TODO: not hooked up yet
         
         self.roundingMode = SCGraphIndexRoundingModeNormal;
+        
+        [[EASoundManager sharedSoundManager] registerSoundIDs:@[@(EASoundIDClick0)]];
         
     }
     return self;
@@ -181,16 +187,20 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
 
 - (void)setHighlightedDataPointIndex:(NSNumber *)highlightedDataPointIndex {
     
-    NSInteger oldValue = _highlightedDataPointIndex.integerValue;
-    NSInteger newValue = highlightedDataPointIndex.integerValue;
+    NSNumber *oldValue = _highlightedDataPointIndex;
+    NSNumber *newValue = highlightedDataPointIndex;
     
     _highlightedDataPointIndex = highlightedDataPointIndex;
     
     if (highlightedDataPointIndex &&
         oldValue != newValue) {
         
+        if (oldValue) {
+            [[EASoundManager sharedSoundManager] playSoundOnce:EASoundIDClick0];
+        }
+        
         if ([self.delegate respondsToSelector:@selector(graphView:didChangeSelectedIndex:)]) {
-            [self.delegate graphView:self didChangeSelectedIndex:newValue];
+            [self.delegate graphView:self didChangeSelectedIndex:newValue.integerValue];
         }
         
     }
@@ -742,11 +752,13 @@ static const CGFloat kGraphDateLabelFontSize = 14.0;
 - (void)_updateHighlightedDataPointLabelForIndex:(NSInteger)index {
     
     NSNumber *dataValue = [self.dataSource graphView:self dataPointForIndex:index];
+    NSString *dataValueString = [self.numberFormatter stringFromNumber:dataValue];
+    
     NSString *dataDate = [self.dataSource graphView:self labelForDataPointAtIndex:index];
     
     self.highlightedDataPointLabel.text = [NSString stringWithFormat:@"%@: %@",
                                            dataDate,
-                                           dataValue];
+                                           dataValueString];
     
 }
 

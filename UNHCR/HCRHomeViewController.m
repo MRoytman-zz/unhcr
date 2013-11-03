@@ -89,7 +89,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         
         self.signedIn = YES;
         
-        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd forceEuropeanFormat:YES];
+        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
         
         self.signedInIconsArray = @[
                                     @[@"evilapples-icon",
@@ -683,7 +683,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 - (NSArray *)messagesReceivedArray {
     
     // TODO: debug only - need to retrieve live data
-    static const NSInteger kNumberOfDataPoints = 30;
+    static const NSInteger kNumberOfDataPoints = 7;
     static const CGFloat kDataPointBaseline = 50.0;
     static const CGFloat kDataPointRange = 50.0;
     static const CGFloat kDataPointIncrement = 6.0;

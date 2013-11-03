@@ -19,6 +19,10 @@
             dateFormatter.dateFormat = @"HH:mm";
             break;
             
+        case HCRDateFormatddMMM:
+            dateFormatter.dateFormat = @"dd MMM";
+            break;
+            
         case HCRDateFormatMMMdd:
             dateFormatter.dateFormat = @"MMM dd";
             break;

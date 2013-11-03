@@ -63,7 +63,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         self.alertsAdded = NO;
         self.localAlerts = @[].mutableCopy;
         
-        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd forceEuropeanFormat:YES];
+        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
         
         self.campClusterCollectionLayoutData = @[
                                       @{@"Section": @"Refugee Requests",
@@ -390,7 +390,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 - (NSArray *)messagesReceivedArray {
     
     // TODO: debug only - need to retrieve live data
-    static const NSInteger kNumberOfDataPoints = 30;
+    static const NSInteger kNumberOfDataPoints = 7;
     static const CGFloat kDataPointBaseline = 50.0;
     static const CGFloat kDataPointRange = 50.0;
     static const CGFloat kDataPointIncrement = 6.0;

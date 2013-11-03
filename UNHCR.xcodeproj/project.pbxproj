@@ -25,6 +25,11 @@
 		4F3D962D181F36D9008128B6 /* HCRTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3D962C181F36D9008128B6 /* HCRTableCell.m */; };
 		4F3D9631181F6D5B008128B6 /* Scratch.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F3D9630181F6D5B008128B6 /* Scratch.xcassets */; };
 		4F59A7BB18259083006EFE41 /* HCRRequestDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59A7BA18259083006EFE41 /* HCRRequestDataViewController.m */; };
+		4F59A7C01825BE7B006EFE41 /* EASoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59A7BF1825BE7B006EFE41 /* EASoundManager.m */; };
+		4F59A7C31825BEBA006EFE41 /* click1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F59A7C11825BEBA006EFE41 /* click1.mp3 */; };
+		4F59A7C41825BEBA006EFE41 /* click0.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F59A7C21825BEBA006EFE41 /* click0.mp3 */; };
+		4F59A7C61825BF91006EFE41 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F59A7C51825BF91006EFE41 /* AVFoundation.framework */; };
+		4F59A7C81825BF96006EFE41 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F59A7C71825BF96006EFE41 /* AudioToolbox.framework */; };
 		4F6137CE181DBBE200FF982F /* HCRCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */; };
 		4F6137D1181EF6C400FF982F /* HCRSignInFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */; };
 		4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
@@ -105,6 +110,12 @@
 		4F3D9630181F6D5B008128B6 /* Scratch.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Scratch.xcassets; sourceTree = "<group>"; };
 		4F59A7B918259083006EFE41 /* HCRRequestDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRRequestDataViewController.h; sourceTree = "<group>"; };
 		4F59A7BA18259083006EFE41 /* HCRRequestDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRRequestDataViewController.m; sourceTree = "<group>"; };
+		4F59A7BE1825BE7B006EFE41 /* EASoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EASoundManager.h; sourceTree = "<group>"; };
+		4F59A7BF1825BE7B006EFE41 /* EASoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EASoundManager.m; sourceTree = "<group>"; };
+		4F59A7C11825BEBA006EFE41 /* click1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = click1.mp3; sourceTree = "<group>"; };
+		4F59A7C21825BEBA006EFE41 /* click0.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = click0.mp3; sourceTree = "<group>"; };
+		4F59A7C51825BF91006EFE41 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4F59A7C71825BF96006EFE41 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		4F6137CC181DBBE200FF982F /* HCRCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCollectionCell.h; sourceTree = "<group>"; };
 		4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCollectionCell.m; sourceTree = "<group>"; };
 		4F6137CF181EF6C400FF982F /* HCRSignInFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSignInFieldCell.h; sourceTree = "<group>"; };
@@ -192,6 +203,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F59A7C81825BF96006EFE41 /* AudioToolbox.framework in Frameworks */,
+				4F59A7C61825BF91006EFE41 /* AVFoundation.framework in Frameworks */,
 				4F866B0E17FAAD1F000350E4 /* MapKit.framework in Frameworks */,
 				4F866AC517F9E022000350E4 /* CoreGraphics.framework in Frameworks */,
 				4F866AC717F9E022000350E4 /* UIKit.framework in Frameworks */,
@@ -272,6 +285,28 @@
 			name = "Collection Layouts";
 			sourceTree = "<group>";
 		};
+		4F59A7BC1825BE3E006EFE41 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4F866AFB17FA7D0D000350E4 /* UNHCR.xcassets */,
+				4F1C940717FCB8010003AA21 /* Common.xcassets */,
+				4F3D9630181F6D5B008128B6 /* Scratch.xcassets */,
+				4F59A7BD1825BE44006EFE41 /* Sounds */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		4F59A7BD1825BE44006EFE41 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				4F59A7BE1825BE7B006EFE41 /* EASoundManager.h */,
+				4F59A7BF1825BE7B006EFE41 /* EASoundManager.m */,
+				4F59A7C11825BEBA006EFE41 /* click1.mp3 */,
+				4F59A7C21825BEBA006EFE41 /* click0.mp3 */,
+			);
+			name = Sounds;
+			sourceTree = "<group>";
+		};
 		4F71C0DD1811B84900672C6A /* Vendors */ = {
 			isa = PBXGroup;
 			children = (
@@ -340,6 +375,8 @@
 		4F866AC117F9E022000350E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4F59A7C71825BF96006EFE41 /* AudioToolbox.framework */,
+				4F59A7C51825BF91006EFE41 /* AVFoundation.framework */,
 				4F866B0D17FAAD1F000350E4 /* MapKit.framework */,
 				4F866AC217F9E022000350E4 /* Foundation.framework */,
 				4F866AC417F9E022000350E4 /* CoreGraphics.framework */,
@@ -357,9 +394,7 @@
 				4F866AD217F9E022000350E4 /* HCRAppDelegate.m */,
 				4F1C93F417FBF6EB0003AA21 /* HCRDataSource.h */,
 				4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */,
-				4F866AFB17FA7D0D000350E4 /* UNHCR.xcassets */,
-				4F1C940717FCB8010003AA21 /* Common.xcassets */,
-				4F3D9630181F6D5B008128B6 /* Scratch.xcassets */,
+				4F59A7BC1825BE3E006EFE41 /* Resources */,
 				4F866AFD17FA8324000350E4 /* (DEPRECATED) delete these */,
 				4F866B0C17FAA5FE000350E4 /* Categories */,
 				4F866B0117FA9F8B000350E4 /* Shared UI */,
@@ -579,6 +614,8 @@
 				4F866AFC17FA7D0D000350E4 /* UNHCR.xcassets in Resources */,
 				4F866ACD17F9E022000350E4 /* InfoPlist.strings in Resources */,
 				4F1C940817FCB8010003AA21 /* Common.xcassets in Resources */,
+				4F59A7C41825BEBA006EFE41 /* click0.mp3 in Resources */,
+				4F59A7C31825BEBA006EFE41 /* click1.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -627,6 +664,7 @@
 				4FDD8A3B18218B67002B717E /* HCRDirectMessageCell.m in Sources */,
 				4FD838F518011BB300B49498 /* HCRRequestsDataViewController.m in Sources */,
 				4F866AD317F9E022000350E4 /* HCRAppDelegate.m in Sources */,
+				4F59A7C01825BE7B006EFE41 /* EASoundManager.m in Sources */,
 				4F1C940217FC17770003AA21 /* UIImage+RMImageManipulation.m in Sources */,
 				4F1C93FC17FC09190003AA21 /* HCRFlowLayout.m in Sources */,
 				4F2B2C95182238B500F0DDB2 /* NSString+HCRAdditions.m in Sources */,

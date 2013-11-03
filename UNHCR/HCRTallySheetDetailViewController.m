@@ -336,7 +336,7 @@ NSString *const kTallyOrganization = @"Organization";
     NSDate *now = [NSDate new];
     NSDate *nextWeek = [now dateByAddingTimeInterval:secondsPerWeek];
     
-    NSDateFormatter *formatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd forceEuropeanFormat:YES];
+    NSDateFormatter *formatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
     
     NSString *nowString = [formatter stringFromDate:now];
     NSString *nextWeekString = [formatter stringFromDate:nextWeek];

@@ -44,7 +44,7 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
         
         self.clusterCompareDataArray = clusterData;
         
-        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd forceEuropeanFormat:NO];
+        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:NO];
         
     }
     return self;
@@ -164,7 +164,7 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
 - (NSArray *)messagesReceivedArrays {
     
     // TODO: debug only - need to retrieve live data
-    static const NSInteger kNumberOfDataPoints = 30;
+    static const NSInteger kNumberOfDataPoints = 7;
     static const CGFloat kDataPointBaseline = 50.0;
     static const CGFloat kDataPointRange = 50.0;
     static const CGFloat kDataPointIncrement = 6.0;

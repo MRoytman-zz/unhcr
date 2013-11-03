@@ -18,6 +18,6 @@ typedef NS_ENUM(NSInteger, HCRNumberFormat) {
 
 @interface NSNumberFormatter (HCRAdditions)
 
-+ (NSNumberFormatter *)numberFormatterWithFormat:(HCRNumberFormat)numberFormat;
++ (NSNumberFormatter *)numberFormatterWithFormat:(HCRNumberFormat)numberFormat forceEuropeanFormat:(BOOL)forceEuropean;
 
 @end

@@ -51,7 +51,7 @@ static const CGFloat kGraphContainerPadding = 8.0;
         
         self.clusterCompareDataArray = clusterData;
         
-        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatMMMdd forceEuropeanFormat:NO];
+        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:NO];
         
     }
     return self;
@@ -62,7 +62,7 @@ static const CGFloat kGraphContainerPadding = 8.0;
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    self.title = @"Data Explorer";
+    self.title = @"Refugee Requests";
     
     // DATA PICKER
     HCRTableFlowLayout *layout = [HCRTableFlowLayout new];
@@ -101,13 +101,15 @@ static const CGFloat kGraphContainerPadding = 8.0;
                               withReuseIdentifier:kRequestListFooterIdentifier];
     
     // GRAPH CONTAINER
-    UIToolbar *graphContainer = [[UIToolbar alloc] initWithFrame:CGRectMake(0,
-                                                                            CGRectGetHeight(self.view.bounds) - kGraphHeight,
-                                                                            CGRectGetWidth(self.view.bounds),
-                                                                            kGraphHeight)];
+    UIView *graphContainer = [[UIView alloc] initWithFrame:CGRectMake(0,
+                                                                      CGRectGetHeight(self.view.bounds) - kGraphHeight,
+                                                                      CGRectGetWidth(self.view.bounds),
+                                                                      kGraphHeight)];
     [self.view addSubview:graphContainer];
     
-    graphContainer.barStyle = UIBarStyleDefault;
+    graphContainer.backgroundColor = [UIColor whiteColor];
+    graphContainer.layer.borderColor = [UIColor tableDividerColor].CGColor;
+    graphContainer.layer.borderWidth = 1.0;
     
     // GRAPH VIEW
     CGRect graphViewFrame = UIEdgeInsetsInsetRect(graphContainer.bounds,
@@ -296,7 +298,7 @@ static const CGFloat kGraphContainerPadding = 8.0;
 - (NSArray *)messagesReceivedArrays {
     
     // TODO: debug only - need to retrieve live data
-    static const NSInteger kNumberOfDataPoints = 30;
+    static const NSInteger kNumberOfDataPoints = 7;
     static const CGFloat kDataPointBaseline = 50.0;
     static const CGFloat kDataPointRange = 50.0;
     static const CGFloat kDataPointIncrement = 6.0;

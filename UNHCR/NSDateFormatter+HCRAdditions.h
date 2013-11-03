@@ -12,6 +12,7 @@
 
 typedef NS_ENUM(NSInteger, HCRDateFormat) {
     HCRDateFormatHHmm,
+    HCRDateFormatddMMM,
     HCRDateFormatMMMdd,
     HCRDateFormatMMMddHHmm,
     HCRDateFormatMMMddhmma,

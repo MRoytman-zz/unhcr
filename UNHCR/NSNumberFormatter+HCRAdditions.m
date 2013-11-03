@@ -10,14 +10,16 @@
 
 @implementation NSNumberFormatter (HCRAdditions)
 
-+ (NSNumberFormatter *)numberFormatterWithFormat:(HCRNumberFormat)numberFormat {
++ (NSNumberFormatter *)numberFormatterWithFormat:(HCRNumberFormat)numberFormat forceEuropeanFormat:(BOOL)forceEuropean {
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     
     switch (numberFormat) {
         case HCRNumberFormatThousandsSeparated:
             formatter.usesGroupingSeparator = YES;
-            formatter.groupingSeparator = [[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator];
+            
+            NSLocale *locale = (forceEuropean) ? [NSLocale localeWithLocaleIdentifier:@"en_GB"] : [NSLocale currentLocale];
+            formatter.groupingSeparator = [locale objectForKey:NSLocaleGroupingSeparator];
             formatter.groupingSize = 3;
             break;
     }

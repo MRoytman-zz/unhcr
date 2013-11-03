@@ -53,7 +53,7 @@ static const CGFloat kDetailXPadding = 4.0;
     if (self) {
         // Initialization code
         self.highlightedColor = [UIColor tableSelectedCellColor];
-        self.numberFormatter = [NSNumberFormatter numberFormatterWithFormat:HCRNumberFormatThousandsSeparated];
+        self.numberFormatter = [NSNumberFormatter numberFormatterWithFormat:HCRNumberFormatThousandsSeparated forceEuropeanFormat:YES];
         
         // label
         self.titleLabel = [[UILabel alloc] init];
