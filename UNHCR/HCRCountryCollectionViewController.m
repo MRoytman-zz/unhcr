@@ -126,9 +126,6 @@ NSString *const kCountryFooterIdentifier = @"kCountryFooterIdentifier";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRCountryCollectionCell *cell = (HCRCountryCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRCountryCollectionCell class]]);
-    
     HCRCampCollectionViewController *campCollection = [[HCRCampCollectionViewController alloc] initWithCollectionViewLayout:[HCRCampCollectionViewController preferredLayout]];
 //    campCollection.countryDictionary = cell.countryDictionary;
     

@@ -140,9 +140,6 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRClusterPickerCell *cell = (HCRClusterPickerCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRClusterPickerCell class]]);
-    
     HCRClusterToolsViewController *campClusterDetail = [[HCRClusterToolsViewController alloc] initWithCollectionViewLayout:[HCRClusterToolsViewController preferredLayout]];
     
     [self.navigationController pushViewController:campClusterDetail animated:YES];

@@ -272,9 +272,6 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
         }
     } else if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
         
-        HCRClusterPickerCell *cell = (HCRClusterPickerCell *)[collectionView cellForItemAtIndexPath:indexPath];
-        NSParameterAssert([cell isKindOfClass:[HCRClusterPickerCell class]]);
-        
         HCRClusterToolsViewController *clusterTools = [[HCRClusterToolsViewController alloc] initWithCollectionViewLayout:[HCRClusterToolsViewController preferredLayout]];
         
         clusterTools.campDictionary = [HCRDataSource iraqDomizCampData];

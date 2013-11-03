@@ -51,8 +51,8 @@ NSString *const kBulletinEmergencyCellIdentifier = @"kBulletinEmergencyCellIdent
     self.title = @"Bulletin Board";
     
     // LAYOUT AND REUSABLES
-    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
-    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
+//    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
+//    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     
     [self.collectionView registerClass:[HCREmergencyCell class]
             forCellWithReuseIdentifier:kBulletinEmergencyCellIdentifier];

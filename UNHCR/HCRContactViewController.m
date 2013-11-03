@@ -56,8 +56,8 @@ NSString *const kContactFooterIdentifier = @"kContactFooterIdentifier";
     self.layoutData = mutableLayout;
     
     // LAYOUT AND REUSABLES
-    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
-    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
+//    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
+//    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     
     [self.collectionView registerClass:[HCRInformationCell class]
             forCellWithReuseIdentifier:kContactCellIdentifier];

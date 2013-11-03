@@ -91,13 +91,13 @@ static const CGFloat kDefaultItemSize = 93.0;
     
     // cluster name
     NSString *clusterName = [clusterDictionary objectForKey:@"Name"];
+    
+    static const CGFloat kXPadding = 4;
+    CGRect clusterLabelFrame = CGRectMake(kXPadding,
+                                          CGRectGetHeight(self.bounds) * kImageToTextRatio,
+                                          CGRectGetWidth(self.bounds) - 2 * kXPadding,
+                                          CGRectGetHeight(self.bounds) * (1 - kImageToTextRatio));
     if ( !self.clusterLabel && clusterName ) {
-        
-        CGFloat xPadding = 4;
-        CGRect clusterLabelFrame = CGRectMake(xPadding,
-                                              CGRectGetHeight(self.bounds) * kImageToTextRatio,
-                                              CGRectGetWidth(self.bounds) - 2 * xPadding,
-                                              CGRectGetHeight(self.bounds) * (1 - kImageToTextRatio));
         
         self.clusterLabel = [[UILabel alloc] initWithFrame:clusterLabelFrame];
         [self addSubview:self.clusterLabel];
@@ -110,6 +110,8 @@ static const CGFloat kDefaultItemSize = 93.0;
         self.clusterLabel.numberOfLines = 2;
         self.clusterLabel.textAlignment = NSTextAlignmentCenter;
         
+    } else {
+        self.clusterLabel.frame = clusterLabelFrame;
     }
     
     self.clusterLabel.text = clusterName;
