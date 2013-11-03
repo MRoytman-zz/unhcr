@@ -32,6 +32,8 @@ NSString *const kHeaderTitleBulletins = @"Bulletins";
 NSString *const kHeaderTitleRequests = @"Refugee Requests";
 NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
 
+static const CGFloat kUniversalClusterCollectionPadding = 10.0;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRCampOverviewController ()
@@ -39,6 +41,9 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
 @property NSArray *layoutData;
 @property NSArray *bulletinData;
 @property NSArray *emergencyData;
+
+// TODO: make this better - see inline comments
+@property UIView *hackyWorkaroundView;
 
 // DEBUG only?
 @property (nonatomic, strong) NSArray *allMessagesDataArray;
@@ -285,15 +290,9 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     
     NSString *sectionHeader = [self _headerForSection:indexPath.section];
     
-    NSLog(@"indexPath: %@",indexPath);
-    NSLog(@"sectionHeader: %@",sectionHeader);
-    
     if ([sectionHeader isEqualToString:kHeaderTitleEmergencies]) {
         return [HCREmergencyCell preferredSizeWithEmergencyBannerForCollectionView:collectionView];
     } else if ([sectionHeader isEqualToString:kHeaderTitleBulletins]) {
-        
-        NSLog(@"height: %@",NSStringFromCGSize([HCRBulletinCell sizeForCellInCollectionView:collectionView
-                                                                     withBulletinDictionary:[self.bulletinData objectAtIndex:indexPath.row ofClass:@"NSDictionary"]]));
         return [HCRBulletinCell sizeForCellInCollectionView:collectionView
                                      withBulletinDictionary:[self.bulletinData objectAtIndex:indexPath.row ofClass:@"NSDictionary"]];
     } else if ([sectionHeader isEqualToString:kHeaderTitleRequests]) {
@@ -317,7 +316,7 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     NSString *sectionHeader = [self _headerForSection:section];
     
     if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
-        static const CGFloat kClusterEdgeInsets = 10.0;
+        static const CGFloat kClusterEdgeInsets = kUniversalClusterCollectionPadding;
         return UIEdgeInsetsMake(kClusterEdgeInsets, kClusterEdgeInsets, kClusterEdgeInsets, kClusterEdgeInsets);
     } else {
         HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)collectionViewLayout;
@@ -331,7 +330,7 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     NSString *sectionHeader = [self _headerForSection:section];
     
     if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
-        return 10.0;
+        return kUniversalClusterCollectionPadding;
     } else {
         HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)collectionViewLayout;
         return tableLayout.minimumInteritemSpacing;
@@ -343,7 +342,7 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     NSString *sectionHeader = [self _headerForSection:section];
     
     if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
-        return 10.0;
+        return kUniversalClusterCollectionPadding;
     } else {
         HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)collectionViewLayout;
         return tableLayout.minimumLineSpacing;
@@ -400,6 +399,40 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     
 }
 
+#pragma mark - UIScrollView Delegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    // TODO: make this less hacky or get rid of it.. not sure how else to solve this problem, sadly
+    NSInteger triggerSection = [self _sectionForHeader:kHeaderTitleAgencies];
+    triggerSection = (triggerSection == 0) ? 0 : triggerSection - 1;
+    
+    NSInteger triggerItem = [self.collectionView numberOfItemsInSection:triggerSection] - 1;
+    NSIndexPath *triggerIndexPath = [NSIndexPath indexPathForItem:triggerItem inSection:triggerSection];
+    UICollectionViewCell *triggerCell = [self.collectionView cellForItemAtIndexPath:triggerIndexPath];
+    
+    CGPoint triggerPoint = CGPointMake(0,
+                                       CGRectGetMaxY(triggerCell.frame));
+    
+    if (triggerCell &&
+        !self.hackyWorkaroundView &&
+        CGRectContainsPoint(scrollView.frame, triggerPoint)) {
+        
+        // ADD WHITE BACKGROUND TO CLUSTER PICKER SECTION
+        // TODO: make not hacky; is there a way to show background on just one section of UICollectionView?
+        CGFloat yOffsetForHackyView = CGRectGetMaxY(triggerCell.frame) + [HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView].height;
+        
+        self.hackyWorkaroundView = [[UIView alloc] initWithFrame:[self _hackyWorkaroundFrameAtYOffset:yOffsetForHackyView]];
+        [self.collectionView insertSubview:self.hackyWorkaroundView atIndex:0];
+        
+        self.hackyWorkaroundView.backgroundColor = [UIColor whiteColor];
+        
+    }
+    
+    
+    
+}
+
 #pragma mark - Getters & Setters
 
 - (NSArray *)allMessagesDataArray {
@@ -432,6 +465,40 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     NSDictionary *sectionDictionary = [self.layoutData objectAtIndex:section ofClass:@"NSDictionary"];
     NSString *sectionHeader = [sectionDictionary objectForKey:@"Header" ofClass:@"NSString"];
     return sectionHeader;
+}
+
+- (NSInteger)_sectionForHeader:(NSString *)header {
+    
+    for (NSDictionary *dictionary in self.layoutData) {
+        NSString *headerString = [dictionary objectForKey:@"Header" ofClass:@"NSString"];
+        
+        if ([headerString isEqualToString:header]) {
+            return [self.layoutData indexOfObject:dictionary];
+        }
+        
+    }
+    
+    NSAssert(NO, @"No known section with header string.");
+    return 0;
+    
+}
+
+- (CGRect)_hackyWorkaroundFrameAtYOffset:(CGFloat)yOffset {
+    
+    CGPoint hackyOrigin = CGPointMake(0,
+                                      yOffset);
+    
+    static const NSInteger kNumberOfCellsHigh = 4;
+    CGSize hackySize = CGSizeMake(CGRectGetWidth(self.collectionView.bounds),
+                                  kNumberOfCellsHigh * (kUniversalClusterCollectionPadding + [HCRClusterPickerCell preferredSizeForCollectionView:self.collectionView].height) + kUniversalClusterCollectionPadding);
+    
+    CGRect hackyRect = CGRectMake(hackyOrigin.x,
+                                  hackyOrigin.y,
+                                  hackySize.width,
+                                  hackySize.height);
+    
+    return hackyRect;
+    
 }
 
 @end
