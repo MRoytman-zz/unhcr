@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HCRClusterCollectionCell : UICollectionViewCell
+@interface HCRClusterPickerCell : UICollectionViewCell
+
++ (CGSize)preferredSizeForCollectionView:(UICollectionView *)collectionView;
 
 @property (nonatomic, strong) NSDictionary *clusterDictionary;
 

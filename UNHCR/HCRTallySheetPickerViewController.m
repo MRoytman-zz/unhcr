@@ -40,7 +40,7 @@ NSString *const kTallySheetCellIdentifier = @"kTallySheetCellIdentifier";
 	// Do any additional setup after loading the view.
     
     NSParameterAssert(self.campClusterData);
-    NSParameterAssert(self.selectedClusterMetaData);
+//    NSParameterAssert(self.selectedClusterMetaData);
     
     self.highlightCells = YES;
     

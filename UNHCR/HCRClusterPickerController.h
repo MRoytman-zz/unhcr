@@ -8,9 +8,8 @@
 
 #import "HCRCollectionViewController.h"
 
-@interface HCRClusterCollectionController : HCRCollectionViewController
+@interface HCRClusterPickerController : HCRCollectionViewController
 
-@property (nonatomic, strong) NSString *countryName;
 @property (nonatomic, strong) NSDictionary *campDictionary;
 
 @end

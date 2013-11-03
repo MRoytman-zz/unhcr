@@ -41,7 +41,10 @@
     
     if (self.highlightCells) {
         HCRCollectionCell *cell = (HCRCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
-        NSParameterAssert([cell isKindOfClass:[HCRCollectionCell class]]);
+        
+        if ([cell isKindOfClass:[HCRCollectionCell class]] == NO) {
+            return;
+        }
         
         if ([cell isKindOfClass:[HCRGraphCell class]] ||
             [cell isKindOfClass:[HCRSignInFieldCell class]] ||
@@ -66,7 +69,10 @@
     
     if (self.highlightCells) {
         HCRCollectionCell *cell = (HCRCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
-        NSParameterAssert([cell isKindOfClass:[HCRCollectionCell class]]);
+        
+        if ([cell isKindOfClass:[HCRCollectionCell class]] == NO) {
+            return;
+        }
         
         if ([cell isKindOfClass:[HCRGraphCell class]] ||
             [cell isKindOfClass:[HCRSignInFieldCell class]]) {

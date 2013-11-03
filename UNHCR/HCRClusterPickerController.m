@@ -8,10 +8,10 @@
 
 #import <MapKit/MapKit.h>
 
-#import "HCRClusterCollectionController.h"
+#import "HCRClusterPickerController.h"
 #import "HCRClusterFlowLayout.h"
-#import "HCRClusterCollectionCell.h"
-#import "HCRCampClusterDetailViewController.h"
+#import "HCRClusterPickerCell.h"
+#import "HCRClusterToolsViewController.h"
 #import "HCRRequestsDataViewController.h"
 #import "HCRHeaderView.h"
 #import "HCRFooterView.h"
@@ -24,13 +24,13 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface HCRClusterCollectionController ()
+@interface HCRClusterPickerController ()
 
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@implementation HCRClusterCollectionController
+@implementation HCRClusterPickerController
 
 - (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
@@ -58,7 +58,7 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
     [clusterLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
     [clusterLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeForCollectionView:self.collectionView]];
     
-    [self.collectionView registerClass:[HCRClusterCollectionCell class]
+    [self.collectionView registerClass:[HCRClusterPickerCell class]
             forCellWithReuseIdentifier:kClusterCellIdentifier];
     
     [self.collectionView registerClass:[HCRHeaderView class]
@@ -89,7 +89,7 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRClusterCollectionCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kClusterCellIdentifier forIndexPath:indexPath];
+    HCRClusterPickerCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kClusterCellIdentifier forIndexPath:indexPath];
     
     NSArray *clustersArray = [HCRDataSource clusterLayoutMetaDataArray];
     cell.clusterDictionary = [clustersArray objectAtIndex:indexPath.row];
@@ -141,14 +141,10 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRClusterCollectionCell *cell = (HCRClusterCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([cell isKindOfClass:[HCRClusterCollectionCell class]]);
+    HCRClusterPickerCell *cell = (HCRClusterPickerCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    NSParameterAssert([cell isKindOfClass:[HCRClusterPickerCell class]]);
     
-    HCRCampClusterDetailViewController *campClusterDetail = [[HCRCampClusterDetailViewController alloc] initWithCollectionViewLayout:[HCRCampClusterDetailViewController preferredLayout]];
-    
-    campClusterDetail.countryName = self.countryName;
-    campClusterDetail.campDictionary = self.campDictionary;
-    campClusterDetail.selectedClusterMetaData = cell.clusterDictionary;
+    HCRClusterToolsViewController *campClusterDetail = [[HCRClusterToolsViewController alloc] initWithCollectionViewLayout:[HCRClusterToolsViewController preferredLayout]];
     
     [self.navigationController pushViewController:campClusterDetail animated:YES];
     

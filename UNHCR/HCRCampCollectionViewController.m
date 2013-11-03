@@ -10,7 +10,7 @@
 
 #import "HCRCampCollectionViewController.h"
 #import "HCRTableFlowLayout.h"
-#import "HCRClusterCollectionController.h"
+#import "HCRClusterPickerController.h"
 #import "HCRHeaderView.h"
 #import "HCRFooterView.h"
 #import "HCRTableCell.h"

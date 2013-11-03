@@ -13,6 +13,8 @@
 #import "HCRBulletinCell.h"
 #import "HCRTableCell.h"
 #import "HCRRequestDataViewController.h"
+#import "HCRClusterPickerCell.h"
+#import "HCRClusterToolsViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -56,8 +58,8 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
         self.layoutData = @[
                             @{@"Header": kHeaderTitleEmergencies},
                             @{@"Header": kHeaderTitleRequests},
-                            @{@"Header": kHeaderTitleBulletins},
-                            @{@"Header": kHeaderTitleAgencies}
+                            @{@"Header": kHeaderTitleAgencies},
+                            @{@"Header": kHeaderTitleBulletins}
                             ];
         
         self.bulletinData = [HCRDataSource globalOnlyBulletinsData];
@@ -96,7 +98,7 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
     [self.collectionView registerClass:[HCRTableCell class]
             forCellWithReuseIdentifier:kOverviewRequestsMoreInfoCellIdentifier];
     
-    [self.collectionView registerClass:[HCRCollectionCell class]
+    [self.collectionView registerClass:[HCRClusterPickerCell class]
             forCellWithReuseIdentifier:kOverviewClusterCellIdentifier];
     
     [self.collectionView registerClass:[HCRHeaderView class]
@@ -128,6 +130,8 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
         return 3;
     } else if ([sectionHeader isEqualToString:kHeaderTitleRequests]) {
         return 2;
+    } else if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
+        return [HCRDataSource clusterLayoutMetaDataArray].count;
     } else {
         return 1;
     }
@@ -184,8 +188,15 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
         
     } else if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
         
-        cell = [collectionView dequeueReusableCellWithReuseIdentifier:kOverviewClusterCellIdentifier
-                                                         forIndexPath:indexPath];
+        HCRClusterPickerCell *clusterCell = [collectionView dequeueReusableCellWithReuseIdentifier:kOverviewClusterCellIdentifier
+                                                                                      forIndexPath:indexPath];
+        
+        NSDictionary *clusterDictionary = [[HCRDataSource clusterLayoutMetaDataArray] objectAtIndex:indexPath.row];
+        clusterCell.clusterDictionary = clusterDictionary;
+        
+        clusterCell.contentView.backgroundColor = [UIColor whiteColor];
+        
+        return clusterCell;
     }
     
     [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
@@ -238,6 +249,18 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
             
             [self.navigationController pushViewController:dataRequests animated:YES];
         }
+    } else if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
+        
+        HCRClusterPickerCell *cell = (HCRClusterPickerCell *)[collectionView cellForItemAtIndexPath:indexPath];
+        NSParameterAssert([cell isKindOfClass:[HCRClusterPickerCell class]]);
+        
+        HCRClusterToolsViewController *clusterTools = [[HCRClusterToolsViewController alloc] initWithCollectionViewLayout:[HCRClusterToolsViewController preferredLayout]];
+        
+        clusterTools.campDictionary = [HCRDataSource iraqDomizCampData];
+        clusterTools.selectedCluster = [[HCRDataSource clusterLayoutMetaDataArray] objectAtIndex:indexPath.row];
+        
+        [self.navigationController pushViewController:clusterTools animated:YES];
+        
     }
 }
 
@@ -275,8 +298,49 @@ NSString *const kHeaderTitleAgencies = @"Agencies & Tools";
             return [HCRTableCell preferredSizeForCollectionView:collectionView];
         }
         
+    } else if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
+        return [HCRClusterPickerCell preferredSizeForCollectionView:collectionView];
+    }
+    
+    return CGSizeZero;
+    
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    
+    NSString *sectionHeader = [self _headerForSection:section];
+    
+    if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
+        static const CGFloat kClusterEdgeInsets = 10.0;
+        return UIEdgeInsetsMake(kClusterEdgeInsets, kClusterEdgeInsets, kClusterEdgeInsets, kClusterEdgeInsets);
     } else {
-        return CGSizeZero;
+        HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)collectionViewLayout;
+        return tableLayout.sectionInset;
+    }
+    
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    
+    NSString *sectionHeader = [self _headerForSection:section];
+    
+    if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
+        return 10.0;
+    } else {
+        HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)collectionViewLayout;
+        return tableLayout.minimumInteritemSpacing;
+    }
+    
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    NSString *sectionHeader = [self _headerForSection:section];
+    
+    if ([sectionHeader isEqualToString:kHeaderTitleAgencies]) {
+        return 10.0;
+    } else {
+        HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)collectionViewLayout;
+        return tableLayout.minimumLineSpacing;
     }
     
 }

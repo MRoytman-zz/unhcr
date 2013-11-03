@@ -6,15 +6,17 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import "HCRClusterCollectionCell.h"
+#import "HCRClusterPickerCell.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 static const CGFloat kImageToTextRatio = 0.6;
 
+static const CGFloat kDefaultItemSize = 93.0;
+
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface HCRClusterCollectionCell ()
+@interface HCRClusterPickerCell ()
 
 @property UILabel *clusterLabel;
 @property UIImageView *clusterImageView;
@@ -25,7 +27,7 @@ static const CGFloat kImageToTextRatio = 0.6;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@implementation HCRClusterCollectionCell
+@implementation HCRClusterPickerCell
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -40,6 +42,14 @@ static const CGFloat kImageToTextRatio = 0.6;
 - (void)prepareForReuse {
     [super prepareForReuse];
     self.clusterDictionary = nil;
+}
+
+#pragma mark - Class Methods
+
++ (CGSize)preferredSizeForCollectionView:(UICollectionView *)collectionView {
+    
+    return CGSizeMake(kDefaultItemSize, kDefaultItemSize);
+        
 }
 
 #pragma mark - Getters & Setters

@@ -9,7 +9,7 @@
 #import "HCRRequestsDataViewController.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRGraphCell.h"
-#import "HCRCampClusterDetailViewController.h"
+#import "HCRClusterToolsViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -196,10 +196,7 @@ NSString *const kCampClusterCompareFooterIdentifier = @"kCampClusterCompareFoote
 
 - (void)_footerButtonPressed:(UIButton *)button {
     
-    HCRCampClusterDetailViewController *campClusterDetail = [[HCRCampClusterDetailViewController alloc] initWithCollectionViewLayout:[HCRCampClusterDetailViewController preferredLayout]];
-    
-    campClusterDetail.campDictionary = self.campDictionary;
-    campClusterDetail.selectedClusterMetaData = [self.clusterCompareDataArray objectAtIndex:button.tag ofClass:@"NSDictionary"];
+    HCRClusterToolsViewController *campClusterDetail = [[HCRClusterToolsViewController alloc] initWithCollectionViewLayout:[HCRClusterToolsViewController preferredLayout]];
     
     [self.navigationController pushViewController:campClusterDetail animated:YES];
     

@@ -14,7 +14,7 @@
 #import "HCRCollectionCell.h"
 #import "HCRTableButtonCell.h"
 #import "HCRTableCell.h"
-#import "HCRClusterCollectionController.h"
+#import "HCRClusterPickerController.h"
 #import "HCRCampCollectionViewController.h"
 #import "HCRMessagesViewController.h"
 #import "HCRBulletinViewController.h"

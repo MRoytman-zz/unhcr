@@ -6,9 +6,8 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import "HCRCampClusterDetailViewController.h"
+#import "HCRClusterToolsViewController.h"
 #import "HCRTableFlowLayout.h"
-#import "HCRGraphCell.h"
 #import "HCRTableButtonCell.h"
 #import "HCRTallySheetPickerViewController.h"
 #import "EAEmailUtilities.h"
@@ -21,8 +20,6 @@
 NSString *const kCampClusterHeaderIdentifier = @"kCampClusterHeaderIdentifier";
 NSString *const kCampClusterFooterIdentifier = @"kCampClusterFooterIdentifier";
 
-NSString *const kCampClusterAlertCellIdentifier = @"kCampClusterAlertCellIdentifier";
-NSString *const kCampClusterGraphCellIdentifier = @"kCampClusterGraphCellIdentifier";
 NSString *const kCampClusterResourcesCellIdentifier = @"kCampClusterResourcesCellIdentifier";
 NSString *const kCampClusterAgenciesCellIdentifier = @"kCampClusterAgenciesCellIdentifier";
 
@@ -32,27 +29,18 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface HCRCampClusterDetailViewController ()
+@interface HCRClusterToolsViewController ()
 
-@property NSMutableArray *localAlerts;
 @property NSDictionary *campClusterData;
-@property NSMutableArray *campClusterCollectionLayoutData;
-
-@property NSDateFormatter *dateFormatter;
-
-@property (nonatomic) BOOL alertsAdded;
+@property NSArray *campClusterCollectionLayoutData;
 
 @property (nonatomic, readonly) BOOL clusterContainsTallySheets;
-
-// DEBUG ONLY //
-@property (nonatomic) NSArray *messagesReceivedArray;
-// DEBUG ONLY //
 
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@implementation HCRCampClusterDetailViewController
+@implementation HCRClusterToolsViewController
 
 - (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
@@ -60,14 +48,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     if (self) {
         // Custom initialization
         
-        self.alertsAdded = NO;
-        self.localAlerts = @[].mutableCopy;
-        
-        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
-        
         self.campClusterCollectionLayoutData = @[
-                                      @{@"Section": @"Refugee Requests",
-                                        @"Cell": kCampClusterGraphCellIdentifier},
                                       @{@"Section": @"Resources",
                                         @"Cell": kCampClusterResourcesCellIdentifier,
                                         @"Resources": @[
@@ -77,7 +58,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
                                                 ]},
                                       @{@"Section": @"Local Agencies",
                                         @"Cell": kCampClusterAgenciesCellIdentifier}
-                                      ].mutableCopy;
+                                      ];
         
     }
     return self;
@@ -88,46 +69,21 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    NSParameterAssert(self.selectedClusterMetaData);
     NSParameterAssert(self.campDictionary);
+    NSParameterAssert(self.selectedCluster);
     
     // finish data source
-    NSString *selectedCluster = [self.selectedClusterMetaData objectForKey:@"Name"];
-    if ([HCRDataSource globalEmergenciesData].count > 0) {
-        
-        for (NSDictionary *alertsDictionary in [HCRDataSource globalEmergenciesData]) {
-            
-            NSString *alertCluster = [alertsDictionary objectForKey:@"Cluster" ofClass:@"NSString"];
-            if ([alertCluster isEqualToString:selectedCluster]) {
-                
-                [self.localAlerts addObject:alertsDictionary];
-                
-                if (!self.alertsAdded) {
-                    self.alertsAdded = YES;
-                    [self.campClusterCollectionLayoutData insertObject:@{@"Section": @"Alerts",
-                                                                         @"Cell": kCampClusterAlertCellIdentifier}
-                                                               atIndex:0];
-                    
-                }
-                
-                
-            }
-            
-            
-        }
-        
-    }
-    [self.collectionView reloadData];
+    NSString *selectedClusterName = [self.selectedCluster objectForKey:@"Name" ofClass:@"NSString"];
+    self.campClusterData = [[self.campDictionary objectForKey:@"Clusters" ofClass:@"NSDictionary"] objectForKey:selectedClusterName ofClass:@"NSDictionary"];
     
-    self.campClusterData = [[self.campDictionary objectForKey:@"Clusters" ofClass:@"NSDictionary"] objectForKey:selectedCluster ofClass:@"NSDictionary"];
-    
-    self.title = selectedCluster;
+    self.title = selectedClusterName;
     
     self.highlightCells = YES;
     
     HCRFlowLayout *flowLayout = (HCRFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([flowLayout isKindOfClass:[HCRFlowLayout class]]);
     [flowLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
+    [flowLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:self.collectionView]];
     
     [self.collectionView registerClass:[HCRHeaderView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
@@ -136,21 +92,16 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
             forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
                    withReuseIdentifier:kCampClusterFooterIdentifier];
     
-    [self.collectionView registerClass:[HCRGraphCell class]
-            forCellWithReuseIdentifier:kCampClusterGraphCellIdentifier];
     [self.collectionView registerClass:[HCRTableButtonCell class]
             forCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier];
     [self.collectionView registerClass:[HCRTableCell class]
             forCellWithReuseIdentifier:kCampClusterAgenciesCellIdentifier];
-    [self.collectionView registerClass:[HCREmergencyCell class]
-            forCellWithReuseIdentifier:kCampClusterAlertCellIdentifier];
-    
 }
 
 #pragma mark - Class Methods
 
 + (UICollectionViewLayout *)preferredLayout {
-    return [[HCRTableFlowLayout alloc] init];
+    return [HCRTableFlowLayout new];
 }
 
 #pragma mark - UICollectionView Data Source
@@ -173,15 +124,9 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         NSArray *agencyArray = [self.campClusterData objectForKey:@"Agencies" ofClass:@"NSArray"];
         return agencyArray.count;
         
-    } else if ([cellType isEqualToString:kCampClusterAlertCellIdentifier]) {
-        
-        return self.localAlerts.count;
-        
-    } else {
-    
-        return 1;
-        
     }
+    
+    return 0;
     
 }
 
@@ -191,15 +136,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     
     HCRCollectionCell *cell;
     
-    if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
-        HCRGraphCell *graphCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterGraphCellIdentifier forIndexPath:indexPath];
-        
-        graphCell.graphDelegate = self;
-        graphCell.graphDataSource = self;
-        
-        cell = graphCell;
-        
-    } else if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
+    if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
         
         HCRTableButtonCell *resourcesCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterResourcesCellIdentifier forIndexPath:indexPath];
         
@@ -218,12 +155,6 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
         
         cell = agencyCell;
         
-    } else if ([cellType isEqualToString:kCampClusterAlertCellIdentifier]) {
-        HCREmergencyCell *alertCell = [collectionView dequeueReusableCellWithReuseIdentifier:kCampClusterAlertCellIdentifier forIndexPath:indexPath];
-        
-        alertCell.emergencyDictionary = [self.localAlerts objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
-        
-        cell = alertCell;
     }
     
     [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
@@ -260,14 +191,6 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
                                                                    withReuseIdentifier:kCampClusterFooterIdentifier
                                                                           forIndexPath:indexPath];
         
-        if ([self _sectionEqualToRefugeeRequestsSection:indexPath.section]) {
-            [footer setButtonType:HCRFooterButtonTypeRawData withButtonTitle:@"Raw Data"];
-            
-            [footer.button addTarget:self
-                              action:@selector(_footerButtonPressed)
-                    forControlEvents:UIControlEventTouchUpInside];
-        }
-        
         return footer;
         
     }
@@ -282,11 +205,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     
     NSString *cellType = [self _cellTypeForSection:indexPath.section];
     
-    if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
-        
-        // do nothing
-        
-    } else if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
+    if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
         
         HCRTableButtonCell *cell = (HCRTableButtonCell *)[collectionView cellForItemAtIndexPath:indexPath];
         NSParameterAssert([cell isKindOfClass:[HCRTableButtonCell class]]);
@@ -313,103 +232,21 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     
     NSString *cellType = [self _cellTypeForSection:indexPath.section];
     
-    if ([cellType isEqualToString:kCampClusterGraphCellIdentifier]) {
-        return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                          [HCRGraphCell preferredHeightForGraphCell]);
-    } else if ([cellType isEqualToString:kCampClusterAlertCellIdentifier]) {
+    if ([cellType isEqualToString:kCampClusterResourcesCellIdentifier]) {
         
-        return [HCREmergencyCell preferredSizeForCollectionView:collectionView];
+        return [HCRTableButtonCell preferredSizeForCollectionView:collectionView];
         
-    } else {
+    } else if ([cellType isEqualToString:kCampClusterAgenciesCellIdentifier]) {
         
-        return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                          [HCRTableButtonCell preferredCellHeight]);
+        return [HCRTableCell preferredSizeForCollectionView:collectionView];
         
     }
     
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    return CGSizeZero;
     
-    if ([self _sectionEqualToRefugeeRequestsSection:section]) {
-        return [HCRFooterView preferredFooterSizeWithGraphCellForCollectionView:collectionView];
-    } else {
-        return [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
-    }
-    
-}
-
-#pragma mark - SCGraphView Delegate
-
-- (void)graphViewBeganTouchingData:(SCGraphView *)graphView withTouches:(NSSet *)touches {
-    self.collectionView.scrollEnabled = NO;
-}
-
-- (void)graphViewStoppedTouchingData:(SCGraphView *)graphView {
-    self.collectionView.scrollEnabled = YES;
-}
-
-#pragma mark - SCGraphView Data Source
-
-- (NSInteger)numberOfDataPointsInGraphView:(SCGraphView *)graphView {
-    return self.messagesReceivedArray.count;
-}
-
-- (CGFloat)graphViewMinYValue:(SCGraphView *)graphView {
-    return 0;
-}
-
-- (CGFloat)graphViewMaxYValue:(SCGraphView *)graphView {
-    
-    // http://stackoverflow.com/questions/3080540/finding-maximum-numeric-value-in-nsarray
-    NSNumber *largestNumber = [self.messagesReceivedArray valueForKeyPath:@"@max.intValue"];
-    CGFloat maxNumberWithPadding = largestNumber.floatValue * 1.1;
-    
-    return maxNumberWithPadding;
-}
-
-- (NSNumber *)graphView:(SCGraphView *)graphView dataPointForIndex:(NSInteger)index {
-    
-    return [self.messagesReceivedArray objectAtIndex:index];
-    
-}
-
-- (NSString *)graphView:(SCGraphView *)graphView labelForDataPointAtIndex:(NSInteger)index {
-    
-    // go back [index] days since today
-    NSTimeInterval numberOfSecondsToTargetDate = ((self.messagesReceivedArray.count - (index + 1)) * 60 * 60 * 24);
-    NSDate *targetDate = [NSDate dateWithTimeIntervalSinceNow:(-1 * numberOfSecondsToTargetDate)];
-
-    NSString *dateString = [self.dateFormatter stringFromDate:targetDate];
-    
-    return dateString;
 }
 
 #pragma mark - Getters & Setters
-
-- (NSArray *)messagesReceivedArray {
-    
-    // TODO: debug only - need to retrieve live data
-    static const NSInteger kNumberOfDataPoints = 7;
-    static const CGFloat kDataPointBaseline = 50.0;
-    static const CGFloat kDataPointRange = 50.0;
-    static const CGFloat kDataPointIncrement = 6.0;
-    
-    if ( ! _messagesReceivedArray ) {
-        
-        NSMutableArray *randomMessagesArray = @[].mutableCopy;
-        
-        for (NSInteger i = 0; i < kNumberOfDataPoints; i++) {
-            CGFloat nextValue = kDataPointBaseline + (i * kDataPointIncrement) + arc4random_uniform(kDataPointRange);
-            [randomMessagesArray addObject:@(nextValue)];
-        }
-        
-        _messagesReceivedArray = randomMessagesArray;
-    }
-    
-    return _messagesReceivedArray;
-    
-}
 
 - (BOOL)clusterContainsTallySheets {
     return ([self.campClusterData objectForKey:@"TallySheets" ofClass:@"NSArray" mustExist:NO] != nil);
@@ -426,7 +263,7 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
 
 - (void)_requestSuppliesButtonPressed {
     
-    NSString *clusterName = [self.selectedClusterMetaData objectForKey:@"Name"];
+    NSString *clusterName = [[HCRDataSource iraqDomizCampData] objectForKey:@"Name" ofClass:@"NSString"];
     NSString *toString = [NSString stringWithFormat:@"%@@unhcr.org", [[clusterName stringByReplacingOccurrencesOfString:@" " withString:@"."] lowercaseString]];
     NSString *subjectString = [NSString stringWithFormat:@"%@ Supply Request", clusterName];
     
@@ -453,17 +290,13 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     HCRTallySheetPickerViewController *healthTallySheet = [[HCRTallySheetPickerViewController alloc] initWithCollectionViewLayout:[HCRTallySheetPickerViewController preferredLayout]];
     
     healthTallySheet.title = kResourceNameTallySheets;
-    healthTallySheet.countryName = self.countryName;
+//    healthTallySheet.countryName = self.countryName;
     healthTallySheet.campData = self.campDictionary;
     healthTallySheet.campClusterData = self.campClusterData;
-    healthTallySheet.selectedClusterMetaData = self.selectedClusterMetaData;
+//    healthTallySheet.selectedClusterMetaData = self.selectedClusterMetaData;
     
     [self.navigationController pushViewController:healthTallySheet animated:YES];
     
-}
-
-- (void)_footerButtonPressed {
-    // TODO: footer button!
 }
 
 - (void)_agencyButtonPressedAtIndexPath:(NSIndexPath *)indexPath {
@@ -476,14 +309,6 @@ NSString *const kResourceNameTallySheets = @"Tally Sheets";
     contactController.agencyDictionary = agencyDictionary;
     
     [self.navigationController pushViewController:contactController animated:YES];
-    
-}
-
-- (BOOL)_sectionEqualToRefugeeRequestsSection:(NSInteger)section {
-    
-    NSDictionary *layoutObject = [self.campClusterCollectionLayoutData objectAtIndex:section ofClass:@"NSDictionary"];
-    NSString *sectionTitle = [layoutObject objectForKey:@"Section" ofClass:@"NSString"];
-    return [sectionTitle isEqualToString:@"Refugee Requests"];
     
 }
 
