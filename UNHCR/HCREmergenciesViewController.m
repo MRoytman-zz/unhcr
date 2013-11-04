@@ -10,6 +10,8 @@
 #import "HCREmergencyCell.h"
 #import "HCRTableFlowLayout.h"
 
+#import <Parse/Parse.h>
+
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kEmergencyCellIdentifier = @"kEmergencyCellIdentifier";
@@ -130,7 +132,20 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
 #pragma mark - Private Methods
 
 - (void)_composeButtonPressed {
-    // TODO: compose
+    
+    // Create our Installation query
+    PFQuery *everyone = [PFInstallation query];
+    [everyone whereKey:@"deviceType" equalTo:@"ios"];
+    
+    // Send push notification to query
+    PFPush *push = [PFPush new];
+    [push setQuery:everyone];
+    
+    [push setData:@{@"alert": @"[EMERGENCY] This is just a test.",
+                    @"sound": @"notice.mp3",
+                    @"badge": @1}];
+    
+    [push sendPushInBackground];
 }
 
 @end

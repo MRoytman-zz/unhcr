@@ -23,6 +23,7 @@
 		4F1C940B17FCBE640003AA21 /* HCRHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */; };
 		4F28B926182703BE0071DF37 /* HCRTableTallyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F28B925182703BE0071DF37 /* HCRTableTallyCell.m */; };
 		4F28B92A18270AB80071DF37 /* HCRHeaderTallyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F28B92918270AB80071DF37 /* HCRHeaderTallyView.m */; };
+		4F28B92C182756070071DF37 /* notice.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F28B92B182756070071DF37 /* notice.mp3 */; };
 		4F2B2C95182238B500F0DDB2 /* NSString+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2B2C94182238B500F0DDB2 /* NSString+HCRAdditions.m */; };
 		4F3D962D181F36D9008128B6 /* HCRTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3D962C181F36D9008128B6 /* HCRTableCell.m */; };
 		4F3D9631181F6D5B008128B6 /* Scratch.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F3D9630181F6D5B008128B6 /* Scratch.xcassets */; };
@@ -108,6 +109,7 @@
 		4F28B925182703BE0071DF37 /* HCRTableTallyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTableTallyCell.m; sourceTree = "<group>"; };
 		4F28B92818270AB80071DF37 /* HCRHeaderTallyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRHeaderTallyView.h; sourceTree = "<group>"; };
 		4F28B92918270AB80071DF37 /* HCRHeaderTallyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRHeaderTallyView.m; sourceTree = "<group>"; };
+		4F28B92B182756070071DF37 /* notice.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = notice.mp3; sourceTree = "<group>"; };
 		4F2B2C93182238B500F0DDB2 /* NSString+HCRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HCRAdditions.h"; sourceTree = "<group>"; };
 		4F2B2C94182238B500F0DDB2 /* NSString+HCRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HCRAdditions.m"; sourceTree = "<group>"; };
 		4F3D962B181F36D9008128B6 /* HCRTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTableCell.h; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				4F59A7BF1825BE7B006EFE41 /* EASoundManager.m */,
 				4F59A7C11825BEBA006EFE41 /* click1.mp3 */,
 				4F59A7C21825BEBA006EFE41 /* click0.mp3 */,
+				4F28B92B182756070071DF37 /* notice.mp3 */,
 			);
 			name = Sounds;
 			sourceTree = "<group>";
@@ -613,6 +616,7 @@
 				4F1C940817FCB8010003AA21 /* Common.xcassets in Resources */,
 				4F59A7C41825BEBA006EFE41 /* click0.mp3 in Resources */,
 				4F59A7C31825BEBA006EFE41 /* click1.mp3 in Resources */,
+				4F28B92C182756070071DF37 /* notice.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
