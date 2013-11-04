@@ -113,7 +113,7 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
     CGSize boundingSize = CGSizeMake(CGRectGetWidth(collectionView.bounds) - kIndentGlobalCustom - kXTrailing,
                                      CGRectGetHeight(collectionView.bounds));
     
-    CGSize messageSize = [messageString sizeWithBoundingSize:boundingSize
+    CGSize messageSize = [messageString sizeforMultiLineStringWithBoundingSize:boundingSize
                                                     withFont:[HCRBulletinCell _preferredFontForMessageText]
                                                      rounded:YES];
     
@@ -146,7 +146,7 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
     
     CGSize boundingSize = CGSizeMake(CGRectGetWidth(self.contentView.bounds) - xOrigin - kXTrailing,
                                      CGRectGetHeight(self.contentView.bounds));
-    CGSize labelSize = [self.messageLabel.text sizeWithBoundingSize:boundingSize
+    CGSize labelSize = [self.messageLabel.text sizeforMultiLineStringWithBoundingSize:boundingSize
                                                            withFont:[HCRBulletinCell _preferredFontForMessageText]
                                                             rounded:YES];
     

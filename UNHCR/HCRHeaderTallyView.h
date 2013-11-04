@@ -10,6 +10,8 @@
 
 @interface HCRHeaderTallyView : HCRHeaderView
 
++ (CGSize)sizeForTallyHeaderInCollectionView:(UICollectionView *)collectionView withStringArray:(NSArray *)stringArray;
+
 @property (nonatomic, strong) NSArray *stringArray;
 
 @end

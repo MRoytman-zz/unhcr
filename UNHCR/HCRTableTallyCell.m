@@ -25,6 +25,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.trailingSpaceForContent = 20.0;
+        
         self.forwardImage.image = [[UIImage imageNamed:@"tap-here"] colorImage:[UIColor UNHCRBlue]
                                                                  withBlendMode:kCGBlendModeNormal
                                                               withTransparency:YES];

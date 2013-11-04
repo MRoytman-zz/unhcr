@@ -23,8 +23,6 @@ typedef NS_ENUM(NSInteger, HCRHeaderTitleStyle) {
 @property (nonatomic) HCRHeaderTitleStyle titleStyle;
 
 @property (nonatomic, strong) NSString *titleString;
-@property (nonatomic, strong) NSString *subtitleString;
-@property (nonatomic, strong) NSString *thirdTitleString;
 
 + (CGSize)preferredHeaderSizeForCollectionView:(UICollectionView *)collectionView;
 + (CGSize)preferredHeaderSizeWithoutTitleForCollectionView:(UICollectionView *)collectionView;

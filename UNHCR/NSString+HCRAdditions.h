@@ -10,6 +10,7 @@
 
 @interface NSString (HCRAdditions)
 
-- (CGSize)sizeWithBoundingSize:(CGSize)boundingSize withFont:(UIFont *)font rounded:(BOOL)rounded;
+- (CGSize)sizeforMultiLineStringWithBoundingSize:(CGSize)boundingSize withFont:(UIFont *)font rounded:(BOOL)rounded;
+- (CGSize)sizeforMultiLineStringWithBoundingSize:(CGSize)boundingSize withAttributes:(NSDictionary *)attributes rounded:(BOOL)rounded;
 
 @end

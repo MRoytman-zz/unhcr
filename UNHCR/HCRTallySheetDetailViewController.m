@@ -69,6 +69,7 @@ NSString *const kTallyOrganization = @"Organization";
     // LAYOUT & REUSABLES
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
+    
     [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:self.collectionView]];
     
     [self.collectionView registerClass:[HCRTableTallyCell class]
@@ -119,20 +120,11 @@ NSString *const kTallyOrganization = @"Organization";
     HCRTableTallyCell *tallyCell = [collectionView dequeueReusableCellWithReuseIdentifier:kTallyDetailCellIdentifier
                                                                              forIndexPath:indexPath];
     
-//    NSDictionary *resourceDictionary = [self.tallyResources objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
-//    
-//    NSMutableDictionary *mutableData = @{@"Title": [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"],
-//                                         @"Input": @"enter"}.mutableCopy;
-//    
-//    NSString *subtitle = [resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
-//    if (subtitle) {
-//        [mutableData setObject:subtitle forKey:@"Subtitle"];
-//    }
-    
-//    tallyCell.cellStatus = HCRDataEntryCellStatusChildNotCompleted;
-//    tallyCell.dataDictionary = [NSDictionary dictionaryWithDictionary:mutableData];
-    
-    tallyCell.title = @"TEST";
+    NSDictionary *resourceDictionary = [self.tallyResources objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+    NSString *title = [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"];
+    NSString *subtitle = [resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
+    NSString *cellTitle = (subtitle) ? [NSString stringWithFormat:@"%@ %@",title,subtitle] : title;
+    tallyCell.title = cellTitle;
     
     [tallyCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
@@ -148,8 +140,7 @@ NSString *const kTallyOrganization = @"Organization";
                                                                         withReuseIdentifier:kTallyDetailHeaderIdentifier
                                                                                forIndexPath:indexPath];
         
-        NSString *title = [self.tallySheetData objectForKey:@"Name" ofClass:@"NSString"];
-        header.titleString = title;
+        header.stringArray = [self _headerStringArrayForSection:indexPath.section];
         
         return header;
         
@@ -190,15 +181,6 @@ NSString *const kTallyOrganization = @"Organization";
     
     HCRTallySheetDetailInputViewController *tallyInput = [[HCRTallySheetDetailInputViewController alloc] initWithCollectionViewLayout:[HCRTallySheetDetailInputViewController preferredLayout]];
     
-//    NSString *title = [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"];
-//    NSString *subtitle = [resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
-//    NSString *headerString = (subtitle) ? [NSString stringWithFormat:@"%@ %@",title, subtitle] : title;
-//    tallyInput.headerDictionary = @{@"Header": headerString,
-//                                    @"Subheader": [NSString stringWithFormat:@"%@ > %@ @ %@",
-//                                                   self.countryName,
-//                                                   self.campName,
-//                                                   [self _inputDateRangeString]]};
-    
     tallyInput.questionsArray = questions;
     
     [self.navigationController pushViewController:tallyInput animated:YES];
@@ -209,48 +191,11 @@ NSString *const kTallyOrganization = @"Organization";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     
-    return [HCRHeaderTallyView preferredHeaderSizeForCollectionView:collectionView];
+    return [HCRHeaderTallyView sizeForTallyHeaderInCollectionView:collectionView withStringArray:[self _headerStringArrayForSection:section]];
     
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.section == 0) {
-        return [HCRTableFlowLayout preferredTableFlowCellSizeForCollectionView:collectionView numberOfLines:@1];
-    } else {
-        
-        NSDictionary *resourceDictionary = [self.tallyResources objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
-        if ([resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO]) {
-            return [HCRTableFlowLayout preferredTableFlowCellSizeForCollectionView:collectionView numberOfLines:@2];
-        } else {
-            NSNumber *numberOfLines = [resourceDictionary objectForKey:@"Lines" ofClass:@"NSNumber" mustExist:NO];
-            return [HCRTableFlowLayout preferredTableFlowCellSizeForCollectionView:collectionView numberOfLines:numberOfLines];
-        }
-            
-    }
-    
-}
-
-#pragma mark - Private Methods
-
-- (void)_agencyPickerBackgroundTapped {
-    // dismiss
-}
-
-- (NSString *)_inputDateRangeString {
-    
-    NSTimeInterval secondsPerWeek = 60*60*24*7;
-    NSDate *now = [NSDate new];
-    NSDate *nextWeek = [now dateByAddingTimeInterval:secondsPerWeek];
-    
-    NSDateFormatter *formatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
-    
-    NSString *nowString = [formatter stringFromDate:now];
-    NSString *nextWeekString = [formatter stringFromDate:nextWeek];
-    NSString *inputString = [NSString stringWithFormat:@"%@ - %@",nowString,nextWeekString];
-    return inputString;
-    
-}
+#pragma mark - Private Methods - Buttons
 
 - (void)_cancelButtonPressed {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -272,6 +217,28 @@ NSString *const kTallyOrganization = @"Organization";
         [hud hide:YES];
         [self dismissViewControllerAnimated:YES completion:nil];
     });
+    
+}
+
+#pragma mark - Private Methods
+
+- (NSArray *)_headerStringArrayForSection:(NSInteger)section {
+    return @[[self.tallySheetData objectForKey:@"Name" ofClass:@"NSString"],
+             [self _inputDateRangeString]];
+}
+
+- (NSString *)_inputDateRangeString {
+    
+    NSTimeInterval secondsPerWeek = 60*60*24*7;
+    NSDate *now = [NSDate new];
+    NSDate *lastWeek = [now dateByAddingTimeInterval:(-1 * secondsPerWeek)];
+    
+    NSDateFormatter *formatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
+    
+    NSString *nowString = [formatter stringFromDate:now];
+    NSString *lastWeekString = [formatter stringFromDate:lastWeek];
+    NSString *inputString = [NSString stringWithFormat:@"%@ - %@",lastWeekString,nowString];
+    return inputString;
     
 }
 

@@ -51,7 +51,7 @@ static const CGFloat kFontSizeLarge = 17.0;
         NSUInteger index = [self.stringArray indexOfObject:string];
         
         CGSize boundingSize = [HCRInformationCell _boundingSizeWithCellSize:self.contentView.bounds.size];
-        CGSize stringSize = [string sizeWithBoundingSize:boundingSize
+        CGSize stringSize = [string sizeforMultiLineStringWithBoundingSize:boundingSize
                                                 withFont:[HCRInformationCell _preferredFontForTextAtIndex:index]
                                                  rounded:YES];
         
@@ -84,7 +84,7 @@ static const CGFloat kFontSizeLarge = 17.0;
                                                                                    HUGE_VALF)];
     
     for (NSString *string in stringArray) {
-        CGSize messageSize = [string sizeWithBoundingSize:boundingSize
+        CGSize messageSize = [string sizeforMultiLineStringWithBoundingSize:boundingSize
                                                  withFont:[HCRInformationCell _preferredFontForTextAtIndex:[stringArray indexOfObject:string]]
                                                   rounded:YES];
         
