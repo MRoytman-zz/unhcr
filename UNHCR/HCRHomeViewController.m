@@ -284,7 +284,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                         tableCell.title = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
                         
                         if (indexPath.row == 0) {
-                            tableCell.detailString = @"Clusters";
+                            tableCell.detailString = @"Overview";
                         }
                         
                         cell = tableCell;

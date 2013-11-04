@@ -54,7 +54,7 @@ static const CGFloat kXLabelTrailing = 10.0;
     
     CGFloat height = kYLabelOffset + kYLabelTrailing;
     
-    CGSize boundingSize = CGSizeMake(CGRectGetWidth(collectionView.bounds),
+    CGSize boundingSize = CGSizeMake(CGRectGetWidth(collectionView.bounds) - kXCustomIndent - kXLabelTrailing,
                                      CGRectGetHeight(collectionView.bounds));
     
     height += [self _heightForStringArray:stringArray withBoundingSize:boundingSize];
@@ -88,7 +88,7 @@ static const CGFloat kXLabelTrailing = 10.0;
         self.headerLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         [self addSubview:self.headerLabel];
         
-        self.headerLabel.numberOfLines = 2;
+        self.headerLabel.numberOfLines = 0;
         self.headerLabel.backgroundColor = [UIColor tableBackgroundColor];
         
     }

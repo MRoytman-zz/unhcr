@@ -11,6 +11,7 @@
 @interface HCRTableCell : HCRCollectionCell
 
 + (CGFloat)preferredIndentForContentWithBadgeImage;
++ (UIFont *)preferredFontForTitleLabel;
 
 @property (nonatomic, strong) UIImage *badgeImage;
 @property (nonatomic, readonly) UIImageView *badgeImageView;

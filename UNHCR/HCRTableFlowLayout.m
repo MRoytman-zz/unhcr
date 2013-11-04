@@ -100,15 +100,4 @@ static const CGFloat kTableDefaultLineSpacing = 10; // system default
 //    
 //}
 
-#pragma mark - Class Methods
-
-+ (CGSize)preferredTableFlowCellSizeForCollectionView:(UICollectionView *)collectionView numberOfLines:(NSNumber *)numberOfLines {
-    
-    CGFloat height = (numberOfLines) ? kTableCellHeight + kTableCellHeightOffset + ((numberOfLines.integerValue - 1) * kTableCellHeightIncremenetPerLine) : kTableCellHeight;
-
-    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                      height);
-    
-}
-
 @end

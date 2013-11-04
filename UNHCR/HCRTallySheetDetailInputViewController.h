@@ -9,8 +9,9 @@
 #import "HCRCollectionViewController.h"
 
 @interface HCRTallySheetDetailInputViewController : HCRCollectionViewController
+<UICollectionViewDelegateFlowLayout>
 
-@property (nonatomic, strong) NSDictionary *headerDictionary;
+@property (nonatomic, strong) NSString *resourceName;
 @property (nonatomic, strong) NSArray *questionsArray;
 
 @end

@@ -60,7 +60,7 @@ static const CGFloat kDetailXPadding = 4.0;
         [self.contentView addSubview:self.titleLabel];
         
         self.titleLabel.backgroundColor = [UIColor clearColor];
-        self.titleLabel.font = [UIFont systemFontOfSize:kLabelFontSize];
+        self.titleLabel.font = [HCRTableCell preferredFontForTitleLabel];
         
         // 'forward' button
         self.forwardImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"forward-button"]];
@@ -110,6 +110,10 @@ static const CGFloat kDetailXPadding = 4.0;
     
     return 2 * kBadgePadding + kBadgeDimension;
     
+}
+
++ (UIFont *)preferredFontForTitleLabel {
+    return [UIFont systemFontOfSize:kLabelFontSize];
 }
 
 #pragma mark - Getters & Setters

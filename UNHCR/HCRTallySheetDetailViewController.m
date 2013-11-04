@@ -120,11 +120,7 @@ NSString *const kTallyOrganization = @"Organization";
     HCRTableTallyCell *tallyCell = [collectionView dequeueReusableCellWithReuseIdentifier:kTallyDetailCellIdentifier
                                                                              forIndexPath:indexPath];
     
-    NSDictionary *resourceDictionary = [self.tallyResources objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
-    NSString *title = [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"];
-    NSString *subtitle = [resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
-    NSString *cellTitle = (subtitle) ? [NSString stringWithFormat:@"%@ %@",title,subtitle] : title;
-    tallyCell.title = cellTitle;
+    tallyCell.title = [self _stringForCellAtIndexPath:indexPath];
     
     [tallyCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
@@ -162,25 +158,19 @@ NSString *const kTallyOrganization = @"Organization";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSArray *questions = [self.tallySheetData objectForKey:@"Questions" ofClass:@"NSArray"];
+    NSArray *questionsArray = [self.tallySheetData objectForKey:@"Questions" ofClass:@"NSArray"];
+    NSMutableArray *questions = questionsArray.mutableCopy;
     
     NSDictionary *resourceDictionary = [self.tallyResources objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
     NSArray *exclusions = [resourceDictionary objectForKey:@"Exclusions" ofClass:@"NSArray" mustExist:NO];
-    if (exclusions) {
-        NSMutableArray *mutableQuestions = questions.mutableCopy;
-        
-        for (NSString *question in questions) {
-            if ([exclusions containsObject:question]) {
-                [mutableQuestions removeObject:question];
-            }
-        }
-        
-        questions = mutableQuestions;
-        
+    
+    for (NSString *exclusion in exclusions) {
+        [questions removeObject:exclusion];
     }
     
     HCRTallySheetDetailInputViewController *tallyInput = [[HCRTallySheetDetailInputViewController alloc] initWithCollectionViewLayout:[HCRTallySheetDetailInputViewController preferredLayout]];
     
+    tallyInput.resourceName = [self _stringForCellAtIndexPath:indexPath];
     tallyInput.questionsArray = questions;
     
     [self.navigationController pushViewController:tallyInput animated:YES];
@@ -193,6 +183,17 @@ NSString *const kTallyOrganization = @"Organization";
     
     return [HCRHeaderTallyView sizeForTallyHeaderInCollectionView:collectionView withStringArray:[self _headerStringArrayForSection:section]];
     
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return [HCRTableTallyCell sizeForCellInCollectionView:collectionView withString:[self _stringForCellAtIndexPath:indexPath]];
+    
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    
+    return [HCRFooterView preferredFooterSizeForCollectionView:collectionView];
 }
 
 #pragma mark - Private Methods - Buttons
@@ -239,6 +240,15 @@ NSString *const kTallyOrganization = @"Organization";
     NSString *lastWeekString = [formatter stringFromDate:lastWeek];
     NSString *inputString = [NSString stringWithFormat:@"%@ - %@",lastWeekString,nowString];
     return inputString;
+    
+}
+
+- (NSString *)_stringForCellAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSDictionary *resourceDictionary = [self.tallyResources objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+    NSString *title = [resourceDictionary objectForKey:@"Title" ofClass:@"NSString"];
+    NSString *subtitle = [resourceDictionary objectForKey:@"Subtitle" ofClass:@"NSString" mustExist:NO];
+    return (subtitle) ? [NSString stringWithFormat:@"%@ %@",title,subtitle] : title;
     
 }
 

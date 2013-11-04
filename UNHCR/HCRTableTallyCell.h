@@ -10,4 +10,6 @@
 
 @interface HCRTableTallyCell : HCRTableCell
 
++ (CGSize)sizeForCellInCollectionView:(UICollectionView *)collectionView withString:(NSString *)string;
+
 @end
