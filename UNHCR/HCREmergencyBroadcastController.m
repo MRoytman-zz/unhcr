@@ -87,6 +87,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     self.collectionView.backgroundColor = [UIColor tableBackgroundColor];
     self.collectionView.contentInset = UIEdgeInsetsMake(kMasterHeaderHeight, 0, 0, 0);
     
+    self.collectionView.scrollEnabled = ([UIDevice isFourInch]);
+    
     // MASTER HEADER
     CGRect headerFrame = CGRectMake(0,
                                     0,
@@ -132,10 +134,6 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     titleLabel.attributedText = attributedTitleString;
     
     // LAYOUT & REUSABLES
-    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
-    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
-    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeWithoutTitleForCollectionView:self.collectionView]];
-    
     [self.collectionView registerClass:[HCRDataEntryFieldCell class]
             forCellWithReuseIdentifier:kEmergencyBroadcastFieldCellIdentifier];
     
@@ -261,8 +259,14 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 #pragma mark - UICollectionView Delegate Flow Layout
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    
+    return ([UIDevice isFourInch]) ? [HCRHeaderView preferredHeaderSizeWithoutTitleForCollectionView:self.collectionView] : [HCRHeaderView preferredHeaderSizeWithLineOnlyForCollectionView:collectionView];
+    
+}
+
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
-    return (section == [collectionView numberOfSections] - 1) ? [HCRFooterView preferredFooterSizeForCollectionView:collectionView] : [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
+    return ([UIDevice isFourInch] && section != ([collectionView numberOfItemsInSection:section] - 1)) ? [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView] : [HCRFooterView preferredFooterSizeForCollectionView:collectionView];
 }
 
 #pragma mark - HCRDataEntryFieldCell Delegate
