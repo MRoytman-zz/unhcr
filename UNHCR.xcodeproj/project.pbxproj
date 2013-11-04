@@ -24,6 +24,7 @@
 		4F28B926182703BE0071DF37 /* HCRTableTallyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F28B925182703BE0071DF37 /* HCRTableTallyCell.m */; };
 		4F28B92A18270AB80071DF37 /* HCRHeaderTallyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F28B92918270AB80071DF37 /* HCRHeaderTallyView.m */; };
 		4F28B92C182756070071DF37 /* notice.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F28B92B182756070071DF37 /* notice.mp3 */; };
+		4F28B92F182769D20071DF37 /* HCREmergencyBroadcastController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F28B92E182769D20071DF37 /* HCREmergencyBroadcastController.m */; };
 		4F2B2C95182238B500F0DDB2 /* NSString+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2B2C94182238B500F0DDB2 /* NSString+HCRAdditions.m */; };
 		4F3D962D181F36D9008128B6 /* HCRTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3D962C181F36D9008128B6 /* HCRTableCell.m */; };
 		4F3D9631181F6D5B008128B6 /* Scratch.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F3D9630181F6D5B008128B6 /* Scratch.xcassets */; };
@@ -34,7 +35,7 @@
 		4F59A7C61825BF91006EFE41 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F59A7C51825BF91006EFE41 /* AVFoundation.framework */; };
 		4F59A7C81825BF96006EFE41 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F59A7C71825BF96006EFE41 /* AudioToolbox.framework */; };
 		4F6137CE181DBBE200FF982F /* HCRCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */; };
-		4F6137D1181EF6C400FF982F /* HCRSignInFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */; };
+		4F6137D1181EF6C400FF982F /* HCRDataEntryFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137D0181EF6C400FF982F /* HCRDataEntryFieldCell.m */; };
 		4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
 		4F75888B18243B1800ECE9CE /* HCRInformationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F75888A18243B1800ECE9CE /* HCRInformationCell.m */; };
 		4F75888E18243B3D00ECE9CE /* HCRContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F75888D18243B3D00ECE9CE /* HCRContactViewController.m */; };
@@ -66,7 +67,7 @@
 		4FD8390E1801EB5F00B49498 /* HCRDataEntryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390D1801EB5F00B49498 /* HCRDataEntryCell.m */; };
 		4FD8391118020D4E00B49498 /* UIFont+HCRCommonFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */; };
 		4FD839151803197200B49498 /* HCREmergencyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839141803197200B49498 /* HCREmergencyCell.m */; };
-		4FD8391918032B6300B49498 /* HCREmergenciesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391818032B6300B49498 /* HCREmergenciesViewController.m */; };
+		4FD8391918032B6300B49498 /* HCREmergencyListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391818032B6300B49498 /* HCREmergencyListViewController.m */; };
 		4FD9308D1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9308C1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m */; };
 		4FD93090181A01AC00B107ED /* HCRHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9308F181A01AC00B107ED /* HCRHeaderView.m */; };
 		4FD93093181A01E200B107ED /* HCRFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD93092181A01E200B107ED /* HCRFooterView.m */; };
@@ -110,6 +111,8 @@
 		4F28B92818270AB80071DF37 /* HCRHeaderTallyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRHeaderTallyView.h; sourceTree = "<group>"; };
 		4F28B92918270AB80071DF37 /* HCRHeaderTallyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRHeaderTallyView.m; sourceTree = "<group>"; };
 		4F28B92B182756070071DF37 /* notice.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = notice.mp3; sourceTree = "<group>"; };
+		4F28B92D182769D20071DF37 /* HCREmergencyBroadcastController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCREmergencyBroadcastController.h; sourceTree = "<group>"; };
+		4F28B92E182769D20071DF37 /* HCREmergencyBroadcastController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCREmergencyBroadcastController.m; sourceTree = "<group>"; };
 		4F2B2C93182238B500F0DDB2 /* NSString+HCRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HCRAdditions.h"; sourceTree = "<group>"; };
 		4F2B2C94182238B500F0DDB2 /* NSString+HCRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HCRAdditions.m"; sourceTree = "<group>"; };
 		4F3D962B181F36D9008128B6 /* HCRTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTableCell.h; sourceTree = "<group>"; };
@@ -125,8 +128,8 @@
 		4F59A7C71825BF96006EFE41 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		4F6137CC181DBBE200FF982F /* HCRCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCollectionCell.h; sourceTree = "<group>"; };
 		4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCollectionCell.m; sourceTree = "<group>"; };
-		4F6137CF181EF6C400FF982F /* HCRSignInFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSignInFieldCell.h; sourceTree = "<group>"; };
-		4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSignInFieldCell.m; sourceTree = "<group>"; };
+		4F6137CF181EF6C400FF982F /* HCRDataEntryFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRDataEntryFieldCell.h; sourceTree = "<group>"; };
+		4F6137D0181EF6C400FF982F /* HCRDataEntryFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDataEntryFieldCell.m; sourceTree = "<group>"; };
 		4F71C0EF18133D0B00672C6A /* SCGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGraphView.h; sourceTree = "<group>"; };
 		4F71C0F018133D0B00672C6A /* SCGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGraphView.m; sourceTree = "<group>"; };
 		4F75888918243B1800ECE9CE /* HCRInformationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRInformationCell.h; sourceTree = "<group>"; };
@@ -186,8 +189,8 @@
 		4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+HCRCommonFonts.m"; sourceTree = "<group>"; };
 		4FD839131803197200B49498 /* HCREmergencyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCREmergencyCell.h; sourceTree = "<group>"; };
 		4FD839141803197200B49498 /* HCREmergencyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCREmergencyCell.m; sourceTree = "<group>"; };
-		4FD8391718032B6300B49498 /* HCREmergenciesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCREmergenciesViewController.h; sourceTree = "<group>"; };
-		4FD8391818032B6300B49498 /* HCREmergenciesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCREmergenciesViewController.m; sourceTree = "<group>"; };
+		4FD8391718032B6300B49498 /* HCREmergencyListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCREmergencyListViewController.h; sourceTree = "<group>"; };
+		4FD8391818032B6300B49498 /* HCREmergencyListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCREmergencyListViewController.m; sourceTree = "<group>"; };
 		4FD9308B1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+HCRAdditions.h"; sourceTree = "<group>"; };
 		4FD9308C1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+HCRAdditions.m"; sourceTree = "<group>"; };
 		4FD9308E181A01AC00B107ED /* HCRHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRHeaderView.h; sourceTree = "<group>"; };
@@ -244,8 +247,6 @@
 			children = (
 				4F1C940917FCBE640003AA21 /* HCRHomeViewController.h */,
 				4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */,
-				4FD838FC18013F1F00B49498 /* HCRHomeLoginMenuScrollView.h */,
-				4FD838FD18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m */,
 			);
 			name = "Home View";
 			sourceTree = "<group>";
@@ -276,8 +277,8 @@
 				4F28B925182703BE0071DF37 /* HCRTableTallyCell.m */,
 				4FD838F6180121EF00B49498 /* HCRGraphCell.h */,
 				4FD838F7180121EF00B49498 /* HCRGraphCell.m */,
-				4F6137CF181EF6C400FF982F /* HCRSignInFieldCell.h */,
-				4F6137D0181EF6C400FF982F /* HCRSignInFieldCell.m */,
+				4F6137CF181EF6C400FF982F /* HCRDataEntryFieldCell.h */,
+				4F6137D0181EF6C400FF982F /* HCRDataEntryFieldCell.m */,
 				4FD839131803197200B49498 /* HCREmergencyCell.h */,
 				4FD839141803197200B49498 /* HCREmergencyCell.m */,
 				4FDD8A3918218B67002B717E /* HCRDirectMessageCell.h */,
@@ -409,7 +410,7 @@
 				4F866B0C17FAA5FE000350E4 /* Categories */,
 				4F866B0117FA9F8B000350E4 /* Shared UI */,
 				4F1C940C17FCBE6A0003AA21 /* Home View */,
-				4FD8391618032B4100B49498 /* Emergencies View */,
+				4FD8391618032B4100B49498 /* Emergency Views */,
 				4F0D7B621820C14E007A22D8 /* Messages View */,
 				4FDD8A4418220E08002B717E /* Bulletin Board */,
 				4F866B0517FAA083000350E4 /* Camp Selection */,
@@ -438,6 +439,8 @@
 		4F866AFD17FA8324000350E4 /* (DEPRECATED) delete these */ = {
 			isa = PBXGroup;
 			children = (
+				4FD838FC18013F1F00B49498 /* HCRHomeLoginMenuScrollView.h */,
+				4FD838FD18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m */,
 				4F866B0F17FAB83B000350E4 /* HCRClusterPickerController.h */,
 				4F866B1017FAB83B000350E4 /* HCRClusterPickerController.m */,
 				4F866B0617FAA09B000350E4 /* HCRCampCollectionCell.h */,
@@ -533,13 +536,15 @@
 			name = "HIS Tally Sheets";
 			sourceTree = "<group>";
 		};
-		4FD8391618032B4100B49498 /* Emergencies View */ = {
+		4FD8391618032B4100B49498 /* Emergency Views */ = {
 			isa = PBXGroup;
 			children = (
-				4FD8391718032B6300B49498 /* HCREmergenciesViewController.h */,
-				4FD8391818032B6300B49498 /* HCREmergenciesViewController.m */,
+				4FD8391718032B6300B49498 /* HCREmergencyListViewController.h */,
+				4FD8391818032B6300B49498 /* HCREmergencyListViewController.m */,
+				4F28B92D182769D20071DF37 /* HCREmergencyBroadcastController.h */,
+				4F28B92E182769D20071DF37 /* HCREmergencyBroadcastController.m */,
 			);
-			name = "Emergencies View";
+			name = "Emergency Views";
 			sourceTree = "<group>";
 		};
 		4FDD8A4418220E08002B717E /* Bulletin Board */ = {
@@ -683,6 +688,7 @@
 				4FD8390118013F5200B49498 /* UIDevice+EAAdditions.m in Sources */,
 				4FD838EB1800D95000B49498 /* UIAlertView+Blocks.m in Sources */,
 				4F7588931824C45E00ECE9CE /* HCRCampOverviewController.m in Sources */,
+				4F28B92F182769D20071DF37 /* HCREmergencyBroadcastController.m in Sources */,
 				4F59A7BB18259083006EFE41 /* HCRRequestDataViewController.m in Sources */,
 				4F866AF617F9EC0C000350E4 /* HCRTableFlowLayout.m in Sources */,
 				4F866ACF17F9E022000350E4 /* main.m in Sources */,
@@ -702,8 +708,8 @@
 				4F1C93FF17FC0B150003AA21 /* HCRClusterPickerCell.m in Sources */,
 				4F0D7B5E18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m in Sources */,
 				4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */,
-				4F6137D1181EF6C400FF982F /* HCRSignInFieldCell.m in Sources */,
-				4FD8391918032B6300B49498 /* HCREmergenciesViewController.m in Sources */,
+				4F6137D1181EF6C400FF982F /* HCRDataEntryFieldCell.m in Sources */,
+				4FD8391918032B6300B49498 /* HCREmergencyListViewController.m in Sources */,
 				4F75888B18243B1800ECE9CE /* HCRInformationCell.m in Sources */,
 				4F75888E18243B3D00ECE9CE /* HCRContactViewController.m in Sources */,
 				4FD8391118020D4E00B49498 /* UIFont+HCRCommonFonts.m in Sources */,

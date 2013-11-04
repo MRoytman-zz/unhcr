@@ -6,11 +6,10 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import "HCREmergenciesViewController.h"
+#import "HCREmergencyListViewController.h"
 #import "HCREmergencyCell.h"
 #import "HCRTableFlowLayout.h"
-
-#import <Parse/Parse.h>
+#import "HCREmergencyBroadcastController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -20,7 +19,7 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface HCREmergenciesViewController ()
+@interface HCREmergencyListViewController ()
 
 @property (nonatomic, strong) NSArray *alertsList;
 
@@ -28,7 +27,7 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@implementation HCREmergenciesViewController
+@implementation HCREmergencyListViewController
 
 - (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
 {
@@ -133,19 +132,10 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
 
 - (void)_composeButtonPressed {
     
-    // Create our Installation query
-    PFQuery *everyone = [PFInstallation query];
-    [everyone whereKey:@"deviceType" equalTo:@"ios"];
+    HCREmergencyBroadcastController *broadcastController = [[HCREmergencyBroadcastController alloc] initWithCollectionViewLayout:[HCREmergencyBroadcastController preferredLayout]];
     
-    // Send push notification to query
-    PFPush *push = [PFPush new];
-    [push setQuery:everyone];
+    [self presentViewController:broadcastController animated:YES completion:nil];
     
-    [push setData:@{@"alert": @"[EMERGENCY] This is just a test.",
-                    @"sound": @"notice.mp3",
-                    @"badge": @1}];
-    
-    [push sendPushInBackground];
 }
 
 @end

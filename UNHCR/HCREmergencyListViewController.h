@@ -8,6 +8,6 @@
 
 #import "HCRCollectionViewController.h"
 
-@interface HCREmergenciesViewController : HCRCollectionViewController
+@interface HCREmergencyListViewController : HCRCollectionViewController
 
 @end

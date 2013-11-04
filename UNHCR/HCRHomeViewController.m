@@ -8,7 +8,7 @@
 
 #import "HCRHomeViewController.h"
 #import "HCRTableFlowLayout.h"
-#import "HCREmergenciesViewController.h"
+#import "HCREmergencyListViewController.h"
 #import "HCRHeaderView.h"
 #import "HCRFooterView.h"
 #import "HCRCollectionCell.h"
@@ -139,7 +139,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     self.collectionView.backgroundColor = [UIColor tableBackgroundColor];
     self.collectionView.contentInset = UIEdgeInsetsMake(kMasterHeaderHeight, 0, 0, 0);
     
-    // add static title section
+    // MASTER HEADER
     CGRect headerFrame = CGRectMake(0,
                                     0,
                                     CGRectGetWidth(self.view.bounds),
@@ -175,6 +175,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                                                                                 attributes:titleAttributes];
     titleLabel.attributedText = attributedTitleString;
     
+    // LAYOUT AND REUSABLES
     [self.collectionView registerClass:[HCRHeaderView class]
             forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                    withReuseIdentifier:kHomeViewHeaderIdentifier];
@@ -186,7 +187,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     [self.collectionView registerClass:[HCRCollectionCell class]
             forCellWithReuseIdentifier:kHomeViewDefaultCellIdentifier];
     
-    [self.collectionView registerClass:[HCRSignInFieldCell class]
+    [self.collectionView registerClass:[HCRDataEntryFieldCell class]
             forCellWithReuseIdentifier:kHomeViewSignInFieldCellIdentifier];
     
     [self.collectionView registerClass:[HCRTableButtonCell class]
@@ -351,15 +352,22 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                 
             case 1:
             {
-                HCRSignInFieldCell *signInCell =
+                HCRDataEntryFieldCell *signInCell =
                 [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewSignInFieldCellIdentifier
                                                           forIndexPath:indexPath];
                 cell = signInCell;
                 
-                signInCell.signInDelegate = self;
-                signInCell.fieldType = indexPath.row;
+                signInCell.dataDelegate = self;
                 
-                BOOL isEmailCell = (signInCell.fieldType == HCRSignInFieldTypeEmail);
+                if (indexPath.row == ([collectionView numberOfItemsInSection:indexPath.section] - 1)) {
+                    signInCell.fieldType = HCRDataEntryFieldTypePassword;
+                    signInCell.lastFieldInSeries = YES;
+                } else {
+                    signInCell.fieldType = HCRDataEntryFieldTypeEmail;
+                }
+                
+                
+                BOOL isEmailCell = (signInCell.fieldType == HCRDataEntryFieldTypeEmail);
                 signInCell.labelTitle = (isEmailCell) ? @"Email" : @"Password";
                 signInCell.inputPlaceholder = (isEmailCell) ? @"name@example.com" : @"Required";
                 
@@ -637,9 +645,9 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     return dateString;
 }
 
-#pragma mark - HCRSignInFieldCell Delegate
+#pragma mark - HCRDataEntryFieldCell Delegate
 
-- (void)signInFieldCellDidBecomeFirstResponder:(HCRSignInFieldCell *)signInCell {
+- (void)dataEntryFieldCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell {
     
     CGFloat bottomOfHeader = CGRectGetMaxY(self.masterHeader.frame);
     CGFloat contentSpace = CGRectGetHeight(self.view.bounds) - kKeyboardHeight - bottomOfHeader;
@@ -659,13 +667,13 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
 }
 
-- (void)signInFieldCellDidPressDone:(HCRSignInFieldCell *)signInCell {
+- (void)dataEntryFieldCellDidPressDone:(HCRDataEntryFieldCell *)signInCell {
     
-    if (signInCell.fieldType == HCRSignInFieldTypeEmail) {
+    if (signInCell.fieldType == HCRDataEntryFieldTypeEmail) {
         
         [self.passwordField becomeFirstResponder];
         
-    } else if (signInCell.fieldType == HCRSignInFieldTypePassword) {
+    } else if (signInCell.fieldType == HCRDataEntryFieldTypePassword) {
         
         if (self.signInFieldsComplete) {
             [self _startSignInWithCompletion:nil];
@@ -719,7 +727,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 #pragma mark - Private Methods (Buttons)
 
 - (void)_emergenciesButtonPressed {
-    HCREmergenciesViewController *alertsController = [[HCREmergenciesViewController alloc] initWithCollectionViewLayout:[HCREmergenciesViewController preferredLayout]];
+    HCREmergencyListViewController *alertsController = [[HCREmergencyListViewController alloc] initWithCollectionViewLayout:[HCREmergencyListViewController preferredLayout]];
     
     [self _pushViewController:alertsController];
 }

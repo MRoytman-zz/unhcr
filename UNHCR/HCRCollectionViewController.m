@@ -11,7 +11,7 @@
 #import "HCRGraphCell.h"
 #import "HCRDataEntryCell.h"
 #import "HCRCollectionCell.h"
-#import "HCRSignInFieldCell.h"
+#import "HCRDataEntryFieldCell.h"
 #import "HCREmergencyCell.h"
 #import "HCRBulletinCell.h"
 
@@ -47,7 +47,7 @@
         }
         
         if ([cell isKindOfClass:[HCRGraphCell class]] ||
-            [cell isKindOfClass:[HCRSignInFieldCell class]] ||
+            [cell isKindOfClass:[HCRDataEntryFieldCell class]] ||
             [cell isKindOfClass:[HCREmergencyCell class]] ||
             [cell isKindOfClass:[HCRBulletinCell class]]) {
             return;
@@ -75,7 +75,7 @@
         }
         
         if ([cell isKindOfClass:[HCRGraphCell class]] ||
-            [cell isKindOfClass:[HCRSignInFieldCell class]]) {
+            [cell isKindOfClass:[HCRDataEntryFieldCell class]]) {
             return;
         }
         

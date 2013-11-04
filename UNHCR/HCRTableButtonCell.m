@@ -39,6 +39,8 @@ static const CGFloat kYButtonPadding = 10;
         // Initialization code
         self.contentView.backgroundColor = [UIColor whiteColor];
         
+        self.indentForContent = 0;
+        
     }
     return self;
 }

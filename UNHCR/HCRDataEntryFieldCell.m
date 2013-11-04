@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import "HCRSignInFieldCell.h"
+#import "HCRDataEntryFieldCell.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface HCRSignInFieldCell ()
+@interface HCRDataEntryFieldCell ()
 
 @property UILabel *titleLabel;
 @property (nonatomic, strong) UITextField *inputField;
@@ -19,7 +19,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-@implementation HCRSignInFieldCell
+@implementation HCRDataEntryFieldCell
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -36,6 +36,8 @@
         
         self.inputField.font = [UIFont systemFontOfSize:(self.titleLabel.font.pointSize - 1.0)];
         self.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        
+        self.lastFieldInSeries = NO;
         
     }
     return self;
@@ -77,20 +79,20 @@
 #pragma mark - UITextField Delegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    if ([self.signInDelegate respondsToSelector:@selector(signInFieldCellDidBecomeFirstResponder:)]) {
-        [self.signInDelegate signInFieldCellDidBecomeFirstResponder:self];
+    if ([self.dataDelegate respondsToSelector:@selector(dataEntryFieldCellDidBecomeFirstResponder:)]) {
+        [self.dataDelegate dataEntryFieldCellDidBecomeFirstResponder:self];
     }
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    if ([self.signInDelegate respondsToSelector:@selector(signInFieldCellDidResignFirstResponder:)]) {
-        [self.signInDelegate signInFieldCellDidResignFirstResponder:self];
+    if ([self.dataDelegate respondsToSelector:@selector(dataEntryFieldCellDidResignFirstResponder:)]) {
+        [self.dataDelegate dataEntryFieldCellDidResignFirstResponder:self];
     }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if ([self.signInDelegate respondsToSelector:@selector(signInFieldCellDidPressDone:)]) {
-        [self.signInDelegate signInFieldCellDidPressDone:self];
+    if ([self.dataDelegate respondsToSelector:@selector(dataEntryFieldCellDidPressDone:)]) {
+        [self.dataDelegate dataEntryFieldCellDidPressDone:self];
     }
     return NO;
 }
@@ -113,18 +115,37 @@
     
 }
 
-- (void)setFieldType:(HCRSignInFieldType)fieldType {
+- (void)setFieldType:(HCRDataEntryFieldType)fieldType {
     
     _fieldType = fieldType;
     
-    BOOL isPasswordType = (fieldType == HCRSignInFieldTypePassword);
+    BOOL isPasswordType = (fieldType == HCRDataEntryFieldTypePassword);
     
     self.inputField.secureTextEntry = isPasswordType;
-    
-    self.inputField.returnKeyType = (isPasswordType) ? UIReturnKeyDone : UIReturnKeyNext;
     self.inputField.autocorrectionType = (isPasswordType) ? UITextAutocorrectionTypeNo : UITextAutocorrectionTypeDefault;
     
-    self.inputField.keyboardType = (fieldType == HCRSignInFieldTypeEmail) ? UIKeyboardTypeEmailAddress : UIKeyboardTypeDefault;
+    switch (fieldType) {
+        case HCRDataEntryFieldTypeDefault:
+        case HCRDataEntryFieldTypePassword:
+            self.inputField.keyboardType = UIKeyboardTypeDefault;
+            break;
+            
+        case HCRDataEntryFieldTypeEmail:
+            self.inputField.keyboardType = UIKeyboardTypeEmailAddress;
+            break;
+            
+        case HCRDataEntryFieldTypeNumber:
+            self.inputField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+            break;
+    }
+    
+}
+
+- (void)setLastFieldInSeries:(BOOL)lastFieldInSeries {
+    
+    _lastFieldInSeries = lastFieldInSeries;
+    
+    self.inputField.returnKeyType = (lastFieldInSeries) ? UIReturnKeyDone : UIReturnKeyNext;
     
 }
 

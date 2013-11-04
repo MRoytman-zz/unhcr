@@ -7,10 +7,10 @@
 //
 
 #import "HCRCollectionViewController.h"
-#import "HCRSignInFieldCell.h"
+#import "HCRDataEntryFieldCell.h"
 #import "HCRGraphCell.h"
 
 @interface HCRHomeViewController : HCRCollectionViewController
-<UICollectionViewDelegateFlowLayout, HCRSignInFieldCellDelegate, SCGraphViewDataSource, SCGraphViewDelegate>
+<UICollectionViewDelegateFlowLayout, HCRDataEntryFieldCellDelegate, SCGraphViewDataSource, SCGraphViewDelegate>
 
 @end
