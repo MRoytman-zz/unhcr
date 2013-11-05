@@ -138,8 +138,8 @@
     
     NSDictionary *contactDictionary = [emergencyDictionary objectForKey:@"Contact" ofClass:@"NSDictionary"];
     NSString *emailString = [[contactDictionary objectForKey:@"Email" ofClass:@"NSString"] stringByAppendingString:@".test"];
-#warning ADDING .TEST TO EMAIL ADDRESS
     
+#warning ADDING .TEST TO EMAIL ADDRESS
     NSString *subjectString = [NSString stringWithFormat:@"RE: %@ in %@ at %@ (%@)",
                                [emergencyDictionary objectForKey:@"Category" ofClass:@"NSString"],
                                [emergencyDictionary objectForKey:@"Camp" ofClass:@"NSString"],

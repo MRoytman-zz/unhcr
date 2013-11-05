@@ -237,7 +237,6 @@ NSString *const kContactFooterIdentifier = @"kContactFooterIdentifier";
     NSDictionary *contactDictionary = [self.agencyDictionary objectForKey:@"Contact" ofClass:@"NSDictionary" mustExist:NO];
     NSString *email = [[contactDictionary objectForKey:@"Email" ofClass:@"NSString" mustExist:NO] stringByAppendingString:@".test"];
 #warning ADDING .TEST TO EMAIL ADDRESS
-    
     [[EAEmailUtilities sharedUtilities] emailFromViewController:self
                                                withToRecipients:@[email]
                                                 withSubjectText:nil

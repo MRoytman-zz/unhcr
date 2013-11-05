@@ -456,7 +456,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     NSString *hurt = [(UITextField *)[self.collectionView viewWithTag:tagForHurtField] text];
     hurt = [self.numberFormatter stringFromNumber:@([hurt integerValue])];
     
-    return [NSString stringWithFormat:@"[EMERGENCY] %@ in %@ at %@. %@ dead and %@ more cases or injured persons.",
+#warning USING TEST TO BROADCAST
+    return [NSString stringWithFormat:@"[TEST] %@ in %@ at %@. %@ dead and %@ more cases or injured persons.",
             category,
             camp,
             location,

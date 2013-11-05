@@ -123,6 +123,7 @@ static const CGFloat kLabelHeight = 20.0;
     [super prepareForReuse];
     
     self.emergencyDictionary = nil;
+    
     [self.emailContactButton removeTarget:nil
                                    action:NULL
                          forControlEvents:UIControlEventAllEvents];
@@ -250,6 +251,9 @@ static const CGFloat kLabelHeight = 20.0;
     
     if (!emergencyDictionary) {
         
+        [self.backgroundTemplate removeFromSuperview];
+        self.backgroundTemplate = nil;
+        
         self.categoryLabel.text = nil;
         self.timeLabel.text = nil;
         self.campValueLabel.text = nil;
@@ -317,7 +321,7 @@ static const CGFloat kLabelHeight = 20.0;
         if (!self.backgroundTemplate) {
             
             self.backgroundTemplate = [[UIView alloc] initWithFrame:CGRectZero];
-            [self.contentView addSubview:self.backgroundTemplate];
+            [self.contentView insertSubview:self.backgroundTemplate atIndex:0];
             
             self.backgroundTemplate.backgroundColor = [UIColor whiteColor];
             

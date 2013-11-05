@@ -267,7 +267,6 @@ static const CGFloat kHeaderHeight = 30.0;
     NSDictionary *contactDictionary = [self.bulletinDictionary objectForKey:@"Contact" ofClass:@"NSDictionary"];
     return [[contactDictionary objectForKey:@"Email" ofClass:@"NSString"] stringByAppendingString:@".test"];
 #warning ADDING .TEST TO EMAIL ADDRESS
-    
 }
 
 - (NSString *)emailSubjectStringWithPrefix:(NSString *)prefix {
