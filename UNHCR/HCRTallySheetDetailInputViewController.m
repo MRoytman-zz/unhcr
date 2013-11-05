@@ -289,12 +289,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                         options:kKeyboardAnimationOptions
                      animations:^{
                          
-                         NSInteger lastSection = 1;
-                         NSInteger lastItem = ([self.collectionView numberOfItemsInSection:lastSection] - 1);
-                         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:lastItem
-                                                                                          inSection:lastSection]
-                                                     atScrollPosition:UICollectionViewScrollPositionBottom
-                                                             animated:YES];
+                         self.collectionView.contentOffset = CGPointMake(0,
+                                                                         -1 * CGRectGetHeight(self.navigationController.navigationBar.frame));
                          
                      } completion:nil];
     
