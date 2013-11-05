@@ -49,6 +49,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 @property (nonatomic, readonly) BOOL dataFieldsComplete;
 
+@property NSNumberFormatter *numberFormatter;
+
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -72,6 +74,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                                   @"Send Broadcast",
                                   @"Cancel"
                                   ];
+        
+        self.numberFormatter = [NSNumberFormatter numberFormatterWithFormat:HCRNumberFormatThousandsSeparated forceEuropeanFormat:YES];
         
     }
     return self;
@@ -359,12 +363,13 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                                 @"sound": @"notice.mp3",
                                 @"badge": @1}];
                 
-                //    [push sendPushInBackground];
-                
-                // STOP HUD AND DISMISS
+                // STOP HUD & SEND PUSH & DISMISS
                 double delayInSeconds = 2.0;
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    
+                    [push sendPushInBackground];
+                    
                     [hud hide:YES];
                     self.collectionView.userInteractionEnabled = YES;
                     [self dismissViewControllerAnimated:YES completion:nil];
@@ -414,14 +419,28 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 - (NSString *)_alertForPushWithCompletedFields {
     
     NSInteger tagForCategoryField = kInputFieldTagBaseline + [self.fieldLayoutData indexOfObject:kFieldCategory];
-    NSString *category = [(UITextField *)[self.collectionView viewWithTag:tagForCategoryField] text];
+    NSString *category = [[(UITextField *)[self.collectionView viewWithTag:tagForCategoryField] text] capitalizedString];
     
     NSInteger tagForCampField = kInputFieldTagBaseline + [self.fieldLayoutData indexOfObject:kFieldCamp];
     NSString *camp = [(UITextField *)[self.collectionView viewWithTag:tagForCampField] text];
     
-    return [NSString stringWithFormat:@"[EMERGENCY] %@ in %@",
+    NSInteger tagForLocationField = kInputFieldTagBaseline + [self.fieldLayoutData indexOfObject:kFieldLocation];
+    NSString *location = [(UITextField *)[self.collectionView viewWithTag:tagForLocationField] text];
+    
+    NSInteger tagForDeathsField = kInputFieldTagBaseline + [self.fieldLayoutData indexOfObject:kFieldDeaths];
+    NSString *deaths = [(UITextField *)[self.collectionView viewWithTag:tagForDeathsField] text];
+    deaths = [self.numberFormatter stringFromNumber:@([deaths integerValue])];
+    
+    NSInteger tagForHurtField = kInputFieldTagBaseline + [self.fieldLayoutData indexOfObject:kFieldHurt];
+    NSString *hurt = [(UITextField *)[self.collectionView viewWithTag:tagForHurtField] text];
+    hurt = [self.numberFormatter stringFromNumber:@([hurt integerValue])];
+    
+    return [NSString stringWithFormat:@"[EMERGENCY] %@ in %@ at %@. %@ dead and %@ more affected.",
             category,
-            camp];
+            camp,
+            location,
+            deaths,
+            hurt];
     
 }
 
