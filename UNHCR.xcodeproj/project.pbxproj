@@ -40,6 +40,7 @@
 		4F75888B18243B1800ECE9CE /* HCRInformationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F75888A18243B1800ECE9CE /* HCRInformationCell.m */; };
 		4F75888E18243B3D00ECE9CE /* HCRContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F75888D18243B3D00ECE9CE /* HCRContactViewController.m */; };
 		4F7588931824C45E00ECE9CE /* HCRCampOverviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7588921824C45E00ECE9CE /* HCRCampOverviewController.m */; };
+		4F7C661A1829A8D300386AA5 /* HCRTallyEntryFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C66191829A8D300386AA5 /* HCRTallyEntryFieldCell.m */; };
 		4F866AC317F9E022000350E4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC217F9E022000350E4 /* Foundation.framework */; };
 		4F866AC517F9E022000350E4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC417F9E022000350E4 /* CoreGraphics.framework */; };
 		4F866AC717F9E022000350E4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC617F9E022000350E4 /* UIKit.framework */; };
@@ -138,6 +139,8 @@
 		4F75888D18243B3D00ECE9CE /* HCRContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRContactViewController.m; sourceTree = "<group>"; };
 		4F7588911824C45E00ECE9CE /* HCRCampOverviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCampOverviewController.h; sourceTree = "<group>"; };
 		4F7588921824C45E00ECE9CE /* HCRCampOverviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCampOverviewController.m; sourceTree = "<group>"; };
+		4F7C66181829A8D300386AA5 /* HCRTallyEntryFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTallyEntryFieldCell.h; sourceTree = "<group>"; };
+		4F7C66191829A8D300386AA5 /* HCRTallyEntryFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTallyEntryFieldCell.m; sourceTree = "<group>"; };
 		4F866ABF17F9E022000350E4 /* RIS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RIS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F866AC217F9E022000350E4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4F866AC417F9E022000350E4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -279,6 +282,8 @@
 				4FD838F7180121EF00B49498 /* HCRGraphCell.m */,
 				4F6137CF181EF6C400FF982F /* HCRDataEntryFieldCell.h */,
 				4F6137D0181EF6C400FF982F /* HCRDataEntryFieldCell.m */,
+				4F7C66181829A8D300386AA5 /* HCRTallyEntryFieldCell.h */,
+				4F7C66191829A8D300386AA5 /* HCRTallyEntryFieldCell.m */,
 				4FD839131803197200B49498 /* HCREmergencyCell.h */,
 				4FD839141803197200B49498 /* HCREmergencyCell.m */,
 				4FDD8A3918218B67002B717E /* HCRDirectMessageCell.h */,
@@ -687,6 +692,7 @@
 				4F1C940B17FCBE640003AA21 /* HCRHomeViewController.m in Sources */,
 				4FD8390118013F5200B49498 /* UIDevice+EAAdditions.m in Sources */,
 				4FD838EB1800D95000B49498 /* UIAlertView+Blocks.m in Sources */,
+				4F7C661A1829A8D300386AA5 /* HCRTallyEntryFieldCell.m in Sources */,
 				4F7588931824C45E00ECE9CE /* HCRCampOverviewController.m in Sources */,
 				4F28B92F182769D20071DF37 /* HCREmergencyBroadcastController.m in Sources */,
 				4F59A7BB18259083006EFE41 /* HCRRequestDataViewController.m in Sources */,

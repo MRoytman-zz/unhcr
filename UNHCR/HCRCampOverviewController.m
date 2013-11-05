@@ -206,7 +206,13 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
             
             tableCell.title = @"Explore Data";
             
-            tableCell.badgeImage = [UIImage imageNamed:@"mixture-icon"];
+            tableCell.badgeImage = [[UIImage imageNamed:@"graph"] colorImage:[UIColor whiteColor]
+                                                                  withBlendMode:kCGBlendModeNormal
+                                                               withTransparency:YES];
+            tableCell.badgeImageView.backgroundColor = [UIColor colorWithRed:104 / 255.0
+                                                                       green:188 / 255.0
+                                                                        blue:29 / 255.0
+                                                                       alpha:1.0];
             
             cell = tableCell;
         }

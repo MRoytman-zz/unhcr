@@ -94,15 +94,15 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         self.dateFormatterTimeStamp = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMMHHmm forceEuropeanFormat:YES];
         
         self.signedInIconsArray = @[
-                                    @[@"evilapples-icon",
-                                      @"mixture-icon",
-                                      @"ris-icon"],
-                                    @[@"evilapples-icon",
-                                      @"mixture-icon",
-                                      @"ris-icon"],
-                                    @[@"evilapples-icon",
-                                      @"mixture-icon",
-                                      @"ris-icon"]
+                                    @[@"emergency",
+                                      @"message",
+                                      @"camp"],
+                                    @[@"bookmark",
+                                      @"none-placeholder",
+                                      @"bulletin"],
+                                    @[@"none-placeholder",
+                                      @"none-placeholder",
+                                      @"none-placeholder"]
                                     ];
         
         self.signedInLabelsArray = @[
@@ -255,14 +255,30 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                 (HCRTableCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier
                                                                           forIndexPath:indexPath];
                 
-                tableCell.badgeImage = [UIImage imageNamed:[iconsForSection objectAtIndex:indexPath.row ofClass:@"NSString"]];
+                UIImage *badgeImage = [UIImage imageNamed:[iconsForSection objectAtIndex:indexPath.row ofClass:@"NSString"]];
+                badgeImage = [badgeImage colorImage:[UIColor whiteColor]
+                                      withBlendMode:kCGBlendModeNormal
+                                   withTransparency:YES];
+                
+                tableCell.badgeImage = badgeImage;
+                
                 tableCell.title = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
                 
                 if (indexPath.row == 0) {
                     tableCell.highlightDetail = YES;
                     tableCell.detailNumber = @([HCRDataSource globalEmergenciesData].count);
+                    tableCell.badgeImageView.backgroundColor = [UIColor colorWithRed:79 / 255.0
+                                                                               green:79 / 255.0
+                                                                                blue:79 / 255.0
+                                                                               alpha:1.0];
                 } else if (indexPath.row == 1) {
                     tableCell.detailNumber = @([HCRDataSource globalMessagesData].count);
+                    tableCell.badgeImageView.backgroundColor = [UIColor colorWithRed:104 / 255.0
+                                                                               green:188 / 255.0
+                                                                                blue:29 / 255.0
+                                                                               alpha:1.0];
+                } else if (indexPath.row == 2) {
+                    tableCell.badgeImageView.backgroundColor = [UIColor UNHCRBlue];
                 }
                 
                 cell = tableCell;
@@ -281,11 +297,22 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                         (HCRTableCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier
                                                                                   forIndexPath:indexPath];
                         
-                        tableCell.badgeImage = [UIImage imageNamed:[iconsForSection objectAtIndex:indexPath.row ofClass:@"NSString"]];
+                        UIImage *badgeImage = [UIImage imageNamed:[iconsForSection objectAtIndex:indexPath.row ofClass:@"NSString"]];
+                        badgeImage = [badgeImage colorImage:[UIColor whiteColor]
+                                              withBlendMode:kCGBlendModeNormal
+                                           withTransparency:YES];
+                        
+                        tableCell.badgeImage = badgeImage;
                         tableCell.title = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
                         
                         if (indexPath.row == 0) {
                             tableCell.detailString = @"Overview";
+                            tableCell.badgeImageView.backgroundColor = [UIColor UNHCRBlue];
+                        } else if (indexPath.row == 2) {
+                            tableCell.badgeImageView.backgroundColor = [UIColor colorWithRed:193 / 255.0
+                                                                                       green:145 / 255.0
+                                                                                        blue:74 / 255.0
+                                                                                       alpha:1.0];
                         }
                         
                         cell = tableCell;

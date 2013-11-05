@@ -25,7 +25,7 @@ NSString *const kFieldCategory = @"Category";
 NSString *const kFieldCamp = @"Camp";
 NSString *const kFieldLocation = @"Location";
 NSString *const kFieldDeaths = @"Deaths";
-NSString *const kFieldHurt = @"Ill/Hurt";
+NSString *const kFieldHurt = @"Injured";
 
 NSString *const kButtonSendBroadcast = @"Send Broadcast";
 
@@ -387,7 +387,9 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                     
-                    [push sendPushInBackground];
+                    [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        NSLog(@"OH YEAH");
+                    }];
                     
                     [hud hide:YES];
                     self.collectionView.userInteractionEnabled = YES;

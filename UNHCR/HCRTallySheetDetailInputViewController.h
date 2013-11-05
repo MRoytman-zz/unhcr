@@ -7,9 +7,11 @@
 //
 
 #import "HCRCollectionViewController.h"
+#import "HCRTallyEntryFieldCell.h"
 
 @interface HCRTallySheetDetailInputViewController : HCRCollectionViewController
-<UICollectionViewDelegateFlowLayout>
+<UICollectionViewDelegateFlowLayout,
+HCRDataEntryFieldCellDelegate>
 
 @property (nonatomic, strong) NSString *resourceName;
 @property (nonatomic, strong) NSArray *questionsArray;

@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger, HCRDataEntryFieldType) {
 @property (nonatomic, strong) NSString *labelTitle;
 @property (nonatomic, strong) NSString *inputPlaceholder;
 
+@property (nonatomic, readonly) UILabel *titleLabel;
 @property (nonatomic, readonly) UITextField *inputField;
 
 @end

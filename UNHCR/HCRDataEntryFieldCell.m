@@ -12,8 +12,8 @@
 
 @interface HCRDataEntryFieldCell ()
 
-@property UILabel *titleLabel;
-@property (nonatomic, strong) UITextField *inputField;
+@property (nonatomic, readwrite) UILabel *titleLabel;
+@property (nonatomic, readwrite) UITextField *inputField;
 
 @end
 
