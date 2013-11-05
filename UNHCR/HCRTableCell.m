@@ -17,7 +17,7 @@ static const CGFloat kForwardButtonPadding = 10.0;
 static const CGFloat kForwardButtonDimension = 20.0;
 static const CGFloat kForwardButtonWidthRatio = 0.75;
 
-static const CGFloat kLabelFontSize = 18.0;
+static const CGFloat kFontSizeLabel = 18.0;
 
 static const CGFloat kDetailLabelMinimumDimension = 22.0;
 static const CGFloat kDetailNumberFontSize = 16.0;
@@ -113,7 +113,7 @@ static const CGFloat kDetailXPadding = 4.0;
 }
 
 + (UIFont *)preferredFontForTitleLabel {
-    return [UIFont systemFontOfSize:kLabelFontSize];
+    return [UIFont systemFontOfSize:kFontSizeLabel];
 }
 
 #pragma mark - Getters & Setters

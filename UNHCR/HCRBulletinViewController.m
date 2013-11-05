@@ -101,8 +101,12 @@ NSString *const kBulletinEmergencyCellIdentifier = @"kBulletinEmergencyCellIdent
         HCREmergencyCell *emergencyCell = [collectionView dequeueReusableCellWithReuseIdentifier:kBulletinEmergencyCellIdentifier
                                                                                     forIndexPath:indexPath];
         
-        emergencyCell.showEmergencyBanner = YES;
         emergencyCell.emergencyDictionary = cellDictionary;
+        
+        emergencyCell.emailContactButton.tag = indexPath.section;
+        [emergencyCell.emailContactButton addTarget:self
+                                             action:@selector(_emergencyEmailButtonPressed:)
+                                   forControlEvents:UIControlEventTouchUpInside];
         
         cell = emergencyCell;
     } else {
@@ -176,10 +180,11 @@ NSString *const kBulletinEmergencyCellIdentifier = @"kBulletinEmergencyCellIdent
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     
+    NSDictionary *cellDictionary = [self.bulletinArray objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
+    
     if ([self _emergencyStatusForBulletinAtIndexPath:indexPath]) {
-        return [HCREmergencyCell preferredSizeWithEmergencyBannerForCollectionView:collectionView];
+        return [HCREmergencyCell sizeForCellInCollectionView:collectionView withEmergencyDictionary:cellDictionary];
     } else; {
-        NSDictionary *cellDictionary = [self.bulletinArray objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
         return [HCRBulletinCell sizeForCellInCollectionView:collectionView withBulletinDictionary:cellDictionary];
     }
     
@@ -219,6 +224,15 @@ NSString *const kBulletinEmergencyCellIdentifier = @"kBulletinEmergencyCellIdent
                                                withToRecipients:nil
                                                 withSubjectText:[bulletinCell emailSubjectStringWithPrefix:@"[RIS] FWD:"]
                                                    withBodyText:[bulletinCell emailBodyString]
+                                                 withCompletion:nil];
+    
+}
+
+- (void)_emergencyEmailButtonPressed:(UIButton *)emailButton {
+    
+    NSDictionary *emergencyDictionary = [self.bulletinArray objectAtIndex:emailButton.tag ofClass:@"NSDictionary"];
+    [[EAEmailUtilities sharedUtilities] emailFromViewController:self
+                                        withEmergencyDictionary:emergencyDictionary
                                                  withCompletion:nil];
     
 }

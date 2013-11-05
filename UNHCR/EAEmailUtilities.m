@@ -134,4 +134,26 @@
     
 }
 
+- (void)emailFromViewController:(UIViewController *)controller withEmergencyDictionary:(NSDictionary *)emergencyDictionary withCompletion:(EAEmailCompletionBlock)completionBlock {
+    
+    NSDictionary *contactDictionary = [emergencyDictionary objectForKey:@"Contact" ofClass:@"NSDictionary"];
+    NSString *emailString = [[contactDictionary objectForKey:@"Email" ofClass:@"NSString"] stringByAppendingString:@".test"];
+#warning ADDING .TEST TO EMAIL ADDRESS
+    
+    NSString *subjectString = [NSString stringWithFormat:@"RE: %@ in %@ at %@ (%@)",
+                               [emergencyDictionary objectForKey:@"Category" ofClass:@"NSString"],
+                               [emergencyDictionary objectForKey:@"Camp" ofClass:@"NSString"],
+                               [emergencyDictionary objectForKey:@"Location" ofClass:@"NSString"],
+                               [emergencyDictionary objectForKey:@"Time" ofClass:@"NSString"]];
+    
+    NSString *bodyString = @"\n\n\n\nYou are receiving this message in response to an Emergency Bulletin you posted using the Refugee Information Service.";
+    
+    [self emailFromViewController:controller
+                 withToRecipients:@[emailString]
+                  withSubjectText:subjectString
+                     withBodyText:bodyString
+                   withCompletion:nil];
+    
+}
+
 @end

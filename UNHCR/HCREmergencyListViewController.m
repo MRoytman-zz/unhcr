@@ -10,6 +10,7 @@
 #import "HCREmergencyCell.h"
 #import "HCRTableFlowLayout.h"
 #import "HCREmergencyBroadcastController.h"
+#import "EAEmailUtilities.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -21,7 +22,7 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
 
 @interface HCREmergencyListViewController ()
 
-@property (nonatomic, strong) NSArray *alertsList;
+@property (nonatomic, strong) NSArray *emergenciesList;
 
 @end
 
@@ -34,7 +35,7 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
-        self.alertsList = [HCRDataSource globalEmergenciesData];
+        self.emergenciesList = [HCRDataSource globalEmergenciesData];
     }
     return self;
 }
@@ -49,10 +50,7 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
     HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
     NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
     
-    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeForCollectionView:self.collectionView]];
-    [tableLayout setDisplayFooter:YES withSize:[HCRFooterView preferredFooterSizeForCollectionView:self.collectionView]];
-    
-    tableLayout.itemSize = [HCREmergencyCell preferredSizeForCollectionView:self.collectionView];
+    [tableLayout setDisplayHeader:YES withSize:[HCRHeaderView preferredHeaderSizeWithoutTitleForCollectionView:self.collectionView]];
     
     [self.collectionView registerClass:[HCREmergencyCell class]
             forCellWithReuseIdentifier:kEmergencyCellIdentifier];
@@ -82,23 +80,28 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
 #pragma mark - UICollectionView
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+    return self.emergenciesList.count;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.alertsList.count;
+    return 1;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCREmergencyCell *alertCell = [collectionView dequeueReusableCellWithReuseIdentifier:kEmergencyCellIdentifier
+    HCREmergencyCell *emergencyCell = [collectionView dequeueReusableCellWithReuseIdentifier:kEmergencyCellIdentifier
                                                                         forIndexPath:indexPath];
     
-    alertCell.emergencyDictionary = [self.alertsList objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+    emergencyCell.emergencyDictionary = [self.emergenciesList objectAtIndex:indexPath.section ofClass:@"NSDictionary"];
     
-    [alertCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
+    emergencyCell.emailContactButton.tag = indexPath.section;
+    [emergencyCell.emailContactButton addTarget:self
+                                         action:@selector(_emergencyEmailButtonPressed:)
+                               forControlEvents:UIControlEventTouchUpInside];
     
-    return alertCell;
+    [emergencyCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
+    
+    return emergencyCell;
     
 }
 
@@ -109,8 +112,6 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
         HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                                                                    withReuseIdentifier:kEmergencyHeaderIdentifier
                                                                           forIndexPath:indexPath];
-        
-        header.titleString = @"Domiz, Iraq";
         
         return header;
         
@@ -128,6 +129,20 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
     
 }
 
+#pragma mark - UICollectionView Delegate Flow Layout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return [HCREmergencyCell sizeForCellInCollectionView:collectionView withEmergencyDictionary:[self.emergenciesList objectAtIndex:indexPath.section ofClass:@"NSDictionary"]];
+    
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    
+    return (section == ([collectionView numberOfSections] - 1)) ? [HCRFooterView preferredFooterSizeForCollectionView:collectionView] : [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:self.collectionView];
+    
+}
+
 #pragma mark - Private Methods
 
 - (void)_composeButtonPressed {
@@ -135,6 +150,15 @@ NSString *const kEmergencyFooterIdentifier = @"kEmergencyFooterIdentifier";
     HCREmergencyBroadcastController *broadcastController = [[HCREmergencyBroadcastController alloc] initWithCollectionViewLayout:[HCREmergencyBroadcastController preferredLayout]];
     
     [self presentViewController:broadcastController animated:YES completion:nil];
+    
+}
+
+- (void)_emergencyEmailButtonPressed:(UIButton *)emailButton {
+    
+    NSDictionary *emergencyDictionary = [self.emergenciesList objectAtIndex:emailButton.tag ofClass:@"NSDictionary"];
+    [[EAEmailUtilities sharedUtilities] emailFromViewController:self
+                                        withEmergencyDictionary:emergencyDictionary
+                                                 withCompletion:nil];
     
 }
 

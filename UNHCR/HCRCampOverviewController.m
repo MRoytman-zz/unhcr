@@ -157,8 +157,12 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
         
         HCREmergencyCell *emergencyCell = [collectionView dequeueReusableCellWithReuseIdentifier:kOverviewEmergencyCellIdentifier forIndexPath:indexPath];
         
-        emergencyCell.showEmergencyBanner = YES;
         emergencyCell.emergencyDictionary = [self.emergencyData objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+        
+        emergencyCell.emailContactButton.tag = indexPath.section;
+        [emergencyCell.emailContactButton addTarget:self
+                                             action:@selector(_emergencyEmailButtonPressed:)
+                                   forControlEvents:UIControlEventTouchUpInside];
         
         cell = emergencyCell;
         
@@ -304,10 +308,11 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
     NSString *sectionHeader = [self _headerForSection:indexPath.section];
     
     if ([sectionHeader isEqualToString:kHeaderTitleEmergencies]) {
-        return [HCREmergencyCell preferredSizeWithEmergencyBannerForCollectionView:collectionView];
+        NSDictionary *emergencyDictionary = [self.emergencyData objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+        return [HCREmergencyCell sizeForCellInCollectionView:collectionView withEmergencyDictionary:emergencyDictionary];
     } else if ([sectionHeader isEqualToString:kHeaderTitleBulletins]) {
-        return [HCRBulletinCell sizeForCellInCollectionView:collectionView
-                                     withBulletinDictionary:[self.bulletinData objectAtIndex:indexPath.row ofClass:@"NSDictionary"]];
+        NSDictionary *bulletinDictionary = [self.bulletinData objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+        return [HCRBulletinCell sizeForCellInCollectionView:collectionView withBulletinDictionary:bulletinDictionary];
     } else if ([sectionHeader isEqualToString:kHeaderTitleRequests]) {
         
         if (indexPath.row == 0) {
@@ -531,6 +536,15 @@ static const CGFloat kUniversalClusterCollectionPadding = 10.0;
                                                withToRecipients:nil
                                                 withSubjectText:[bulletinCell emailSubjectStringWithPrefix:@"[RIS] FWD:"]
                                                    withBodyText:[bulletinCell emailBodyString]
+                                                 withCompletion:nil];
+    
+}
+
+- (void)_emergencyEmailButtonPressed:(UIButton *)emailButton {
+    
+    NSDictionary *emergencyDictionary = [self.emergencyData objectAtIndex:emailButton.tag ofClass:@"NSDictionary"];
+    [[EAEmailUtilities sharedUtilities] emailFromViewController:self
+                                        withEmergencyDictionary:emergencyDictionary
                                                  withCompletion:nil];
     
 }

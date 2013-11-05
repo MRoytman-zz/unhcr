@@ -9,5 +9,6 @@
 #import "HCRCollectionViewController.h"
 
 @interface HCREmergencyListViewController : HCRCollectionViewController
+<UICollectionViewDelegateFlowLayout>
 
 @end

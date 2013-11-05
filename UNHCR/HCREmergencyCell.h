@@ -10,9 +10,9 @@
 
 @interface HCREmergencyCell : HCRCollectionCell
 
-@property (nonatomic) BOOL showEmergencyBanner;
+@property (nonatomic, readonly) UIButton *emailContactButton;
 @property (nonatomic, strong) NSDictionary *emergencyDictionary;
 
-+ (CGSize)preferredSizeWithEmergencyBannerForCollectionView:(UICollectionView *)collectionView;
++ (CGSize)sizeForCellInCollectionView:(UICollectionView *)collectionView withEmergencyDictionary:(NSDictionary *)emergencyDictionary;
 
 @end

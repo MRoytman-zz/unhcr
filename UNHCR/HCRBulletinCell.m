@@ -16,6 +16,7 @@ static const CGFloat kIndentClusterImage = 12.0;
 static const CGFloat kYOffset = 14.0;
 static const CGFloat kXTrailing = 8.0;
 
+static const CGFloat kFontSizeHeader = 20.0;
 static const CGFloat kFontSizeDefault = 16.0;
 static const CGFloat kFontSizeTime = 14.0;
 
@@ -30,19 +31,21 @@ static const CGFloat kOneLineLabelHeight = 20.0;
 static const CGFloat kTwoLineLabelHeight = 35.0;
 static const CGFloat kThreeLineLabelHeight = 55.0;
 
+static const CGFloat kHeaderHeight = 30.0;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRBulletinCell ()
 
+@property (nonatomic, readonly) CGRect headerLabelFrame;
 @property (nonatomic, readonly) CGRect clusterImageFrame;
 @property (nonatomic, readonly) CGRect messageLabelFrame;
 @property (nonatomic, readonly) CGRect nameLabelFrame;
-//@property (nonatomic, readonly) CGRect timeLabelFrame;
 
+@property UILabel *headerLabel;
 @property UIImageView *clusterImage;
 @property UILabel *messageLabel;
 @property UILabel *nameLabel;
-//@property UILabel *timeLabel;
 
 @property (nonatomic, readonly) CGRect replyButtonFrame;
 @property (nonatomic, readonly) CGRect forwardButtonFrame;
@@ -62,6 +65,16 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
     if (self) {
         // Initialization code
         self.indentForContent = kIndentGlobalCustom;
+        
+        self.headerLabel = [UILabel new];
+        [self.contentView addSubview:self.headerLabel];
+        
+        self.headerLabel.text = @"BULLETIN";
+        self.headerLabel.textAlignment = NSTextAlignmentCenter;
+        
+        self.headerLabel.font = [UIFont boldSystemFontOfSize:kFontSizeHeader];
+        self.headerLabel.textColor = [UIColor whiteColor];
+        self.headerLabel.backgroundColor = [UIColor UNHCRBlue];
         
         self.replyButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.contentView addSubview:self.replyButton];
@@ -87,20 +100,14 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
 - (void)layoutSubviews {
     [super layoutSubviews];
     
+    self.headerLabel.frame = self.headerLabelFrame;
+    
     self.clusterImage.frame = self.clusterImageFrame;
     self.messageLabel.frame = self.messageLabelFrame;
-//    self.timeLabel.frame = self.timeLabelFrame;
     self.nameLabel.frame = self.nameLabelFrame;
     
     self.replyButton.frame = self.replyButtonFrame;
     self.forwardButton.frame = self.forwardButtonFrame;
-    
-//    self.clusterImage.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.5];
-//    self.timeLabel.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
-//    self.messageLabel.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.5];
-//    self.nameLabel.backgroundColor = [[UIColor orangeColor] colorWithAlphaComponent:0.5];
-//    self.replyButton.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:0.5];
-//    self.forwardButton.backgroundColor = [[UIColor yellowColor] colorWithAlphaComponent:0.5];
     
 }
 
@@ -117,7 +124,7 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
                                                     withFont:[HCRBulletinCell _preferredFontForMessageText]
                                                      rounded:YES];
     
-    CGFloat height = kYOffset + messageSize.height + kYTimePadding + kThreeLineLabelHeight + kYButtonPadding + kButtonHeight;
+    CGFloat height = kHeaderHeight + kYOffset + messageSize.height + kYTimePadding + kThreeLineLabelHeight + kYButtonPadding + kButtonHeight;
     
     return CGSizeMake(CGRectGetWidth(collectionView.bounds),
                       height);
@@ -131,10 +138,19 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
 
 #pragma mark - Getters & Setters
 
+- (CGRect)headerLabelFrame {
+    
+    return CGRectMake(0,
+                      0,
+                      CGRectGetWidth(self.contentView.bounds),
+                      kHeaderHeight);
+    
+}
+
 - (CGRect)clusterImageFrame {
     
     return CGRectMake(kIndentClusterImage,
-                      kYOffset,
+                      kHeaderHeight + kYOffset,
                       CGRectGetWidth(self.clusterImage.bounds),
                       CGRectGetHeight(self.clusterImage.bounds));
     
@@ -151,21 +167,10 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
                                                             rounded:YES];
     
     return CGRectMake(xOrigin,
-                      kYOffset,
+                      kHeaderHeight + kYOffset,
                       labelSize.width,
                       labelSize.height);
 }
-
-//- (CGRect)timeLabelFrame {
-//    
-//    CGFloat xOrigin = self.indentForContent;
-//    CGFloat labelHeight = kOneLineLabelHeight;
-//    
-//    return CGRectMake(xOrigin,
-//                      CGRectGetMaxY(self.messageLabel.frame) + kYTimePadding,
-//                      CGRectGetWidth(self.contentView.bounds) - xOrigin - kXTrailing,
-//                      labelHeight);
-//}
 
 - (CGRect)nameLabelFrame {
     
@@ -216,18 +221,6 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
         
     }
     
-//    if (!self.timeLabel) {
-//        
-//        self.timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-//        [self.contentView addSubview:self.timeLabel];
-//        
-//        self.timeLabel.font = [UIFont systemFontOfSize:kFontSizeTime];
-//        self.timeLabel.textAlignment = NSTextAlignmentLeft;
-//        self.timeLabel.textColor = [UIColor midGrayColor];
-//        self.timeLabel.numberOfLines = 1;
-//        
-//    }
-    
     if (!self.messageLabel) {
         
         self.messageLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -273,6 +266,7 @@ static const CGFloat kThreeLineLabelHeight = 55.0;
     
     NSDictionary *contactDictionary = [self.bulletinDictionary objectForKey:@"Contact" ofClass:@"NSDictionary"];
     return [[contactDictionary objectForKey:@"Email" ofClass:@"NSString"] stringByAppendingString:@".test"];
+#warning ADDING .TEST TO EMAIL ADDRESS
     
 }
 

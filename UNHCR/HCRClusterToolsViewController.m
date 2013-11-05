@@ -11,7 +11,6 @@
 #import "HCRTableButtonCell.h"
 #import "HCRHealthToolkitPickerController.h"
 #import "EAEmailUtilities.h"
-#import "HCREmergencyCell.h"
 #import "HCRContactViewController.h"
 #import "HCRTableCell.h"
 

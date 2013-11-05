@@ -33,4 +33,8 @@ typedef void (^EAEmailCompletionBlock)(EAEmailStatus emailStatus);
                    withBodyText:(NSString *)bodyText
                  withCompletion:(EAEmailCompletionBlock)completionBlock;
 
+- (void)emailFromViewController:(UIViewController *)controller
+        withEmergencyDictionary:(NSDictionary *)emergencyDictionary
+                 withCompletion:(EAEmailCompletionBlock)completionBlock;
+
 @end
