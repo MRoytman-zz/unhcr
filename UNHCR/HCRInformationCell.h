@@ -12,6 +12,8 @@
 
 @property (nonatomic, strong) NSArray *stringArray;
 
+@property (nonatomic, readonly) UIButton *hyperlinkButton;
+
 + (CGSize)sizeForItemInCollectionView:(UICollectionView *)collectionView withStringArray:(NSArray *)stringArray;
 
 @end

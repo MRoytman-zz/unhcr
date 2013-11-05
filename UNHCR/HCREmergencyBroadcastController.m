@@ -28,7 +28,6 @@ NSString *const kFieldDeaths = @"Deaths";
 NSString *const kFieldHurt = @"Ill/Hurt";
 
 NSString *const kButtonSendBroadcast = @"Send Broadcast";
-NSString *const kButtonCancel = @"Cancel";
 
 static const CGFloat kMasterHeaderHeight = 90.0;
 
@@ -71,8 +70,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                                  ];
         
         self.buttonLayoutData = @[
-                                  @"Send Broadcast",
-                                  @"Cancel"
+                                  kButtonSendBroadcast
                                   ];
         
         self.numberFormatter = [NSNumberFormatter numberFormatterWithFormat:HCRNumberFormatThousandsSeparated forceEuropeanFormat:YES];
@@ -94,48 +92,72 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     self.collectionView.scrollEnabled = ([UIDevice isFourInch]);
     
     // MASTER HEADER
-    CGRect headerFrame = CGRectMake(0,
-                                    0,
-                                    CGRectGetWidth(self.view.bounds),
-                                    kMasterHeaderHeight);
-    self.masterHeader = [[UIView alloc] initWithFrame:headerFrame];
-    [self.view addSubview:self.masterHeader];
-    
-    self.masterHeader.backgroundColor = [UIColor redColor];
-    
-    static const CGFloat kLineHeight = 0.5;
-    UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0,
-                                                                  CGRectGetHeight(self.masterHeader.bounds) - kLineHeight,
-                                                                  CGRectGetWidth(self.masterHeader.bounds),
-                                                                  kLineHeight)];
-    [self.masterHeader addSubview:bottomLine];
-    
-    bottomLine.backgroundColor = [UIColor tableDividerColor];
-    
-    static const CGFloat kTitleLabelHeight = 60;
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
-                                                                    CGRectGetHeight(self.masterHeader.bounds) - kTitleLabelHeight,
-                                                                    CGRectGetWidth(self.masterHeader.bounds),
-                                                                    kTitleLabelHeight)];
-    [self.masterHeader insertSubview:titleLabel belowSubview:bottomLine];
-    
-    titleLabel.backgroundColor = self.masterHeader.backgroundColor;
-    titleLabel.numberOfLines = 2;
-    
-    static const CGFloat kXIndentation = 20.0;
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.lineHeightMultiple = 0.8;
-    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
-    paragraphStyle.firstLineHeadIndent = kXIndentation;
-    paragraphStyle.headIndent = kXIndentation;
-    
-    NSDictionary *titleAttributes = @{NSFontAttributeName: [UIFont helveticaNeueBoldFontOfSize:24.0],
-                                      NSForegroundColorAttributeName: [UIColor whiteColor],
-                                      NSParagraphStyleAttributeName: paragraphStyle};
-    
-    NSAttributedString *attributedTitleString = [[NSAttributedString alloc] initWithString:@"Emergency\nBroadcast"
-                                                                                attributes:titleAttributes];
-    titleLabel.attributedText = attributedTitleString;
+    if (!self.masterHeader) {
+        CGRect headerFrame = CGRectMake(0,
+                                        0,
+                                        CGRectGetWidth(self.view.bounds),
+                                        kMasterHeaderHeight);
+        self.masterHeader = [[UIView alloc] initWithFrame:headerFrame];
+        [self.view addSubview:self.masterHeader];
+        
+        self.masterHeader.backgroundColor = [UIColor redColor];
+        
+        static const CGFloat kLineHeight = 0.5;
+        UIView *bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0,
+                                                                      CGRectGetHeight(self.masterHeader.bounds) - kLineHeight,
+                                                                      CGRectGetWidth(self.masterHeader.bounds),
+                                                                      kLineHeight)];
+        [self.masterHeader addSubview:bottomLine];
+        
+        bottomLine.backgroundColor = [UIColor tableDividerColor];
+        
+        static const CGFloat kTitleLabelHeight = 60;
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
+                                                                        CGRectGetHeight(self.masterHeader.bounds) - kTitleLabelHeight,
+                                                                        CGRectGetWidth(self.masterHeader.bounds),
+                                                                        kTitleLabelHeight)];
+        [self.masterHeader insertSubview:titleLabel belowSubview:bottomLine];
+        
+        titleLabel.backgroundColor = self.masterHeader.backgroundColor;
+        titleLabel.numberOfLines = 2;
+        
+        static const CGFloat kXIndentation = 20.0;
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.lineHeightMultiple = 0.8;
+        paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
+        paragraphStyle.firstLineHeadIndent = kXIndentation;
+        paragraphStyle.headIndent = kXIndentation;
+        
+        NSDictionary *titleAttributes = @{NSFontAttributeName: [UIFont helveticaNeueBoldFontOfSize:24.0],
+                                          NSForegroundColorAttributeName: [UIColor whiteColor],
+                                          NSParagraphStyleAttributeName: paragraphStyle};
+        
+        NSAttributedString *attributedTitleString = [[NSAttributedString alloc] initWithString:@"Emergency\nBroadcast"
+                                                                                    attributes:titleAttributes];
+        titleLabel.attributedText = attributedTitleString;
+        
+        UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.masterHeader addSubview:cancelButton];
+        
+        static const CGFloat kButtonTrailing = 10.0;
+        static const CGFloat kButtonHeight = 40.0;
+        static const CGFloat kButtonWidth = 50.0;
+        cancelButton.frame = CGRectMake(CGRectGetWidth(self.masterHeader.bounds) - kButtonTrailing - kButtonWidth,
+                                        CGRectGetMaxY(titleLabel.frame) - kButtonHeight,
+                                        kButtonWidth,
+                                        kButtonHeight);
+        
+        [cancelButton setTitle:@"Cancel"
+                      forState:UIControlStateNormal];
+        [cancelButton setTitleColor:[UIColor whiteColor]
+                           forState:UIControlStateNormal];
+        
+        [cancelButton addTarget:self
+                         action:@selector(_cancelButtonPressed)
+               forControlEvents:UIControlEventTouchUpInside];
+        
+//        cancelButton.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
+    }
     
     // LAYOUT & REUSABLES
     [self.collectionView registerClass:[HCRDataEntryFieldCell class]
@@ -155,7 +177,6 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
@@ -254,8 +275,6 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         
         if (indexPath.row == [self.buttonLayoutData indexOfObject:kButtonSendBroadcast]) {
             [self _sendBroadcastButtonPressed];
-        } else if (indexPath.row == [self.buttonLayoutData indexOfObject:kButtonCancel]) {
-            [self _cancelButtonPressed];
         }
     }
     
@@ -435,7 +454,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     NSString *hurt = [(UITextField *)[self.collectionView viewWithTag:tagForHurtField] text];
     hurt = [self.numberFormatter stringFromNumber:@([hurt integerValue])];
     
-    return [NSString stringWithFormat:@"[EMERGENCY] %@ in %@ at %@. %@ dead and %@ more affected.",
+    return [NSString stringWithFormat:@"[EMERGENCY] %@ in %@ at %@. %@ dead and %@ more cases or injured persons.",
             category,
             camp,
             location,

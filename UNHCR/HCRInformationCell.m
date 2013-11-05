@@ -23,6 +23,14 @@ static const CGFloat kFontSizeLarge = 17.0;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+@interface HCRInformationCell ()
+
+@property (nonatomic, readwrite) UIButton *hyperlinkButton;
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////
+
 @implementation HCRInformationCell
 
 - (id)initWithFrame:(CGRect)frame
@@ -30,6 +38,8 @@ static const CGFloat kFontSizeLarge = 17.0;
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.hyperlinkButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.contentView addSubview:self.hyperlinkButton];
     }
     return self;
 }
@@ -38,9 +48,11 @@ static const CGFloat kFontSizeLarge = 17.0;
     [super layoutSubviews];
     
     // clear subviews
-    // TODO: find a better way to handle this; no cachine = bad performance
+    // TODO: find a better way to handle this; no caching = bad performance
     for (UIView *subview in self.contentView.subviews) {
-        [subview removeFromSuperview];
+        if (subview != self.hyperlinkButton) {
+            [subview removeFromSuperview];
+        }
     }
     
     // make subviews
@@ -70,6 +82,13 @@ static const CGFloat kFontSizeLarge = 17.0;
         
         lastLabel = stringLabel;
         
+    }
+    
+    if (self.stringArray.count >= 3 ||
+        ([lastLabel.text rangeOfString:@"http"].location != NSNotFound) ||
+        ([lastLabel.text rangeOfString:@"@"].location != NSNotFound)) {
+        self.hyperlinkButton.frame = lastLabel.frame;
+        lastLabel.textColor = [UIColor UNHCRBlue];
     }
     
 }

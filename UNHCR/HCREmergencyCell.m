@@ -427,7 +427,8 @@ static const CGFloat kLabelHeight = 20.0;
         }
         
         if (!self.hurtLabel) {
-            self.hurtLabel = [self _valueLabelWithString:@"Sick/Hurt" withBoldText:NO addToContentView:YES];
+            NSString *hurtLabelString = ([[categoryString lowercaseString] isEqualToString:[@"Outbreak" lowercaseString]]) ? @"Cases" : @"Injured";
+            self.hurtLabel = [self _valueLabelWithString:hurtLabelString withBoldText:NO addToContentView:YES];
             
         }
         

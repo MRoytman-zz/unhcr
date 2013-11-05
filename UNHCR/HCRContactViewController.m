@@ -9,6 +9,7 @@
 #import "HCRContactViewController.h"
 #import "HCRInformationCell.h"
 #import "HCRTableFlowLayout.h"
+#import "EAEmailUtilities.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -56,9 +57,6 @@ NSString *const kContactFooterIdentifier = @"kContactFooterIdentifier";
     self.layoutData = mutableLayout;
     
     // LAYOUT AND REUSABLES
-//    HCRTableFlowLayout *tableLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
-//    NSParameterAssert([tableLayout isKindOfClass:[HCRTableFlowLayout class]]);
-    
     [self.collectionView registerClass:[HCRInformationCell class]
             forCellWithReuseIdentifier:kContactCellIdentifier];
     
@@ -93,7 +91,19 @@ NSString *const kContactFooterIdentifier = @"kContactFooterIdentifier";
     HCRInformationCell *infoCell = [collectionView dequeueReusableCellWithReuseIdentifier:kContactCellIdentifier
                                                                              forIndexPath:indexPath];
     
-    infoCell.stringArray = ([self _sectionIsContactsSection:indexPath.section]) ? [self _contactStrings] : [self _overviewStrings];
+    BOOL contactsSection = [self _sectionIsContactsSection:indexPath.section];
+    infoCell.stringArray = (contactsSection) ? [self _contactStrings] : [self _overviewStrings];
+    
+    SEL hyperlinkSelector;
+    if (contactsSection) {
+        hyperlinkSelector = @selector(_emailButtonPressed:);
+    } else {
+        hyperlinkSelector = @selector(_hyperlinkButtonPressed:);
+    }
+    
+    [infoCell.hyperlinkButton addTarget:self
+                                 action:hyperlinkSelector
+                       forControlEvents:UIControlEventTouchUpInside];
     
     [infoCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
@@ -212,6 +222,28 @@ NSString *const kContactFooterIdentifier = @"kContactFooterIdentifier";
 
 - (BOOL)_sectionIsContactsSection:(NSInteger)section {
     return (self.layoutData.count > 1 && section == 0);
+}
+
+- (void)_hyperlinkButtonPressed:(UIButton *)button {
+    
+    NSString *website = [self.agencyDictionary objectForKey:@"Website" ofClass:@"NSString" mustExist:NO];
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:website]];
+    
+}
+
+- (void)_emailButtonPressed:(UIButton *)button {
+    
+    NSDictionary *contactDictionary = [self.agencyDictionary objectForKey:@"Contact" ofClass:@"NSDictionary" mustExist:NO];
+    NSString *email = [[contactDictionary objectForKey:@"Email" ofClass:@"NSString" mustExist:NO] stringByAppendingString:@".test"];
+#warning ADDING .TEST TO EMAIL ADDRESS
+    
+    [[EAEmailUtilities sharedUtilities] emailFromViewController:self
+                                               withToRecipients:@[email]
+                                                withSubjectText:nil
+                                                   withBodyText:nil
+                                                 withCompletion:nil];
+    
 }
 
 @end
