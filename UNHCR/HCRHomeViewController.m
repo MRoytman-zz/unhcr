@@ -19,6 +19,7 @@
 #import "HCRMessagesViewController.h"
 #import "HCRBulletinViewController.h"
 #import "HCRCampOverviewController.h"
+#import "EASoundManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -479,87 +480,26 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
+    NSString *cellTitle = [self _layoutLabelForIndexPath:indexPath];
+    
     if (self.signedIn) {
         
-        switch (indexPath.section) {
-            case 0:
-            {
-                
-                switch (indexPath.row) {
-                    case 0:
-                    {
-                        [self _emergenciesButtonPressed];
-                        break;
-                    }
-                        
-                    case 1:
-                    {
-                        [self _directMessagesButtonPressed];
-                        break;
-                    }
-                        
-                    case 2:
-                    {
-                        [self _campsButtonPressed];
-                        break;
-                    }
-                        
-                    default:
-                        NSAssert(NO, @"Unhandled collection view row.");
-                        break;
-                }
-                
-                break;
-            }
-                
-            case 1:
-            {
-                
-                switch (indexPath.row) {
-                    case 0:
-                    {
-                        [self _bookmarkedCampButtonPressed];
-                        break;
-                    }
-                        
-                    case 1:
-                        // do nothing
-                        break;
-                        
-                    case 2:
-                    {
-                        [self _bookmarkedBulletinBoardButtonPressed];
-                        break;
-                    }
-                        
-                    default:
-                        NSAssert(NO, @"Unhandled collection view row.");
-                        break;
-                }
-                
-                break;
-            }
-                
-            case 2:
-            {
-                switch (indexPath.row) {
-                    case 0:
-                    {
-                        [self _signoutButtonPressed];
-                        break;
-                    }
-                        
-                    default:
-                        NSAssert(NO, @"Unhandled collection view row.");
-                        break;
-                }
-                
-                break;
-            }
-                
-            default:
-                NSAssert(NO, @"Unhandled collection view section.");
-                break;
+        if ([cellTitle isEqualToString:kLayoutCellLabelEmergencies]) {
+            [self _emergenciesButtonPressed];
+        } else if ([cellTitle isEqualToString:kLayoutCellLabelMessages]) {
+            [self _directMessagesButtonPressed];
+        } else if ([cellTitle isEqualToString:kLayoutCellLabelCamps]) {
+            [self _campsButtonPressed];
+        } else if ([cellTitle isEqualToString:kLayoutCellLabelDomiz]) {
+            [self _bookmarkedCampButtonPressed];
+        } else if ([cellTitle isEqualToString:kLayoutCellLabelBulletin]) {
+            [self _bookmarkedBulletinBoardButtonPressed];
+        } else if ([cellTitle isEqualToString:kLayoutCellLabelSignOut]) {
+            [self _signoutButtonPressed];
+        } else if ([cellTitle isEqualToString:kLayoutCellLabelDirectory]) {
+            [[EASoundManager sharedSoundManager] playSoundOnce:EASoundIDNotice];
+        } else if ([cellTitle isEqualToString:kLayoutCellLabelSurveys]) {
+            [[EASoundManager sharedSoundManager] playSoundOnce:EASoundIDNotice];
         }
         
     } else {
@@ -568,8 +508,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         [self.passwordField resignFirstResponder];
         [self _resetCollectionContentOffset];
         
-        if (self.signedIn == NO &&
-            indexPath.section == 2) {
+        if ([cellTitle isEqualToString:kLayoutSignedOutCellLogIn]) {
             
             if (self.signInFieldsComplete) {
                 [self _startSignInWithCompletion:nil];
