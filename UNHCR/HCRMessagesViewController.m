@@ -9,6 +9,7 @@
 #import "HCRMessagesViewController.h"
 #import "HCRTableFlowLayout.h"
 #import "HCRDirectMessageCell.h"
+#import "EASoundManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -125,10 +126,16 @@ NSString *const kMessagesFooterIdentifier = @"kMessagesFooterIdentifier";
     
 }
 
+#pragma mark - UICollectionView Delegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [[EASoundManager sharedSoundManager] playSoundOnce:EASoundIDNotice];
+}
+
 #pragma mark - Private Methods
 
 - (void)_composeButtonPressed {
-    // TODO: compose
+    [[EASoundManager sharedSoundManager] playSoundOnce:EASoundIDNotice];
 }
 
 @end

@@ -36,6 +36,7 @@ NSString *const kLayoutCellLabelKey = @"kLayoutCellLabelKey";
 NSString *const kLayoutCellIconKey = @"kLayoutCellIconKey";
 
 NSString *const kLayoutCellLabelEmergencies = @"Emergencies";
+NSString *const kLayoutCellLabelAlerts = @"Alerts";
 NSString *const kLayoutCellLabelMessages = @"Messages";
 NSString *const kLayoutCellLabelCamps = @"Refugee Camps";
 NSString *const kLayoutCellLabelDomiz = @"Domiz, Iraq";
@@ -145,6 +146,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                                        kLayoutCellIconKey: @"bulletin"}
                                      ],
                                  @[
+                                     @{kLayoutCellLabelKey: kLayoutCellLabelAlerts,
+                                       kLayoutCellIconKey: @"emergency"},
                                      @{kLayoutCellLabelKey: kLayoutCellLabelMessages,
                                        kLayoutCellIconKey: @"message"},
                                      @{kLayoutCellLabelKey: kLayoutCellLabelDirectory,
@@ -308,6 +311,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         if ([cellTitle isEqualToString:kLayoutCellLabelSurveys] ||
             [cellTitle isEqualToString:kLayoutCellLabelMessages] ||
             [cellTitle isEqualToString:kLayoutCellLabelEmergencies] ||
+            [cellTitle isEqualToString:kLayoutCellLabelAlerts] ||
             [cellTitle isEqualToString:kLayoutCellLabelCamps] ||
             [cellTitle isEqualToString:kLayoutCellLabelDirectory] ||
             [cellTitle isEqualToString:kLayoutCellLabelDomiz] ||
@@ -329,7 +333,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                                                                             blue:74 / 255.0
                                                                            alpha:1.0];
                 
-            } else if ([cellTitle isEqualToString:kLayoutCellLabelEmergencies]) {
+            } else if ([cellTitle isEqualToString:kLayoutCellLabelEmergencies] ||
+                       [cellTitle isEqualToString:kLayoutCellLabelAlerts]) {
                 tableCell.highlightDetail = YES;
                 tableCell.detailNumber = @([HCRDataSource globalEmergenciesData].count);
                 tableCell.badgeImageView.backgroundColor = [UIColor colorWithRed:79 / 255.0
@@ -484,7 +489,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     if (self.signedIn) {
         
-        if ([cellTitle isEqualToString:kLayoutCellLabelEmergencies]) {
+        if ([cellTitle isEqualToString:kLayoutCellLabelEmergencies] ||
+            [cellTitle isEqualToString:kLayoutCellLabelAlerts]) {
             [self _emergenciesButtonPressed];
         } else if ([cellTitle isEqualToString:kLayoutCellLabelMessages]) {
             [self _directMessagesButtonPressed];
