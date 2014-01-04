@@ -21,6 +21,8 @@
 #import "HCRCampOverviewController.h"
 #import "EASoundManager.h"
 
+#import <Parse/Parse.h>
+
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kHomeViewHeaderIdentifier = @"kHomeViewHeaderIdentifier";
@@ -50,7 +52,8 @@ NSString *const kLayoutSignedOutCellBody = @"kLayoutSignedOutCellBody";
 NSString *const kLayoutSignedOutCellEmail = @"Email";
 NSString *const kLayoutSignedOutCellPassword = @"Password";
 NSString *const kLayoutSignedOutCellLogIn = @"Log In";
-NSString *const kLayoutSignedOutCellSignUp = @"Sign Up";
+NSString *const kLayoutSignedOutCellSignUp = @"Create New User";
+NSString *const kLayoutSignedOutCellForgot = @"Forgot Password";
 
 NSString *const kLayoutCellIconNone = @"kLayoutCellIconNone";
 
@@ -73,6 +76,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 @property (nonatomic, weak) HCRDataEntryFieldCell *emailCell;
 @property (nonatomic, weak) HCRDataEntryFieldCell *passwordCell;
 @property (nonatomic, weak) HCRTableButtonCell *signInButtonCell;
+@property (nonatomic, weak) HCRTableButtonCell *createNewUserButtonCell;
+@property (nonatomic, weak) HCRTableButtonCell *forgotPasswordButtonCell;
 
 @property UIView *masterHeader;
 @property UIView *masterHeaderBottomLine;
@@ -109,7 +114,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         self.baseParagraphStyle.firstLineHeadIndent = kXIndentation;
         self.baseParagraphStyle.headIndent = kXIndentation;
         
-        self.signedIn = YES;
+        self.signedIn = ([PFUser currentUser] != nil);
         
         self.dateFormatterPlain = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
         self.dateFormatterTimeStamp = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMMHHmm forceEuropeanFormat:YES];
@@ -171,6 +176,10 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                                               ],
                                           @[
                                               @{kLayoutCellLabelKey: kLayoutSignedOutCellLogIn}
+                                              ],
+                                          @[
+                                              @{kLayoutCellLabelKey: kLayoutSignedOutCellSignUp},
+                                              @{kLayoutCellLabelKey: kLayoutSignedOutCellForgot}
                                               ]
                                           ];
         
@@ -216,6 +225,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     [self.masterHeader addSubview:self.masterHeaderBottomLine];
     
     self.masterHeaderBottomLine.backgroundColor = [UIColor tableDividerColor];
+    self.masterHeaderBottomLine.hidden = !self.signedIn;
     
     static const CGFloat kTitleLabelHeight = 80.0;
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
@@ -281,10 +291,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     
-    NSInteger numberOfSectionsSignedIn = self.layoutDataArray.count;
-    NSInteger numberOfSectionsNotSignedIn = 3;
-    
-    return (self.signedIn) ? numberOfSectionsSignedIn : numberOfSectionsNotSignedIn;
+    return (self.signedIn) ? self.layoutDataArray.count : self.layoutDataArraySignedOut.count;
     
 }
 
@@ -434,7 +441,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
             }
             
         } else if ([cellTitle isEqualToString:kLayoutSignedOutCellLogIn] ||
-                   [cellTitle isEqualToString:kLayoutSignedOutCellSignUp]) {
+                   [cellTitle isEqualToString:kLayoutSignedOutCellSignUp] ||
+                   [cellTitle isEqualToString:kLayoutSignedOutCellForgot]) {
             
             HCRTableButtonCell *buttonCell =
             [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewSignInButtonCellIdentifier
@@ -444,7 +452,9 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
             buttonCell.tableButtonTitle = cellTitle;
             buttonCell.processingViewPosition = HCRCollectionCellProcessingViewPositionLeft;
             
-            self.signInButtonCell = buttonCell;
+            if ([cellTitle isEqualToString:kLayoutSignedOutCellLogIn]) {
+                self.signInButtonCell = buttonCell;
+            }
             
         } else {
             NSAssert(NO, @"Unhandled section!");
@@ -512,30 +522,48 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     } else {
         
         [self.emailCell.inputField resignFirstResponder];
-        [self.emailCell.inputField resignFirstResponder];
-        [self _resetCollectionContentOffset];
+        [self.passwordCell.inputField resignFirstResponder];
+//        [self _resetCollectionContentOffset];
         
-        if ([cellTitle isEqualToString:kLayoutSignedOutCellLogIn]) {
+        void (^shakeCellTitleIfRequired)(HCRDataEntryFieldCell *) = ^(HCRDataEntryFieldCell *cell){
+            if (cell.inputField.text.length == 0) {
+                
+                UIColor *backgroundColor = cell.titleLabel.backgroundColor;
+                cell.titleLabel.backgroundColor = [UIColor clearColor];
+                [cell.titleLabel shakeWithCompletion:^(BOOL finished) {
+                    cell.titleLabel.backgroundColor = backgroundColor;
+                }];
+                
+            }
+        };
+        
+        if ([cellTitle isEqualToString:kLayoutSignedOutCellLogIn] ||
+            [cellTitle isEqualToString:kLayoutSignedOutCellSignUp]) {
             
             if (self.signInFieldsComplete) {
-                [self _startSignInWithCompletion:nil];
+                
+                if ([cellTitle isEqualToString:kLayoutSignedOutCellLogIn]) {
+                    [self _simpleSignIn];
+                } else if ([cellTitle isEqualToString:kLayoutSignedOutCellSignUp]) {
+                    [self _simpleSignUp];
+                }
+                
             } else {
                 
                 NSArray *cells = @[self.emailCell, self.passwordCell];
                 
                 for (HCRDataEntryFieldCell *cell in cells) {
-                    if (cell.inputField.text.length == 0) {
-                        
-                        UIColor *backgroundColor = cell.titleLabel.backgroundColor;
-                        cell.titleLabel.backgroundColor = [UIColor clearColor];
-                        [cell.titleLabel shakeWithCompletion:^(BOOL finished) {
-                            cell.titleLabel.backgroundColor = backgroundColor;
-                        }];
-                        
-                    }
-                    
+                    shakeCellTitleIfRequired(cell);
                 }
                 
+            }
+            
+        } else if ([cellTitle isEqualToString:kLayoutSignedOutCellForgot]) {
+            
+            if (self.emailCell.inputField.text.length == 0) {
+                shakeCellTitleIfRequired(self.emailCell);
+            } else {
+                // TODO: query for user, if exists, handle, if not, handle that
             }
             
         }
@@ -597,13 +625,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     
-    if (self.signedIn) {
-        BOOL lastSection = (section == self.collectionView.numberOfSections - 1);
-        
-        return (lastSection) ? [HCRFooterView preferredFooterSizeForCollectionView:collectionView] : [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
-    } else {
-        return [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
-    }
+    BOOL lastSection = (section == self.collectionView.numberOfSections - 1);
+    return (lastSection) ? [HCRFooterView preferredFooterSizeForCollectionView:collectionView] : [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
     
 }
 
@@ -683,10 +706,6 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         [self.passwordCell.inputField becomeFirstResponder];
         
     } else if (signInCell.fieldType == HCRDataEntryFieldTypePassword) {
-        
-        if (self.signInFieldsComplete) {
-            [self _startSignInWithCompletion:nil];
-        }
         
         [self.passwordCell.inputField resignFirstResponder];
         
@@ -791,17 +810,20 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     self.signedIn = NO;
     
+//    self.collectionView.numberOfSections = [self numberOfSectionsInCollectionView:self.collectionView];
+    
     [self _reloadSectionsAnimated];
     
 }
 
 #pragma mark - Private Methods
 
-- (void)_startSignInWithCompletion:(void (^)(BOOL success))completionBlock {
+- (void)_startSignInWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL success))completionBlock {
     
     self.collectionView.scrollEnabled = NO;
     self.signInButtonCell.processingAction = YES;
-    self.signInButtonCell.tableButton.enabled = NO;
+    
+    [self _setLoginButtonsEnabled:NO];
     
     double delayInSeconds = 2.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -809,11 +831,10 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         
         self.signedIn = YES;
         
-        [self _reloadSectionsAnimated];
-        
         self.collectionView.scrollEnabled = YES;
         self.signInButtonCell.processingAction = NO;
-        self.signInButtonCell.tableButton.enabled = YES;
+ 
+        [self _setLoginButtonsEnabled:YES];
         
         if (completionBlock) {
             completionBlock(YES);
@@ -915,6 +936,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)_reloadSectionsAnimated {
     
+    [self.collectionView reloadData];
+    
     [self.collectionView performBatchUpdates:^{
         [self.collectionView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)]];
     } completion:^(BOOL finished) {
@@ -957,6 +980,44 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     } else {
         return nil;
     }
+}
+
+- (void)_createNewUserWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL success))completionBlock {
+    
+    // TOOD
+    
+}
+
+-(void)_setLoginButtonsEnabled:(BOOL)enabled {
+    self.signInButtonCell.tableButton.enabled = enabled;
+    self.createNewUserButtonCell.tableButton.enabled = enabled;
+    self.forgotPasswordButtonCell.tableButton.enabled = enabled;
+}
+
+-(void)_simpleSignIn {
+    
+    [self _startSignInWithUsername:self.emailCell.inputField.text
+                      withPassword:self.passwordCell.inputField.text
+                    withCompletion:^(BOOL success) {
+                        if (success) {
+                            [self _reloadSectionsAnimated];
+                            self.emailCell.inputField.text = nil;
+                            self.passwordCell.inputField.text = nil;
+                        }
+                    }];
+    
+}
+
+-(void)_simpleSignUp {
+    
+    [self _createNewUserWithUsername:self.emailCell.inputField.text
+                        withPassword:self.passwordCell.inputField.text
+                      withCompletion:^(BOOL success) {
+                          // TODO: handle this - create the user but set a flag at "not authorized"
+                          // some where: check for 'authorized' flag - if exists, OK, if not, don't let 'em in
+                          // also handle whether user is already created with that email address - if so, just invoke 'forgot password' and email it to them
+                      }];
+    
 }
 
 @end
