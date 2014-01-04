@@ -70,8 +70,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 @property (nonatomic, readonly) BOOL signInFieldsComplete;
 
-@property (nonatomic, weak) UITextField *emailField;
-@property (nonatomic, weak) UITextField *passwordField;
+@property (nonatomic, weak) HCRDataEntryFieldCell *emailCell;
+@property (nonatomic, weak) HCRDataEntryFieldCell *passwordCell;
 @property (nonatomic, weak) HCRTableButtonCell *signInButtonCell;
 
 @property UIView *masterHeader;
@@ -396,6 +396,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         
     } else {
         
+        // NOT SIGNED IN
+        
         if ([cellTitle isEqualToString:kLayoutSignedOutCellBody]) {
             cell = [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewDefaultCellIdentifier
                                                              forIndexPath:indexPath];
@@ -426,9 +428,9 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
             signInCell.inputPlaceholder = (isEmailCell) ? @"name@example.com" : @"Required";
             
             if (isEmailCell) {
-                self.emailField = signInCell.inputField;
+                self.emailCell = signInCell;
             } else {
-                self.passwordField = signInCell.inputField;
+                self.passwordCell = signInCell;
             }
             
         } else if ([cellTitle isEqualToString:kLayoutSignedOutCellLogIn] ||
@@ -440,7 +442,6 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
             cell = buttonCell;
             
             buttonCell.tableButtonTitle = cellTitle;
-            
             buttonCell.processingViewPosition = HCRCollectionCellProcessingViewPositionLeft;
             
             self.signInButtonCell = buttonCell;
@@ -510,14 +511,31 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         
     } else {
         
-        [self.emailField resignFirstResponder];
-        [self.passwordField resignFirstResponder];
+        [self.emailCell.inputField resignFirstResponder];
+        [self.emailCell.inputField resignFirstResponder];
         [self _resetCollectionContentOffset];
         
         if ([cellTitle isEqualToString:kLayoutSignedOutCellLogIn]) {
             
             if (self.signInFieldsComplete) {
                 [self _startSignInWithCompletion:nil];
+            } else {
+                
+                NSArray *cells = @[self.emailCell, self.passwordCell];
+                
+                for (HCRDataEntryFieldCell *cell in cells) {
+                    if (cell.inputField.text.length == 0) {
+                        
+                        UIColor *backgroundColor = cell.titleLabel.backgroundColor;
+                        cell.titleLabel.backgroundColor = [UIColor clearColor];
+                        [cell.titleLabel shakeWithCompletion:^(BOOL finished) {
+                            cell.titleLabel.backgroundColor = backgroundColor;
+                        }];
+                        
+                    }
+                    
+                }
+                
             }
             
         }
@@ -662,7 +680,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     if (signInCell.fieldType == HCRDataEntryFieldTypeEmail) {
         
-        [self.passwordField becomeFirstResponder];
+        [self.passwordCell.inputField becomeFirstResponder];
         
     } else if (signInCell.fieldType == HCRDataEntryFieldTypePassword) {
         
@@ -670,7 +688,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
             [self _startSignInWithCompletion:nil];
         }
         
-        [self.passwordField resignFirstResponder];
+        [self.passwordCell.inputField resignFirstResponder];
         
         [self _resetCollectionContentOffset];
     }
@@ -712,7 +730,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 }
 
 - (BOOL)signInFieldsComplete {
-    return(self.emailField.text.length > 0 && self.passwordField.text.length > 0);
+    return(self.emailCell.inputField.text.length > 0 && self.passwordCell.inputField.text.length > 0);
 }
 
 #pragma mark - Private Methods (Buttons)

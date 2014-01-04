@@ -29,6 +29,9 @@
 		4F2B2C95182238B500F0DDB2 /* NSString+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2B2C94182238B500F0DDB2 /* NSString+HCRAdditions.m */; };
 		4F3D962D181F36D9008128B6 /* HCRTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3D962C181F36D9008128B6 /* HCRTableCell.m */; };
 		4F3D9631181F6D5B008128B6 /* Scratch.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F3D9630181F6D5B008128B6 /* Scratch.xcassets */; };
+		4F419DDC1878C2360000C7DA /* HCRDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F419DDB1878C2360000C7DA /* HCRDataManager.m */; };
+		4F419DDF1878C44C0000C7DA /* UIView+EAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F419DDE1878C44C0000C7DA /* UIView+EAAdditions.m */; };
+		4F419DE01878C44C0000C7DA /* UIView+EAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F419DDE1878C44C0000C7DA /* UIView+EAAdditions.m */; };
 		4F4F4B76187263D700E0ADE8 /* HMS.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4F4B75187263D700E0ADE8 /* HMS.xcassets */; };
 		4F59A7BB18259083006EFE41 /* HCRRequestDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59A7BA18259083006EFE41 /* HCRRequestDataViewController.m */; };
 		4F59A7C01825BE7B006EFE41 /* EASoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59A7BF1825BE7B006EFE41 /* EASoundManager.m */; };
@@ -186,6 +189,10 @@
 		4F3D962B181F36D9008128B6 /* HCRTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTableCell.h; sourceTree = "<group>"; };
 		4F3D962C181F36D9008128B6 /* HCRTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTableCell.m; sourceTree = "<group>"; };
 		4F3D9630181F6D5B008128B6 /* Scratch.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Scratch.xcassets; sourceTree = "<group>"; };
+		4F419DDA1878C2360000C7DA /* HCRDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRDataManager.h; sourceTree = "<group>"; };
+		4F419DDB1878C2360000C7DA /* HCRDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDataManager.m; sourceTree = "<group>"; };
+		4F419DDD1878C44C0000C7DA /* UIView+EAAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+EAAdditions.h"; sourceTree = "<group>"; };
+		4F419DDE1878C44C0000C7DA /* UIView+EAAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+EAAdditions.m"; sourceTree = "<group>"; };
 		4F4F4B511872634B00E0ADE8 /* MSF-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MSF-Info.plist"; sourceTree = "<group>"; };
 		4F4F4B531872634B00E0ADE8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4F4F4B551872634B00E0ADE8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -402,12 +409,22 @@
 			name = "Collection Layouts";
 			sourceTree = "<group>";
 		};
+		4F419DD91878C2150000C7DA /* Local Data */ = {
+			isa = PBXGroup;
+			children = (
+				4F419DDA1878C2360000C7DA /* HCRDataManager.h */,
+				4F419DDB1878C2360000C7DA /* HCRDataManager.m */,
+			);
+			name = "Local Data";
+			sourceTree = "<group>";
+		};
 		4F4F4B4F1872634B00E0ADE8 /* MSF */ = {
 			isa = PBXGroup;
 			children = (
 				4F1B66E918760A3000506D66 /* msf-build.h */,
 				4F4F4B581872634B00E0ADE8 /* HCRAppDelegate.h */,
 				4F4F4B591872634B00E0ADE8 /* HCRAppDelegate.m */,
+				4F419DD91878C2150000C7DA /* Local Data */,
 				4F4F4B501872634B00E0ADE8 /* Supporting Files */,
 			);
 			path = MSF;
@@ -637,6 +654,8 @@
 				4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */,
 				4F2B2C93182238B500F0DDB2 /* NSString+HCRAdditions.h */,
 				4F2B2C94182238B500F0DDB2 /* NSString+HCRAdditions.m */,
+				4F419DDD1878C44C0000C7DA /* UIView+EAAdditions.h */,
+				4F419DDE1878C44C0000C7DA /* UIView+EAAdditions.m */,
 			);
 			name = Categories;
 			path = ../UNHCR;
@@ -894,6 +913,7 @@
 				4FD838EB1800D95000B49498 /* UIAlertView+Blocks.m in Sources */,
 				4F7C661A1829A8D300386AA5 /* HCRTallyEntryFieldCell.m in Sources */,
 				4F7588931824C45E00ECE9CE /* HCRCampOverviewController.m in Sources */,
+				4F419DDF1878C44C0000C7DA /* UIView+EAAdditions.m in Sources */,
 				4F28B92F182769D20071DF37 /* HCREmergencyBroadcastController.m in Sources */,
 				4F59A7BB18259083006EFE41 /* HCRRequestDataViewController.m in Sources */,
 				4F866AF617F9EC0C000350E4 /* HCRTableFlowLayout.m in Sources */,
@@ -938,6 +958,7 @@
 				4FA716E518751C9700BCE0A6 /* HCREmergencyListViewController.m in Sources */,
 				4F72042518751079006E95B2 /* HCRTableTallyCell.m in Sources */,
 				4F720432187510B2006E95B2 /* HCRTallySheetDetailViewController.m in Sources */,
+				4F419DE01878C44C0000C7DA /* UIView+EAAdditions.m in Sources */,
 				4F72041C1875105D006E95B2 /* HCRCollectionViewController.m in Sources */,
 				4F72041B18750FD2006E95B2 /* NSString+HCRAdditions.m in Sources */,
 				4F72041718750FC8006E95B2 /* UIDevice+EAAdditions.m in Sources */,
@@ -975,6 +996,7 @@
 				4F720431187510AE006E95B2 /* HCRHealthToolkitPickerController.m in Sources */,
 				4FA716E718751CBD00BCE0A6 /* SCGraphView.m in Sources */,
 				4F72042218751070006E95B2 /* HCRTallyEntryFieldCell.m in Sources */,
+				4F419DDC1878C2360000C7DA /* HCRDataManager.m in Sources */,
 				4FA1FB0D1875196500CB786B /* MKMapView+HCRMapView.m in Sources */,
 				4FA716E318751C2E00BCE0A6 /* HCRRequestDataViewController.m in Sources */,
 				4FA716E018751BFA00BCE0A6 /* HCRCampOverviewController.m in Sources */,

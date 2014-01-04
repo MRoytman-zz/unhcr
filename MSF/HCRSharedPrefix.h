@@ -22,3 +22,4 @@
 #import "NSDateFormatter+HCRAdditions.h"
 #import "NSNumberFormatter+HCRAdditions.h"
 #import "NSString+HCRAdditions.h"
+#import "UIView+EAAdditions.h"
