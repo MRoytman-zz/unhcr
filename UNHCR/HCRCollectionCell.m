@@ -153,7 +153,7 @@ static const CGFloat kAppDescriptionHeight = 210.0;
     
     switch (self.processingViewPosition) {
         case HCRCollectionCellProcessingViewPositionLeft:
-            xPosition = self.indentForContent + CGRectGetMidX(self.spinner.bounds);
+            xPosition = self.indentForContent + CGRectGetMidX(self.spinner.bounds) + [HCRCollectionCell preferredIndentForContent];
             break;
             
         case HCRCollectionCellProcessingViewPositionCenter:

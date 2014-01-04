@@ -105,7 +105,7 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
                                                                    withReuseIdentifier:kClusterHeaderIdentifier
                                                                           forIndexPath:indexPath];
         
-        header.titleString = @"Clusters";
+        header.titleString = @"Sectors";
         
         return header;
         
@@ -116,7 +116,7 @@ NSString *const kClusterFooterIdentifier = @"kClusterFooterIdentifier";
                                                                           forIndexPath:indexPath];
         
         CGSize buttonSize = CGSizeMake(180, CGRectGetHeight(footer.bounds));
-        UIButton *footerButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Compare Clusters"
+        UIButton *footerButton = [UIButton buttonWithUNHCRTextStyleWithString:@"Compare Sectors"
                                                           horizontalAlignment:UIControlContentHorizontalAlignmentCenter
                                                                          buttonSize:buttonSize
                                                                      fontSize:@16.0];

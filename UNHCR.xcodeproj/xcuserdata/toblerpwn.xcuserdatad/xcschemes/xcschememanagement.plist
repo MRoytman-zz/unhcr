@@ -4,7 +4,12 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>UNHCR.xcscheme</key>
+		<key>MSF.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
+		<key>RIS.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,12 +17,52 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>4F12CA0A18726239007ECDCC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4F12CA2018726239007ECDCC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4F4F4B4A1872634B00E0ADE8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4F4F4B601872634B00E0ADE8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4F70CD92187356EA008B9D53</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4F70CDA8187356EA008B9D53</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>4F866ABE17F9E022000350E4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>4F866AD917F9E022000350E4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4FCBC00A1873577900D96D7F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4FCBC0201873577900D96D7F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

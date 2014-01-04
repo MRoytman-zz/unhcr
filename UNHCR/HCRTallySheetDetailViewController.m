@@ -10,7 +10,6 @@
 
 #import "HCRTallySheetDetailViewController.h"
 #import "HCRTableFlowLayout.h"
-#import "HCRDataEntryCell.h"
 #import "HCRTallySheetDetailInputViewController.h"
 #import "HCRTableTallyCell.h"
 #import "HCRHeaderTallyView.h"

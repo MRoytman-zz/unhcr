@@ -9,7 +9,6 @@
 #import "HCRCollectionViewController.h"
 #import "HCRTableButtonCell.h"
 #import "HCRGraphCell.h"
-#import "HCRDataEntryCell.h"
 #import "HCRCollectionCell.h"
 #import "HCRDataEntryFieldCell.h"
 #import "HCREmergencyCell.h"
@@ -56,9 +55,6 @@
         if ([cell isKindOfClass:[HCRTableButtonCell class]]) {
             HCRTableButtonCell *buttonCell = (HCRTableButtonCell *)[collectionView cellForItemAtIndexPath:indexPath];
             [buttonCell.tableButton setHighlighted:YES];
-        } else if ([cell isKindOfClass:[HCRDataEntryCell class]]) {
-            HCRDataEntryCell *dataCell = (HCRDataEntryCell *)cell;
-            [dataCell.dataEntryButton setHighlighted:YES];
         } else {
             cell.contentView.backgroundColor = cell.highlightedColor;
         }
@@ -82,9 +78,6 @@
         if ([cell isKindOfClass:[HCRTableButtonCell class]]) {
             HCRTableButtonCell *buttonCell = (HCRTableButtonCell *)cell;
             [buttonCell.tableButton setHighlighted:NO];
-        } else if ([cell isKindOfClass:[HCRDataEntryCell class]]) {
-            HCRDataEntryCell *dataCell = (HCRDataEntryCell *)cell;
-            [dataCell.dataEntryButton setHighlighted:NO];
         } else {
             cell.contentView.backgroundColor = [UIColor whiteColor];
         }

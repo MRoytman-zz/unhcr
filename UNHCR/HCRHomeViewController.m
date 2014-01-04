@@ -31,7 +31,26 @@ NSString *const kHomeViewSignInButtonCellIdentifier = @"kHomeViewSignInButtonCel
 NSString *const kHomeViewBadgeCellIdentifier = @"kHomeViewBadgeCellIdentifier";
 NSString *const kHomeViewGraphCellIdentifier = @"kHomeViewGraphCellIdentifier";
 
-NSString *const kGraphCellPlaceholderLabel = @"kGraphCellPlaceholderLabel";
+NSString *const kLayoutCellLabelKey = @"kLayoutCellLabelKey";
+NSString *const kLayoutCellIconKey = @"kLayoutCellIconKey";
+
+NSString *const kLayoutCellLabelEmergencies = @"Emergencies";
+NSString *const kLayoutCellLabelMessages = @"Messages";
+NSString *const kLayoutCellLabelCamps = @"Refugee Camps";
+NSString *const kLayoutCellLabelDomiz = @"Domiz, Iraq";
+NSString *const kLayoutCellLabelBulletin = @"Bulletin Board";
+NSString *const kLayoutCellLabelSignOut = @"Sign Out";
+NSString *const kLayoutCellLabelSurveys = @"Surveys";
+NSString *const kLayoutCellLabelDirectory = @"Directory";
+NSString *const kLayoutCellLabelGraph = @"kLayoutCellLabelGraph";
+
+NSString *const kLayoutSignedOutCellBody = @"kLayoutSignedOutCellBody";
+NSString *const kLayoutSignedOutCellEmail = @"Email";
+NSString *const kLayoutSignedOutCellPassword = @"Password";
+NSString *const kLayoutSignedOutCellLogIn = @"Log In";
+NSString *const kLayoutSignedOutCellSignUp = @"Sign Up";
+
+NSString *const kLayoutCellIconNone = @"kLayoutCellIconNone";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -58,8 +77,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 @property NSMutableParagraphStyle *baseParagraphStyle;
 
-@property NSArray *signedInLabelsArray;
-@property NSArray *signedInIconsArray;
+@property NSArray *layoutDataArray;
+@property NSArray *layoutDataArraySignedOut;
 
 @property NSDateFormatter *dateFormatterPlain;
 @property NSDateFormatter *dateFormatterTimeStamp;
@@ -93,27 +112,63 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         self.dateFormatterPlain = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
         self.dateFormatterTimeStamp = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMMHHmm forceEuropeanFormat:YES];
         
-        self.signedInIconsArray = @[
-                                    @[@"emergency",
-                                      @"message",
-                                      @"camp"],
-                                    @[@"bookmark",
-                                      @"none-placeholder",
-                                      @"bulletin"],
-                                    @[@"none-placeholder",
-                                      @"none-placeholder",
-                                      @"none-placeholder"]
-                                    ];
-        
-        self.signedInLabelsArray = @[
-                                     @[@"Emergencies",
-                                       @"Direct Messages",
-                                       @"Refugee Camps"],
-                                     @[@"Domiz, Iraq",
-                                       kGraphCellPlaceholderLabel,
-                                       @"Bulletin Board"],
-                                     @[@"Sign Out"]
+#ifdef TARGET_RIS
+        self.layoutDataArray = @[
+                                     @[
+                                         @{kLayoutCellLabelKey: kLayoutCellLabelEmergencies,
+                                           kLayoutCellIconKey: @"emergency"},
+                                         @{kLayoutCellLabelKey: kLayoutCellLabelMessages,
+                                           kLayoutCellIconKey: @"message"},
+                                         @{kLayoutCellLabelKey: kLayoutCellLabelCamps,
+                                           kLayoutCellIconKey: @"camp"}
+
+                                         ],
+                                     @[
+                                         @{kLayoutCellLabelKey: kLayoutCellLabelDomiz,
+                                           kLayoutCellIconKey: @"bookmark"},
+                                         @{kLayoutCellLabelKey: kLayoutCellLabelGraph,
+                                           kLayoutCellIconKey: kLayoutCellIconNone},
+                                         @{kLayoutCellLabelKey: kLayoutCellLabelBulletin,
+                                           kLayoutCellIconKey: @"bulletin"}
+                                         ],
+                                     @[
+                                         @{kLayoutCellLabelKey: kLayoutCellLabelSignOut,
+                                           kLayoutCellIconKey: kLayoutCellIconNone}
+                                         ]
                                      ];
+        
+#elif defined(TARGET_MSF)
+        self.layoutDataArray = @[
+                                 @[
+                                     @{kLayoutCellLabelKey: kLayoutCellLabelSurveys,
+                                       kLayoutCellIconKey: @"bulletin"}
+                                     ],
+                                 @[
+                                     @{kLayoutCellLabelKey: kLayoutCellLabelMessages,
+                                       kLayoutCellIconKey: @"message"},
+                                     @{kLayoutCellLabelKey: kLayoutCellLabelDirectory,
+                                       kLayoutCellIconKey: @"camp"},
+                                     ],
+                                 @[
+                                     @{kLayoutCellLabelKey: kLayoutCellLabelSignOut,
+                                       kLayoutCellIconKey: kLayoutCellIconNone}
+                                     ]
+                                 ];
+#endif
+        
+        // applies to all targets
+        self.layoutDataArraySignedOut = @[
+                                          @[
+                                              @{kLayoutCellLabelKey: kLayoutSignedOutCellBody}
+                                              ],
+                                          @[
+                                              @{kLayoutCellLabelKey: kLayoutSignedOutCellEmail},
+                                              @{kLayoutCellLabelKey: kLayoutSignedOutCellPassword},
+                                              ],
+                                          @[
+                                              @{kLayoutCellLabelKey: kLayoutSignedOutCellLogIn}
+                                              ]
+                                          ];
         
         NSDictionary *countryDictionary = [[HCRDataSource globalCampDataArray] objectAtIndex:0 ofClass:@"NSDictionary"];
         NSArray *camps = [countryDictionary objectForKey:@"Camps" ofClass:@"NSArray"];
@@ -171,7 +226,14 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     NSDictionary *titleAttributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Bold" size:24],
                                       NSParagraphStyleAttributeName: self.baseParagraphStyle};
     
-    NSAttributedString *attributedTitleString = [[NSAttributedString alloc] initWithString:@"Refugee\nInformation\nService"
+    NSString *titleString;
+#ifdef TARGET_RIS
+    titleString = @"Refugee\nInformation\nService";
+#elif defined(TARGET_MSF)
+    titleString = @"Médecins\nSans Frontières\nField Survey Tool";
+#endif
+    
+    NSAttributedString *attributedTitleString = [[NSAttributedString alloc] initWithString:titleString
                                                                                 attributes:titleAttributes];
     titleLabel.attributedText = attributedTitleString;
     
@@ -215,7 +277,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     
-    NSInteger numberOfSectionsSignedIn = self.signedInLabelsArray.count;
+    NSInteger numberOfSectionsSignedIn = self.layoutDataArray.count;
     NSInteger numberOfSectionsNotSignedIn = 3;
     
     return (self.signedIn) ? numberOfSectionsSignedIn : numberOfSectionsNotSignedIn;
@@ -224,17 +286,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     
-    if (self.signedIn) {
-        
-        NSArray *labelsForSection = [self.signedInLabelsArray objectAtIndex:section];
-        return labelsForSection.count;
-        
-    } else {
-        
-        // TODO: make dynamic match to proper sections, etc
-        return (section == 1) ? 2 : 1;
-        
-    }
+    NSArray *sectionDataArrays = [[self _layoutArray] objectAtIndex:section ofClass:@"NSArray"];
+    return sectionDataArrays.count;
     
 }
 
@@ -242,190 +295,155 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     HCRCollectionCell *cell;
     
+    NSString *cellTitle = [self _layoutLabelForIndexPath:indexPath];
+    UIImage *cellIcon = [self _layoutIconForIndexPath:indexPath];
+    cellIcon = [cellIcon colorImage:[UIColor whiteColor]
+                      withBlendMode:kCGBlendModeNormal
+                   withTransparency:YES];
+    
     if (self.signedIn) {
         
-        NSArray *labelsForSection = [self.signedInLabelsArray objectAtIndex:indexPath.section ofClass:@"NSArray"];
-        NSArray *iconsForSection = [self.signedInIconsArray objectAtIndex:indexPath.section ofClass:@"NSArray"];
-        
-        switch (indexPath.section) {
-            case 0:
-            {
-                // TODO: some duplicate code below
-                HCRTableCell *tableCell =
-                (HCRTableCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier
-                                                                          forIndexPath:indexPath];
+        if ([cellTitle isEqualToString:kLayoutCellLabelSurveys] ||
+            [cellTitle isEqualToString:kLayoutCellLabelMessages] ||
+            [cellTitle isEqualToString:kLayoutCellLabelEmergencies] ||
+            [cellTitle isEqualToString:kLayoutCellLabelCamps] ||
+            [cellTitle isEqualToString:kLayoutCellLabelDirectory] ||
+            [cellTitle isEqualToString:kLayoutCellLabelDomiz] ||
+            [cellTitle isEqualToString:kLayoutCellLabelBulletin]) {
+            
+            // TODO: some duplicate code below
+            HCRTableCell *tableCell =
+            (HCRTableCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier
+                                                                      forIndexPath:indexPath];
+            
+            cellIcon = [cellIcon colorImage:[UIColor whiteColor]
+                              withBlendMode:kCGBlendModeNormal
+                           withTransparency:YES];
+            
+            tableCell.badgeImage = cellIcon;
+            tableCell.title = cellTitle;
+            
+            if ([cellTitle isEqualToString:kLayoutCellLabelSurveys] ||
+                [cellTitle isEqualToString:kLayoutCellLabelBulletin]) {
                 
-                UIImage *badgeImage = [UIImage imageNamed:[iconsForSection objectAtIndex:indexPath.row ofClass:@"NSString"]];
-                badgeImage = [badgeImage colorImage:[UIColor whiteColor]
-                                      withBlendMode:kCGBlendModeNormal
-                                   withTransparency:YES];
+                tableCell.badgeImageView.backgroundColor = [UIColor colorWithRed:193 / 255.0
+                                                                           green:145 / 255.0
+                                                                            blue:74 / 255.0
+                                                                           alpha:1.0];
                 
-                tableCell.badgeImage = badgeImage;
-                
-                tableCell.title = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
-                
-                if (indexPath.row == 0) {
-                    tableCell.highlightDetail = YES;
-                    tableCell.detailNumber = @([HCRDataSource globalEmergenciesData].count);
-                    tableCell.badgeImageView.backgroundColor = [UIColor colorWithRed:79 / 255.0
-                                                                               green:79 / 255.0
-                                                                                blue:79 / 255.0
-                                                                               alpha:1.0];
-                } else if (indexPath.row == 1) {
-                    tableCell.detailNumber = @([HCRDataSource globalMessagesData].count);
-                    tableCell.badgeImageView.backgroundColor = [UIColor colorWithRed:104 / 255.0
-                                                                               green:188 / 255.0
-                                                                                blue:29 / 255.0
-                                                                               alpha:1.0];
-                } else if (indexPath.row == 2) {
-                    tableCell.badgeImageView.backgroundColor = [UIColor UNHCRBlue];
-                }
-                
-                cell = tableCell;
-                break;
+            } else if ([cellTitle isEqualToString:kLayoutCellLabelEmergencies]) {
+                tableCell.highlightDetail = YES;
+                tableCell.detailNumber = @([HCRDataSource globalEmergenciesData].count);
+                tableCell.badgeImageView.backgroundColor = [UIColor colorWithRed:79 / 255.0
+                                                                           green:79 / 255.0
+                                                                            blue:79 / 255.0
+                                                                           alpha:1.0];
+            } else if ([cellTitle isEqualToString:kLayoutCellLabelDomiz]) {
+                // TODO: prototype only - in prod need to read this dynamically
+                tableCell.detailString = @"Overview";
+                tableCell.badgeImageView.backgroundColor = [UIColor UNHCRBlue];
+            } else if ([cellTitle isEqualToString:kLayoutCellLabelMessages]) {
+                tableCell.detailNumber = @([HCRDataSource globalMessagesData].count);
+                tableCell.badgeImageView.backgroundColor = [UIColor colorWithRed:104 / 255.0
+                                                                           green:188 / 255.0
+                                                                            blue:29 / 255.0
+                                                                           alpha:1.0];
+            } else if ([cellTitle isEqualToString:kLayoutCellLabelCamps] ||
+                       [cellTitle isEqualToString:kLayoutCellLabelDirectory]) {
+                tableCell.badgeImageView.backgroundColor = [UIColor UNHCRBlue];
             }
-                
-            case 1:
-            {
-                
-                switch (indexPath.row) {
-                    case 0:
-                    case 2:
-                    {
-                        // TODO: some duplicate code above
-                        HCRTableCell *tableCell =
-                        (HCRTableCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier
-                                                                                  forIndexPath:indexPath];
-                        
-                        UIImage *badgeImage = [UIImage imageNamed:[iconsForSection objectAtIndex:indexPath.row ofClass:@"NSString"]];
-                        badgeImage = [badgeImage colorImage:[UIColor whiteColor]
-                                              withBlendMode:kCGBlendModeNormal
-                                           withTransparency:YES];
-                        
-                        tableCell.badgeImage = badgeImage;
-                        tableCell.title = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
-                        
-                        if (indexPath.row == 0) {
-                            tableCell.detailString = @"Overview";
-                            tableCell.badgeImageView.backgroundColor = [UIColor UNHCRBlue];
-                        } else if (indexPath.row == 2) {
-                            tableCell.badgeImageView.backgroundColor = [UIColor colorWithRed:193 / 255.0
-                                                                                       green:145 / 255.0
-                                                                                        blue:74 / 255.0
-                                                                                       alpha:1.0];
-                        }
-                        
-                        cell = tableCell;
-                        break;
-                    }
-                        
-                    case 1:
-                    {
-                        HCRGraphCell *graphCell =
-                        (HCRGraphCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewGraphCellIdentifier
-                                                                                  forIndexPath:indexPath];
-                        
-                        graphCell.graphDataSource = self;
-                        graphCell.graphDelegate = self;
-                        
-                        graphCell.indentForContent = [HCRTableCell preferredIndentForContentWithBadgeImage];
-                        
-                        static const CGFloat manualAdjustment = 6.0;
-                        graphCell.xGraphTrailingSpace = [HCRTableCell preferredTrailingSpaceForContent] + manualAdjustment;
-                        
-                        graphCell.dataLabel = @"Refugee Requests";
-                        
-                        cell = graphCell;
-                        break;
-                    }
-                        
-                    default:
-                        NSAssert(NO, @"Unhandled collection cell row.");
-                        break;
-                }
-                
-                cell.bottomLineView.hidden = YES;
-                break;
-            }
-                
-            case 2:
-            {
-                HCRTableButtonCell *buttonCell =
-                [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewSignInButtonCellIdentifier
-                                                          forIndexPath:indexPath];
-                
-                buttonCell.tableButtonTitle = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
-                
-                buttonCell.processingViewPosition = HCRCollectionCellProcessingViewPositionLeft;
-                
-                cell = buttonCell;
-                
-                break;
-            }
-                
-            default:
-                NSAssert(NO, @"Unhandled collection cell section.");
-                break;
+            
+            cell = tableCell;
+            
+        } else if ([cellTitle isEqualToString:kLayoutCellLabelSignOut]) {
+            
+            HCRTableButtonCell *buttonCell =
+            [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewSignInButtonCellIdentifier
+                                                      forIndexPath:indexPath];
+            
+            buttonCell.tableButtonTitle = cellTitle;
+            
+            buttonCell.processingViewPosition = HCRCollectionCellProcessingViewPositionLeft;
+            
+            cell = buttonCell;
+            
+        } else if ([cellTitle isEqualToString:kLayoutCellLabelGraph]) {
+            
+            HCRGraphCell *graphCell =
+            (HCRGraphCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewGraphCellIdentifier
+                                                                      forIndexPath:indexPath];
+            
+            graphCell.graphDataSource = self;
+            graphCell.graphDelegate = self;
+            
+            graphCell.indentForContent = [HCRTableCell preferredIndentForContentWithBadgeImage];
+            
+            static const CGFloat manualAdjustment = 6.0;
+            graphCell.xGraphTrailingSpace = [HCRTableCell preferredTrailingSpaceForContent] + manualAdjustment;
+            
+            graphCell.dataLabel = @"Refugee Requests";
+            
+            cell = graphCell;
+            
+            cell.bottomLineView.hidden = YES;
+            
+        } else {
+            NSAssert(NO, @"Unhandled collection cell section.");
         }
         
     } else {
         
-        switch (indexPath.section) {
-            case 0:
-                cell = [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewDefaultCellIdentifier
-                                                                 forIndexPath:indexPath];
-                [cell.contentView addSubview:[self _expandedTextViewForSignInWithFrame:cell.contentView.bounds]];
-                break;
-                
-            case 1:
-            {
-                HCRDataEntryFieldCell *signInCell =
-                [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewSignInFieldCellIdentifier
-                                                          forIndexPath:indexPath];
-                cell = signInCell;
-                
-                signInCell.dataDelegate = self;
-                
-                if (indexPath.row == ([collectionView numberOfItemsInSection:indexPath.section] - 1)) {
-                    signInCell.fieldType = HCRDataEntryFieldTypePassword;
-                    signInCell.lastFieldInSeries = YES;
-                } else {
-                    signInCell.fieldType = HCRDataEntryFieldTypeEmail;
-                }
-                
-                
-                BOOL isEmailCell = (signInCell.fieldType == HCRDataEntryFieldTypeEmail);
-                signInCell.labelTitle = (isEmailCell) ? @"Email" : @"Password";
-                signInCell.inputPlaceholder = (isEmailCell) ? @"name@example.com" : @"Required";
-                
-                if (isEmailCell) {
-                    self.emailField = signInCell.inputField;
-                } else {
-                    self.passwordField = signInCell.inputField;
-                }
-                
-                break;
+        if ([cellTitle isEqualToString:kLayoutSignedOutCellBody]) {
+            cell = [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewDefaultCellIdentifier
+                                                             forIndexPath:indexPath];
+            [cell.contentView addSubview:[self _expandedTextViewForSignInWithFrame:cell.contentView.bounds]];
+        } else if ([cellTitle isEqualToString:kLayoutSignedOutCellEmail] ||
+                   [cellTitle isEqualToString:kLayoutSignedOutCellPassword]) {
+            
+            HCRDataEntryFieldCell *signInCell =
+            [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewSignInFieldCellIdentifier
+                                                      forIndexPath:indexPath];
+            cell = signInCell;
+            
+            signInCell.dataDelegate = self;
+            
+            if (indexPath.row == ([collectionView numberOfItemsInSection:indexPath.section] - 1)) {
+                signInCell.lastFieldInSeries = YES;
             }
-                
-            case 2:
-            {
-                HCRTableButtonCell *buttonCell =
-                [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewSignInButtonCellIdentifier
-                                                          forIndexPath:indexPath];
-                cell = buttonCell;
-                
-                buttonCell.tableButtonTitle = @"Sign In";
-                
-                buttonCell.processingViewPosition = HCRCollectionCellProcessingViewPositionLeft;
-                
-                self.signInButtonCell = buttonCell;
-                
-                break;
+            
+            if ([cellTitle isEqualToString:kLayoutSignedOutCellPassword]) {
+                signInCell.fieldType = HCRDataEntryFieldTypePassword;
+            } else if ([cellTitle isEqualToString:kLayoutSignedOutCellEmail]) {
+                signInCell.fieldType = HCRDataEntryFieldTypeEmail;
             }
-                
-            default:
-                NSAssert(NO, @"Unhandled section!");
-                break;
+            
+            signInCell.labelTitle = cellTitle;
+            
+            BOOL isEmailCell = (signInCell.fieldType == HCRDataEntryFieldTypeEmail);
+            signInCell.inputPlaceholder = (isEmailCell) ? @"name@example.com" : @"Required";
+            
+            if (isEmailCell) {
+                self.emailField = signInCell.inputField;
+            } else {
+                self.passwordField = signInCell.inputField;
+            }
+            
+        } else if ([cellTitle isEqualToString:kLayoutSignedOutCellLogIn] ||
+                   [cellTitle isEqualToString:kLayoutSignedOutCellSignUp]) {
+            
+            HCRTableButtonCell *buttonCell =
+            [collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewSignInButtonCellIdentifier
+                                                      forIndexPath:indexPath];
+            cell = buttonCell;
+            
+            buttonCell.tableButtonTitle = cellTitle;
+            
+            buttonCell.processingViewPosition = HCRCollectionCellProcessingViewPositionLeft;
+            
+            self.signInButtonCell = buttonCell;
+            
+        } else {
+            NSAssert(NO, @"Unhandled section!");
         }
         
     }
@@ -442,10 +460,11 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         HCRHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                                                                    withReuseIdentifier:kHomeViewHeaderIdentifier
                                                                           forIndexPath:indexPath];
-        
+#ifdef TARGET_RIS
         if (self.signedIn && indexPath.section == 1) {
             header.titleString = @"Bookmarked Camps";
         }
+#endif
         
         return header;
     } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
@@ -571,9 +590,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     if (self.signedIn) {
         
-        NSArray *labelsForSection = [self.signedInLabelsArray objectAtIndex:indexPath.section ofClass:@"NSArray"];
-        NSString *itemLabel = [labelsForSection objectAtIndex:indexPath.row ofClass:@"NSString"];
-        BOOL isGraphCell = ([itemLabel isEqualToString:kGraphCellPlaceholderLabel]);
+        NSString *itemLabel = [self _layoutLabelForIndexPath:indexPath];
+        BOOL isGraphCell = ([itemLabel isEqualToString:kLayoutCellLabelGraph]);
         
         return (isGraphCell) ? [HCRGraphCell preferredSizeForCollectionView:collectionView] : [HCRCollectionCell preferredSizeForCollectionView:collectionView];
         
@@ -597,11 +615,15 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     if (self.signedIn) {
         
+#ifdef TARGET_RIS
         if (section == 1) {
             return [HCRHeaderView preferredHeaderSizeForCollectionView:collectionView];
         } else {
             return [HCRHeaderView preferredHeaderSizeWithoutTitleForCollectionView:collectionView];
         }
+#elif defined(TARGET_MSF)
+        return [HCRHeaderView preferredHeaderSizeWithoutTitleForCollectionView:collectionView];
+#endif
         
     } else {
         if (section == 0) {
@@ -860,7 +882,14 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     NSDictionary *subtitleAttributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Light" size:18],
                                          NSParagraphStyleAttributeName: self.baseParagraphStyle};
     
-    NSAttributedString *attributedSubtitleString = [[NSAttributedString alloc] initWithString:@"Camp Services App\nfor Humanitarian Aid Providers"
+    NSString *subtitleString;
+#ifdef TARGET_RIS
+    subtitleString = @"Camp Services App\nfor Humanitarian Aid Providers";
+#elif defined(TARGET_MSF)
+    subtitleString = @"Mobile Data Collection\nby Humanitarian Mobile Solutions";
+#endif
+    
+    NSAttributedString *attributedSubtitleString = [[NSAttributedString alloc] initWithString:subtitleString
                                                                                    attributes:subtitleAttributes];
     
     subtitleLabel.attributedText = attributedSubtitleString;
@@ -888,10 +917,22 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     NSDictionary *boldAttributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Bold" size:12]};
     
-    NSMutableAttributedString *attributedBodyString = [[NSMutableAttributedString alloc] initWithString:@"The Camp Services App system allows Humanitarian Aid Providers to view realtime and aggregated Refugee request information directly on their mobile phones, as well as view contact information for all camp-affiliated NGO and UN actors working in the camp to better coordinate and maximize the impact of any intervention. Centralizing this information opens up a new level of cross-Cluster collaboration and maximizes the effect of all interventions throughout the camp."
+    NSString *bodyString;
+#ifdef TARGET_RIS
+    bodyString = @"The Camp Services App system allows Humanitarian Aid Providers to view realtime and aggregated Refugee request information directly on their mobile phones, as well as view contact information for all camp-affiliated NGO and UN actors working in the camp to better coordinate and maximize the impact of any intervention. Centralizing this information opens up a new level of cross-Cluster collaboration and maximizes the effect of all interventions throughout the camp.";
+#elif defined(TARGET_MSF)
+    bodyString = @"The Field Survey Tool enables field staff to record survey results directly in digital form on their mobile device. Entered results are uploaded to a central database - either immedaitely or as soon as a data connection is available. Authorized users may then review the data in real-time as it enters the system.\n\nFor more information, or to request survey data access, contact Humanitarian Mobile Solutions at: help@hms.io";
+#endif
+    
+    NSMutableAttributedString *attributedBodyString = [[NSMutableAttributedString alloc] initWithString:bodyString
                                                                                              attributes:bodyAttributes];
     
-    [attributedBodyString setAttributes:boldAttributes range:NSMakeRange(3, 18)];
+#ifdef TARGET_RIS
+    [attributedBodyString setAttributes:boldAttributes range:[bodyString rangeOfString:@"Camp Services App"]];
+#elif defined(TARGET_MSF)
+    [attributedBodyString setAttributes:boldAttributes range:[bodyString rangeOfString:@"Field Survey Tool"]];
+    [attributedBodyString setAttributes:boldAttributes range:[bodyString rangeOfString:@"help@hms.io"]];
+#endif
     
     bodyLabel.attributedText = attributedBodyString;
     
@@ -927,6 +968,30 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     [self.navigationController pushViewController:controller animated:YES];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
+}
+
+- (NSArray *)_layoutArray {
+    return (self.signedIn) ? self.layoutDataArray : self.layoutDataArraySignedOut;
+}
+
+- (NSArray *)_layoutDataForSection:(NSInteger)section {
+    NSArray *sectionData = [[self _layoutArray] objectAtIndex:section ofClass:@"NSArray"];
+    return sectionData;
+}
+
+- (NSString *)_layoutLabelForIndexPath:(NSIndexPath *)indexPath {
+    NSArray *sectionData = [self _layoutDataForSection:indexPath.section];
+    NSDictionary *dataForIndexPath = [sectionData objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+    NSString *string = [dataForIndexPath objectForKey:kLayoutCellLabelKey ofClass:@"NSString"];
+    return string;
+}
+
+- (UIImage *)_layoutIconForIndexPath:(NSIndexPath *)indexPath {
+    NSArray *sectionData = [self _layoutDataForSection:indexPath.section];
+    NSDictionary *dataForIndexPath = [sectionData objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
+    NSString *imagePath = [dataForIndexPath objectForKey:kLayoutCellIconKey ofClass:@"NSString" mustExist:NO];
+    UIImage *image = [UIImage imageNamed:imagePath];
+    return image;
 }
 
 @end

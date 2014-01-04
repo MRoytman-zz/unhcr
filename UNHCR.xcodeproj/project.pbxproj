@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3447101F5C914B9F9DFF6050 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04773A9AD17C462187CA1561 /* libPods.a */; };
 		4F0C701B17FF482B0081F201 /* AssertionCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C701A17FF482B0081F201 /* AssertionCategories.m */; };
 		4F0C702A17FF4BE70081F201 /* HCRCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702917FF4BE70081F201 /* HCRCollectionViewController.m */; };
 		4F0C702D17FF56680081F201 /* MKMapView+HCRMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702C17FF56680081F201 /* MKMapView+HCRMapView.m */; };
@@ -28,6 +29,7 @@
 		4F2B2C95182238B500F0DDB2 /* NSString+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2B2C94182238B500F0DDB2 /* NSString+HCRAdditions.m */; };
 		4F3D962D181F36D9008128B6 /* HCRTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3D962C181F36D9008128B6 /* HCRTableCell.m */; };
 		4F3D9631181F6D5B008128B6 /* Scratch.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F3D9630181F6D5B008128B6 /* Scratch.xcassets */; };
+		4F4F4B76187263D700E0ADE8 /* HMS.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4F4B75187263D700E0ADE8 /* HMS.xcassets */; };
 		4F59A7BB18259083006EFE41 /* HCRRequestDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59A7BA18259083006EFE41 /* HCRRequestDataViewController.m */; };
 		4F59A7C01825BE7B006EFE41 /* EASoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59A7BF1825BE7B006EFE41 /* EASoundManager.m */; };
 		4F59A7C31825BEBA006EFE41 /* click1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F59A7C11825BEBA006EFE41 /* click1.mp3 */; };
@@ -37,6 +39,50 @@
 		4F6137CE181DBBE200FF982F /* HCRCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */; };
 		4F6137D1181EF6C400FF982F /* HCRDataEntryFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137D0181EF6C400FF982F /* HCRDataEntryFieldCell.m */; };
 		4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
+		4F72040818750E59006E95B2 /* HMS.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4F4B75187263D700E0ADE8 /* HMS.xcassets */; };
+		4F72040918750E75006E95B2 /* Common.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F1C940717FCB8010003AA21 /* Common.xcassets */; };
+		4F72040A18750E7E006E95B2 /* RIS.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F866AFB17FA7D0D000350E4 /* RIS.xcassets */; };
+		4F72040B18750E8F006E95B2 /* HCRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4F4B591872634B00E0ADE8 /* HCRAppDelegate.m */; };
+		4F72040D18750EAD006E95B2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4F4B551872634B00E0ADE8 /* main.m */; };
+		4F72040E18750EB1006E95B2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F4F4B521872634B00E0ADE8 /* InfoPlist.strings */; };
+		4F72041018750FB2006E95B2 /* AssertionCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C701A17FF482B0081F201 /* AssertionCategories.m */; };
+		4F72041118750FB8006E95B2 /* UIColor+HCRColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866B0A17FAA5F7000350E4 /* UIColor+HCRColors.m */; };
+		4F72041218750FBB006E95B2 /* UIImage+RMImageManipulation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940117FC17770003AA21 /* UIImage+RMImageManipulation.m */; };
+		4F72041418750FC0006E95B2 /* UIButton+UNHCRButtonStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702F18009C850081F201 /* UIButton+UNHCRButtonStyles.m */; };
+		4F72041518750FC2006E95B2 /* EAEmailUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838E71800D88200B49498 /* EAEmailUtilities.m */; };
+		4F72041618750FC5006E95B2 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838EA1800D95000B49498 /* UIAlertView+Blocks.m */; };
+		4F72041718750FC8006E95B2 /* UIDevice+EAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390018013F5200B49498 /* UIDevice+EAAdditions.m */; };
+		4F72041818750FCA006E95B2 /* UIFont+HCRCommonFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391018020D4E00B49498 /* UIFont+HCRCommonFonts.m */; };
+		4F72041918750FCD006E95B2 /* NSDateFormatter+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9308C1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m */; };
+		4F72041A18750FCF006E95B2 /* NSNumberFormatter+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */; };
+		4F72041B18750FD2006E95B2 /* NSString+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2B2C94182238B500F0DDB2 /* NSString+HCRAdditions.m */; };
+		4F72041C1875105D006E95B2 /* HCRCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702917FF4BE70081F201 /* HCRCollectionViewController.m */; };
+		4F72041D18751065006E95B2 /* HCRClusterPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93FE17FC0B150003AA21 /* HCRClusterPickerCell.m */; };
+		4F72041E18751067006E95B2 /* HCRInformationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F75888A18243B1800ECE9CE /* HCRInformationCell.m */; };
+		4F72041F18751069006E95B2 /* HCRBulletinCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDD8A3F18220423002B717E /* HCRBulletinCell.m */; };
+		4F7204201875106B006E95B2 /* HCRDirectMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDD8A3A18218B67002B717E /* HCRDirectMessageCell.m */; };
+		4F7204211875106E006E95B2 /* HCREmergencyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839141803197200B49498 /* HCREmergencyCell.m */; };
+		4F72042218751070006E95B2 /* HCRTallyEntryFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C66191829A8D300386AA5 /* HCRTallyEntryFieldCell.m */; };
+		4F72042318751074006E95B2 /* HCRDataEntryFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137D0181EF6C400FF982F /* HCRDataEntryFieldCell.m */; };
+		4F72042418751076006E95B2 /* HCRGraphCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838F7180121EF00B49498 /* HCRGraphCell.m */; };
+		4F72042518751079006E95B2 /* HCRTableTallyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F28B925182703BE0071DF37 /* HCRTableTallyCell.m */; };
+		4F7204261875107B006E95B2 /* HCRTableButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838ED1800DFB200B49498 /* HCRTableButtonCell.m */; };
+		4F7204271875107E006E95B2 /* HCRTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3D962C181F36D9008128B6 /* HCRTableCell.m */; };
+		4F72042818751080006E95B2 /* HCRCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */; };
+		4F72042918751086006E95B2 /* HCRFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD93092181A01E200B107ED /* HCRFooterView.m */; };
+		4F72042A1875108A006E95B2 /* HCRHeaderTallyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F28B92918270AB80071DF37 /* HCRHeaderTallyView.m */; };
+		4F72042B1875108C006E95B2 /* HCRHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9308F181A01AC00B107ED /* HCRHeaderView.m */; };
+		4F72042C18751090006E95B2 /* HCRFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93FB17FC09190003AA21 /* HCRFlowLayout.m */; };
+		4F72042D18751093006E95B2 /* HCRTableFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866AF517F9EC0C000350E4 /* HCRTableFlowLayout.m */; };
+		4F72042E18751095006E95B2 /* HCRClusterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93F817FC06D00003AA21 /* HCRClusterFlowLayout.m */; };
+		4F720430187510AA006E95B2 /* HCRMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D7B601820C14B007A22D8 /* HCRMessagesViewController.m */; };
+		4F720431187510AE006E95B2 /* HCRHealthToolkitPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839041801DF8900B49498 /* HCRHealthToolkitPickerController.m */; };
+		4F720432187510B2006E95B2 /* HCRTallySheetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD839071801E59500B49498 /* HCRTallySheetDetailViewController.m */; };
+		4F720433187510B4006E95B2 /* HCRTallySheetDetailInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8390A1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m */; };
+		4F720434187510C0006E95B2 /* EASoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59A7BF1825BE7B006EFE41 /* EASoundManager.m */; };
+		4F720435187510C0006E95B2 /* click1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F59A7C11825BEBA006EFE41 /* click1.mp3 */; };
+		4F720436187510C0006E95B2 /* click0.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F59A7C21825BEBA006EFE41 /* click0.mp3 */; };
+		4F720437187510C0006E95B2 /* notice.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F28B92B182756070071DF37 /* notice.mp3 */; };
 		4F75888B18243B1800ECE9CE /* HCRInformationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F75888A18243B1800ECE9CE /* HCRInformationCell.m */; };
 		4F75888E18243B3D00ECE9CE /* HCRContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F75888D18243B3D00ECE9CE /* HCRContactViewController.m */; };
 		4F7588931824C45E00ECE9CE /* HCRCampOverviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7588921824C45E00ECE9CE /* HCRCampOverviewController.m */; };
@@ -49,13 +95,31 @@
 		4F866AD317F9E022000350E4 /* HCRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866AD217F9E022000350E4 /* HCRAppDelegate.m */; };
 		4F866AF317F9EB8C000350E4 /* HCRCountryCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866AF217F9EB8C000350E4 /* HCRCountryCollectionViewController.m */; };
 		4F866AF617F9EC0C000350E4 /* HCRTableFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866AF517F9EC0C000350E4 /* HCRTableFlowLayout.m */; };
-		4F866AFC17FA7D0D000350E4 /* UNHCR.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F866AFB17FA7D0D000350E4 /* UNHCR.xcassets */; };
+		4F866AFC17FA7D0D000350E4 /* RIS.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F866AFB17FA7D0D000350E4 /* RIS.xcassets */; };
 		4F866B0017FA8350000350E4 /* HCRCountryCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866AFF17FA8350000350E4 /* HCRCountryCollectionCell.m */; };
 		4F866B0417FAA07D000350E4 /* HCRCampCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866B0317FAA07D000350E4 /* HCRCampCollectionViewController.m */; };
 		4F866B0817FAA09B000350E4 /* HCRCampCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866B0717FAA09B000350E4 /* HCRCampCollectionCell.m */; };
 		4F866B0B17FAA5F7000350E4 /* UIColor+HCRColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866B0A17FAA5F7000350E4 /* UIColor+HCRColors.m */; };
-		4F866B0E17FAAD1F000350E4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866B0D17FAAD1F000350E4 /* MapKit.framework */; };
 		4F866B1117FAB83B000350E4 /* HCRClusterPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866B1017FAB83B000350E4 /* HCRClusterPickerController.m */; };
+		4FA1FB0B187518F400CB786B /* HCRHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */; };
+		4FA1FB0D1875196500CB786B /* MKMapView+HCRMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702C17FF56680081F201 /* MKMapView+HCRMapView.m */; };
+		4FA716DA18751B7D00BCE0A6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F59A7C71825BF96006EFE41 /* AudioToolbox.framework */; };
+		4FA716DB18751B8000BCE0A6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F59A7C51825BF91006EFE41 /* AVFoundation.framework */; };
+		4FA716DC18751B8800BCE0A6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866B0D17FAAD1F000350E4 /* MapKit.framework */; };
+		4FA716DD18751B8900BCE0A6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866B0D17FAAD1F000350E4 /* MapKit.framework */; };
+		4FA716DE18751BD000BCE0A6 /* HCRBulletinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDD8A4218220E04002B717E /* HCRBulletinViewController.m */; };
+		4FA716DF18751BE100BCE0A6 /* HCRCampCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F866B0317FAA07D000350E4 /* HCRCampCollectionViewController.m */; };
+		4FA716E018751BFA00BCE0A6 /* HCRCampOverviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7588921824C45E00ECE9CE /* HCRCampOverviewController.m */; };
+		4FA716E118751C2500BCE0A6 /* HCRClusterToolsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940417FC28C40003AA21 /* HCRClusterToolsViewController.m */; };
+		4FA716E218751C2900BCE0A6 /* HCRContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F75888D18243B3D00ECE9CE /* HCRContactViewController.m */; };
+		4FA716E318751C2E00BCE0A6 /* HCRRequestDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59A7BA18259083006EFE41 /* HCRRequestDataViewController.m */; };
+		4FA716E418751C8C00BCE0A6 /* HCRDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */; };
+		4FA716E518751C9700BCE0A6 /* HCREmergencyListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391818032B6300B49498 /* HCREmergencyListViewController.m */; };
+		4FA716E618751CA300BCE0A6 /* HCREmergencyBroadcastController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F28B92E182769D20071DF37 /* HCREmergencyBroadcastController.m */; };
+		4FA716E718751CBD00BCE0A6 /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
+		4FCBC00C1873577900D96D7F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC217F9E022000350E4 /* Foundation.framework */; };
+		4FCBC00D1873577900D96D7F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC417F9E022000350E4 /* CoreGraphics.framework */; };
+		4FCBC00E1873577900D96D7F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC617F9E022000350E4 /* UIKit.framework */; };
 		4FD838E81800D88200B49498 /* EAEmailUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838E71800D88200B49498 /* EAEmailUtilities.m */; };
 		4FD838EB1800D95000B49498 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838EA1800D95000B49498 /* UIAlertView+Blocks.m */; };
 		4FD838EE1800DFB200B49498 /* HCRTableButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD838ED1800DFB200B49498 /* HCRTableButtonCell.m */; };
@@ -92,6 +156,9 @@
 		4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumberFormatter+HCRAdditions.m"; sourceTree = "<group>"; };
 		4F0D7B5F1820C14B007A22D8 /* HCRMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRMessagesViewController.h; sourceTree = "<group>"; };
 		4F0D7B601820C14B007A22D8 /* HCRMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRMessagesViewController.m; sourceTree = "<group>"; };
+		4F1B66E81876090700506D66 /* build.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = build.h; sourceTree = SOURCE_ROOT; };
+		4F1B66E918760A3000506D66 /* msf-build.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "msf-build.h"; sourceTree = "<group>"; };
+		4F1B66EA18760A5700506D66 /* ris-build.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ris-build.h"; sourceTree = "<group>"; };
 		4F1C93F417FBF6EB0003AA21 /* HCRDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRDataSource.h; sourceTree = "<group>"; };
 		4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDataSource.m; sourceTree = "<group>"; };
 		4F1C93F717FC06D00003AA21 /* HCRClusterFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRClusterFlowLayout.h; sourceTree = "<group>"; };
@@ -119,6 +186,13 @@
 		4F3D962B181F36D9008128B6 /* HCRTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTableCell.h; sourceTree = "<group>"; };
 		4F3D962C181F36D9008128B6 /* HCRTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTableCell.m; sourceTree = "<group>"; };
 		4F3D9630181F6D5B008128B6 /* Scratch.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Scratch.xcassets; sourceTree = "<group>"; };
+		4F4F4B511872634B00E0ADE8 /* MSF-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MSF-Info.plist"; sourceTree = "<group>"; };
+		4F4F4B531872634B00E0ADE8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4F4F4B551872634B00E0ADE8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4F4F4B571872634B00E0ADE8 /* MSF-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MSF-Prefix.pch"; sourceTree = "<group>"; };
+		4F4F4B581872634B00E0ADE8 /* HCRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HCRAppDelegate.h; sourceTree = "<group>"; };
+		4F4F4B591872634B00E0ADE8 /* HCRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HCRAppDelegate.m; sourceTree = "<group>"; };
+		4F4F4B75187263D700E0ADE8 /* HMS.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = HMS.xcassets; sourceTree = "<group>"; };
 		4F59A7B918259083006EFE41 /* HCRRequestDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRRequestDataViewController.h; sourceTree = "<group>"; };
 		4F59A7BA18259083006EFE41 /* HCRRequestDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRRequestDataViewController.m; sourceTree = "<group>"; };
 		4F59A7BE1825BE7B006EFE41 /* EASoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EASoundManager.h; sourceTree = "<group>"; };
@@ -133,6 +207,7 @@
 		4F6137D0181EF6C400FF982F /* HCRDataEntryFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDataEntryFieldCell.m; sourceTree = "<group>"; };
 		4F71C0EF18133D0B00672C6A /* SCGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGraphView.h; sourceTree = "<group>"; };
 		4F71C0F018133D0B00672C6A /* SCGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGraphView.m; sourceTree = "<group>"; };
+		4F72043818751335006E95B2 /* HCRSharedPrefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSharedPrefix.h; sourceTree = "<group>"; };
 		4F75888918243B1800ECE9CE /* HCRInformationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRInformationCell.h; sourceTree = "<group>"; };
 		4F75888A18243B1800ECE9CE /* HCRInformationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRInformationCell.m; sourceTree = "<group>"; };
 		4F75888C18243B3D00ECE9CE /* HCRContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRContactViewController.h; sourceTree = "<group>"; };
@@ -151,12 +226,11 @@
 		4F866AD017F9E022000350E4 /* UNHCR-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UNHCR-Prefix.pch"; sourceTree = "<group>"; };
 		4F866AD117F9E022000350E4 /* HCRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HCRAppDelegate.h; sourceTree = "<group>"; };
 		4F866AD217F9E022000350E4 /* HCRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HCRAppDelegate.m; sourceTree = "<group>"; };
-		4F866ADB17F9E022000350E4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4F866AF117F9EB8C000350E4 /* HCRCountryCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCountryCollectionViewController.h; sourceTree = "<group>"; };
 		4F866AF217F9EB8C000350E4 /* HCRCountryCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCountryCollectionViewController.m; sourceTree = "<group>"; };
 		4F866AF417F9EC0C000350E4 /* HCRTableFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTableFlowLayout.h; sourceTree = "<group>"; };
 		4F866AF517F9EC0C000350E4 /* HCRTableFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRTableFlowLayout.m; sourceTree = "<group>"; };
-		4F866AFB17FA7D0D000350E4 /* UNHCR.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = UNHCR.xcassets; sourceTree = "<group>"; };
+		4F866AFB17FA7D0D000350E4 /* RIS.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = RIS.xcassets; sourceTree = "<group>"; };
 		4F866AFE17FA8350000350E4 /* HCRCountryCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCountryCollectionCell.h; sourceTree = "<group>"; };
 		4F866AFF17FA8350000350E4 /* HCRCountryCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCountryCollectionCell.m; sourceTree = "<group>"; };
 		4F866B0217FAA07D000350E4 /* HCRCampCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRCampCollectionViewController.h; sourceTree = "<group>"; };
@@ -168,6 +242,7 @@
 		4F866B0D17FAAD1F000350E4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		4F866B0F17FAB83B000350E4 /* HCRClusterPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRClusterPickerController.h; sourceTree = "<group>"; };
 		4F866B1017FAB83B000350E4 /* HCRClusterPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRClusterPickerController.m; sourceTree = "<group>"; };
+		4FCBC00B1873577900D96D7F /* MSF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSF.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FD838E61800D88200B49498 /* EAEmailUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAEmailUtilities.h; sourceTree = "<group>"; };
 		4FD838E71800D88200B49498 /* EAEmailUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EAEmailUtilities.m; sourceTree = "<group>"; };
 		4FD838E91800D95000B49498 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
@@ -216,11 +291,25 @@
 			files = (
 				4F59A7C81825BF96006EFE41 /* AudioToolbox.framework in Frameworks */,
 				4F59A7C61825BF91006EFE41 /* AVFoundation.framework in Frameworks */,
-				4F866B0E17FAAD1F000350E4 /* MapKit.framework in Frameworks */,
 				4F866AC517F9E022000350E4 /* CoreGraphics.framework in Frameworks */,
 				4F866AC717F9E022000350E4 /* UIKit.framework in Frameworks */,
+				4FA716DC18751B8800BCE0A6 /* MapKit.framework in Frameworks */,
 				4F866AC317F9E022000350E4 /* Foundation.framework in Frameworks */,
 				C1FCCA2A37DE44BABAAEC9EC /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FCBC0081873577900D96D7F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FCBC00D1873577900D96D7F /* CoreGraphics.framework in Frameworks */,
+				4FCBC00E1873577900D96D7F /* UIKit.framework in Frameworks */,
+				4FA716DB18751B8000BCE0A6 /* AVFoundation.framework in Frameworks */,
+				4FA716DA18751B7D00BCE0A6 /* AudioToolbox.framework in Frameworks */,
+				4FA716DD18751B8900BCE0A6 /* MapKit.framework in Frameworks */,
+				4FCBC00C1873577900D96D7F /* Foundation.framework in Frameworks */,
+				3447101F5C914B9F9DFF6050 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,6 +323,7 @@
 				4F0D7B601820C14B007A22D8 /* HCRMessagesViewController.m */,
 			);
 			name = "Messages View";
+			path = ../UNHCR;
 			sourceTree = "<group>";
 		};
 		4F1445BF1825E57C005078F3 /* Cluster Tools View */ = {
@@ -252,6 +342,7 @@
 				4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */,
 			);
 			name = "Home View";
+			path = ../UNHCR;
 			sourceTree = "<group>";
 		};
 		4F28B92718270A530071DF37 /* Supplemental Views */ = {
@@ -311,15 +402,39 @@
 			name = "Collection Layouts";
 			sourceTree = "<group>";
 		};
+		4F4F4B4F1872634B00E0ADE8 /* MSF */ = {
+			isa = PBXGroup;
+			children = (
+				4F1B66E918760A3000506D66 /* msf-build.h */,
+				4F4F4B581872634B00E0ADE8 /* HCRAppDelegate.h */,
+				4F4F4B591872634B00E0ADE8 /* HCRAppDelegate.m */,
+				4F4F4B501872634B00E0ADE8 /* Supporting Files */,
+			);
+			path = MSF;
+			sourceTree = "<group>";
+		};
+		4F4F4B501872634B00E0ADE8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4F4F4B511872634B00E0ADE8 /* MSF-Info.plist */,
+				4F4F4B521872634B00E0ADE8 /* InfoPlist.strings */,
+				4F4F4B551872634B00E0ADE8 /* main.m */,
+				4F4F4B571872634B00E0ADE8 /* MSF-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		4F59A7BC1825BE3E006EFE41 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4F866AFB17FA7D0D000350E4 /* UNHCR.xcassets */,
+				4F866AFB17FA7D0D000350E4 /* RIS.xcassets */,
+				4F4F4B75187263D700E0ADE8 /* HMS.xcassets */,
 				4F1C940717FCB8010003AA21 /* Common.xcassets */,
 				4F3D9630181F6D5B008128B6 /* Scratch.xcassets */,
 				4F59A7BD1825BE44006EFE41 /* Sounds */,
 			);
 			name = Resources;
+			path = UNHCR;
 			sourceTree = "<group>";
 		};
 		4F59A7BD1825BE44006EFE41 /* Sounds */ = {
@@ -351,6 +466,22 @@
 			name = SCGraphView;
 			sourceTree = "<group>";
 		};
+		4F72040F18750EC9006E95B2 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				4F1B66E81876090700506D66 /* build.h */,
+				4F72043818751335006E95B2 /* HCRSharedPrefix.h */,
+				4F866B0C17FAA5FE000350E4 /* Categories */,
+				4F866B0117FA9F8B000350E4 /* Shared UI */,
+				4F1C940C17FCBE6A0003AA21 /* Home View */,
+				4F0D7B621820C14E007A22D8 /* Messages View */,
+				4FD839021801DF6200B49498 /* HIS Toolkit Picker */,
+				4FD8391218025C0700B49498 /* HIS Tally Sheets */,
+			);
+			name = Shared;
+			path = MSF;
+			sourceTree = "<group>";
+		};
 		4F75888518243A7100ECE9CE /* Directory Detail */ = {
 			isa = PBXGroup;
 			children = (
@@ -373,6 +504,9 @@
 			isa = PBXGroup;
 			children = (
 				4F866AC817F9E022000350E4 /* UNHCR */,
+				4F4F4B4F1872634B00E0ADE8 /* MSF */,
+				4F72040F18750EC9006E95B2 /* Shared */,
+				4F59A7BC1825BE3E006EFE41 /* Resources */,
 				4F866AC117F9E022000350E4 /* Frameworks */,
 				4F866AC017F9E022000350E4 /* Products */,
 				4F71C0DD1811B84900672C6A /* Vendors */,
@@ -384,6 +518,7 @@
 			isa = PBXGroup;
 			children = (
 				4F866ABF17F9E022000350E4 /* RIS.app */,
+				4FCBC00B1873577900D96D7F /* MSF.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -397,7 +532,6 @@
 				4F866AC217F9E022000350E4 /* Foundation.framework */,
 				4F866AC417F9E022000350E4 /* CoreGraphics.framework */,
 				4F866AC617F9E022000350E4 /* UIKit.framework */,
-				4F866ADB17F9E022000350E4 /* XCTest.framework */,
 				04773A9AD17C462187CA1561 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -406,25 +540,19 @@
 		4F866AC817F9E022000350E4 /* UNHCR */ = {
 			isa = PBXGroup;
 			children = (
+				4F1B66EA18760A5700506D66 /* ris-build.h */,
 				4F866AD117F9E022000350E4 /* HCRAppDelegate.h */,
 				4F866AD217F9E022000350E4 /* HCRAppDelegate.m */,
 				4F1C93F417FBF6EB0003AA21 /* HCRDataSource.h */,
 				4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */,
-				4F59A7BC1825BE3E006EFE41 /* Resources */,
 				4F866AFD17FA8324000350E4 /* (DEPRECATED) delete these */,
-				4F866B0C17FAA5FE000350E4 /* Categories */,
-				4F866B0117FA9F8B000350E4 /* Shared UI */,
-				4F1C940C17FCBE6A0003AA21 /* Home View */,
 				4FD8391618032B4100B49498 /* Emergency Views */,
-				4F0D7B621820C14E007A22D8 /* Messages View */,
 				4FDD8A4418220E08002B717E /* Bulletin Board */,
 				4F866B0517FAA083000350E4 /* Camp Selection */,
 				4F75888F1824C42A00ECE9CE /* Camp Overview */,
 				4FD838EF18011B5A00B49498 /* Requests Data Explorer */,
 				4F1445BF1825E57C005078F3 /* Cluster Tools View */,
 				4F75888518243A7100ECE9CE /* Directory Detail */,
-				4FD839021801DF6200B49498 /* HIS Toolkit Picker */,
-				4FD8391218025C0700B49498 /* HIS Tally Sheets */,
 				4F866AC917F9E022000350E4 /* Supporting Files */,
 			);
 			path = UNHCR;
@@ -470,6 +598,7 @@
 				4F0C702917FF4BE70081F201 /* HCRCollectionViewController.m */,
 			);
 			name = "Shared UI";
+			path = ../UNHCR;
 			sourceTree = "<group>";
 		};
 		4F866B0517FAA083000350E4 /* Camp Selection */ = {
@@ -510,6 +639,7 @@
 				4F2B2C94182238B500F0DDB2 /* NSString+HCRAdditions.m */,
 			);
 			name = Categories;
+			path = ../UNHCR;
 			sourceTree = "<group>";
 		};
 		4FD838EF18011B5A00B49498 /* Requests Data Explorer */ = {
@@ -528,6 +658,7 @@
 				4FD839041801DF8900B49498 /* HCRHealthToolkitPickerController.m */,
 			);
 			name = "HIS Toolkit Picker";
+			path = ../UNHCR;
 			sourceTree = "<group>";
 		};
 		4FD8391218025C0700B49498 /* HIS Tally Sheets */ = {
@@ -539,6 +670,7 @@
 				4FD8390A1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m */,
 			);
 			name = "HIS Tally Sheets";
+			path = ../UNHCR;
 			sourceTree = "<group>";
 		};
 		4FD8391618032B4100B49498 /* Emergency Views */ = {
@@ -583,6 +715,25 @@
 			productReference = 4F866ABF17F9E022000350E4 /* RIS.app */;
 			productType = "com.apple.product-type.application";
 		};
+		4FCBC00A1873577900D96D7F /* MSF */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FCBC02F1873577900D96D7F /* Build configuration list for PBXNativeTarget "MSF" */;
+			buildPhases = (
+				0758F5E0E69D4FAB8A4CA120 /* Check Pods Manifest.lock */,
+				4FCBC0071873577900D96D7F /* Sources */,
+				4FCBC0081873577900D96D7F /* Frameworks */,
+				4FCBC0091873577900D96D7F /* Resources */,
+				4D275994DBDF485A929F4C2C /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MSF;
+			productName = MSF;
+			productReference = 4FCBC00B1873577900D96D7F /* MSF.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -594,6 +745,9 @@
 				ORGANIZATIONNAME = "Sean Conrad";
 				TargetAttributes = {
 					4F866ABE17F9E022000350E4 = {
+						DevelopmentTeam = ZBR4CWAWXC;
+					};
+					4FCBC00A1873577900D96D7F = {
 						DevelopmentTeam = ZBR4CWAWXC;
 					};
 				};
@@ -611,6 +765,7 @@
 			projectRoot = "";
 			targets = (
 				4F866ABE17F9E022000350E4 /* RIS */,
+				4FCBC00A1873577900D96D7F /* MSF */,
 			);
 		};
 /* End PBXProject section */
@@ -621,7 +776,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F3D9631181F6D5B008128B6 /* Scratch.xcassets in Resources */,
-				4F866AFC17FA7D0D000350E4 /* UNHCR.xcassets in Resources */,
+				4F866AFC17FA7D0D000350E4 /* RIS.xcassets in Resources */,
+				4F4F4B76187263D700E0ADE8 /* HMS.xcassets in Resources */,
 				4F866ACD17F9E022000350E4 /* InfoPlist.strings in Resources */,
 				4F1C940817FCB8010003AA21 /* Common.xcassets in Resources */,
 				4F59A7C41825BEBA006EFE41 /* click0.mp3 in Resources */,
@@ -630,9 +786,53 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4FCBC0091873577900D96D7F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F72040A18750E7E006E95B2 /* RIS.xcassets in Resources */,
+				4F72040E18750EB1006E95B2 /* InfoPlist.strings in Resources */,
+				4F72040918750E75006E95B2 /* Common.xcassets in Resources */,
+				4F72040818750E59006E95B2 /* HMS.xcassets in Resources */,
+				4F720436187510C0006E95B2 /* click0.mp3 in Resources */,
+				4F720435187510C0006E95B2 /* click1.mp3 in Resources */,
+				4F720437187510C0006E95B2 /* notice.mp3 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0758F5E0E69D4FAB8A4CA120 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		4D275994DBDF485A929F4C2C /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		7EFF60285E564EE8B964DDF4 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -728,9 +928,73 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4FCBC0071873577900D96D7F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FA716E418751C8C00BCE0A6 /* HCRDataSource.m in Sources */,
+				4F72040D18750EAD006E95B2 /* main.m in Sources */,
+				4F72042918751086006E95B2 /* HCRFooterView.m in Sources */,
+				4FA716E518751C9700BCE0A6 /* HCREmergencyListViewController.m in Sources */,
+				4F72042518751079006E95B2 /* HCRTableTallyCell.m in Sources */,
+				4F720432187510B2006E95B2 /* HCRTallySheetDetailViewController.m in Sources */,
+				4F72041C1875105D006E95B2 /* HCRCollectionViewController.m in Sources */,
+				4F72041B18750FD2006E95B2 /* NSString+HCRAdditions.m in Sources */,
+				4F72041718750FC8006E95B2 /* UIDevice+EAAdditions.m in Sources */,
+				4F72041118750FB8006E95B2 /* UIColor+HCRColors.m in Sources */,
+				4FA1FB0B187518F400CB786B /* HCRHomeViewController.m in Sources */,
+				4FA716DE18751BD000BCE0A6 /* HCRBulletinViewController.m in Sources */,
+				4F72042C18751090006E95B2 /* HCRFlowLayout.m in Sources */,
+				4F72042318751074006E95B2 /* HCRDataEntryFieldCell.m in Sources */,
+				4F72041418750FC0006E95B2 /* UIButton+UNHCRButtonStyles.m in Sources */,
+				4F72042D18751093006E95B2 /* HCRTableFlowLayout.m in Sources */,
+				4F72042818751080006E95B2 /* HCRCollectionCell.m in Sources */,
+				4FA716E118751C2500BCE0A6 /* HCRClusterToolsViewController.m in Sources */,
+				4F72042418751076006E95B2 /* HCRGraphCell.m in Sources */,
+				4F720430187510AA006E95B2 /* HCRMessagesViewController.m in Sources */,
+				4F72041818750FCA006E95B2 /* UIFont+HCRCommonFonts.m in Sources */,
+				4F72041A18750FCF006E95B2 /* NSNumberFormatter+HCRAdditions.m in Sources */,
+				4F720434187510C0006E95B2 /* EASoundManager.m in Sources */,
+				4F72041618750FC5006E95B2 /* UIAlertView+Blocks.m in Sources */,
+				4F72040B18750E8F006E95B2 /* HCRAppDelegate.m in Sources */,
+				4F72041918750FCD006E95B2 /* NSDateFormatter+HCRAdditions.m in Sources */,
+				4F72042E18751095006E95B2 /* HCRClusterFlowLayout.m in Sources */,
+				4F7204261875107B006E95B2 /* HCRTableButtonCell.m in Sources */,
+				4F72041F18751069006E95B2 /* HCRBulletinCell.m in Sources */,
+				4FA716E618751CA300BCE0A6 /* HCREmergencyBroadcastController.m in Sources */,
+				4F720433187510B4006E95B2 /* HCRTallySheetDetailInputViewController.m in Sources */,
+				4F72042A1875108A006E95B2 /* HCRHeaderTallyView.m in Sources */,
+				4F72041018750FB2006E95B2 /* AssertionCategories.m in Sources */,
+				4F72042B1875108C006E95B2 /* HCRHeaderView.m in Sources */,
+				4FA716DF18751BE100BCE0A6 /* HCRCampCollectionViewController.m in Sources */,
+				4F72041218750FBB006E95B2 /* UIImage+RMImageManipulation.m in Sources */,
+				4F72041D18751065006E95B2 /* HCRClusterPickerCell.m in Sources */,
+				4F72041E18751067006E95B2 /* HCRInformationCell.m in Sources */,
+				4F7204211875106E006E95B2 /* HCREmergencyCell.m in Sources */,
+				4F7204201875106B006E95B2 /* HCRDirectMessageCell.m in Sources */,
+				4F720431187510AE006E95B2 /* HCRHealthToolkitPickerController.m in Sources */,
+				4FA716E718751CBD00BCE0A6 /* SCGraphView.m in Sources */,
+				4F72042218751070006E95B2 /* HCRTallyEntryFieldCell.m in Sources */,
+				4FA1FB0D1875196500CB786B /* MKMapView+HCRMapView.m in Sources */,
+				4FA716E318751C2E00BCE0A6 /* HCRRequestDataViewController.m in Sources */,
+				4FA716E018751BFA00BCE0A6 /* HCRCampOverviewController.m in Sources */,
+				4FA716E218751C2900BCE0A6 /* HCRContactViewController.m in Sources */,
+				4F7204271875107E006E95B2 /* HCRTableCell.m in Sources */,
+				4F72041518750FC2006E95B2 /* EAEmailUtilities.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		4F4F4B521872634B00E0ADE8 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4F4F4B531872634B00E0ADE8 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		4F866ACB17F9E022000350E4 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -825,14 +1089,16 @@
 			baseConfigurationReference = D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "ris-icon";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "ris-launch";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UNHCR/UNHCR-Prefix.pch";
 				INFOPLIST_FILE = "UNHCR/UNHCR-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "BA12ED6E-D1BD-4F1F-BBF0-F861469044E0";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -843,14 +1109,60 @@
 			baseConfigurationReference = D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "ris-icon";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "ris-launch";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UNHCR/UNHCR-Prefix.pch";
 				INFOPLIST_FILE = "UNHCR/UNHCR-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "EFD7922E-0261-445D-B32F-E0FFD9A20DE4";
+				TARGETED_DEVICE_FAMILY = 1;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		4FCBC0301873577900D96D7F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "hms-icon";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "hms-launch";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MSF/MSF-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "MSF/MSF-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "BA12ED6E-D1BD-4F1F-BBF0-F861469044E0";
+				TARGETED_DEVICE_FAMILY = 1;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		4FCBC0311873577900D96D7F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "hms-icon";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "hms-launch";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MSF/MSF-Prefix.pch";
+				INFOPLIST_FILE = "MSF/MSF-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "EFD7922E-0261-445D-B32F-E0FFD9A20DE4";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -873,6 +1185,15 @@
 			buildConfigurations = (
 				4F866AEC17F9E022000350E4 /* Debug */,
 				4F866AED17F9E022000350E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4FCBC02F1873577900D96D7F /* Build configuration list for PBXNativeTarget "MSF" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FCBC0301873577900D96D7F /* Debug */,
+				4FCBC0311873577900D96D7F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
