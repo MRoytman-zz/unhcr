@@ -296,6 +296,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     HCRCollectionCell *cell;
     
     NSString *cellTitle = [self _layoutLabelForIndexPath:indexPath];
+    
     UIImage *cellIcon = [self _layoutIconForIndexPath:indexPath];
     cellIcon = [cellIcon colorImage:[UIColor whiteColor]
                       withBlendMode:kCGBlendModeNormal
@@ -315,10 +316,6 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
             HCRTableCell *tableCell =
             (HCRTableCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kHomeViewBadgeCellIdentifier
                                                                       forIndexPath:indexPath];
-            
-            cellIcon = [cellIcon colorImage:[UIColor whiteColor]
-                              withBlendMode:kCGBlendModeNormal
-                           withTransparency:YES];
             
             tableCell.badgeImage = cellIcon;
             tableCell.title = cellTitle;
@@ -990,8 +987,13 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     NSArray *sectionData = [self _layoutDataForSection:indexPath.section];
     NSDictionary *dataForIndexPath = [sectionData objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
     NSString *imagePath = [dataForIndexPath objectForKey:kLayoutCellIconKey ofClass:@"NSString" mustExist:NO];
-    UIImage *image = [UIImage imageNamed:imagePath];
-    return image;
+    
+    if (imagePath) {
+        UIImage *image = [UIImage imageNamed:imagePath];
+        return image;
+    } else {
+        return nil;
+    }
 }
 
 @end
