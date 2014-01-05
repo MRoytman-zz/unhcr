@@ -12,6 +12,8 @@
 		4F0C702A17FF4BE70081F201 /* HCRCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702917FF4BE70081F201 /* HCRCollectionViewController.m */; };
 		4F0C702D17FF56680081F201 /* MKMapView+HCRMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702C17FF56680081F201 /* MKMapView+HCRMapView.m */; };
 		4F0C703018009C850081F201 /* UIButton+UNHCRButtonStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702F18009C850081F201 /* UIButton+UNHCRButtonStyles.m */; };
+		4F0CBF651879FE35003DF444 /* SCErrorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF641879FE35003DF444 /* SCErrorManager.m */; };
+		4F0CBF661879FE35003DF444 /* SCErrorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF641879FE35003DF444 /* SCErrorManager.m */; };
 		4F0D7B5E18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */; };
 		4F0D7B611820C14B007A22D8 /* HCRMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D7B601820C14B007A22D8 /* HCRMessagesViewController.m */; };
 		4F1C93F617FBF6EB0003AA21 /* HCRDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */; };
@@ -155,6 +157,8 @@
 		4F0C702C17FF56680081F201 /* MKMapView+HCRMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+HCRMapView.m"; sourceTree = "<group>"; };
 		4F0C702E18009C850081F201 /* UIButton+UNHCRButtonStyles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+UNHCRButtonStyles.h"; sourceTree = "<group>"; };
 		4F0C702F18009C850081F201 /* UIButton+UNHCRButtonStyles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+UNHCRButtonStyles.m"; sourceTree = "<group>"; };
+		4F0CBF631879FE35003DF444 /* SCErrorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCErrorManager.h; path = ../UNHCR/SCErrorManager.h; sourceTree = "<group>"; };
+		4F0CBF641879FE35003DF444 /* SCErrorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCErrorManager.m; path = ../UNHCR/SCErrorManager.m; sourceTree = "<group>"; };
 		4F0D7B5C18209498007A22D8 /* NSNumberFormatter+HCRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumberFormatter+HCRAdditions.h"; sourceTree = "<group>"; };
 		4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumberFormatter+HCRAdditions.m"; sourceTree = "<group>"; };
 		4F0D7B5F1820C14B007A22D8 /* HCRMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRMessagesViewController.h; sourceTree = "<group>"; };
@@ -202,8 +206,8 @@
 		4F4F4B75187263D700E0ADE8 /* HMS.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = HMS.xcassets; sourceTree = "<group>"; };
 		4F59A7B918259083006EFE41 /* HCRRequestDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRRequestDataViewController.h; sourceTree = "<group>"; };
 		4F59A7BA18259083006EFE41 /* HCRRequestDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRRequestDataViewController.m; sourceTree = "<group>"; };
-		4F59A7BE1825BE7B006EFE41 /* EASoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EASoundManager.h; sourceTree = "<group>"; };
-		4F59A7BF1825BE7B006EFE41 /* EASoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EASoundManager.m; sourceTree = "<group>"; };
+		4F59A7BE1825BE7B006EFE41 /* EASoundManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EASoundManager.h; path = ../UNHCR/EASoundManager.h; sourceTree = "<group>"; };
+		4F59A7BF1825BE7B006EFE41 /* EASoundManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EASoundManager.m; path = ../UNHCR/EASoundManager.m; sourceTree = "<group>"; };
 		4F59A7C11825BEBA006EFE41 /* click1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = click1.mp3; sourceTree = "<group>"; };
 		4F59A7C21825BEBA006EFE41 /* click0.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = click0.mp3; sourceTree = "<group>"; };
 		4F59A7C51825BF91006EFE41 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -250,8 +254,8 @@
 		4F866B0F17FAB83B000350E4 /* HCRClusterPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRClusterPickerController.h; sourceTree = "<group>"; };
 		4F866B1017FAB83B000350E4 /* HCRClusterPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRClusterPickerController.m; sourceTree = "<group>"; };
 		4FCBC00B1873577900D96D7F /* MSF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSF.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4FD838E61800D88200B49498 /* EAEmailUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAEmailUtilities.h; sourceTree = "<group>"; };
-		4FD838E71800D88200B49498 /* EAEmailUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EAEmailUtilities.m; sourceTree = "<group>"; };
+		4FD838E61800D88200B49498 /* EAEmailUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAEmailUtilities.h; path = ../UNHCR/EAEmailUtilities.h; sourceTree = "<group>"; };
+		4FD838E71800D88200B49498 /* EAEmailUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAEmailUtilities.m; path = ../UNHCR/EAEmailUtilities.m; sourceTree = "<group>"; };
 		4FD838E91800D95000B49498 /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
 		4FD838EA1800D95000B49498 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		4FD838EC1800DFB200B49498 /* HCRTableButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRTableButtonCell.h; sourceTree = "<group>"; };
@@ -323,6 +327,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F0CBF671879FE9A003DF444 /* Managers/Singletons */ = {
+			isa = PBXGroup;
+			children = (
+				4F0CBF631879FE35003DF444 /* SCErrorManager.h */,
+				4F0CBF641879FE35003DF444 /* SCErrorManager.m */,
+				4FD838E61800D88200B49498 /* EAEmailUtilities.h */,
+				4FD838E71800D88200B49498 /* EAEmailUtilities.m */,
+				4F59A7BE1825BE7B006EFE41 /* EASoundManager.h */,
+				4F59A7BF1825BE7B006EFE41 /* EASoundManager.m */,
+			);
+			name = Managers/Singletons;
+			sourceTree = "<group>";
+		};
 		4F0D7B621820C14E007A22D8 /* Messages View */ = {
 			isa = PBXGroup;
 			children = (
@@ -457,8 +474,6 @@
 		4F59A7BD1825BE44006EFE41 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				4F59A7BE1825BE7B006EFE41 /* EASoundManager.h */,
-				4F59A7BF1825BE7B006EFE41 /* EASoundManager.m */,
 				4F59A7C11825BEBA006EFE41 /* click1.mp3 */,
 				4F59A7C21825BEBA006EFE41 /* click0.mp3 */,
 				4F28B92B182756070071DF37 /* notice.mp3 */,
@@ -488,6 +503,7 @@
 			children = (
 				4F1B66E81876090700506D66 /* build.h */,
 				4F72043818751335006E95B2 /* HCRSharedPrefix.h */,
+				4F0CBF671879FE9A003DF444 /* Managers/Singletons */,
 				4F866B0C17FAA5FE000350E4 /* Categories */,
 				4F866B0117FA9F8B000350E4 /* Shared UI */,
 				4F1C940C17FCBE6A0003AA21 /* Home View */,
@@ -640,8 +656,6 @@
 				4F0C702C17FF56680081F201 /* MKMapView+HCRMapView.m */,
 				4F0C702E18009C850081F201 /* UIButton+UNHCRButtonStyles.h */,
 				4F0C702F18009C850081F201 /* UIButton+UNHCRButtonStyles.m */,
-				4FD838E61800D88200B49498 /* EAEmailUtilities.h */,
-				4FD838E71800D88200B49498 /* EAEmailUtilities.m */,
 				4FD838E91800D95000B49498 /* UIAlertView+Blocks.h */,
 				4FD838EA1800D95000B49498 /* UIAlertView+Blocks.m */,
 				4FD838FF18013F5200B49498 /* UIDevice+EAAdditions.h */,
@@ -920,6 +934,7 @@
 				4F866ACF17F9E022000350E4 /* main.m in Sources */,
 				4FD839151803197200B49498 /* HCREmergencyCell.m in Sources */,
 				4F0C702D17FF56680081F201 /* MKMapView+HCRMapView.m in Sources */,
+				4F0CBF651879FE35003DF444 /* SCErrorManager.m in Sources */,
 				4F1C940517FC28C40003AA21 /* HCRClusterToolsViewController.m in Sources */,
 				4FD8390B1801E5B200B49498 /* HCRTallySheetDetailInputViewController.m in Sources */,
 				4FD838FE18013F1F00B49498 /* HCRHomeLoginMenuScrollView.m in Sources */,
@@ -982,6 +997,7 @@
 				4F72042E18751095006E95B2 /* HCRClusterFlowLayout.m in Sources */,
 				4F7204261875107B006E95B2 /* HCRTableButtonCell.m in Sources */,
 				4F72041F18751069006E95B2 /* HCRBulletinCell.m in Sources */,
+				4F0CBF661879FE35003DF444 /* SCErrorManager.m in Sources */,
 				4FA716E618751CA300BCE0A6 /* HCREmergencyBroadcastController.m in Sources */,
 				4F720433187510B4006E95B2 /* HCRTallySheetDetailInputViewController.m in Sources */,
 				4F72042A1875108A006E95B2 /* HCRHeaderTallyView.m in Sources */,

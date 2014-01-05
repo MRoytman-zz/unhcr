@@ -527,16 +527,13 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         [self.passwordCell.inputField resignFirstResponder];
 //        [self _resetCollectionContentOffset];
         
-        void (^shakeCellTitleIfRequired)(HCRDataEntryFieldCell *) = ^(HCRDataEntryFieldCell *cell){
-            if (cell.inputField.text.length == 0) {
-                
-                UIColor *backgroundColor = cell.titleLabel.backgroundColor;
-                cell.titleLabel.backgroundColor = [UIColor clearColor];
-                [cell.titleLabel shakeWithCompletion:^(BOOL finished) {
-                    cell.titleLabel.backgroundColor = backgroundColor;
-                }];
-                
-            }
+        void (^shakeCellTitle)(HCRDataEntryFieldCell *) = ^(HCRDataEntryFieldCell *cell){
+            
+            UIColor *backgroundColor = cell.titleLabel.backgroundColor;
+            cell.titleLabel.backgroundColor = [UIColor clearColor];
+            [cell.titleLabel shakeWithCompletion:^(BOOL finished) {
+                cell.titleLabel.backgroundColor = backgroundColor;
+            }];
         };
         
         if ([cellTitle isEqualToString:kLayoutSignedOutCellLogIn] ||
@@ -552,18 +549,20 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                 
             } else {
                 
-                NSArray *cells = @[self.emailCell, self.passwordCell];
+                if ([self _emailFieldComplete] == NO) {
+                    shakeCellTitle(self.emailCell);
+                }
                 
-                for (HCRDataEntryFieldCell *cell in cells) {
-                    shakeCellTitleIfRequired(cell);
+                if ([self _passwordFieldComplete] == NO) {
+                    shakeCellTitle(self.passwordCell);
                 }
                 
             }
             
         } else if ([cellTitle isEqualToString:kLayoutSignedOutCellForgot]) {
             
-            if (self.emailCell.inputField.text.length == 0) {
-                shakeCellTitleIfRequired(self.emailCell);
+            if ([self _emailFieldComplete]) {
+                shakeCellTitle(self.emailCell);
             } else {
                 // TODO: query for user, if exists, handle, if not, handle that
             }
@@ -748,7 +747,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 }
 
 - (BOOL)signInFieldsComplete {
-    return(self.emailCell.inputField.text.length > 0 && self.passwordCell.inputField.text.length > 0);
+    return ([self _emailFieldComplete] &&
+            [self _passwordFieldComplete]);
 }
 
 #pragma mark - Private Methods (Buttons)
@@ -991,12 +991,9 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         [self _setLoginButtonsEnabled:YES];
         
         if (error) {
-            HCRError(@"Error signing in! %@",error.description);
-            if (error.code == 101) {
-                [UIAlertView showWithTitle:@"Incorrect Password"
-                                   message:@"Please try again. If you've forgotten your password, scroll down and tap \"Forgot Password\"."
-                                   handler:nil];
-            }
+            
+            [[SCErrorManager sharedManager] showAlertForError:error withErrorSource:SCErrorSourceParse];
+            
         }
         
         if (completionBlock) {
@@ -1018,6 +1015,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     PFUser *newUser = [PFUser user];
     newUser.username = username;
     newUser.password = password;
+    newUser.email = username;
     
     newUser[@"authorized"] = @NO;
     
@@ -1044,13 +1042,13 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
 }
 
--(void)_setLoginButtonsEnabled:(BOOL)enabled {
+- (void)_setLoginButtonsEnabled:(BOOL)enabled {
     self.signInButtonCell.tableButton.enabled = enabled;
     self.createNewUserButtonCell.tableButton.enabled = enabled;
     self.forgotPasswordButtonCell.tableButton.enabled = enabled;
 }
 
--(void)_simpleSignIn {
+- (void)_simpleSignIn {
     
     [self _startSignInWithUsername:self.emailCell.inputField.text
                       withPassword:self.passwordCell.inputField.text
@@ -1064,7 +1062,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
 }
 
--(void)_simpleSignUp {
+- (void)_simpleSignUp {
     
     [self _createNewUserWithUsername:self.emailCell.inputField.text
                         withPassword:self.passwordCell.inputField.text
@@ -1081,6 +1079,16 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                           // also handle whether user is already created with that email address - if so, just invoke 'forgot password' and email it to them
                       }];
     
+}
+
+- (BOOL)_emailFieldComplete {
+    // cell must have text and it must contain a period and an @
+    return ([self.emailCell.inputField.text rangeOfString:@"."].location != NSNotFound &&
+            [self.emailCell.inputField.text rangeOfString:@"@"].location != NSNotFound);
+}
+
+- (BOOL)_passwordFieldComplete {
+    return (self.passwordCell.inputField.text.length > 0);
 }
 
 @end

@@ -23,3 +23,4 @@
 #import "NSNumberFormatter+HCRAdditions.h"
 #import "NSString+HCRAdditions.h"
 #import "UIView+EAAdditions.h"
+#import "SCErrorManager.h"
