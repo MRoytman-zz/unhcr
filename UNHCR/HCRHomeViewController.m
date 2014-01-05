@@ -52,7 +52,7 @@ NSString *const kLayoutSignedOutCellBody = @"kLayoutSignedOutCellBody";
 NSString *const kLayoutSignedOutCellEmail = @"Email";
 NSString *const kLayoutSignedOutCellPassword = @"Password";
 NSString *const kLayoutSignedOutCellLogIn = @"Log In";
-NSString *const kLayoutSignedOutCellSignUp = @"Create New User";
+NSString *const kLayoutSignedOutCellSignUp = @"Create New Account";
 NSString *const kLayoutSignedOutCellForgot = @"Forgot Password";
 
 NSString *const kLayoutCellIconNone = @"kLayoutCellIconNone";
@@ -69,7 +69,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 @interface HCRHomeViewController ()
 
-@property (nonatomic) BOOL signedIn;
+@property (nonatomic, readonly) BOOL signedIn;
 
 @property (nonatomic, readonly) BOOL signInFieldsComplete;
 
@@ -113,8 +113,6 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         self.baseParagraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
         self.baseParagraphStyle.firstLineHeadIndent = kXIndentation;
         self.baseParagraphStyle.headIndent = kXIndentation;
-        
-        self.signedIn = ([PFUser currentUser] != nil);
         
         self.dateFormatterPlain = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
         self.dateFormatterTimeStamp = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMMHHmm forceEuropeanFormat:YES];
@@ -454,6 +452,10 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
             
             if ([cellTitle isEqualToString:kLayoutSignedOutCellLogIn]) {
                 self.signInButtonCell = buttonCell;
+            } else if ([cellTitle isEqualToString:kLayoutSignedOutCellSignUp]) {
+                self.createNewUserButtonCell = buttonCell;
+            } else if ([cellTitle isEqualToString:kLayoutSignedOutCellForgot]) {
+                self.forgotPasswordButtonCell = buttonCell;
             }
             
         } else {
@@ -716,11 +718,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 #pragma mark - Getters & Setters
 
-- (void)setSignedIn:(BOOL)signedIn {
-    _signedIn = signedIn;
-    
-    self.masterHeaderBottomLine.hidden = !signedIn;
-    
+- (BOOL)signedIn {
+    return ([PFUser currentUser] != nil);
 }
 
 - (NSArray *)messagesReceivedArray {
@@ -808,41 +807,13 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)_signoutButtonPressed {
     
-    self.signedIn = NO;
-    
-//    self.collectionView.numberOfSections = [self numberOfSectionsInCollectionView:self.collectionView];
-    
+    [PFUser logOut];
+
     [self _reloadSectionsAnimated];
     
 }
 
 #pragma mark - Private Methods
-
-- (void)_startSignInWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL success))completionBlock {
-    
-    self.collectionView.scrollEnabled = NO;
-    self.signInButtonCell.processingAction = YES;
-    
-    [self _setLoginButtonsEnabled:NO];
-    
-    double delayInSeconds = 2.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        
-        self.signedIn = YES;
-        
-        self.collectionView.scrollEnabled = YES;
-        self.signInButtonCell.processingAction = NO;
- 
-        [self _setLoginButtonsEnabled:YES];
-        
-        if (completionBlock) {
-            completionBlock(YES);
-        }
-        
-    });
-    
-}
 
 - (UIView *)_expandedTextViewForSignInWithFrame:(CGRect)frame {
     
@@ -936,6 +907,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)_reloadSectionsAnimated {
     
+    self.masterHeaderBottomLine.hidden = !self.signedIn;
+    
     [self.collectionView reloadData];
     
     [self.collectionView performBatchUpdates:^{
@@ -982,9 +955,71 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     }
 }
 
+- (void)_startSignInWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL success))completionBlock {
+    
+    self.collectionView.scrollEnabled = NO;
+    self.signInButtonCell.processingAction = YES;
+    
+    [self _setLoginButtonsEnabled:NO];
+    
+    [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser *user, NSError *error) {
+        
+        self.collectionView.scrollEnabled = YES;
+        self.signInButtonCell.processingAction = NO;
+        
+        [self _setLoginButtonsEnabled:YES];
+        
+        if (error) {
+            HCRError(@"Error signing in! %@",error.description);
+            if (error.code == 101) {
+                [UIAlertView showWithTitle:@"Incorrect Password"
+                                   message:@"Please try again. If you've forgotten your password, scroll down and tap \"Forgot Password\"."
+                                   handler:nil];
+            }
+        }
+        
+        if (completionBlock) {
+            completionBlock(!error);
+        }
+    }];
+    
+}
+
+
 - (void)_createNewUserWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL success))completionBlock {
     
-    // TOOD
+    self.collectionView.scrollEnabled = NO;
+    
+    self.createNewUserButtonCell.processingAction = YES;
+    
+    [self _setLoginButtonsEnabled:NO];
+    
+    PFUser *newUser = [PFUser user];
+    newUser.username = username;
+    newUser.password = password;
+    
+    newUser[@"authorized"] = @NO;
+    
+    [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        
+        self.collectionView.scrollEnabled = YES;
+        self.createNewUserButtonCell.processingAction = NO;
+        
+        [self _setLoginButtonsEnabled:YES];
+        
+        if (error) {
+            HCRError(@"Error creating user! %@",error.description);
+            if (error.code == 202) {
+                [UIAlertView showWithTitle:@"Account Already Exists"
+                                   message:@"The email address you entered already exists. Please try again with a different email address, or, if you've forgotten your password, scroll down and tap \"Forgot Password\"."
+                                   handler:nil];
+            }
+        }
+        
+        if (completionBlock) {
+            completionBlock(succeeded);
+        }
+    }];
     
 }
 
@@ -1013,6 +1048,13 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     [self _createNewUserWithUsername:self.emailCell.inputField.text
                         withPassword:self.passwordCell.inputField.text
                       withCompletion:^(BOOL success) {
+                          
+                          if (success) {
+                              [self _reloadSectionsAnimated];
+                              self.emailCell.inputField.text = nil;
+                              self.passwordCell.inputField.text = nil;
+                          }
+                          
                           // TODO: handle this - create the user but set a flag at "not authorized"
                           // some where: check for 'authorized' flag - if exists, OK, if not, don't let 'em in
                           // also handle whether user is already created with that email address - if so, just invoke 'forgot password' and email it to them
