@@ -518,7 +518,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         } else if ([cellTitle isEqualToString:kLayoutCellLabelDirectory]) {
             [[EASoundManager sharedSoundManager] playSoundOnce:EASoundIDNotice];
         } else if ([cellTitle isEqualToString:kLayoutCellLabelSurveys]) {
-            [[EASoundManager sharedSoundManager] playSoundOnce:EASoundIDNotice];
+            [self _surveyButtonPressed];
         }
         
     } else {
@@ -797,19 +797,40 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     [self _pushViewController:bulletinController];
 }
 
-//- (void)_aboutButtonPressed {
-//    // TODO: about button
-//}
-//
-//- (void)_settingsButtonPressed {
-//    // TODO: options button
-//}
-
 - (void)_signoutButtonPressed {
     
     [PFUser logOut];
 
     [self _reloadSectionsAnimated];
+    
+}
+
+- (void)_surveyButtonPressed {
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"Question"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        
+        [[EASoundManager sharedSoundManager] playSoundOnce:EASoundIDNotice];
+        
+        if (objects) {
+            
+            HCRDebug(@"Question objects found: %d",objects.count);
+            
+        } else {
+            
+            if (error) {
+                
+                HCRError(@"Error retrieving objects! %@",error.description);
+                
+            } else {
+                
+                HCRDebug(@"No objects found.");
+                
+            }
+            
+        }
+        
+    }];
     
 }
 
