@@ -34,7 +34,7 @@
     return self;
 }
 
-#pragma mark - Class Methods
+#pragma mark - Public Methods
 
 - (void)showAlertForError:(NSError *)error withErrorSource:(SCErrorSource)errorSource {
     
@@ -64,6 +64,9 @@
     } else if (parseError.code == 101) {
         errorTitle = @"Incorrect Username/Password";
         errorBody = @"Please try again. If you've forgotten your password, scroll down and tap \"Forgot Password\".";
+    } else if (parseError.code == 202) {
+        errorTitle = @"Account Already Exists";
+        errorBody = @"The email address you entered already exists. Please try again with a different email address, or, if you've forgotten your password, scroll down and tap \"Forgot Password\".";
     }
     
     [UIAlertView showWithTitle:errorTitle

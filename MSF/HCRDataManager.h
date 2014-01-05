@@ -10,4 +10,8 @@
 
 @interface HCRDataManager : NSObject
 
++ (id)sharedManager;
+
+- (NSArray *)surveyQuestionsArray;
+
 @end

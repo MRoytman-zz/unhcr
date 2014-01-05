@@ -8,6 +8,7 @@
 
 #import "HCRAppDelegate.h"
 #import "HCRHomeViewController.h"
+#import "HCRUser.h"
 
 #import <Parse/Parse.h>
 
@@ -19,6 +20,7 @@
     // Override point for customization after application launch.
     
     // PARSE
+    [HCRUser registerSubclass];
     [Parse setApplicationId:@"CZX2WArPOqFH6kWTNG30JWPfYVGO1SjmA0j3dwTH"
                   clientKey:@"l88Td8IxqYphPYso4Z8tbtonEH49aJpKOcuXSUfE"];
     

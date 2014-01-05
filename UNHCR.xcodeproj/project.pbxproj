@@ -14,6 +14,7 @@
 		4F0C703018009C850081F201 /* UIButton+UNHCRButtonStyles.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702F18009C850081F201 /* UIButton+UNHCRButtonStyles.m */; };
 		4F0CBF651879FE35003DF444 /* SCErrorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF641879FE35003DF444 /* SCErrorManager.m */; };
 		4F0CBF661879FE35003DF444 /* SCErrorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF641879FE35003DF444 /* SCErrorManager.m */; };
+		4F0CBF6E187A0CD7003DF444 /* HCRUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF6D187A0CD7003DF444 /* HCRUser.m */; };
 		4F0D7B5E18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */; };
 		4F0D7B611820C14B007A22D8 /* HCRMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D7B601820C14B007A22D8 /* HCRMessagesViewController.m */; };
 		4F1C93F617FBF6EB0003AA21 /* HCRDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */; };
@@ -159,6 +160,8 @@
 		4F0C702F18009C850081F201 /* UIButton+UNHCRButtonStyles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+UNHCRButtonStyles.m"; sourceTree = "<group>"; };
 		4F0CBF631879FE35003DF444 /* SCErrorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCErrorManager.h; path = ../UNHCR/SCErrorManager.h; sourceTree = "<group>"; };
 		4F0CBF641879FE35003DF444 /* SCErrorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCErrorManager.m; path = ../UNHCR/SCErrorManager.m; sourceTree = "<group>"; };
+		4F0CBF6C187A0CD7003DF444 /* HCRUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRUser.h; sourceTree = "<group>"; };
+		4F0CBF6D187A0CD7003DF444 /* HCRUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRUser.m; sourceTree = "<group>"; };
 		4F0D7B5C18209498007A22D8 /* NSNumberFormatter+HCRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumberFormatter+HCRAdditions.h"; sourceTree = "<group>"; };
 		4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumberFormatter+HCRAdditions.m"; sourceTree = "<group>"; };
 		4F0D7B5F1820C14B007A22D8 /* HCRMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRMessagesViewController.h; sourceTree = "<group>"; };
@@ -426,13 +429,15 @@
 			name = "Collection Layouts";
 			sourceTree = "<group>";
 		};
-		4F419DD91878C2150000C7DA /* Local Data */ = {
+		4F419DD91878C2150000C7DA /* Managers/Singletons */ = {
 			isa = PBXGroup;
 			children = (
 				4F419DDA1878C2360000C7DA /* HCRDataManager.h */,
 				4F419DDB1878C2360000C7DA /* HCRDataManager.m */,
+				4F0CBF6C187A0CD7003DF444 /* HCRUser.h */,
+				4F0CBF6D187A0CD7003DF444 /* HCRUser.m */,
 			);
-			name = "Local Data";
+			name = Managers/Singletons;
 			sourceTree = "<group>";
 		};
 		4F4F4B4F1872634B00E0ADE8 /* MSF */ = {
@@ -441,7 +446,7 @@
 				4F1B66E918760A3000506D66 /* msf-build.h */,
 				4F4F4B581872634B00E0ADE8 /* HCRAppDelegate.h */,
 				4F4F4B591872634B00E0ADE8 /* HCRAppDelegate.m */,
-				4F419DD91878C2150000C7DA /* Local Data */,
+				4F419DD91878C2150000C7DA /* Managers/Singletons */,
 				4F4F4B501872634B00E0ADE8 /* Supporting Files */,
 			);
 			path = MSF;
@@ -1006,6 +1011,7 @@
 				4FA716DF18751BE100BCE0A6 /* HCRCampCollectionViewController.m in Sources */,
 				4F72041218750FBB006E95B2 /* UIImage+RMImageManipulation.m in Sources */,
 				4F72041D18751065006E95B2 /* HCRClusterPickerCell.m in Sources */,
+				4F0CBF6E187A0CD7003DF444 /* HCRUser.m in Sources */,
 				4F72041E18751067006E95B2 /* HCRInformationCell.m in Sources */,
 				4F7204211875106E006E95B2 /* HCREmergencyCell.m in Sources */,
 				4F7204201875106B006E95B2 /* HCRDirectMessageCell.m in Sources */,

@@ -11,4 +11,6 @@
 
 #define TARGET_MSF
 
+#include "HCRDataManager.h"
+
 #endif

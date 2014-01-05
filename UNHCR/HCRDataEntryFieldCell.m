@@ -46,6 +46,7 @@
 - (void)prepareForReuse {
     [super prepareForReuse];
     
+    self.inputField.text = nil;
     self.labelTitle = nil;
     self.inputPlaceholder = nil;
     
