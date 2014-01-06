@@ -506,6 +506,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                 
             }
             
+//            buttonCell.tableButton.enabled = ([cellTitle isEqualToString:kLayoutUnauthorizedLabelAction]);
             buttonCell.tableButton.enabled = NO;
         
         } else if ([cellTitle isEqualToString:kLayoutCellLabelSignOut]) {

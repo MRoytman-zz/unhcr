@@ -35,7 +35,7 @@ NSString *const HCRUserTeamIDKey = @"teamId";
 }
 
 - (NSString *)teamID {
-    return [[HCRUser currentUser] objectForKey:HCRUserTeamIDKey ofClass:@"NSString"];
+    return [[HCRUser currentUser] objectForKey:HCRUserTeamIDKey ofClass:@"NSString" mustExist:NO];
 }
 
 + (void)surveySignInWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL succeeded, NSError *error))completionBlock {

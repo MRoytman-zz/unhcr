@@ -63,10 +63,10 @@
         // no internet connection; do nothing - default messaging works
     } else if (parseError.code == 101) {
         errorTitle = @"Incorrect Username/Password";
-        errorBody = @"Please try again. If you've forgotten your password, scroll down and tap \"Forgot Password\".";
+        errorBody = @"Please try again. If you've forgotten your password, tell your supervisor.";
     } else if (parseError.code == 202) {
         errorTitle = @"Account Already Exists";
-        errorBody = @"The email address you entered already exists. Please try again with a different email address, or, if you've forgotten your password, scroll down and tap \"Forgot Password\".";
+        errorBody = @"The email address you entered already exists. Please try again with a different email address, or, if you've forgotten your password, tell your supervisor.";
     }
     
     [UIAlertView showWithTitle:errorTitle

@@ -10,6 +10,7 @@
 #import "HCRTableFlowLayout.h"
 #import "HCRTableCell.h"
 #import "HCRTableButtonCell.h"
+#import "EASoundManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -169,7 +170,7 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     if ([cellTitle isEqualToString:kLayoutCellLabelNewSurvey]) {
         [self _newSurveyButtonPressed];
     } else {
-        //
+        [[EASoundManager sharedSoundManager] playSoundOnce:EASoundIDNotice];
     }
     
 }
