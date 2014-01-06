@@ -10,11 +10,13 @@
 
 @interface HCRDataManager : NSObject
 
-@property (nonatomic, readonly) NSArray *surveyQuestionsArray;
-@property (nonatomic, readonly) NSDate *surveyLastUpdated;
-
 + (id)sharedManager;
 
+- (NSArray *)surveyQuestionsArray;
+- (NSDate *)surveyLastUpdated;
+
 - (void)refreshSurveyQuestionsWithCompletion:(void (^)(NSError *error))completionBlock;
+
+- (NSDictionary *)createNewSurveyAnswerSet;
 
 @end

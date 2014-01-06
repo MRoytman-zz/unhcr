@@ -7,6 +7,7 @@
 //
 
 #import "HCRDataManager.h"
+#import "HCRUser.h"
 
 #import <Parse/Parse.h>
 
@@ -14,7 +15,6 @@
 
 // NSUD KEYS
 NSString *const HCRPrefKeyQuestions = @"HCRPrefKeyQuestions";
-
 NSString *const HCRPrefKeyQuestionsAnswers = @"answers";
 NSString *const HCRPrefKeyQuestionsUpdated = @"updated";
 NSString *const HCRPrefKeyQuestionsQuestion = @"question";
@@ -27,11 +27,36 @@ NSString *const HCRPrefKeyQuestionsFreeformLabel = @"freeformLabel";
 NSString *const HCRPrefKeyQuestionsKeyboard = @"keyboard";
 NSString *const HCRPrefKeyQuestionsNote = @"note";
 
+NSString *const HCRPrefKeyAnswerSets = @"HCRPrefKeyAnswerSets";
+NSString *const HCRPrefKeyAnswerSetsUser = @"userId";
+NSString *const HCRPrefKeyAnswerSetsConsent = @"consent";
+NSString *const HCRPrefKeyAnswerSetsHouseholdID = @"householdId";
+NSString *const HCRPrefKeyAnswerSetsTeamID = @"teamId";
+NSString *const HCRPrefKeyAnswerSetsParticipantID = @"participantId";
+NSString *const HCRPrefKeyAnswerSetsParticipantAge = @"participantAge";
+NSString *const HCRPrefKeyAnswerSetsParticipantGender = @"participantGender";
+NSString *const HCRPrefKeyAnswerSetsDuration = @"duration";
+
+NSString *const HCRPrefKeyAnswerSetsDurationStart = @"HCRPrefKeyAnswerSetsDurationStart";
+NSString *const HCRPrefKeyAnswerSetsDurationEnd = @"HCRPrefKeyAnswerSetsDurationEnd";
+
+// PARSE CLASSES
+#ifdef DEBUG
+NSString *const kSurveyResultClass = @"Test";
+#else
+#ifdef PRODUCTION
+NSString *const kSurveyResultClass = @"SurveyResult";
+#else
+NSString *const kSurveyResultClass = @"TestFlight";
+#endif
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRDataManager ()
 
 @property (nonatomic) NSArray *localSurveyQuestionsArray;
+@property (nonatomic) NSMutableArray *localSurveyAnswerSetsArray;
 
 @end
 
@@ -58,6 +83,7 @@ NSString *const HCRPrefKeyQuestionsNote = @"note";
     {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         self.localSurveyQuestionsArray = [defaults objectForKey:HCRPrefKeyQuestions ofClass:@"NSArray" mustExist:NO];
+        self.localSurveyAnswerSetsArray = [[defaults objectForKey:HCRPrefKeyAnswerSets ofClass:@"NSArray" mustExist:NO] mutableCopy];
     }
     return self;
 }
@@ -71,7 +97,7 @@ NSString *const HCRPrefKeyQuestionsNote = @"note";
 
 #pragma mark - Public Methods
 
-// TODO: (remote) get list of surveys
+// TODO: (remote) get list of possible surveys to work with
 
 - (void)refreshSurveyQuestionsWithCompletion:(void (^)(NSError *error))completionBlock {
     
@@ -89,17 +115,7 @@ NSString *const HCRPrefKeyQuestionsNote = @"note";
             
             for (PFObject *object in objects) {
                 
-                NSMutableDictionary *dictionary = [NSMutableDictionary new];
-                
-                for (NSString *key in [object allKeys]) {
-                    [dictionary setObject:object[key]
-                                   forKey:key];
-                }
-                
-                [dictionary setObject:[object updatedAt]
-                               forKey:HCRPrefKeyQuestionsUpdated];
-                
-                [newArray addObject:dictionary];
+                [newArray addObject:[self _dictionaryFromPFObject:object]];
                 
             }
             
@@ -122,8 +138,7 @@ NSString *const HCRPrefKeyQuestionsNote = @"note";
     
     // TODO: make more efficient; don't always check whole array (somehow determine 'dirty' status)
     
-    // set date to non-nil inside loop so it returns nil if no survey list
-    NSDate *date;
+    NSDate *date; // set date to non-nil inside loop so it returns nil if no survey list
     
     for (NSDictionary *question in [[HCRDataManager sharedManager] surveyQuestionsArray]) {
         
@@ -138,13 +153,48 @@ NSString *const HCRPrefKeyQuestionsNote = @"note";
     
 }
 
-// (local) get question for code (e.g. 23a)
-// (local) start new survey
+- (NSDictionary *)surveyQuestionDataWithQuestionCode:(NSString *)questionCode {
+    
+    NSDictionary *questionDictionary;
+    
+    for (NSDictionary *question in [[HCRDataManager sharedManager] surveyQuestionsArray]) {
+        
+        if ([question[HCRPrefKeyQuestionsQuestionCode] isEqualToString:questionCode]) {
+            questionDictionary = question;
+            break;
+        }
+        
+    }
+    
+    return questionDictionary;
+    
+}
+
+- (NSDictionary *)createNewSurveyAnswerSet {
+    
+    // create new survey
+    // store initial vars necessary
+    // add to list of local surveys in-process
+    
+    NSMutableDictionary *surveyAnswerSet = [NSMutableDictionary new];
+    
+    surveyAnswerSet[HCRPrefKeyAnswerSetsTeamID] = [[HCRUser currentUser] teamID];
+    surveyAnswerSet[HCRPrefKeyAnswerSetsUser] = [[HCRUser currentUser] objectId];
+    surveyAnswerSet[HCRPrefKeyAnswerSetsDurationStart] = [NSDate date];
+    surveyAnswerSet[HCRPrefKeyAnswerSetsParticipantID] = @1;
+    
+    [self.localSurveyAnswerSetsArray addObject:surveyAnswerSet];
+    [self _sync];
+    
+    return surveyAnswerSet;
+    
+}
+
 // (local) save array of people for each survey
 // (local) save answers given per participant for survey
 // (local) check conditions - per participant per question check of coded response
 // (remote) get survey ID (gets current value + increments it)
-// (remote) submit survey with ID, users, etc (relatively complex)
+// (remote) submit survey with ID, users, durection (updatedAt - createdAt), etc (relatively complex)
 
 #pragma mark - Private Methods
 
@@ -152,10 +202,42 @@ NSString *const HCRPrefKeyQuestionsNote = @"note";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
+    [defaults setObject:[NSArray arrayWithArray:self.localSurveyAnswerSetsArray]
+                 forKey:HCRPrefKeyAnswerSets];
+    
     [defaults setObject:self.localSurveyQuestionsArray
                  forKey:HCRPrefKeyQuestions];
     
     [defaults synchronize];
+    
+}
+
+- (NSDictionary *)_dictionaryFromPFObject:(PFObject *)object {
+    
+    NSMutableDictionary *dictionary = [NSMutableDictionary new];
+    
+    for (NSString *key in [object allKeys]) {
+        [dictionary setObject:object[key]
+                       forKey:key];
+    }
+    
+    [dictionary setObject:[object updatedAt]
+                   forKey:HCRPrefKeyQuestionsUpdated];
+    
+    return dictionary;
+    
+}
+
+- (PFObject *)_objectForDictionary:(NSDictionary *)dictionary withClassName:(NSString *)className {
+    
+    PFObject *object = [PFObject objectWithClassName:className];
+    
+    for (NSString *key in [dictionary allKeys]) {
+        [object setObject:object[key]
+                   forKey:key];
+    }
+    
+    return object;
     
 }
 

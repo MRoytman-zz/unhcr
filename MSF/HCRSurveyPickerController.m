@@ -21,7 +21,7 @@ NSString *const kSurveyPickerButtonCellIdentifier = @"kSurveyPickerButtonCellIde
 
 NSString *const kLayoutCellLabel = @"kLayoutCellLabel";
 
-NSString *const kLayoutCellLabelLebanon = @"Lebanon Access to Care";
+NSString *const kLayoutCellLabelLebanon = @"Lebanon: Access to Care";
 NSString *const kLayoutCellLabelRefresh = @"Refresh Survey List";
 NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
 

@@ -15,6 +15,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const HCRUserAuthorizedKey = @"authorized";
+NSString *const HCRUserTeamIDKey = @"teamId";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -30,6 +31,10 @@ NSString *const HCRUserAuthorizedKey = @"authorized";
 
 - (BOOL)surveyUserAuthorized {
     return [[[HCRUser currentUser] objectForKey:HCRUserAuthorizedKey] boolValue];
+}
+
+- (NSString *)teamID {
+    return [[HCRUser currentUser] objectForKey:HCRUserTeamIDKey];
 }
 
 + (void)surveySignInWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL succeeded, NSError *error))completionBlock {

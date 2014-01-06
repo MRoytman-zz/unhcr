@@ -13,6 +13,7 @@
 
 #include "HCRDataManager.h"
 
-#define HCR_WIPE_NSUD
+//#define PRODUCTION
+//#define HCR_WIPE_NSUD
 
 #endif

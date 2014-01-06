@@ -21,6 +21,7 @@ extern NSString *const HCRUserAuthorizedKey;
 + (HCRUser *)currentUser;
 
 - (BOOL)surveyUserAuthorized;
+- (NSString *)teamID;
 
 + (void)surveySignInWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 
