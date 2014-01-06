@@ -16,6 +16,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+NSString *const kLayoutCells = @"kLayoutCells";
+NSString *const kLayoutCellLabel = @"kLayoutCellLabel";
+NSString *const kLayoutHeaderLabel = @"kLayoutHeaderLabel";
+NSString *const kLayoutFooterLabel = @"kLayoutFooterLabel";
+
+////////////////////////////////////////////////////////////////////////////////
+
 @interface HCRCollectionViewController ()
 
 @end

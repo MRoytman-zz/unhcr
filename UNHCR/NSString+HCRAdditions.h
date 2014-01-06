@@ -10,6 +10,8 @@
 
 @interface NSString (HCRAdditions)
 
++ (NSString *)stringWithNewUUID;
+
 - (BOOL)isValidEmailAddress;
 
 - (CGSize)sizeforMultiLineStringWithBoundingSize:(CGSize)boundingSize withFont:(UIFont *)font rounded:(BOOL)rounded;

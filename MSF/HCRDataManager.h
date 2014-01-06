@@ -13,10 +13,14 @@
 + (id)sharedManager;
 
 - (NSArray *)surveyQuestionsArray;
+- (NSArray *)surveyAnswerSetsArray;
 - (NSDate *)surveyLastUpdated;
 
 - (void)refreshSurveyQuestionsWithCompletion:(void (^)(NSError *error))completionBlock;
 
 - (NSDictionary *)createNewSurveyAnswerSet;
+- (NSString *)answerSetIDForAnswerSet:(NSDictionary *)answerSet;
+- (NSDictionary *)answerSetWithID:(NSString *)answerSetID;
+- (void)removeAnswerSetWithID:(NSString *)answerSetID;
 
 @end

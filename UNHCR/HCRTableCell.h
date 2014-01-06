@@ -13,6 +13,8 @@
 + (CGFloat)preferredIndentForContentWithBadgeImage;
 + (UIFont *)preferredFontForTitleLabel;
 
+@property (nonatomic, readonly) UISwipeGestureRecognizer *deleteGestureRecognizer;
+
 @property (nonatomic, strong) UIImage *badgeImage;
 @property (nonatomic, readonly) UIImageView *badgeImageView;
 

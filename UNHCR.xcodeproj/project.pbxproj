@@ -16,7 +16,6 @@
 		4F0CBF661879FE35003DF444 /* SCErrorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF641879FE35003DF444 /* SCErrorManager.m */; };
 		4F0CBF6E187A0CD7003DF444 /* HCRUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF6D187A0CD7003DF444 /* HCRUser.m */; };
 		4F0CBF72187A4366003DF444 /* HCRSurveyPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF71187A4366003DF444 /* HCRSurveyPickerController.m */; };
-		4F0CBF78187A4B39003DF444 /* HCRSurveyQuestionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF77187A4B39003DF444 /* HCRSurveyQuestionController.m */; };
 		4F0CBF7B187A4B4A003DF444 /* HCRSurveyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF7A187A4B4A003DF444 /* HCRSurveyController.m */; };
 		4F0D7B5E18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */; };
 		4F0D7B611820C14B007A22D8 /* HCRMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D7B601820C14B007A22D8 /* HCRMessagesViewController.m */; };
@@ -38,6 +37,10 @@
 		4F419DDC1878C2360000C7DA /* HCRDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F419DDB1878C2360000C7DA /* HCRDataManager.m */; };
 		4F419DDF1878C44C0000C7DA /* UIView+EAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F419DDE1878C44C0000C7DA /* UIView+EAAdditions.m */; };
 		4F419DE01878C44C0000C7DA /* UIView+EAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F419DDE1878C44C0000C7DA /* UIView+EAAdditions.m */; };
+		4F49ABF2187B461300A4B896 /* HCRAnswerSetPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F49ABF1187B461300A4B896 /* HCRAnswerSetPickerController.m */; };
+		4F49ABF5187B46D600A4B896 /* HCRSurveyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F49ABF4187B46D600A4B896 /* HCRSurveyCell.m */; };
+		4F49ABF8187B47E900A4B896 /* HCRSurveyAnswerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F49ABF7187B47E900A4B896 /* HCRSurveyAnswerCell.m */; };
+		4F49ABFB187B47F400A4B896 /* HCRSurveyAnswerFreeformCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F49ABFA187B47F400A4B896 /* HCRSurveyAnswerFreeformCell.m */; };
 		4F4F4B76187263D700E0ADE8 /* HMS.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4F4B75187263D700E0ADE8 /* HMS.xcassets */; };
 		4F59A7BB18259083006EFE41 /* HCRRequestDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59A7BA18259083006EFE41 /* HCRRequestDataViewController.m */; };
 		4F59A7C01825BE7B006EFE41 /* EASoundManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F59A7BF1825BE7B006EFE41 /* EASoundManager.m */; };
@@ -167,8 +170,6 @@
 		4F0CBF6D187A0CD7003DF444 /* HCRUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRUser.m; sourceTree = "<group>"; };
 		4F0CBF70187A4366003DF444 /* HCRSurveyPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSurveyPickerController.h; sourceTree = "<group>"; };
 		4F0CBF71187A4366003DF444 /* HCRSurveyPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSurveyPickerController.m; sourceTree = "<group>"; };
-		4F0CBF76187A4B39003DF444 /* HCRSurveyQuestionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSurveyQuestionController.h; sourceTree = "<group>"; };
-		4F0CBF77187A4B39003DF444 /* HCRSurveyQuestionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSurveyQuestionController.m; sourceTree = "<group>"; };
 		4F0CBF79187A4B4A003DF444 /* HCRSurveyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSurveyController.h; sourceTree = "<group>"; };
 		4F0CBF7A187A4B4A003DF444 /* HCRSurveyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSurveyController.m; sourceTree = "<group>"; };
 		4F0D7B5C18209498007A22D8 /* NSNumberFormatter+HCRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumberFormatter+HCRAdditions.h"; sourceTree = "<group>"; };
@@ -209,6 +210,14 @@
 		4F419DDB1878C2360000C7DA /* HCRDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDataManager.m; sourceTree = "<group>"; };
 		4F419DDD1878C44C0000C7DA /* UIView+EAAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+EAAdditions.h"; sourceTree = "<group>"; };
 		4F419DDE1878C44C0000C7DA /* UIView+EAAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+EAAdditions.m"; sourceTree = "<group>"; };
+		4F49ABF0187B461300A4B896 /* HCRAnswerSetPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRAnswerSetPickerController.h; sourceTree = "<group>"; };
+		4F49ABF1187B461300A4B896 /* HCRAnswerSetPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRAnswerSetPickerController.m; sourceTree = "<group>"; };
+		4F49ABF3187B46D600A4B896 /* HCRSurveyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSurveyCell.h; sourceTree = "<group>"; };
+		4F49ABF4187B46D600A4B896 /* HCRSurveyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSurveyCell.m; sourceTree = "<group>"; };
+		4F49ABF6187B47E900A4B896 /* HCRSurveyAnswerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSurveyAnswerCell.h; sourceTree = "<group>"; };
+		4F49ABF7187B47E900A4B896 /* HCRSurveyAnswerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSurveyAnswerCell.m; sourceTree = "<group>"; };
+		4F49ABF9187B47F400A4B896 /* HCRSurveyAnswerFreeformCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSurveyAnswerFreeformCell.h; sourceTree = "<group>"; };
+		4F49ABFA187B47F400A4B896 /* HCRSurveyAnswerFreeformCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSurveyAnswerFreeformCell.m; sourceTree = "<group>"; };
 		4F4F4B511872634B00E0ADE8 /* MSF-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MSF-Info.plist"; sourceTree = "<group>"; };
 		4F4F4B531872634B00E0ADE8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4F4F4B551872634B00E0ADE8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -357,10 +366,10 @@
 			children = (
 				4F0CBF70187A4366003DF444 /* HCRSurveyPickerController.h */,
 				4F0CBF71187A4366003DF444 /* HCRSurveyPickerController.m */,
+				4F49ABF0187B461300A4B896 /* HCRAnswerSetPickerController.h */,
+				4F49ABF1187B461300A4B896 /* HCRAnswerSetPickerController.m */,
 				4F0CBF79187A4B4A003DF444 /* HCRSurveyController.h */,
 				4F0CBF7A187A4B4A003DF444 /* HCRSurveyController.m */,
-				4F0CBF76187A4B39003DF444 /* HCRSurveyQuestionController.h */,
-				4F0CBF77187A4B39003DF444 /* HCRSurveyQuestionController.m */,
 			);
 			name = "Survey Controller";
 			sourceTree = "<group>";
@@ -462,6 +471,19 @@
 			name = Managers/Singletons;
 			sourceTree = "<group>";
 		};
+		4F49ABEF187B45DD00A4B896 /* Survey Views */ = {
+			isa = PBXGroup;
+			children = (
+				4F49ABF3187B46D600A4B896 /* HCRSurveyCell.h */,
+				4F49ABF4187B46D600A4B896 /* HCRSurveyCell.m */,
+				4F49ABF6187B47E900A4B896 /* HCRSurveyAnswerCell.h */,
+				4F49ABF7187B47E900A4B896 /* HCRSurveyAnswerCell.m */,
+				4F49ABF9187B47F400A4B896 /* HCRSurveyAnswerFreeformCell.h */,
+				4F49ABFA187B47F400A4B896 /* HCRSurveyAnswerFreeformCell.m */,
+			);
+			name = "Survey Views";
+			sourceTree = "<group>";
+		};
 		4F4F4B4F1872634B00E0ADE8 /* MSF */ = {
 			isa = PBXGroup;
 			children = (
@@ -470,6 +492,7 @@
 				4F4F4B591872634B00E0ADE8 /* HCRAppDelegate.m */,
 				4F419DD91878C2150000C7DA /* Managers/Singletons */,
 				4F0CBF6F187A4327003DF444 /* Survey Controller */,
+				4F49ABEF187B45DD00A4B896 /* Survey Views */,
 				4F4F4B501872634B00E0ADE8 /* Supporting Files */,
 			);
 			path = MSF;
@@ -999,10 +1022,12 @@
 				4F72040D18750EAD006E95B2 /* main.m in Sources */,
 				4F72042918751086006E95B2 /* HCRFooterView.m in Sources */,
 				4FA716E518751C9700BCE0A6 /* HCREmergencyListViewController.m in Sources */,
+				4F49ABF2187B461300A4B896 /* HCRAnswerSetPickerController.m in Sources */,
 				4F72042518751079006E95B2 /* HCRTableTallyCell.m in Sources */,
 				4F720432187510B2006E95B2 /* HCRTallySheetDetailViewController.m in Sources */,
 				4F419DE01878C44C0000C7DA /* UIView+EAAdditions.m in Sources */,
 				4F72041C1875105D006E95B2 /* HCRCollectionViewController.m in Sources */,
+				4F49ABF8187B47E900A4B896 /* HCRSurveyAnswerCell.m in Sources */,
 				4F72041B18750FD2006E95B2 /* NSString+HCRAdditions.m in Sources */,
 				4F72041718750FC8006E95B2 /* UIDevice+EAAdditions.m in Sources */,
 				4F72041118750FB8006E95B2 /* UIColor+HCRColors.m in Sources */,
@@ -1033,6 +1058,7 @@
 				4F72042A1875108A006E95B2 /* HCRHeaderTallyView.m in Sources */,
 				4F72041018750FB2006E95B2 /* AssertionCategories.m in Sources */,
 				4F72042B1875108C006E95B2 /* HCRHeaderView.m in Sources */,
+				4F49ABFB187B47F400A4B896 /* HCRSurveyAnswerFreeformCell.m in Sources */,
 				4FA716DF18751BE100BCE0A6 /* HCRCampCollectionViewController.m in Sources */,
 				4F72041218750FBB006E95B2 /* UIImage+RMImageManipulation.m in Sources */,
 				4F72041D18751065006E95B2 /* HCRClusterPickerCell.m in Sources */,
@@ -1044,13 +1070,13 @@
 				4FA716E718751CBD00BCE0A6 /* SCGraphView.m in Sources */,
 				4F72042218751070006E95B2 /* HCRTallyEntryFieldCell.m in Sources */,
 				4F419DDC1878C2360000C7DA /* HCRDataManager.m in Sources */,
+				4F49ABF5187B46D600A4B896 /* HCRSurveyCell.m in Sources */,
 				4FA1FB0D1875196500CB786B /* MKMapView+HCRMapView.m in Sources */,
 				4FA716E318751C2E00BCE0A6 /* HCRRequestDataViewController.m in Sources */,
 				4FA716E018751BFA00BCE0A6 /* HCRCampOverviewController.m in Sources */,
 				4FA716E218751C2900BCE0A6 /* HCRContactViewController.m in Sources */,
 				4F7204271875107E006E95B2 /* HCRTableCell.m in Sources */,
 				4F72041518750FC2006E95B2 /* EAEmailUtilities.m in Sources */,
-				4F0CBF78187A4B39003DF444 /* HCRSurveyQuestionController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,6 +28,7 @@ NSString *const HCRPrefKeyQuestionsKeyboard = @"keyboard";
 NSString *const HCRPrefKeyQuestionsNote = @"note";
 
 NSString *const HCRPrefKeyAnswerSets = @"HCRPrefKeyAnswerSets";
+NSString *const HCRPrefKeyAnswerSetsLocalID = @"HCRPrefKeyAnswerSetsLocalID";
 NSString *const HCRPrefKeyAnswerSetsUser = @"userId";
 NSString *const HCRPrefKeyAnswerSetsConsent = @"consent";
 NSString *const HCRPrefKeyAnswerSetsHouseholdID = @"householdId";
@@ -82,8 +83,10 @@ NSString *const kSurveyResultClass = @"TestFlight";
     if ( self != nil )
     {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
         self.localSurveyQuestionsArray = [defaults objectForKey:HCRPrefKeyQuestions ofClass:@"NSArray" mustExist:NO];
         self.localSurveyAnswerSetsArray = [[defaults objectForKey:HCRPrefKeyAnswerSets ofClass:@"NSArray" mustExist:NO] mutableCopy];
+
     }
     return self;
 }
@@ -119,7 +122,15 @@ NSString *const kSurveyResultClass = @"TestFlight";
                 
             }
             
-            self.localSurveyQuestionsArray = [NSArray arrayWithArray:newArray];
+            // sort it!
+            // https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/SortDescriptors/Articles/Creating.html#//apple_ref/doc/uid/20001845-BAJEAIEE
+            // http://stackoverflow.com/questions/8633932/how-to-sort-an-array-with-alphanumeric-values
+            
+            NSSortDescriptor *questionCodeDescriptor = [[NSSortDescriptor alloc] initWithKey:HCRPrefKeyQuestionsQuestionCode ascending:YES selector:@selector(localizedStandardCompare:)];
+            
+            NSArray *sortedArray = [newArray sortedArrayUsingDescriptors:@[questionCodeDescriptor]];
+            
+            self.localSurveyQuestionsArray = sortedArray;
         }
         
         completionBlock(error);
@@ -134,9 +145,16 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
+- (NSArray *)surveyAnswerSetsArray {
+    
+    return self.localSurveyAnswerSetsArray;
+    
+}
+
 - (NSDate *)surveyLastUpdated {
     
     // TODO: make more efficient; don't always check whole array (somehow determine 'dirty' status)
+    // is this faster than sorting the array and snagging index:0?
     
     NSDate *date; // set date to non-nil inside loop so it returns nil if no survey list
     
@@ -176,8 +194,13 @@ NSString *const kSurveyResultClass = @"TestFlight";
     // store initial vars necessary
     // add to list of local surveys in-process
     
+    if (self.localSurveyAnswerSetsArray == nil) {
+        self.localSurveyAnswerSetsArray = @[].mutableCopy;
+    }
+    
     NSMutableDictionary *surveyAnswerSet = [NSMutableDictionary new];
     
+    surveyAnswerSet[HCRPrefKeyAnswerSetsLocalID] = [NSString stringWithNewUUID];
     surveyAnswerSet[HCRPrefKeyAnswerSetsTeamID] = [[HCRUser currentUser] teamID];
     surveyAnswerSet[HCRPrefKeyAnswerSetsUser] = [[HCRUser currentUser] objectId];
     surveyAnswerSet[HCRPrefKeyAnswerSetsDurationStart] = [NSDate date];
@@ -187,6 +210,45 @@ NSString *const kSurveyResultClass = @"TestFlight";
     [self _sync];
     
     return surveyAnswerSet;
+    
+}
+
+- (NSString *)answerSetIDForAnswerSet:(NSDictionary *)answerSet {
+    
+    return [answerSet objectForKey:HCRPrefKeyAnswerSetsLocalID ofClass:@"NSString"];
+    
+}
+
+- (NSDictionary *)answerSetWithID:(NSString *)answerSetID {
+    
+    NSNumber *index = [self _indexForAnswerSetWithID:answerSetID];
+    
+    if (index) {
+        return [self.localSurveyAnswerSetsArray objectAtIndex:index.integerValue];
+    } else {
+        return nil;
+    }
+    
+}
+
+- (void)removeAnswerSetWithID:(NSString *)answerSetID {
+    
+    NSNumber *index = [self _indexForAnswerSetWithID:answerSetID];
+    
+    if (index) {
+        [self.localSurveyAnswerSetsArray removeObjectAtIndex:index.integerValue];
+        
+        if (self.localSurveyAnswerSetsArray.count == 0) {
+            self.localSurveyAnswerSetsArray = nil;
+            [self _syncUnsafe];
+        } else {
+            [self _sync];
+        }
+        
+    } else {
+        // do nothing
+        HCRWarning(@"No local answer set found with ID: %@",answerSetID);
+    }
     
 }
 
@@ -202,7 +264,25 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    [defaults setObject:[NSArray arrayWithArray:self.localSurveyAnswerSetsArray]
+    if (self.localSurveyAnswerSetsArray) {
+        [defaults setObject:self.localSurveyAnswerSetsArray
+                     forKey:HCRPrefKeyAnswerSets];
+    }
+    
+    if (self.localSurveyQuestionsArray) {
+        [defaults setObject:self.localSurveyQuestionsArray
+                     forKey:HCRPrefKeyQuestions];
+    }
+    
+    [defaults synchronize];
+    
+}
+
+- (void)_syncUnsafe {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    [defaults setObject:self.localSurveyAnswerSetsArray
                  forKey:HCRPrefKeyAnswerSets];
     
     [defaults setObject:self.localSurveyQuestionsArray
@@ -238,6 +318,27 @@ NSString *const kSurveyResultClass = @"TestFlight";
     }
     
     return object;
+    
+}
+
+- (NSNumber *)_indexForAnswerSetWithID:(NSString *)answerSetID {
+    
+    NSNumber *index; // is this OK? will it delete index 0 if none found?
+    
+    for (NSDictionary *answerSet in self.localSurveyAnswerSetsArray) {
+        
+        if ([[answerSet objectForKey:HCRPrefKeyAnswerSetsLocalID ofClass:@"NSString"] isEqualToString:answerSetID]) {
+            index = @([self.localSurveyAnswerSetsArray indexOfObject:answerSet]);
+            break;
+        }
+        
+    }
+    
+    if (!index) {
+        HCRWarning(@"No local answer set found with ID: %@",answerSetID);
+    }
+    
+    return index;
     
 }
 

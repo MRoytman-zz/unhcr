@@ -36,6 +36,7 @@ static const CGFloat kDetailXPadding = 4.0;
 @property (nonatomic, readwrite) UIImageView *badgeImageView;
 @property (nonatomic, readwrite) UILabel *titleLabel;
 @property (nonatomic, readwrite) UIImageView *forwardImage;
+@property (nonatomic, readwrite) UISwipeGestureRecognizer *deleteGestureRecognizer;
 
 @property UILabel *detailLabel;
 
@@ -68,6 +69,11 @@ static const CGFloat kDetailXPadding = 4.0;
         
         self.forwardImage.contentMode = UIViewContentModeScaleAspectFit;
         
+        // delete gesture recognizer
+        self.deleteGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:nil action:NULL];
+        self.deleteGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+        [self addGestureRecognizer:self.deleteGestureRecognizer];
+        
         // DEBUG
 //        self.titleLabel.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.5];
 //        self.forwardImage.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
@@ -84,6 +90,8 @@ static const CGFloat kDetailXPadding = 4.0;
     self.detailString = nil;
     self.detailNumber = nil;
     self.highlightDetail = NO;
+    
+    [self.deleteGestureRecognizer removeTarget:nil action:NULL];
     
 }
 

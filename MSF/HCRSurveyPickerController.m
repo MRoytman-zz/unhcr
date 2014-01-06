@@ -10,7 +10,7 @@
 #import "HCRTableButtonCell.h"
 #import "HCRTableFlowLayout.h"
 #import "EAEmailUtilities.h"
-#import "HCRSurveyController.h"
+#import "HCRAnswerSetPickerController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -18,8 +18,6 @@ NSString *const kSurveyPickerHeaderIdentifier = @"kSurveyPickerHeaderIdentifier"
 NSString *const kSurveyPickerFooterIdentifier = @"kSurveyPickerFooterIdentifier";
 
 NSString *const kSurveyPickerButtonCellIdentifier = @"kSurveyPickerButtonCellIdentifier";
-
-NSString *const kLayoutCellLabel = @"kLayoutCellLabel";
 
 NSString *const kLayoutCellLabelLebanon = @"Lebanon: Access to Care";
 NSString *const kLayoutCellLabelRefresh = @"Refresh Survey List";
@@ -71,8 +69,6 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
     self.title = @"Surveys";
     
     self.highlightCells = YES;
-    
-    self.collectionView.backgroundColor = [UIColor tableBackgroundColor];
     
     // LAYOUT AND REUSABLES
     [self.collectionView registerClass:[HCRHeaderView class]
@@ -222,6 +218,50 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
     self.refreshCell.tableButton.enabled = !refreshingSurvey;
 }
 
+#pragma mark - Private Methods (Buttons)
+
+- (void)_newStudyButtonPressedFromIndexPath:(NSIndexPath *)indexPath {
+    
+    HCRTableButtonCell *buttonCell = (HCRTableButtonCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+    NSParameterAssert([buttonCell isKindOfClass:[HCRTableButtonCell class]]);
+    
+    buttonCell.processingAction = YES;
+    
+    [[EAEmailUtilities sharedUtilities] emailFromViewController:self
+                                               withToRecipients:@[@"studies@hms.io"]
+                                                withSubjectText:@"Request for new Study or Survey"
+                                                   withBodyText:nil
+                                                 withCompletion:^(EAEmailStatus emailStatus) {
+                                                     buttonCell.processingAction = NO;
+                                                 }];
+    
+}
+
+- (void)_lebanonStudyButtonPressed {
+    
+    if ([[HCRDataManager sharedManager] surveyQuestionsArray] == nil) {
+        
+        NSString *bodyString = [NSString stringWithFormat:@"The survey you are trying to access is too old. Please use the %@ button and try again.",kLayoutCellLabelRefresh];
+        
+        [UIAlertView showWithTitle:@"Outdated Survey"
+                           message:bodyString
+                           handler:nil];
+        
+    } else {
+        
+        HCRAnswerSetPickerController *answerSetPicker = [[HCRAnswerSetPickerController alloc] initWithCollectionViewLayout:[HCRAnswerSetPickerController preferredLayout]];
+        
+        [self.navigationController pushViewController:answerSetPicker animated:YES];
+    }
+    
+}
+
+- (void)_refreshButtonPressed {
+    
+    [self _refreshSurveyData];
+    
+}
+
 #pragma mark - Private Methods
 
 - (NSArray *)_layoutDataForSection:(NSInteger)section {
@@ -262,47 +302,6 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
     
     return [NSIndexPath indexPathForRow:row.integerValue inSection:section.integerValue];
 
-}
-
-- (void)_newStudyButtonPressedFromIndexPath:(NSIndexPath *)indexPath {
-    
-    HCRTableButtonCell *buttonCell = (HCRTableButtonCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
-    NSParameterAssert([buttonCell isKindOfClass:[HCRTableButtonCell class]]);
-    
-    buttonCell.processingAction = YES;
-    
-    [[EAEmailUtilities sharedUtilities] emailFromViewController:self
-                                               withToRecipients:@[@"studies@hms.io"]
-                                                withSubjectText:@"Request for new Study or Survey"
-                                                   withBodyText:nil
-                                                 withCompletion:^(EAEmailStatus emailStatus) {
-                                                     buttonCell.processingAction = NO;
-                                                 }];
-    
-}
-
-- (void)_lebanonStudyButtonPressed {
-    
-    if ([[HCRDataManager sharedManager] surveyQuestionsArray] == nil) {
-        
-        NSString *bodyString = [NSString stringWithFormat:@"The survey you are trying to access is too old. Please use the %@ button and try again.",kLayoutCellLabelRefresh];
-        
-        [UIAlertView showWithTitle:@"Outdated Survey"
-                           message:bodyString
-                           handler:nil];
-        
-    } else {
-        HCRSurveyController *surveyController = [[HCRSurveyController alloc] initWithCollectionViewLayout:[HCRSurveyController preferredLayout]];
-        
-        [self presentViewController:surveyController animated:YES completion:nil];
-    }
-    
-}
-
-- (void)_refreshButtonPressed {
-    
-    [self _refreshSurveyData];
-    
 }
 
 - (void)_refreshSurveyData {

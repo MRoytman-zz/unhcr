@@ -30,11 +30,12 @@ NSString *const HCRUserTeamIDKey = @"teamId";
 #pragma mark - Public Methods
 
 - (BOOL)surveyUserAuthorized {
-    return [[[HCRUser currentUser] objectForKey:HCRUserAuthorizedKey] boolValue];
+    return ([[[HCRUser currentUser] objectForKey:HCRUserAuthorizedKey] boolValue] &&
+            [self teamID] != nil);
 }
 
 - (NSString *)teamID {
-    return [[HCRUser currentUser] objectForKey:HCRUserTeamIDKey];
+    return [[HCRUser currentUser] objectForKey:HCRUserTeamIDKey ofClass:@"NSString"];
 }
 
 + (void)surveySignInWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL succeeded, NSError *error))completionBlock {

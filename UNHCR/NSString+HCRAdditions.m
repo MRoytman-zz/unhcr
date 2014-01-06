@@ -10,6 +10,15 @@
 
 @implementation NSString (HCRAdditions)
 
++ (NSString *)stringWithNewUUID {
+    
+    CFUUIDRef uuidObj = CFUUIDCreate(nil);
+    NSString *newUUID = (NSString*)CFBridgingRelease(CFUUIDCreateString(nil, uuidObj));
+    CFRelease(uuidObj);
+    return newUUID;
+    
+}
+
 - (BOOL)isValidEmailAddress {
     
     NSString *emailRegex =
