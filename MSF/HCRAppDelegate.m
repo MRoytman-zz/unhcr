@@ -19,6 +19,12 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
+#ifdef HCR_WIPE_NSUD
+    NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removePersistentDomainForName:appDomain];
+#endif
+    
     // PARSE
     [HCRUser registerSubclass];
     [Parse setApplicationId:@"CZX2WArPOqFH6kWTNG30JWPfYVGO1SjmA0j3dwTH"

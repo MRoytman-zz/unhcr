@@ -20,6 +20,6 @@ typedef NS_ENUM(NSUInteger, SCErrorSource) {
 
 + (id)sharedManager;
 
-- (void)showAlertForError:(NSError *)error withErrorSource:(SCErrorSource)errorSource;
+- (void)showAlertForError:(NSError *)error withErrorSource:(SCErrorSource)errorSource withCompletion:(void (^)(void))completionBlock;
 
 @end

@@ -14,12 +14,17 @@ const CGFloat kFooterHeight = 14.0;
 const CGFloat kFooterHeightForGraphCell = 50.0;
 const CGFloat kFooterHeightForTopLine = 0.5;
 
+const CGFloat kLabelHeight = 30.0;
+const CGFloat kXLabelPadding = 10;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRFooterView ()
 
 @property (nonatomic, readwrite) UIButton *button;
 @property (nonatomic, readwrite) HCRFooterButtonType buttonType;
+
+@property UILabel *titleLabel;
 
 @property UIView *footerTopLineView;
 
@@ -52,6 +57,8 @@ const CGFloat kFooterHeightForTopLine = 0.5;
     [self.button removeFromSuperview];
     self.button = nil;
     
+    self.titleString = nil;
+    
 }
 
 - (void)layoutSubviews {
@@ -81,11 +88,16 @@ const CGFloat kFooterHeightForTopLine = 0.5;
                       kFooterHeightForGraphCell);
 }
 
++ (CGSize)preferredFooterSizeWithTitleForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      kFooterHeight + kLabelHeight);
+}
+
 #pragma mark - Public Methods
 
 - (void)setButtonType:(HCRFooterButtonType)buttonType withButtonTitle:(NSString *)buttonTitle {
     
-    self.buttonType = buttonType;
+    _buttonType = buttonType;
     
     // set new button
     switch (buttonType) {
@@ -104,6 +116,36 @@ const CGFloat kFooterHeightForTopLine = 0.5;
             break;
             
     }
+    
+}
+
+- (void)setTitleString:(NSString *)titleString {
+    
+    _titleString = titleString;
+    
+    NSString *newString = titleString;
+    
+    if (!titleString) {
+        [self.titleLabel removeFromSuperview];
+        self.titleLabel = nil;
+    } else if (!self.titleLabel) {
+        
+        CGRect labelRect = CGRectMake(kXLabelPadding,
+                                      0,
+                                      CGRectGetWidth(self.bounds) - 2 * kXLabelPadding,
+                                      kLabelHeight);
+        
+        self.titleLabel = [[UILabel alloc] initWithFrame:labelRect];
+        [self addSubview:self.titleLabel];
+        
+        self.titleLabel.textColor = [UIColor tableHeaderTitleColor];
+        self.titleLabel.textAlignment = NSTextAlignmentRight;
+        
+        self.titleLabel.font = [UIFont systemFontOfSize:14];
+        
+    }
+    
+    self.titleLabel.text = newString;
     
 }
 

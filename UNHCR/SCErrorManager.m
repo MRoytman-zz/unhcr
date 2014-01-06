@@ -36,11 +36,11 @@
 
 #pragma mark - Public Methods
 
-- (void)showAlertForError:(NSError *)error withErrorSource:(SCErrorSource)errorSource {
+- (void)showAlertForError:(NSError *)error withErrorSource:(SCErrorSource)errorSource withCompletion:(void (^)(void))completionBlock {
     
     switch (errorSource) {
         case SCErrorSourceParse:
-            [self _showAlertForParseError:error];
+            [self _showAlertForParseError:error withCompletion:completionBlock];
             break;
             
         default:
@@ -52,7 +52,7 @@
 
 #pragma mark - Private Methods
 
-- (void)_showAlertForParseError:(NSError *)parseError {
+- (void)_showAlertForParseError:(NSError *)parseError withCompletion:(void (^)(void))completionBlock {
     
     // http://parse.com/docs/dotnet/api/html/T_Parse_ParseException_ErrorCode.htm
     
@@ -71,7 +71,11 @@
     
     [UIAlertView showWithTitle:errorTitle
                        message:errorBody
-                       handler:nil];
+                       handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                           if (completionBlock) {
+                               completionBlock();
+                           }
+                       }];
     
 }
 

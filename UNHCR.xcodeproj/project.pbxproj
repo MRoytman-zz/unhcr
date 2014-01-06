@@ -15,6 +15,9 @@
 		4F0CBF651879FE35003DF444 /* SCErrorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF641879FE35003DF444 /* SCErrorManager.m */; };
 		4F0CBF661879FE35003DF444 /* SCErrorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF641879FE35003DF444 /* SCErrorManager.m */; };
 		4F0CBF6E187A0CD7003DF444 /* HCRUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF6D187A0CD7003DF444 /* HCRUser.m */; };
+		4F0CBF72187A4366003DF444 /* HCRSurveyPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF71187A4366003DF444 /* HCRSurveyPickerController.m */; };
+		4F0CBF78187A4B39003DF444 /* HCRSurveyQuestionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF77187A4B39003DF444 /* HCRSurveyQuestionController.m */; };
+		4F0CBF7B187A4B4A003DF444 /* HCRSurveyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBF7A187A4B4A003DF444 /* HCRSurveyController.m */; };
 		4F0D7B5E18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */; };
 		4F0D7B611820C14B007A22D8 /* HCRMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D7B601820C14B007A22D8 /* HCRMessagesViewController.m */; };
 		4F1C93F617FBF6EB0003AA21 /* HCRDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */; };
@@ -162,6 +165,12 @@
 		4F0CBF641879FE35003DF444 /* SCErrorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCErrorManager.m; path = ../UNHCR/SCErrorManager.m; sourceTree = "<group>"; };
 		4F0CBF6C187A0CD7003DF444 /* HCRUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRUser.h; sourceTree = "<group>"; };
 		4F0CBF6D187A0CD7003DF444 /* HCRUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRUser.m; sourceTree = "<group>"; };
+		4F0CBF70187A4366003DF444 /* HCRSurveyPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSurveyPickerController.h; sourceTree = "<group>"; };
+		4F0CBF71187A4366003DF444 /* HCRSurveyPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSurveyPickerController.m; sourceTree = "<group>"; };
+		4F0CBF76187A4B39003DF444 /* HCRSurveyQuestionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSurveyQuestionController.h; sourceTree = "<group>"; };
+		4F0CBF77187A4B39003DF444 /* HCRSurveyQuestionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSurveyQuestionController.m; sourceTree = "<group>"; };
+		4F0CBF79187A4B4A003DF444 /* HCRSurveyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSurveyController.h; sourceTree = "<group>"; };
+		4F0CBF7A187A4B4A003DF444 /* HCRSurveyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSurveyController.m; sourceTree = "<group>"; };
 		4F0D7B5C18209498007A22D8 /* NSNumberFormatter+HCRAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumberFormatter+HCRAdditions.h"; sourceTree = "<group>"; };
 		4F0D7B5D18209498007A22D8 /* NSNumberFormatter+HCRAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumberFormatter+HCRAdditions.m"; sourceTree = "<group>"; };
 		4F0D7B5F1820C14B007A22D8 /* HCRMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRMessagesViewController.h; sourceTree = "<group>"; };
@@ -343,6 +352,19 @@
 			name = Managers/Singletons;
 			sourceTree = "<group>";
 		};
+		4F0CBF6F187A4327003DF444 /* Survey Controller */ = {
+			isa = PBXGroup;
+			children = (
+				4F0CBF70187A4366003DF444 /* HCRSurveyPickerController.h */,
+				4F0CBF71187A4366003DF444 /* HCRSurveyPickerController.m */,
+				4F0CBF79187A4B4A003DF444 /* HCRSurveyController.h */,
+				4F0CBF7A187A4B4A003DF444 /* HCRSurveyController.m */,
+				4F0CBF76187A4B39003DF444 /* HCRSurveyQuestionController.h */,
+				4F0CBF77187A4B39003DF444 /* HCRSurveyQuestionController.m */,
+			);
+			name = "Survey Controller";
+			sourceTree = "<group>";
+		};
 		4F0D7B621820C14E007A22D8 /* Messages View */ = {
 			isa = PBXGroup;
 			children = (
@@ -447,6 +469,7 @@
 				4F4F4B581872634B00E0ADE8 /* HCRAppDelegate.h */,
 				4F4F4B591872634B00E0ADE8 /* HCRAppDelegate.m */,
 				4F419DD91878C2150000C7DA /* Managers/Singletons */,
+				4F0CBF6F187A4327003DF444 /* Survey Controller */,
 				4F4F4B501872634B00E0ADE8 /* Supporting Files */,
 			);
 			path = MSF;
@@ -991,6 +1014,7 @@
 				4F72042D18751093006E95B2 /* HCRTableFlowLayout.m in Sources */,
 				4F72042818751080006E95B2 /* HCRCollectionCell.m in Sources */,
 				4FA716E118751C2500BCE0A6 /* HCRClusterToolsViewController.m in Sources */,
+				4F0CBF72187A4366003DF444 /* HCRSurveyPickerController.m in Sources */,
 				4F72042418751076006E95B2 /* HCRGraphCell.m in Sources */,
 				4F720430187510AA006E95B2 /* HCRMessagesViewController.m in Sources */,
 				4F72041818750FCA006E95B2 /* UIFont+HCRCommonFonts.m in Sources */,
@@ -1002,6 +1026,7 @@
 				4F72042E18751095006E95B2 /* HCRClusterFlowLayout.m in Sources */,
 				4F7204261875107B006E95B2 /* HCRTableButtonCell.m in Sources */,
 				4F72041F18751069006E95B2 /* HCRBulletinCell.m in Sources */,
+				4F0CBF7B187A4B4A003DF444 /* HCRSurveyController.m in Sources */,
 				4F0CBF661879FE35003DF444 /* SCErrorManager.m in Sources */,
 				4FA716E618751CA300BCE0A6 /* HCREmergencyBroadcastController.m in Sources */,
 				4F720433187510B4006E95B2 /* HCRTallySheetDetailInputViewController.m in Sources */,
@@ -1025,6 +1050,7 @@
 				4FA716E218751C2900BCE0A6 /* HCRContactViewController.m in Sources */,
 				4F7204271875107E006E95B2 /* HCRTableCell.m in Sources */,
 				4F72041518750FC2006E95B2 /* EAEmailUtilities.m in Sources */,
+				4F0CBF78187A4B39003DF444 /* HCRSurveyQuestionController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

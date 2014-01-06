@@ -61,8 +61,11 @@ static const CGFloat kAppDescriptionHeight = 210.0;
     
     self.bottomLineView.hidden = NO;
     
+    self.processingAction = NO;
+    
     [self.spinner removeFromSuperview];
     self.spinner = nil;
+    
 }
 
 - (void)layoutSubviews {

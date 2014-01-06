@@ -21,6 +21,7 @@
 #import "HCRCampOverviewController.h"
 #import "EASoundManager.h"
 #import "HCRUser.h"
+#import "HCRSurveyPickerController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -293,6 +294,11 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     [self.collectionView registerClass:[HCRGraphCell class]
             forCellWithReuseIdentifier:kHomeViewGraphCellIdentifier];
     
+    // STARTUP CHECKS
+    if (self.signedIn && !self.authorized) {
+        [self _waitForAuthorization];
+    }
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -315,7 +321,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     
-    NSArray *sectionDataArrays = [[self _layoutArray] objectAtIndex:section ofClass:@"NSArray"];
+    NSArray *sectionDataArrays = [self _layoutDataForSection:section];
     return sectionDataArrays.count;
     
 }
@@ -818,13 +824,6 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)_bookmarkedCampButtonPressed {
     
-//    HCRClusterCollectionController *campDetail = [[HCRClusterCollectionController alloc] initWithCollectionViewLayout:[HCRClusterCollectionController preferredLayout]];
-//    
-//    campDetail.countryName = @"Iraq";
-//    campDetail.campDictionary = [self.bookmarkedCamps objectAtIndex:0 ofClass:@"NSDictionary"];
-//
-//    [self _pushViewController:campDetail];
-    
     HCRCampOverviewController *campOverview = [[HCRCampOverviewController alloc] initWithCollectionViewLayout:[HCRCampOverviewController preferredLayout]];
     
     NSDictionary *campDictionary = [self.bookmarkedCamps objectAtIndex:0 ofClass:@"NSDictionary"];
@@ -835,9 +834,11 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 }
 
 - (void)_bookmarkedBulletinBoardButtonPressed {
+    
     HCRBulletinViewController *bulletinController = [[HCRBulletinViewController alloc] initWithCollectionViewLayout:[HCRBulletinViewController preferredLayout]];
     
     [self _pushViewController:bulletinController];
+    
 }
 
 - (void)_signoutButtonPressed {
@@ -850,7 +851,9 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)_surveyButtonPressed {
     
+    HCRSurveyPickerController *surveyPicker = [[HCRSurveyPickerController alloc] initWithCollectionViewLayout:[HCRSurveyPickerController preferredLayout]];
     
+    [self _pushViewController:surveyPicker];
     
 }
 
@@ -950,12 +953,22 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     self.masterHeaderBottomLine.hidden = !self.authorized;
     
-    [self.collectionView reloadData];
+    BOOL layoutSectionsCountMatches = (self.layoutDataArraySignedOut.count == self.layoutDataArrayAuthorized.count) && (self.layoutDataArrayAuthorized.count == self.layoutDataArrayUnauthorizedSignedIn.count) && (self.layoutDataArraySignedOut.count == self.layoutDataArrayUnauthorizedSignedIn.count);
+    
+    if (!layoutSectionsCountMatches) {
+        [self.collectionView reloadData];
+    }
     
     [self.collectionView performBatchUpdates:^{
         [self.collectionView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)]];
     } completion:^(BOOL finished) {
-        //
+        
+        // if signed in but NOT authorized, retrieve updated authorization status every N seconds
+        // else do nothing
+        if (self.signedIn && !self.authorized) {
+            [self _waitForAuthorization];
+        }
+        
     }];
     
 }
@@ -1017,9 +1030,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         [self _setLoginButtonsEnabled:YES];
         
         if (error) {
-            
-            [[SCErrorManager sharedManager] showAlertForError:error withErrorSource:SCErrorSourceParse];
-            
+            [[SCErrorManager sharedManager] showAlertForError:error withErrorSource:SCErrorSourceParse withCompletion:nil];
         }
         
         if (completionBlock) {
@@ -1044,7 +1055,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         [self _setLoginButtonsEnabled:YES];
         
         if (error) {
-            [[SCErrorManager sharedManager] showAlertForError:error withErrorSource:SCErrorSourceParse];
+            [[SCErrorManager sharedManager] showAlertForError:error withErrorSource:SCErrorSourceParse withCompletion:nil];
         }
         
         if (completionBlock) {
@@ -1096,13 +1107,58 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 }
 
 - (BOOL)_emailFieldComplete {
-    // cell must have text and it must contain a period and an @
-    return ([self.emailCell.inputField.text rangeOfString:@"."].location != NSNotFound &&
-            [self.emailCell.inputField.text rangeOfString:@"@"].location != NSNotFound);
+    return ([self.emailCell.inputField.text isValidEmailAddress]);
 }
 
 - (BOOL)_passwordFieldComplete {
     return (self.passwordCell.inputField.text.length > 0);
+}
+
+- (void)_waitForAuthorization {
+    
+    HCRDebug(@"Refreshing authorization status..");
+    static const NSTimeInterval loopDelay = 5.0;
+    
+    if ([[HCRUser currentUser] surveyUserAuthorized]) {
+        
+        HCRDebug(@"Authorized!");
+        
+        [self _reloadSectionsAnimated];
+        
+    } else {
+        
+        [self _refreshAuthorizationStatusWithCompletion:^(NSError *error) {
+            
+            if (!error) {
+                
+                double delayInSeconds = loopDelay;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [self _waitForAuthorization];
+                });
+                
+            } else {
+                
+                [[SCErrorManager sharedManager] showAlertForError:error withErrorSource:SCErrorSourceParse withCompletion:^{
+                    [self _waitForAuthorization];
+                }];
+                
+            }
+            
+        }];
+        
+    }
+    
+}
+
+- (void)_refreshAuthorizationStatusWithCompletion:(void (^)(NSError *error))completionBlock {
+    
+    [[HCRUser currentUser] refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        
+        completionBlock(error);
+        
+    }];
+    
 }
 
 @end

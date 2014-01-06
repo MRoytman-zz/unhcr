@@ -21,6 +21,9 @@ typedef NS_ENUM(NSInteger, HCRFooterButtonType) {
 + (CGSize)preferredFooterSizeForCollectionView:(UICollectionView *)collectionView;
 + (CGSize)preferredFooterSizeWithGraphCellForCollectionView:(UICollectionView *)collectionView;
 + (CGSize)preferredFooterSizeWithBottomLineOnlyForCollectionView:(UICollectionView *)collectionView;
++ (CGSize)preferredFooterSizeWithTitleForCollectionView:(UICollectionView *)collectionView;
+
+@property (nonatomic, strong) NSString *titleString;
 
 @property (nonatomic, readonly) HCRFooterButtonType buttonType;
 @property (nonatomic, readonly) UIButton *button;

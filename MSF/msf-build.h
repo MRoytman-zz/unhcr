@@ -13,4 +13,6 @@
 
 #include "HCRDataManager.h"
 
+#define HCR_WIPE_NSUD
+
 #endif
