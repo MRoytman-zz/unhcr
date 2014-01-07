@@ -30,13 +30,18 @@ NSString *const HCRPrefKeyQuestionsNote = @"note";
 NSString *const HCRPrefKeyAnswerSets = @"HCRPrefKeyAnswerSets";
 NSString *const HCRPrefKeyAnswerSetsLocalID = @"HCRPrefKeyAnswerSetsLocalID";
 NSString *const HCRPrefKeyAnswerSetsUser = @"userId";
-NSString *const HCRPrefKeyAnswerSetsConsent = @"consent";
 NSString *const HCRPrefKeyAnswerSetsHouseholdID = @"householdId";
 NSString *const HCRPrefKeyAnswerSetsTeamID = @"teamId";
-NSString *const HCRPrefKeyAnswerSetsParticipantID = @"participantId";
-NSString *const HCRPrefKeyAnswerSetsParticipantAge = @"participantAge";
-NSString *const HCRPrefKeyAnswerSetsParticipantGender = @"participantGender";
 NSString *const HCRPrefKeyAnswerSetsDuration = @"duration";
+NSString *const HCRPrefKeyAnswerSetsParticipants = @"HCRPrefKeyAnswerSetsParticipants";
+NSString *const HCRPrefKeyAnswerSetsParticipantsID = @"participantId";
+NSString *const HCRPrefKeyAnswerSetsParticipantsAge = @"participantAge";
+NSString *const HCRPrefKeyAnswerSetsParticipantsGender = @"participantGender";
+NSString *const HCRPrefKeyAnswerSetsParticipantsResponses = @"HCRPrefKeyAnswerSetsParticipantsResponses";
+NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesQuestion = @"HCRPrefKeyAnswerSetsParticipantsResponsesQuestion";
+NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesAnswer = @"HCRPrefKeyAnswerSetsParticipantsResponsesAnswer";
+NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesQuestionString = @"HCRPrefKeyAnswerSetsParticipantsResponsesQuestionString";
+NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString = @"HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString";
 
 NSString *const HCRPrefKeyAnswerSetsDurationStart = @"HCRPrefKeyAnswerSetsDurationStart";
 NSString *const HCRPrefKeyAnswerSetsDurationEnd = @"HCRPrefKeyAnswerSetsDurationEnd";
@@ -64,6 +69,41 @@ NSString *const kSurveyResultClass = @"TestFlight";
 ////////////////////////////////////////////////////////////////////////////////
 
 @implementation HCRDataManager
+
+//- (void)example {
+//    
+//    @{HCRPrefKeyAnswerSets: @[
+//              @{
+//                  HCRPrefKeyAnswerSetsLocalID: @"hash",
+//                  HCRPrefKeyAnswerSetsUser: @"local user's ID",
+//                  HCRPrefKeyAnswerSetsTeamID: @"team id",
+//                  HCRPrefKeyAnswerSetsHouseholdID: @"tally number for survey ID", // server issued at completion
+//                  HCRPrefKeyAnswerSetsDuration: @"combination of start and end", // set at completion
+//                  HCRPrefKeyAnswerSetsDurationStart: @"marked when survey is created", // local only
+//                  HCRPrefKeyAnswerSetsDurationEnd: @"marked when survey is completed", // local only, set at completion
+//                  HCRPrefKeyAnswerSetsParticipants: @[
+//                          @{HCRPrefKeyAnswerSetsParticipantsAge: @"some number",
+//                            HCRPrefKeyAnswerSetsParticipantsGender: @"coded response",
+//                            HCRPrefKeyAnswerSetsParticipantsID: @"just a tallied number, 1 - n",
+//                            HCRPrefKeyAnswerSetsParticipantsResponses: @[
+//                                    @{HCRPrefKeyAnswerSetsParticipantsResponsesQuestion: @"question code",
+//                                      HCRPrefKeyAnswerSetsParticipantsResponsesAnswer: @"answer code",
+//                                      HCRPrefKeyAnswerSetsParticipantsResponsesQuestionString: @"question string",
+//                                      HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString: @"answer string"},
+//                                    @{HCRPrefKeyAnswerSetsParticipantsResponsesQuestion: @"question 2",
+//                                      HCRPrefKeyAnswerSetsParticipantsResponsesAnswer: @"answer 2",
+//                                      HCRPrefKeyAnswerSetsParticipantsResponsesQuestionString: @"question 2",
+//                                      HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString: @"answer 2"},
+//                                    @{@"etc": @"array of all questions"}
+//                                    ]
+//                            },
+//                          @{@"etc": @"next person - may be many"}
+//                          ]
+//                  },
+//              @{@"etc": @"next survey answer set"},
+//              ]
+//      };
+//};
 
 #pragma mark - Life Cycle
 
@@ -204,7 +244,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
     surveyAnswerSet[HCRPrefKeyAnswerSetsTeamID] = [[HCRUser currentUser] teamID];
     surveyAnswerSet[HCRPrefKeyAnswerSetsUser] = [[HCRUser currentUser] objectId];
     surveyAnswerSet[HCRPrefKeyAnswerSetsDurationStart] = [NSDate date];
-    surveyAnswerSet[HCRPrefKeyAnswerSetsParticipantID] = @1;
+    surveyAnswerSet[HCRPrefKeyAnswerSetsParticipants] = @[@{HCRPrefKeyAnswerSetsParticipantsID: @0}];
     
     [self.localSurveyAnswerSetsArray addObject:surveyAnswerSet];
     [self _sync];
@@ -213,13 +253,47 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
-- (NSString *)answerSetIDForAnswerSet:(NSDictionary *)answerSet {
-    
+- (NSString *)getIDForAnswerSet:(NSDictionary *)answerSet {
     return [answerSet objectForKey:HCRPrefKeyAnswerSetsLocalID ofClass:@"NSString"];
+}
+
+- (NSDate *)getCreatedDateForAnswerSet:(NSDictionary *)answerSet {
+    return [answerSet objectForKey:HCRPrefKeyAnswerSetsDurationStart ofClass:@"NSDate"];
+}
+
+- (NSArray *)getParticipantsForAnswerSet:(NSDictionary *)answerSet {
+    return [answerSet objectForKey:HCRPrefKeyAnswerSetsParticipants ofClass:@"NSArray"];
+}
+
+- (NSDictionary *)getParticipantDataForAnswerSet:(NSDictionary *)answerSet withParticipantID:(NSInteger)participantID {
+    
+    NSDictionary *participantDictionary;
+    
+    for (NSDictionary *dictionary in [[HCRDataManager sharedManager] getParticipantsForAnswerSet:answerSet]) {
+        NSNumber *partyID = [dictionary objectForKey:HCRPrefKeyAnswerSetsParticipantsID ofClass:@"NSNumber"];
+        if (partyID.integerValue == participantID) {
+            participantDictionary = dictionary;
+            break;
+        }
+    }
+    
+    return participantDictionary;
     
 }
 
-- (NSDictionary *)answerSetWithID:(NSString *)answerSetID {
+- (NSInteger)getPercentCompleteForAnswerSet:(NSDictionary *)answerSet withParticipantID:(NSInteger)participantID {
+    
+    NSDictionary *participantData = [[HCRDataManager sharedManager] getParticipantDataForAnswerSet:answerSet
+                                                                                 withParticipantID:participantID];
+    
+    NSArray *totalResponses = [participantData objectForKey:HCRPrefKeyAnswerSetsParticipantsResponses
+                                                    ofClass:@"NSArray"
+                                                  mustExist:NO];
+    
+    return (totalResponses) ? 100 * totalResponses.count / self.localSurveyQuestionsArray.count : 0;
+}
+
+- (NSDictionary *)getAnswerSetWithID:(NSString *)answerSetID {
     
     NSNumber *index = [self _indexForAnswerSetWithID:answerSetID];
     

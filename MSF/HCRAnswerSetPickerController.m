@@ -31,6 +31,8 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 
 @interface HCRAnswerSetPickerController ()
 
+@property NSDateFormatter *dateFormatter;
+
 @property (nonatomic, readonly) NSArray *layoutDataArray;
 
 @end
@@ -44,6 +46,7 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
+        self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMMHHmm forceEuropeanFormat:YES];
     }
     return self;
 }
@@ -103,7 +106,15 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     NSString *cellTitle = [self _layoutLabelForIndexPath:indexPath];
     
     if (!cellTitle) {
-        cellTitle = [[HCRDataManager sharedManager] answerSetIDForAnswerSet:[self _layoutDataForIndexPath:indexPath]];
+        NSDictionary *layoutData = [self _layoutDataForIndexPath:indexPath];
+        NSDate *createdDate = [[HCRDataManager sharedManager] getCreatedDateForAnswerSet:layoutData];
+        NSInteger percentNumber = [[HCRDataManager sharedManager] getPercentCompleteForAnswerSet:layoutData withParticipantID:indexPath.row];
+        NSString *percentString = [NSString stringWithFormat:@"%d",percentNumber];
+        
+        NSString *titleString = [NSString stringWithFormat:@"%@ (%@%% complete)",
+                                 [self.dateFormatter stringFromDate:createdDate],
+                                 percentString];
+        cellTitle = titleString;
     }
     
     if ([cellTitle isEqualToString:kLayoutCellLabelNewSurvey]) {
@@ -229,9 +240,7 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     tableCell.userInteractionEnabled = NO;
     tableCell.processingAction = YES;
     
-    NSString *cellID = tableCell.title;
-    
-    NSString *bodyString = [NSString stringWithFormat:@"Are you sure you want to delete survey ID %@ and remove it completely?",cellID];
+    NSString *bodyString = [NSString stringWithFormat:@"Are you sure you want to delete the survey created at %@ and remove it completely?",tableCell.title];
     [UIAlertView showConfirmationDialogWithTitle:@"Delete Survey"
                                          message:bodyString
                                          handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
@@ -242,7 +251,9 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
                                              if (buttonIndex == 0) {
                                                  // do nothing
                                              } else {
-                                                 [[HCRDataManager sharedManager] removeAnswerSetWithID:cellID];
+                                                 NSIndexPath *indexPath = [self.collectionView indexPathForCell:tableCell];
+                                                 NSDictionary *dataForIndexPath = [self _layoutDataForIndexPath:indexPath];
+                                                 [[HCRDataManager sharedManager] removeAnswerSetWithID:[[HCRDataManager sharedManager] getIDForAnswerSet:dataForIndexPath]];
                                                  [self _reloadLayoutData];
                                              }
                                              

@@ -19,8 +19,13 @@
 - (void)refreshSurveyQuestionsWithCompletion:(void (^)(NSError *error))completionBlock;
 
 - (NSDictionary *)createNewSurveyAnswerSet;
-- (NSString *)answerSetIDForAnswerSet:(NSDictionary *)answerSet;
-- (NSDictionary *)answerSetWithID:(NSString *)answerSetID;
 - (void)removeAnswerSetWithID:(NSString *)answerSetID;
+
+- (NSDictionary *)getAnswerSetWithID:(NSString *)answerSetID;
+- (NSString *)getIDForAnswerSet:(NSDictionary *)answerSet;
+- (NSDate *)getCreatedDateForAnswerSet:(NSDictionary *)answerSet;
+- (NSArray *)getParticipantsForAnswerSet:(NSDictionary *)answerSet;
+- (NSDictionary *)getParticipantDataForAnswerSet:(NSDictionary *)answerSet withParticipantID:(NSInteger)participantID;
+- (NSInteger)getPercentCompleteForAnswerSet:(NSDictionary *)answerSet withParticipantID:(NSInteger)participantID;
 
 @end
