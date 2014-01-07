@@ -7,7 +7,18 @@
 //
 
 #import "HCRSurveyParticipantView.h"
-#import "HCRTableFlowLayout.h"
+
+////////////////////////////////////////////////////////////////////////////////
+
+NSString *const kSurveyHeaderIdentifier = @"kSurveyHeaderIdentifier";
+NSString *const kSurveyFooterIdentifier = @"kSurveyFooterIdentifier";
+
+NSString *const kSurveyCellIdentifier = @"kSurveyCellIdentifier";
+NSString *const kSurveyNoteCellIdentifier = @"kSurveyNoteCellIdentifier";
+NSString *const kSurveyAnswerCellIdentifier = @"kSurveyAnswerCellIdentifier";
+NSString *const kSurveyAnswerFreeformCellIdentifier = @"kSurveyAnswerFreeformCellIdentifier";
+
+////////////////////////////////////////////////////////////////////////////////
 
 @implementation HCRSurveyParticipantView
 
@@ -16,6 +27,26 @@
     self = [super initWithFrame:frame collectionViewLayout:layout];
     if (self) {
         // Initialization code
+        
+        self.backgroundColor = [UIColor tableBackgroundColor];
+        
+        [self registerClass:[HCRSurveyQuestionHeader class]
+ forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+        withReuseIdentifier:kSurveyHeaderIdentifier];
+        
+        [self registerClass:[HCRSurveyQuestionFooter class]
+ forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+        withReuseIdentifier:kSurveyFooterIdentifier];
+        
+        [self registerClass:[HCRSurveyAnswerCell class]
+ forCellWithReuseIdentifier:kSurveyAnswerCellIdentifier];
+        
+        [self registerClass:[HCRSurveyAnswerFreeformCell class]
+ forCellWithReuseIdentifier:kSurveyAnswerFreeformCellIdentifier];
+        
+        [self registerClass:[HCRSurveyNoteCell class]
+ forCellWithReuseIdentifier:kSurveyNoteCellIdentifier];
+        
     }
     return self;
 }

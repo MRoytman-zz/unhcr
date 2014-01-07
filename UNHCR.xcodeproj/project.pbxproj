@@ -382,6 +382,8 @@
 				4F49ABF1187B461300A4B896 /* HCRAnswerSetPickerController.m */,
 				4F0CBF79187A4B4A003DF444 /* HCRSurveyController.h */,
 				4F0CBF7A187A4B4A003DF444 /* HCRSurveyController.m */,
+				4F49ABFF187BBD8200A4B896 /* HCRSurveyParticipantView.h */,
+				4F49AC00187BBD8200A4B896 /* HCRSurveyParticipantView.m */,
 			);
 			name = "Survey Controller";
 			sourceTree = "<group>";
@@ -488,8 +490,6 @@
 			children = (
 				4F49ABF3187B46D600A4B896 /* HCRSurveyCell.h */,
 				4F49ABF4187B46D600A4B896 /* HCRSurveyCell.m */,
-				4F49ABFF187BBD8200A4B896 /* HCRSurveyParticipantView.h */,
-				4F49AC00187BBD8200A4B896 /* HCRSurveyParticipantView.m */,
 				4F49AC02187BC2FD00A4B896 /* HCRSurveyQuestionHeader.h */,
 				4F49AC03187BC2FD00A4B896 /* HCRSurveyQuestionHeader.m */,
 				4F49AC08187BC8F800A4B896 /* HCRSurveyQuestionFooter.h */,

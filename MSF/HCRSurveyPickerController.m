@@ -183,9 +183,11 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
     
     NSString *cellTitle = [self _layoutLabelForIndexPath:indexPath];
     
-    if ([cellTitle isEqualToString:kLayoutCellLabelLebanon]) {
+    if ([cellTitle isEqualToString:kLayoutCellLabelLebanon] &&
+        self.refreshingSurvey == NO) {
         [self _lebanonStudyButtonPressed];
-    } else if ([cellTitle isEqualToString:kLayoutCellLabelRequestNew]) {
+    } else if ([cellTitle isEqualToString:kLayoutCellLabelRequestNew] &&
+               self.refreshingSurvey == NO) {
         [self _newStudyButtonPressedFromIndexPath:indexPath];
     } else if ([cellTitle isEqualToString:kLayoutCellLabelRefresh]) {
         [self _refreshButtonPressed];

@@ -9,21 +9,6 @@
 #import "HCRSurveyController.h"
 #import "HCRSurveyCell.h"
 #import "HCRSurveyParticipantView.h"
-#import "HCRSurveyQuestionHeader.h"
-#import "HCRSurveyNoteCell.h"
-#import "HCRSurveyAnswerCell.h"
-#import "HCRSurveyAnswerFreeformCell.h"
-#import "HCRSurveyQuestionFooter.h"
-
-////////////////////////////////////////////////////////////////////////////////
-
-NSString *const kSurveyHeaderIdentifier = @"kSurveyHeaderIdentifier";
-NSString *const kSurveyFooterIdentifier = @"kSurveyFooterIdentifier";
-
-NSString *const kSurveyCellIdentifier = @"kSurveyCellIdentifier";
-NSString *const kSurveyNoteCellIdentifier = @"kSurveyNoteCellIdentifier";
-NSString *const kSurveyAnswerCellIdentifier = @"kSurveyAnswerCellIdentifier";
-NSString *const kSurveyAnswerFreeformCellIdentifier = @"kSurveyAnswerFreeformCellIdentifier";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -56,41 +41,18 @@ NSString *const kSurveyAnswerFreeformCellIdentifier = @"kSurveyAnswerFreeformCel
     self.collectionView.scrollEnabled = NO;
     
     // LAYOUT AND REUSABLES
-    [self.collectionView registerClass:[HCRSurveyQuestionHeader class]
-            forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                   withReuseIdentifier:kSurveyHeaderIdentifier];
-    
-    [self.collectionView registerClass:[HCRSurveyQuestionFooter class]
-            forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
-                   withReuseIdentifier:kSurveyFooterIdentifier];
-    
     [self.collectionView registerClass:[HCRSurveyCell class]
             forCellWithReuseIdentifier:kSurveyCellIdentifier];
     
-    [self.collectionView registerClass:[HCRSurveyAnswerCell class]
-            forCellWithReuseIdentifier:kSurveyAnswerCellIdentifier];
-    
-    [self.collectionView registerClass:[HCRSurveyAnswerFreeformCell class]
-            forCellWithReuseIdentifier:kSurveyAnswerFreeformCellIdentifier];
-    
-    [self.collectionView registerClass:[HCRSurveyNoteCell class]
-            forCellWithReuseIdentifier:kSurveyNoteCellIdentifier];
-    
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     
     // refresh on load
-    NSArray *responses = [[HCRDataManager sharedManager] getResponsesForAnswerSet:self.answerSet
-                                                                withParticipantID:0];
-    
-    if (responses.count == 0) {
-        
-        [[HCRDataManager sharedManager] refreshSurveyResponsesForAnswerSet:self.answerSet
-                                                          forParticipantID:0];
-        [self _reloadDataAnimated];
-        
-    }
+    HCRDebug(@"time 1");
+    [[HCRDataManager sharedManager] refreshSurveyResponsesForAllParticipantsWithAnswerSet:self.answerSet];
+    HCRDebug(@"time 2");
+    [self _reloadDataAnimated];
     
 }
 
@@ -187,8 +149,9 @@ NSString *const kSurveyAnswerFreeformCellIdentifier = @"kSurveyAnswerFreeformCel
         // CONTENTS OF SURVEY PAGES
         NSInteger participantID = [self _participantIDForSurveyView:collectionView];
         
-        return [self _collectionViewCellForParticipantCollectionViewWithParticipantID:participantID
-                                                                          atIndexPath:indexPath];
+        return [self _cellForParticipantCollectionView:collectionView
+                                     withParticipantID:participantID
+                                           atIndexPath:indexPath];
         
     } else {
         NSAssert(NO, @"Unhandled collectionView type..");
@@ -271,10 +234,10 @@ NSString *const kSurveyAnswerFreeformCellIdentifier = @"kSurveyAnswerFreeformCel
     [self.collectionView reloadData];
 }
 
-- (UICollectionViewCell *)_collectionViewCellForParticipantCollectionViewWithParticipantID:(NSInteger)participantID atIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)_cellForParticipantCollectionView:(UICollectionView *)collectionView withParticipantID:(NSInteger)participantID atIndexPath:(NSIndexPath *)indexPath {
     
-    HCRSurveyAnswerCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kSurveyAnswerCellIdentifier
-                                                                               forIndexPath:indexPath];
+    HCRSurveyAnswerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kSurveyAnswerCellIdentifier
+                                                                          forIndexPath:indexPath];
     
     return cell;
     

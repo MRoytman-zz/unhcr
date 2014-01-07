@@ -18,7 +18,8 @@
 
 // question management
 - (void)refreshSurveyQuestionsWithCompletion:(void (^)(NSError *error))completionBlock;
-- (void)refreshSurveyResponsesForAnswerSet:(NSDictionary *)answerSet forParticipantID:(NSInteger)participantID;
+- (void)refreshSurveyResponsesForAllParticipantsWithAnswerSet:(NSDictionary *)answerSet;
+- (void)refreshSurveyResponsesForParticipantID:(NSInteger)participantID withAnswerSet:(NSDictionary *)answerSet;
 - (NSDictionary *)getSurveyQuestionDataForQuestionCode:(NSString *)questionCode;
 - (NSString *)getSurveyQuestionForResponseData:(NSDictionary *)responseData;
 - (NSArray *)getSurveyAnswersForResponseData:(NSDictionary *)responseData;
@@ -26,7 +27,7 @@
 // answer set management
 - (void)createNewSurveyAnswerSet;
 - (void)removeAnswerSetWithID:(NSString *)answerSetID;
-- (void)setAnswer:(NSString *)answerCode forQuestion:(NSString *)questionCode withAnswerSet:(NSDictionary *)answerSet withParticipantID:(NSInteger)participantID;
+- (void)setAnswer:(NSString *)answerCode forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID;
 
 // general
 - (NSDictionary *)getAnswerSetWithID:(NSString *)answerSetID;
@@ -39,7 +40,8 @@
 
 // responses
 - (NSArray *)getResponsesForAnswerSet:(NSDictionary *)answerSet withParticipantID:(NSInteger)participantID;
-- (NSDictionary *)getResponseDataWithQuestionCode:(NSString *)questionCode fromResponses:(NSArray *)responses;
+- (NSDictionary *)getResponseDataFromParticipantResponses:(NSArray *)responses withQuestionCode:(NSString *)questionCode;
+- (NSNumber *)getAnswerFromAnswerSet:(NSDictionary *)answerSet forParticipantID:(NSInteger)participantID forQuestionCode:(NSString *)questionCode;
 
 // convenience
 - (NSInteger)getPercentCompleteForAnswerSet:(NSDictionary *)answerSet withParticipantID:(NSInteger)participantID;

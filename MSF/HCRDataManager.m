@@ -15,6 +15,10 @@
 
 // condition keys
 NSString *const kSurveyQuestionConditionKeyParticipantID = @"participantID";
+NSString *const kSurveyQuestionConditionKeyResponse = @"response";
+NSString *const kSurveyQuestionConditionKeyResponseQuestion = @"question";
+NSString *const kSurveyQuestionConditionKeyResponseAnswer = @"answer";
+NSString *const kSurveyQuestionConditionKeyMinParticipants = @"minParticipants";
 
 // NSUD KEYS
 NSString *const HCRPrefKeyQuestions = @"HCRPrefKeyQuestions";
@@ -212,7 +216,21 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
-- (void)refreshSurveyResponsesForAnswerSet:(NSDictionary *)answerSet forParticipantID:(NSInteger)participantID {
+- (void)refreshSurveyResponsesForAllParticipantsWithAnswerSet:(NSDictionary *)answerSet {
+    
+    NSArray *participants = [self getParticipantsForAnswerSet:answerSet];
+    
+    for (NSDictionary *participantData in participants) {
+        
+        NSInteger participantID = [[participantData objectForKey:HCRPrefKeyAnswerSetsParticipantsID ofClass:@"NSNumber"] integerValue];
+        
+        [self refreshSurveyResponsesForParticipantID:participantID withAnswerSet:answerSet];
+        
+    }
+    
+}
+
+- (void)refreshSurveyResponsesForParticipantID:(NSInteger)participantID withAnswerSet:(NSDictionary *)answerSet {
     
     for (NSDictionary *questionData in self.localSurveyQuestionsArray) {
         
@@ -233,35 +251,26 @@ NSString *const kSurveyResultClass = @"TestFlight";
                 
                 for (NSString *key in condition.allKeys) {
                     
-                    if ([key isEqualToString:kSurveyQuestionConditionKeyParticipantID]) {
-                        
-                        NSInteger conditionalID = [[condition objectForKey:kSurveyQuestionConditionKeyParticipantID
-                                                                   ofClass:@"NSNumber"] integerValue];
-                        if (participantID != conditionalID) {
-                            conditionPasses = NO;
-                            break;
-                        }
-                        
-                    } else {
-                        conditionPasses = NO;
-                        NSAssert(NO, @"Unhandled survey question condition: %@",key);
-                    }
+                    conditionPasses = [self _passCondition:condition withKey:key forAnswerSet:answerSet forParticipantID:participantID];
                     
                 }
                 
                 if (conditionPasses == NO) {
+                    HCRWarning(@"Condition failed: %@",condition);
                     break;
                 }
                 
             }
             
             if (conditionPasses) {
-                [self setAnswer:nil forQuestion:questionCode withAnswerSet:answerSet withParticipantID:participantID];
+                NSString *answerSetID = [self getIDForAnswerSet:answerSet];
+                [self setAnswer:nil forQuestion:questionCode withAnswerSetID:answerSetID withParticipantID:participantID];
             }
             
         } else {
             HCRDebug(@"No conditions found! Adding question: %@",questionData);
-            [self setAnswer:nil forQuestion:questionCode withAnswerSet:answerSet withParticipantID:participantID];
+            NSString *answerSetID = [self getIDForAnswerSet:answerSet];
+            [self setAnswer:nil forQuestion:questionCode withAnswerSetID:answerSetID withParticipantID:participantID];
         }
         
     }
@@ -366,32 +375,42 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
-- (void)setAnswer:(NSString *)answerCode forQuestion:(NSString *)questionCode withAnswerSet:(NSDictionary *)answerSet withParticipantID:(NSInteger)participantID {
+- (void)setAnswer:(NSString *)answerCode forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID {
     
     NSParameterAssert(questionCode);
     
-    if ([self.localSurveyAnswerSetsArray containsObject:answerSet]) {
-        
+    NSDictionary *targetAnswerSet;
+    
+    for (NSDictionary *answerSet in self.localSurveyAnswerSetsArray) {
+        NSString *setID = [self getIDForAnswerSet:answerSet];
+        if ([setID isEqualToString:answerSetID]) {
+            targetAnswerSet = answerSet;
+            break;
+        }
+    }
+    
+    if (targetAnswerSet) {
+    
         // drill down to this particular response
-        NSUInteger indexOfAnswerSet = [self.localSurveyAnswerSetsArray indexOfObject:answerSet];
-        NSMutableDictionary *newAnswerSet = answerSet.mutableCopy;
+        NSUInteger indexOfAnswerSet = [self.localSurveyAnswerSetsArray indexOfObject:targetAnswerSet];
+        NSMutableDictionary *newAnswerSet = targetAnswerSet.mutableCopy;
         
-        NSMutableArray *newParticipants = [newAnswerSet objectForKey:HCRPrefKeyAnswerSetsParticipants
-                                                             ofClass:@"NSArray"];
+        NSMutableArray *newParticipants = [[newAnswerSet objectForKey:HCRPrefKeyAnswerSetsParticipants
+                                                             ofClass:@"NSArray"] mutableCopy];
         
-        NSMutableDictionary *newParticipant = [newParticipants objectAtIndex:participantID
-                                                                     ofClass:@"NSDictionary"];
+        NSMutableDictionary *newParticipant = [[newParticipants objectAtIndex:participantID
+                                                                     ofClass:@"NSDictionary"] mutableCopy];
         
-        NSMutableArray *newResponses = [newParticipant objectForKey:HCRPrefKeyAnswerSetsParticipantsResponses
+        NSMutableArray *newResponses = [[newParticipant objectForKey:HCRPrefKeyAnswerSetsParticipantsResponses
                                                             ofClass:@"NSArray"
-                                                          mustExist:NO];
+                                                          mustExist:NO] mutableCopy];
         
         NSString *existingAnswer;
         if (newResponses) {
             
             // if present, store old answer value and remove existing value
-            NSDictionary *questionData = [self getResponseDataWithQuestionCode:questionCode
-                                                                 fromResponses:newResponses];
+            NSDictionary *questionData = [self getResponseDataFromParticipantResponses:newResponses
+                                                                      withQuestionCode:questionCode];
             
             existingAnswer = [questionData objectForKey:HCRPrefKeyAnswerSetsParticipantsResponsesAnswer
                                                 ofClass:@"NSString"
@@ -489,7 +508,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
-- (NSDictionary *)getResponseDataWithQuestionCode:(NSString *)questionCode fromResponses:(NSArray *)responses {
+- (NSDictionary *)getResponseDataFromParticipantResponses:(NSArray *)responses withQuestionCode:(NSString *)questionCode {
     
     NSDictionary *responseData;
     
@@ -502,6 +521,16 @@ NSString *const kSurveyResultClass = @"TestFlight";
     }
     
     return responseData;
+    
+}
+
+- (NSNumber *)getAnswerFromAnswerSet:(NSDictionary *)answerSet forParticipantID:(NSInteger)participantID forQuestionCode:(NSString *)questionCode {
+    
+    NSArray *responses = [self getResponsesForAnswerSet:answerSet withParticipantID:participantID];
+    
+    NSDictionary *responseData = [self getResponseDataFromParticipantResponses:responses withQuestionCode:questionCode];
+    
+    return [responseData objectForKey:HCRPrefKeyAnswerSetsParticipantsResponsesAnswer ofClass:@"NSNumber" mustExist:NO];
     
 }
 
@@ -600,6 +629,49 @@ NSString *const kSurveyResultClass = @"TestFlight";
     }
     
     return index;
+    
+}
+
+- (BOOL)_passCondition:(NSDictionary *)condition withKey:(NSString *)key forAnswerSet:(NSDictionary *)answerSet forParticipantID:(NSInteger)participantID {
+    
+    if ([key isEqualToString:kSurveyQuestionConditionKeyParticipantID]) {
+        
+        NSInteger conditionalID = [[condition objectForKey:kSurveyQuestionConditionKeyParticipantID
+                                                   ofClass:@"NSNumber"] integerValue];
+        if (participantID != conditionalID) {
+            return NO;
+        }
+        
+    } else if ([key isEqualToString:kSurveyQuestionConditionKeyResponse]) {
+        
+        NSDictionary *targetResponse = [condition objectForKey:kSurveyQuestionConditionKeyResponse ofClass:@"NSDictionary"];
+        
+        NSString *targetQuestion = [targetResponse objectForKey:kSurveyQuestionConditionKeyResponseQuestion ofClass:@"NSString"];
+        NSNumber *targetAnswer = [targetResponse objectForKey:kSurveyQuestionConditionKeyResponseAnswer ofClass:@"NSNumber"];
+        
+        NSNumber *answer = [self getAnswerFromAnswerSet:answerSet forParticipantID:participantID forQuestionCode:targetQuestion];
+        
+        if (targetAnswer != answer) {
+            return NO;
+        }
+        
+    } else if ([key isEqualToString:kSurveyQuestionConditionKeyMinParticipants]) {
+        
+        NSInteger targetParticipants = [[condition objectForKey:kSurveyQuestionConditionKeyMinParticipants ofClass:@"NSNumber"] integerValue];
+        
+        NSArray *participants = [self getParticipantsForAnswerSet:answerSet];
+        
+        if (participants.count < targetParticipants) {
+            return NO;
+        }
+    
+    } else {
+        HCRError(@"Unhandled survey question condition: %@",key);
+        NSParameterAssert(NO);
+        return NO;
+    }
+    
+    return YES;
     
 }
 

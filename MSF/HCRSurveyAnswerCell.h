@@ -10,4 +10,7 @@
 
 @interface HCRSurveyAnswerCell : HCRCollectionCell
 
+@property (nonatomic) BOOL *freeform;
+@property (nonatomic, strong) NSString *answerTitle;
+
 @end
