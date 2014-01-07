@@ -11,6 +11,7 @@
 #import "HCRTableCell.h"
 #import "HCRTableButtonCell.h"
 #import "EASoundManager.h"
+#import "HCRSurveyController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -181,7 +182,7 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     if ([cellTitle isEqualToString:kLayoutCellLabelNewSurvey]) {
         [self _newSurveyButtonPressed];
     } else {
-        [[EASoundManager sharedSoundManager] playSoundOnce:EASoundIDNotice];
+        [self _openSurveyButtonPressedAtIndexPath:indexPath];
     }
     
 }
@@ -223,6 +224,17 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 }
 
 #pragma mark - Private Methods (Buttons)
+
+- (void)_openSurveyButtonPressedAtIndexPath:(NSIndexPath *)indexPath {
+    
+    NSDictionary *answerSet = [self _layoutDataForIndexPath:indexPath];
+    
+    HCRSurveyController *surveyController = [[HCRSurveyController alloc] initWithCollectionViewLayout:[HCRSurveyController preferredLayout]];
+    surveyController.answerSetID = [[HCRDataManager sharedManager] getIDForAnswerSet:answerSet];
+    
+    [self presentViewController:surveyController animated:YES completion:nil];
+    
+}
 
 - (void)_newSurveyButtonPressed {
     

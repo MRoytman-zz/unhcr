@@ -6,8 +6,15 @@
 //  Copyright (c) 2014 Sean Conrad. All rights reserved.
 //
 
-#import "HCRCollectionCell.h"
+#import <UIKit/UIKit.h>
 
-@interface HCRSurveyCell : HCRCollectionCell
+@class HCRSurveyParticipantView;
+
+@interface HCRSurveyCell : UICollectionViewCell
+
+@property (nonatomic, strong) HCRSurveyParticipantView *participantCollection;
+
+@property (nonatomic, strong) NSNumber *participantID;
+@property (nonatomic, strong) id<UICollectionViewDataSource, UICollectionViewDelegate> participantDataSourceDelegate;
 
 @end

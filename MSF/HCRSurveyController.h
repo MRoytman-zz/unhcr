@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface HCRSurveyController : UICollectionViewController
+<UICollectionViewDelegateFlowLayout>
+
+@property (nonatomic, strong) NSString *answerSetID;
 
 + (UICollectionViewLayout *)preferredLayout;
 
