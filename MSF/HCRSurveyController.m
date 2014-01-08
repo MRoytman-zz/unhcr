@@ -14,7 +14,8 @@
 
 @interface HCRSurveyController ()
 
-@property (nonatomic, readonly) NSDictionary *answerSet;
+@property (nonatomic, readonly) HCRSurveyAnswerSet *answerSet;
+@property (nonatomic, readonly) UICollectionViewFlowLayout *flowLayout;
 
 @end
 
@@ -47,12 +48,10 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
     // refresh on load
-    HCRDebug(@"time 1");
-    [[HCRDataManager sharedManager] refreshSurveyResponsesForAllParticipantsWithAnswerSet:self.answerSet];
-    HCRDebug(@"time 2");
-    [self _reloadDataAnimated];
+    [self _refreshModelData];
     
 }
 
@@ -63,8 +62,6 @@
     UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
     
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    
-    layout.itemSize = [UIScreen mainScreen].bounds.size;
     
     layout.sectionInset = UIEdgeInsetsZero;
     layout.minimumInteritemSpacing = 0;
@@ -87,9 +84,9 @@
     } else if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
         
         // CONTENTS OF SURVEY PAGES
-        NSArray *responses = [[HCRDataManager sharedManager] getResponsesForAnswerSet:self.answerSet
-                                                                    withParticipantID:[self _participantIDForSurveyView:collectionView]];
-        numberOfSections = responses.count;
+        NSInteger participantID = [self _participantIDForSurveyView:collectionView];
+        HCRSurveyAnswerSetParticipant *participant = [self.answerSet participantWithID:participantID];
+        numberOfSections = participant.questions.count;
         
     } else {
         
@@ -109,22 +106,17 @@
     if (collectionView == self.collectionView) {
         
         // SURVEY PAGES
-        NSArray *participants = [[HCRDataManager sharedManager] getParticipantsForAnswerSet:self.answerSet];
-        numberOfItemsInSection = participants.count;
+        numberOfItemsInSection = self.answerSet.participants.count;
         
     } else if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
         
         // CONTENTS OF SURVEY PAGES
-        NSInteger participantID = [self _participantIDForSurveyView:collectionView];
         
-        NSArray *responses = [[HCRDataManager sharedManager] getResponsesForAnswerSet:self.answerSet
-                                                                    withParticipantID:participantID];
-        
-        NSDictionary *responseData = [responses objectAtIndex:section];
-        NSArray *answers = [[HCRDataManager sharedManager] getSurveyAnswersForResponseData:responseData];
+        HCRSurveyAnswerSetParticipantQuestion *question = [self _participantQuestionForSection:section inCollectionView:collectionView];
+        HCRSurveyQuestion *surveyQuestion = [[HCRDataManager sharedManager] surveyQuestionWithQuestionID:question.question];
         
         // if answers is empty, return 1 - it's freeform!
-        numberOfItemsInSection = (answers) ? answers.count : 1;
+        numberOfItemsInSection = (surveyQuestion.answers) ? surveyQuestion.answers.count : 1;
         
     } else {
         
@@ -217,27 +209,125 @@
 
 #pragma mark - UICollectionView Delegate Flow Layout
 
-// header size dependent on text
-// footer size probably just static space
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    
+    if (collectionView == self.collectionView) {
+        
+        // SURVEY PAGES
+        return CGSizeZero;
+        
+    } else if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
+        
+        // CONTENTS OF SURVEY PAGES
+        return [HCRHeaderView preferredHeaderSizeForCollectionView:collectionView];
+        
+    } else {
+        NSAssert(NO, @"Unhandled collectionView type..");
+        return CGSizeZero;
+    }
+    
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    
+    if (collectionView == self.collectionView) {
+        
+        // SURVEY PAGES
+        return CGSizeZero;
+        
+    } else if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
+        
+        // CONTENTS OF SURVEY PAGES
+        return (section == collectionView.numberOfSections - 1) ? [HCRSurveyQuestionFooter preferredFooterSizeForCollectionView:collectionView] : [HCRSurveyQuestionFooter preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
+        
+    } else {
+        NSAssert(NO, @"Unhandled collectionView type..");
+        return CGSizeZero;
+    }
+    
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    // not ideal to use this method on such a large collection, but there's some wackiness with the collectionview changing all over the place, so..
+    
+    if (collectionView == self.collectionView) {
+        
+        // SURVEY PAGES
+        UINavigationBar *navBar = self.navigationController.navigationBar;
+        UIEdgeInsets navigationInsets = UIEdgeInsetsMake(CGRectGetMinY(navBar.frame) + CGRectGetHeight(navBar.bounds),
+                                                         0,
+                                                         0,
+                                                         0);
+        
+        return UIEdgeInsetsInsetRect(self.view.bounds, navigationInsets).size;
+        
+    } else if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
+        
+        // CONTENTS OF SURVEY PAGES
+        UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)collectionView.collectionViewLayout;
+        return flowLayout.itemSize;
+        
+    } else {
+        NSAssert(NO, @"Unhandled collectionView type..");
+        return CGSizeZero;
+    }
+    
+}
 
 #pragma mark - Getters & Setters
 
-- (NSDictionary *)answerSet {
+- (HCRSurveyAnswerSet *)answerSet {
     
-    return [[HCRDataManager sharedManager] getAnswerSetWithID:self.answerSetID];
+    return [[HCRDataManager sharedManager] surveyAnswerSetWithLocalID:self.answerSetID];
+    
+}
+
+- (UICollectionViewFlowLayout *)flowLayout {
+    
+    UICollectionViewFlowLayout *flow = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+    NSParameterAssert([flow isKindOfClass:[UICollectionViewFlowLayout class]]);
+    
+    return flow;
     
 }
 
 #pragma mark - Private Methods
 
-- (void)_reloadDataAnimated {
+- (void)_reloadLayout {
+    
     [self.collectionView reloadData];
+}
+
+- (void)_refreshModelData {
+    
+    [[HCRDataManager sharedManager] refreshSurveyResponsesForAllParticipantsWithAnswerSet:self.answerSet];
+    
+    [self _reloadLayout];
+    
 }
 
 - (UICollectionViewCell *)_cellForParticipantCollectionView:(UICollectionView *)collectionView withParticipantID:(NSInteger)participantID atIndexPath:(NSIndexPath *)indexPath {
     
     HCRSurveyAnswerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kSurveyAnswerCellIdentifier
                                                                           forIndexPath:indexPath];
+    
+    // get question code
+    NSString *questionCode = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView].question;
+    
+    // get answer strings
+    HCRSurveyQuestion *question = [[HCRDataManager sharedManager] surveyQuestionWithQuestionID:questionCode];
+    NSArray *answerStrings = question.answers;
+    HCRSurveyQuestionAnswer *answer = [answerStrings objectAtIndex:indexPath.row ofClass:@"HCRSurveyQuestionAnswer"];
+    
+    // check freeform status
+    BOOL freeform = [answer.freeform boolValue];
+    
+    NSString *titleString = (freeform) ? [NSString stringWithFormat:@"%@ (freeform)",answer.string] : answer.string;
+    
+    cell.title = titleString;
+    
+    [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
     return cell;
     
@@ -261,6 +351,14 @@
     NSParameterAssert([surveyView isKindOfClass:[HCRSurveyParticipantView class]]);
     
     return surveyView.participantID.integerValue;
+    
+}
+
+- (HCRSurveyAnswerSetParticipantQuestion *)_participantQuestionForSection:(NSInteger)section inCollectionView:(UICollectionView *)collectionView {
+    
+    // get question code
+    NSInteger participantID = [self _participantIDForSurveyView:collectionView];
+    return [[self.answerSet participantWithID:participantID].questions objectAtIndex:section];
     
 }
 

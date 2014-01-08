@@ -87,7 +87,7 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if ([[HCRDataManager sharedManager] surveyQuestionsArray] == nil) {
+    if ([[HCRDataManager sharedManager] localQuestionsArray] == nil) {
         [self _refreshSurveyData];
     }
     
@@ -165,7 +165,7 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
         
         if ([[self _layoutLabelForIndexPath:indexPath] isEqualToString:kLayoutCellLabelLebanon]) {
             
-            NSDate *lastUpdated = [[HCRDataManager sharedManager] surveyLastUpdated];
+            NSDate *lastUpdated = [[HCRDataManager sharedManager] surveyQuestionsLastUpdated];
             footer.titleString = [NSString stringWithFormat:@"Revision: %@",
                                   (lastUpdated) ? [self.dateFormatter stringFromDate:lastUpdated] : @"n/a"];
         }
@@ -241,7 +241,7 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
 
 - (void)_lebanonStudyButtonPressed {
     
-    if ([[HCRDataManager sharedManager] surveyQuestionsArray] == nil) {
+    if ([[HCRDataManager sharedManager] localQuestionsArray] == nil) {
         
         NSString *bodyString = [NSString stringWithFormat:@"The survey you are trying to access is too old. Please use the %@ button and try again.",kLayoutCellLabelRefresh];
         

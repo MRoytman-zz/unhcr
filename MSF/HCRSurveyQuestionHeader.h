@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Sean Conrad. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "HCRHeaderView.h"
 
-@interface HCRSurveyQuestionHeader : UICollectionReusableView
+@interface HCRSurveyQuestionHeader : HCRHeaderView
 
 @end

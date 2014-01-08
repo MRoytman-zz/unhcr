@@ -6,11 +6,10 @@
 //  Copyright (c) 2014 Sean Conrad. All rights reserved.
 //
 
-#import "HCRCollectionCell.h"
+#import "HCRTableCell.h"
 
-@interface HCRSurveyAnswerCell : HCRCollectionCell
+@interface HCRSurveyAnswerCell : HCRTableCell
 
 @property (nonatomic) BOOL *freeform;
-@property (nonatomic, strong) NSString *answerTitle;
 
 @end

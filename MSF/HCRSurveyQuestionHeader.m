@@ -19,13 +19,34 @@
     return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
+#pragma mark - Class Methods
+
+//+ (CGSize)sizeForCellInCollectionView:(UICollectionView *)collectionView withQuestionData:(NSDictionary *)questionData {
+//    
+//    CGFloat height;
+//    
+//    // vars we need
+//    NSArray *stringArray = [HCREmergencyCell _arrayOfStringsForValueLabelsWithEmergencyDictionary:emergencyDictionary];
+//    CGSize finalBounding = [HCREmergencyCell _boundingSizeForValueLabelInViewWithWidth:boundingSize.width];
+//    
+//    // start with padding
+//    NSInteger amountOfPadding = (stringArray.count - 1) * kYLabelPadding;
+//    height = kEmergencyBannerHeight + kEmergencyBannerHeight + kYLabelOffset + amountOfPadding + kYLabelTrailing;
+//    
+//    // then add size of objects
+//    for (NSString *string in stringArray) {
+//        
+//        CGSize stringSize = [string sizeforMultiLineStringWithBoundingSize:finalBounding
+//                                                                  withFont:[HCREmergencyCell _preferredFontForLabelBold:YES]
+//                                                                   rounded:YES];
+//        
+//        height += stringSize.height;
+//        
+//    }
+//    
+//    return CGSizeMake(boundingSize.width,
+//                      height);
+//    
+//}
 
 @end

@@ -11,7 +11,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 static const CGFloat kTableCellHeight = 54;
-static const CGFloat kTableCellHeightOffset = -10;
 static const CGFloat kTableCellHeightIncremenetPerLine = 20;
 
 static const CGFloat kTableMinimumLineSpacing = 0;

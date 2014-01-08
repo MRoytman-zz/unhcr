@@ -30,6 +30,8 @@ NSString *const kSurveyAnswerFreeformCellIdentifier = @"kSurveyAnswerFreeformCel
         
         self.backgroundColor = [UIColor tableBackgroundColor];
         
+        self.showsHorizontalScrollIndicator = NO;
+        
         [self registerClass:[HCRSurveyQuestionHeader class]
  forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
         withReuseIdentifier:kSurveyHeaderIdentifier];

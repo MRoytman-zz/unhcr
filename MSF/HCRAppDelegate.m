@@ -20,6 +20,7 @@
     // Override point for customization after application launch.
     
 #ifdef HCR_WIPE_NSUD
+    HCRDebug(@"wiping NSUserDefaults (too late now anyway!)");
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults removePersistentDomainForName:appDomain];

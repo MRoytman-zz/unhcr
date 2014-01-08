@@ -107,13 +107,12 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     NSString *cellTitle = [self _layoutLabelForIndexPath:indexPath];
     
     if (!cellTitle) {
-        NSDictionary *layoutData = [self _layoutDataForIndexPath:indexPath];
-        NSDate *createdDate = [[HCRDataManager sharedManager] getCreatedDateForAnswerSet:layoutData];
-        NSInteger percentNumber = [[HCRDataManager sharedManager] getPercentCompleteForAnswerSet:layoutData withParticipantID:indexPath.row];
+        HCRSurveyAnswerSet *answerSet = [self _answerSetForIndexPath:indexPath];
+        NSInteger percentNumber = [[HCRDataManager sharedManager] percentCompleteForAnswerSet:answerSet];
         NSString *percentString = [NSString stringWithFormat:@"%d",percentNumber];
         
         NSString *titleString = [NSString stringWithFormat:@"%@ (%@%% complete)",
-                                 [self.dateFormatter stringFromDate:createdDate],
+                                 [self.dateFormatter stringFromDate:answerSet.durationStart],
                                  percentString];
         cellTitle = titleString;
     }
@@ -205,9 +204,10 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 
 - (NSArray *)layoutDataArray {
     
+    // TODO: this is called like a hundred times - should refactor
     NSMutableArray *layoutData = @[].mutableCopy;
     
-    NSArray *localAnswerSets = [[HCRDataManager sharedManager] surveyAnswerSetsArray];
+    NSArray *localAnswerSets = [[HCRDataManager sharedManager] localAnswerSetsArray];
     
     if (localAnswerSets) {
         [layoutData addObject:@{kLayoutHeaderLabel: kLayoutHeaderLabelInProgress,
@@ -227,12 +227,20 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 
 - (void)_openSurveyButtonPressedAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSDictionary *answerSet = [self _layoutDataForIndexPath:indexPath];
+    HCRSurveyAnswerSet *answerSet = [self _answerSetForIndexPath:indexPath];
     
     HCRSurveyController *surveyController = [[HCRSurveyController alloc] initWithCollectionViewLayout:[HCRSurveyController preferredLayout]];
-    surveyController.answerSetID = [[HCRDataManager sharedManager] getIDForAnswerSet:answerSet];
+    surveyController.answerSetID = answerSet.localID;
     
-    [self presentViewController:surveyController animated:YES completion:nil];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:surveyController];
+    
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                 target:self
+                                                                                 action:@selector(_closeButtonPressed)];
+    
+    surveyController.navigationItem.leftBarButtonItem = closeButton;
+    
+    [self.navigationController presentViewController:navController animated:YES completion:nil];
     
 }
 
@@ -264,9 +272,27 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
                                                  // do nothing
                                              } else {
                                                  NSIndexPath *indexPath = [self.collectionView indexPathForCell:tableCell];
-                                                 NSDictionary *dataForIndexPath = [self _layoutDataForIndexPath:indexPath];
-                                                 [[HCRDataManager sharedManager] removeAnswerSetWithID:[[HCRDataManager sharedManager] getIDForAnswerSet:dataForIndexPath]];
+                                                 HCRSurveyAnswerSet *answerSet = [self _answerSetForIndexPath:indexPath];
+                                                 [[HCRDataManager sharedManager] removeAnswerSetWithID:answerSet.localID];
                                                  [self _reloadLayoutData];
+                                             }
+                                             
+                                         }];
+    
+}
+
+- (void)_closeButtonPressed {
+    
+    [UIAlertView showConfirmationDialogWithTitle:@"Cancel Survey"
+                                         message:@"Are you sure you want to cancel the survey? Your progress will be saved and you can return to it at any time."
+                                         handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                             
+                                             if (buttonIndex == alertView.cancelButtonIndex) {
+                                                 // do nothing
+                                             } else {
+                                                 [self.navigationController dismissViewControllerAnimated:YES completion:^{
+                                                     [self _reloadLayoutData];
+                                                 }];
                                              }
                                              
                                          }];
@@ -300,17 +326,23 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     return cellsData;
 }
 
-- (NSDictionary *)_layoutDataForIndexPath:(NSIndexPath *)indexPath {
+- (id)_layoutDataForIndexPath:(NSIndexPath *)indexPath {
     NSArray *cellsData = [self _layoutCellsForSection:indexPath.section];
-    NSDictionary *layoutData = [cellsData objectAtIndex:indexPath.row ofClass:@"NSDictionary"];
-    return layoutData;
+    id object = [cellsData objectAtIndex:indexPath.row];
+    return object; // TODO: fix all of this; dangerous and hacky
 }
 
 - (NSString *)_layoutLabelForIndexPath:(NSIndexPath *)indexPath {
     
-    NSDictionary *dataForIndexPath = [self _layoutDataForIndexPath:indexPath];
-    NSString *string = [dataForIndexPath objectForKey:kLayoutCellLabel ofClass:@"NSString" mustExist:NO];
-    return string;
+    id object = [self _layoutDataForIndexPath:indexPath];
+    if ([object isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *layoutData = (NSDictionary *)object;
+        NSString *string = [layoutData objectForKey:kLayoutCellLabel ofClass:@"NSString" mustExist:NO];
+        return string;
+    } else {
+        return nil; // TODO: hacky way to handle this
+    }
+    
 }
 
 - (NSString *)_layoutHeaderStringForSection:(NSInteger)section {
@@ -323,6 +355,12 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     NSDictionary *layoutData = [self _layoutDataForSection:section];
     NSString *footerString = [layoutData objectForKey:kLayoutFooterLabel ofClass:@"NSString" mustExist:NO];
     return footerString;
+}
+
+- (HCRSurveyAnswerSet *)_answerSetForIndexPath:(NSIndexPath *)indexPath {
+    NSArray *cellsData = [self _layoutCellsForSection:indexPath.section];
+    HCRSurveyAnswerSet *answerSet = [cellsData objectAtIndex:indexPath.row ofClass:@"HCRSurveyAnswerSet"];
+    return answerSet;
 }
 
 @end
