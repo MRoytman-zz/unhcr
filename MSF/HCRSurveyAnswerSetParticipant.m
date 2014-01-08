@@ -31,14 +31,14 @@
     [encoder encodeObject:self.questions forKey:HCRPrefKeyAnswerSetsParticipantsResponses];
 }
 
-- (NSArray *)propertyList {
-    return @[
-             NSStringFromSelector(@selector(participantID)),
-             NSStringFromSelector(@selector(age)),
-             NSStringFromSelector(@selector(gender)),
-             NSStringFromSelector(@selector(questions))
-             ];
-}
+//- (NSArray *)propertyList {
+//    return @[
+//             NSStringFromSelector(@selector(participantID)),
+//             NSStringFromSelector(@selector(age)),
+//             NSStringFromSelector(@selector(gender)),
+//             NSStringFromSelector(@selector(questions))
+//             ];
+//}
 
 #pragma mark - Class Methods
 

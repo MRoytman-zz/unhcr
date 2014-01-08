@@ -26,13 +26,13 @@
     [encoder encodeObject:self.response forKey:HCRPrefKeyQuestionsConditionsResponse];
 }
 
-- (NSArray *)propertyList {
-    return @[
-             NSStringFromSelector(@selector(participantID)),
-             NSStringFromSelector(@selector(minimumParticipants)),
-             NSStringFromSelector(@selector(response))
-             ];
-}
+//- (NSArray *)propertyList {
+//    return @[
+//             NSStringFromSelector(@selector(participantID)),
+//             NSStringFromSelector(@selector(minimumParticipants)),
+//             NSStringFromSelector(@selector(response))
+//             ];
+//}
 
 #pragma mark - Class Methods
 

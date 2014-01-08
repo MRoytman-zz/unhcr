@@ -27,13 +27,13 @@
     [encoder encodeObject:self.freeform forKey:HCRPrefKeyQuestionsAnswersFreeform];
 }
 
-- (NSArray *)propertyList {
-    return @[
-             NSStringFromSelector(@selector(code)),
-             NSStringFromSelector(@selector(string)),
-             NSStringFromSelector(@selector(freeform)),
-             ];
-}
+//- (NSArray *)propertyList {
+//    return @[
+//             NSStringFromSelector(@selector(code)),
+//             NSStringFromSelector(@selector(string)),
+//             NSStringFromSelector(@selector(freeform)),
+//             ];
+//}
 
 #pragma mark - Class Methods
 

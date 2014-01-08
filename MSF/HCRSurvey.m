@@ -26,12 +26,12 @@
 
 #pragma mark - Getters & Setters
 
-- (NSArray *)propertyList {
-    return @[
-             NSStringFromSelector(@selector(questionDictionary)),
-             NSStringFromSelector(@selector(answerSetDictionary)),
-             ];
-}
+//- (NSArray *)propertyList {
+//    return @[
+//             NSStringFromSelector(@selector(questionDictionary)),
+//             NSStringFromSelector(@selector(questionDictionary)),
+//             ];
+//}
 
 - (NSArray *)questions {
     return self.questionDictionary.allValues;

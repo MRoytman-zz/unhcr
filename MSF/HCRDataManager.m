@@ -253,7 +253,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
     for (HCRSurveyQuestion *question in questionArray) {
         
-        if (question.skip) {
+        if (question.skip.boolValue) {
             
             HCRDebug(@"Skipping question %@",question.questionCode);
             
@@ -430,8 +430,6 @@ NSString *const kSurveyResultClass = @"TestFlight";
 - (NSInteger)percentCompleteForAnswerSet:(HCRSurveyAnswerSet *)answerSet {
     
     // TODO: handle this better - overall questions?
-    
-    HCRLog(@"%@",self.localSurvey);
     
     HCRSurveyAnswerSetParticipant *participant = [answerSet participantWithID:0];
     NSArray *currentQuestions = participant.questions;

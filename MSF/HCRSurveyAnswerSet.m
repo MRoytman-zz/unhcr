@@ -39,19 +39,19 @@
     [encoder encodeObject:self.participants forKey:HCRPrefKeyAnswerSetsParticipants];
 }
 
-- (NSArray *)propertyList {
-    return @[
-             NSStringFromSelector(@selector(localID)),
-             NSStringFromSelector(@selector(userID)),
-             NSStringFromSelector(@selector(householdID)),
-             NSStringFromSelector(@selector(teamID)),
-             NSStringFromSelector(@selector(consent)),
-             NSStringFromSelector(@selector(duration)),
-             NSStringFromSelector(@selector(durationStart)),
-             NSStringFromSelector(@selector(durationEnd)),
-             NSStringFromSelector(@selector(participants))
-             ];
-}
+//- (NSArray *)propertyList {
+//    return @[
+//             NSStringFromSelector(@selector(localID)),
+//             NSStringFromSelector(@selector(userID)),
+//             NSStringFromSelector(@selector(householdID)),
+//             NSStringFromSelector(@selector(teamID)),
+//             NSStringFromSelector(@selector(consent)),
+//             NSStringFromSelector(@selector(duration)),
+//             NSStringFromSelector(@selector(durationStart)),
+//             NSStringFromSelector(@selector(durationEnd)),
+//             NSStringFromSelector(@selector(participants))
+//             ];
+//}
 
 #pragma mark - Public Methods
 

@@ -43,21 +43,21 @@
     [encoder encodeObject:self.note forKey:HCRPrefKeyQuestionsNote];
 }
 
-- (NSArray *)propertyList {
-    return @[
-             NSStringFromSelector(@selector(answers)),
-             NSStringFromSelector(@selector(updatedAt)),
-             NSStringFromSelector(@selector(questionString)),
-             NSStringFromSelector(@selector(questionCode)),
-             NSStringFromSelector(@selector(conditions)),
-             NSStringFromSelector(@selector(defaultAnswer)),
-             NSStringFromSelector(@selector(skip)),
-             NSStringFromSelector(@selector(numberOfAnswersRequired)),
-             NSStringFromSelector(@selector(freeformLabel)),
-             NSStringFromSelector(@selector(keyboard)),
-             NSStringFromSelector(@selector(note)),
-             ];
-}
+//- (NSArray *)propertyList {
+//    return @[
+//             NSStringFromSelector(@selector(answers)),
+//             NSStringFromSelector(@selector(updatedAt)),
+//             NSStringFromSelector(@selector(questionString)),
+//             NSStringFromSelector(@selector(questionCode)),
+//             NSStringFromSelector(@selector(conditions)),
+//             NSStringFromSelector(@selector(defaultAnswer)),
+//             NSStringFromSelector(@selector(skip)),
+//             NSStringFromSelector(@selector(numberOfAnswersRequired)),
+//             NSStringFromSelector(@selector(freeformLabel)),
+//             NSStringFromSelector(@selector(keyboard)),
+//             NSStringFromSelector(@selector(note)),
+//             ];
+//}
 
 #pragma mark - Class Methods
 

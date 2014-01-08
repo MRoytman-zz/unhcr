@@ -10,6 +10,6 @@
 
 @interface HCRArchivalObject : NSObject
 
-@property (nonatomic, readonly) NSArray *propertyList;
+//@property (nonatomic, readonly) NSArray *propertyList;
 
 @end

@@ -290,8 +290,12 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
                                              if (buttonIndex == alertView.cancelButtonIndex) {
                                                  // do nothing
                                              } else {
+                                                 
                                                  [self.navigationController dismissViewControllerAnimated:YES completion:^{
+                                                     
+                                                     // TODO: add some sort of progress here - MBProgressHud breaks id..
                                                      [self _reloadLayoutData];
+                                                     
                                                  }];
                                              }
                                              
