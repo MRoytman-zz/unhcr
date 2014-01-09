@@ -8,7 +8,7 @@
 
 #import "HCRAnswerSetPickerController.h"
 #import "HCRTableFlowLayout.h"
-#import "HCRTableCell.h"
+#import "HCRAnswerSetCell.h"
 #import "HCRTableButtonCell.h"
 #import "EASoundManager.h"
 #import "HCRSurveyController.h"
@@ -70,12 +70,17 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
             forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
                    withReuseIdentifier:kAnswerSetPickerFooterIdentifier];
     
-    [self.collectionView registerClass:[HCRTableCell class]
+    [self.collectionView registerClass:[HCRAnswerSetCell class]
             forCellWithReuseIdentifier:kAnswerSetPickerTableCellIdentifier];
     
     [self.collectionView registerClass:[HCRTableButtonCell class]
             forCellWithReuseIdentifier:kAnswerSetPickerButtonCellIdentifier];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self _reloadLayoutData];
 }
 
 #pragma mark - Class Methods
@@ -105,9 +110,12 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     HCRCollectionCell *cell;
     
     NSString *cellTitle = [self _layoutLabelForIndexPath:indexPath];
+    HCRSurveyAnswerSet *answerSet;
     
     if (!cellTitle) {
-        HCRSurveyAnswerSet *answerSet = [self _answerSetForIndexPath:indexPath];
+        
+        answerSet = [self _answerSetForIndexPath:indexPath];
+        
         NSInteger percentNumber = [[HCRDataManager sharedManager] percentCompleteForAnswerSet:answerSet];
         NSString *percentString = [NSString stringWithFormat:@"%d",percentNumber];
         
@@ -129,7 +137,9 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
         
     } else {
         
-        HCRTableCell *tableCell =
+        NSParameterAssert(answerSet);
+        
+        HCRAnswerSetCell *tableCell =
         [self.collectionView dequeueReusableCellWithReuseIdentifier:kAnswerSetPickerTableCellIdentifier
                                                        forIndexPath:indexPath];
         
@@ -137,8 +147,13 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
         
         tableCell.title = cellTitle;
         
-        tableCell.processingViewPosition = HCRCollectionCellProcessingViewPositionCenter;
-        [tableCell.deleteGestureRecognizer addTarget:self action:@selector(_deleteGestureRecognizer:)];
+        NSInteger percentComplete = [[HCRDataManager sharedManager] percentCompleteForAnswerSet:answerSet];
+        tableCell.percentComplete = percentComplete;
+        
+        if (percentComplete != 100) {
+            tableCell.processingViewPosition = HCRCollectionCellProcessingViewPositionCenter;
+            [tableCell.deleteGestureRecognizer addTarget:self action:@selector(_deleteGestureRecognizer:)];
+        }
         
     }
     
@@ -207,12 +222,26 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     // TODO: this is called like a hundred times - should refactor
     NSMutableArray *layoutData = @[].mutableCopy;
     
-    NSArray *localAnswerSets = [[HCRDataManager sharedManager] localAnswerSetsArray];
+    NSMutableArray *completedAnswerSets = @[].mutableCopy;
+    NSMutableArray *incompleteAnswerSets = @[].mutableCopy;
     
-    if (localAnswerSets) {
+    for (HCRSurveyAnswerSet *answerSet in [[HCRDataManager sharedManager] localAnswerSetsArray]) {
+        if ([[HCRDataManager sharedManager] percentCompleteForAnswerSet:answerSet] == 100) {
+            [completedAnswerSets addObject:answerSet];
+        } else {
+            [incompleteAnswerSets addObject:answerSet];
+        }
+    }
+    
+    if (incompleteAnswerSets.count > 0) {
         [layoutData addObject:@{kLayoutHeaderLabel: kLayoutHeaderLabelInProgress,
-                                kLayoutCells: localAnswerSets,
+                                kLayoutCells: incompleteAnswerSets,
                                 kLayoutFooterLabel: kLayoutFooterLabelPress}];
+    }
+    
+    if (completedAnswerSets > 0) {
+        [layoutData addObject:@{kLayoutHeaderLabel: kLayoutHeaderLabelCompleted,
+                                kLayoutCells: completedAnswerSets}];
     }
     
     [layoutData addObject:@{kLayoutCells: @[
@@ -254,8 +283,8 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 
 - (void)_deleteGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
     
-    HCRTableCell *tableCell = (HCRTableCell *)gestureRecognizer.view;
-    NSParameterAssert([tableCell isKindOfClass:[HCRTableCell class]]);
+    HCRAnswerSetCell *tableCell = (HCRAnswerSetCell *)gestureRecognizer.view;
+    NSParameterAssert([tableCell isKindOfClass:[HCRAnswerSetCell class]]);
     
     tableCell.userInteractionEnabled = NO;
     tableCell.processingAction = YES;
@@ -291,12 +320,8 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
                                                  // do nothing
                                              } else {
                                                  
-                                                 [self.navigationController dismissViewControllerAnimated:YES completion:^{
-                                                     
-                                                     // TODO: add some sort of progress here - MBProgressHud breaks id..
-                                                     [self _reloadLayoutData];
-                                                     
-                                                 }];
+                                                 [self _reloadLayoutData];
+                                                 [self.navigationController dismissViewControllerAnimated:YES completion:nil];
                                              }
                                              
                                          }];

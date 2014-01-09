@@ -132,10 +132,19 @@
     if (fieldType == HCRDataEntryFieldTypeNumber &&
         !self.doneAccessoryView) {
         
-        self.doneAccessoryView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, 40)];
+        CGFloat buttonHeight = 40;
+        self.doneAccessoryView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, buttonHeight)];
         self.inputField.inputAccessoryView = self.doneAccessoryView;
         
-        self.doneAccessoryView.backgroundColor = [UIColor flatGrayColor];
+        CGFloat lineHeight = 1;
+        UIView *topLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, lineHeight)];
+        [self.doneAccessoryView addSubview:topLineView];
+        topLineView.backgroundColor = [UIColor darkGrayColor];
+        UIView *bottomLineView = [[UIView alloc] initWithFrame:CGRectMake(0, buttonHeight - lineHeight, 320, lineHeight)];
+        [self.doneAccessoryView addSubview:bottomLineView];
+        bottomLineView.backgroundColor = [UIColor darkGrayColor];
+        
+        self.doneAccessoryView.backgroundColor = [UIColor flatOrangeColor];
         
         [self.doneAccessoryView setTitle:@"Done" forState:UIControlStateNormal];
         

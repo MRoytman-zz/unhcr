@@ -165,6 +165,7 @@
 		4FDD8A3B18218B67002B717E /* HCRDirectMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDD8A3A18218B67002B717E /* HCRDirectMessageCell.m */; };
 		4FDD8A4018220423002B717E /* HCRBulletinCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDD8A3F18220423002B717E /* HCRBulletinCell.m */; };
 		4FDD8A4318220E04002B717E /* HCRBulletinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FDD8A4218220E04002B717E /* HCRBulletinViewController.m */; };
+		4FF7CD4B187E7C3E00A2B8F2 /* HCRAnswerSetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FF7CD4A187E7C3E00A2B8F2 /* HCRAnswerSetCell.m */; };
 		C1FCCA2A37DE44BABAAEC9EC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04773A9AD17C462187CA1561 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -354,6 +355,8 @@
 		4FDD8A3F18220423002B717E /* HCRBulletinCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRBulletinCell.m; sourceTree = "<group>"; };
 		4FDD8A4118220E04002B717E /* HCRBulletinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRBulletinViewController.h; sourceTree = "<group>"; };
 		4FDD8A4218220E04002B717E /* HCRBulletinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRBulletinViewController.m; sourceTree = "<group>"; };
+		4FF7CD49187E7C3E00A2B8F2 /* HCRAnswerSetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRAnswerSetCell.h; sourceTree = "<group>"; };
+		4FF7CD4A187E7C3E00A2B8F2 /* HCRAnswerSetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRAnswerSetCell.m; sourceTree = "<group>"; };
 		D66FBD79CC2E41CEB2FBEE61 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -529,6 +532,8 @@
 				4F49ABF7187B47E900A4B896 /* HCRSurveyAnswerCell.m */,
 				4F49ABF9187B47F400A4B896 /* HCRSurveyAnswerFreeformCell.h */,
 				4F49ABFA187B47F400A4B896 /* HCRSurveyAnswerFreeformCell.m */,
+				4FF7CD49187E7C3E00A2B8F2 /* HCRAnswerSetCell.h */,
+				4FF7CD4A187E7C3E00A2B8F2 /* HCRAnswerSetCell.m */,
 			);
 			name = "Survey Views";
 			sourceTree = "<group>";
@@ -1158,6 +1163,7 @@
 				4F720431187510AE006E95B2 /* HCRHealthToolkitPickerController.m in Sources */,
 				4FA716E718751CBD00BCE0A6 /* SCGraphView.m in Sources */,
 				4F72042218751070006E95B2 /* HCRTallyEntryFieldCell.m in Sources */,
+				4FF7CD4B187E7C3E00A2B8F2 /* HCRAnswerSetCell.m in Sources */,
 				4F419DDC1878C2360000C7DA /* HCRDataManager.m in Sources */,
 				4F49ABF5187B46D600A4B896 /* HCRSurveyCell.m in Sources */,
 				4FA1FB0D1875196500CB786B /* MKMapView+HCRMapView.m in Sources */,

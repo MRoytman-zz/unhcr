@@ -10,12 +10,20 @@
 #import "HCRSurveyCell.h"
 #import "HCRSurveyParticipantView.h"
 
+#import <MBProgressHUD.h>
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRSurveyController ()
 
+@property CGRect keyboardBounds;
+@property NSTimeInterval keyboardAnimationTime;
+@property UIViewAnimationOptions keyboardAnimationOptions;
+
 @property UITapGestureRecognizer *tapRecognizer;
 @property UITextField *textFieldToDismiss;
+
+@property UIBarButtonItem *doneBarButton;
 
 @property (nonatomic, readonly) HCRSurveyAnswerSet *answerSet;
 @property (nonatomic, readonly) UICollectionViewFlowLayout *flowLayout;
@@ -45,10 +53,21 @@
     self.collectionView.scrollEnabled = NO;
     self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
+    // KEYBOARD AND INPUTS
     self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_dismissKeyboard)];
     [self.view addGestureRecognizer:self.tapRecognizer];
     
     self.tapRecognizer.cancelsTouchesInView = NO;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
     
     // LAYOUT AND REUSABLES
     [self.collectionView registerClass:[HCRSurveyCell class]
@@ -61,6 +80,11 @@
     
     // refresh on load
     [self _refreshModelData];
+    
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
 }
 
@@ -299,10 +323,26 @@
 
 - (void)dataEntryFieldCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell {
     
+    self.textFieldToDismiss = signInCell.inputField;
+    
+    // position text field / collection view
     HCRSurveyAnswerFreeformCell *freeformCell = (HCRSurveyAnswerFreeformCell *)signInCell;
     NSParameterAssert([freeformCell isKindOfClass:[HCRSurveyAnswerFreeformCell class]]);
     
-    self.textFieldToDismiss = signInCell.inputField;
+    // next loop so keyboard data populates
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        CGFloat yTarget = CGRectGetMinY(freeformCell.frame) + CGRectGetMidY(freeformCell.bounds);
+        CGFloat midPoint = 0.5 * (CGRectGetHeight(freeformCell.participantView.bounds) - CGRectGetHeight(self.keyboardBounds));
+        
+        [UIView animateWithDuration:self.keyboardAnimationTime
+                              delay:0
+                            options:self.keyboardAnimationOptions
+                         animations:^{
+                             [freeformCell.participantView setContentOffset:CGPointMake(0, yTarget - midPoint)];
+                         } completion:nil];
+        
+    });
     
 }
 
@@ -323,6 +363,21 @@
     
     [self _surveyAnswerCellPressedInCollectionView:freeformCell.participantView AtIndexPath:cellIndexPath withFreeformAnswer:(signInCell.inputField.text.length > 0) ? signInCell.inputField.text : nil];
     
+    // next loop so cells are regenerated
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        CGFloat yTarget = CGRectGetMinY(freeformCell.frame) + CGRectGetMidY(freeformCell.bounds);
+        CGFloat midPoint = 0.33 * CGRectGetHeight(freeformCell.participantView.bounds);
+        
+        [UIView animateWithDuration:self.keyboardAnimationTime
+                              delay:0
+                            options:self.keyboardAnimationOptions
+                         animations:^{
+                             [freeformCell.participantView setContentOffset:CGPointMake(0, yTarget - midPoint)];
+                         } completion:nil];
+        
+    });
+    
 }
 
 #pragma mark - Getters & Setters
@@ -342,7 +397,7 @@
     
 }
 
-#pragma mark - Private Methods
+#pragma mark - Private Methods (Layout)
 
 - (void)_reloadAllData {
     [self _reloadData:YES inSections:nil withCollectionView:self.collectionView animated:NO withLayoutChanges:nil];
@@ -350,9 +405,17 @@
 
 - (void)_reloadData:(BOOL)reloadData inSections:(NSIndexSet *)sections withCollectionView:(UICollectionView *)collectionView animated:(BOOL)animated withLayoutChanges:(void (^)(void))layoutChanges {
     
+    void (^percentCompleteCheck)(void) = ^{
+        NSInteger percentComplete = [[HCRDataManager sharedManager] percentCompleteForAnswerSet:self.answerSet];
+        [self _updateAnswersCompleted:(percentComplete == 100)];
+    };
+    
     if (animated == NO ||
         (reloadData && !layoutChanges)) {
         [collectionView reloadData];
+        
+        percentCompleteCheck();
+        
     }
     
     if (layoutChanges) {
@@ -360,8 +423,10 @@
             if (reloadData) {
                 if (sections) {
                     [collectionView reloadSections:sections];
+                    percentCompleteCheck();
                 } else {
                     [collectionView reloadData];
+                    percentCompleteCheck();
                 }
             }
         }];
@@ -376,6 +441,24 @@
     [self _reloadData:YES inSections:nil withCollectionView:self.collectionView animated:YES withLayoutChanges:nil];
     
 }
+
+#pragma mark - Private Methods (Keyboard)
+
+- (void)_keyboardWillShow:(NSNotification *)notification {
+    NSDictionary *dictionary = notification.userInfo;
+    self.keyboardBounds = [[dictionary objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    self.keyboardAnimationTime = [[dictionary objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    self.keyboardAnimationOptions = [[dictionary objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue] << 16;
+}
+
+- (void)_keyboardWillHide:(NSNotification *)notification {
+    NSDictionary *dictionary = notification.userInfo;
+    self.keyboardBounds = [[dictionary objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    self.keyboardAnimationTime = [[dictionary objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    self.keyboardAnimationOptions = [[dictionary objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue] << 16;
+}
+
+#pragma mark - Private Methods
 
 - (UICollectionViewCell *)_cellForParticipantCollectionView:(UICollectionView *)collectionView atIndexPath:(NSIndexPath *)indexPath {
     
@@ -416,7 +499,7 @@
         freeformCell.inputPlaceholder = @"(tap here to answer)";
         freeformCell.inputField.text = participantQuestion.answerString;
         
-        freeformCell.fieldType = HCRDataEntryFieldTypeNumber;
+        freeformCell.fieldType = (freeformAnswer) ? HCRDataEntryFieldTypeDefault : HCRDataEntryFieldTypeNumber;
         freeformCell.dataDelegate = self;
         
         freeformCell.lastFieldInSeries = YES;
@@ -572,6 +655,36 @@
     HCRDebug(@"tapped!");
     [self.textFieldToDismiss resignFirstResponder];
     self.textFieldToDismiss = nil;
+}
+
+- (void)_updateAnswersCompleted:(BOOL)allAnswersComplete {
+    
+    if (!self.doneBarButton) {
+        self.doneBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                           target:self
+                                                                           action:@selector(_doneButtonPressed)];
+    }
+    
+    UIBarButtonItem *newItem = (allAnswersComplete) ? self.doneBarButton : nil;
+    
+    [self.navigationItem setRightBarButtonItem:newItem animated:YES];
+    
+}
+
+- (void)_doneButtonPressed {
+    
+    [UIAlertView showConfirmationDialogWithTitle:@"Submit Survey"
+                                         message:@"Are you sure you want to submit this survey? Once you submit the survey, you may not make any changes."
+                                         handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                             
+                                             if (buttonIndex != alertView.cancelButtonIndex) {
+                                                 
+                                                 [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+                                                 
+                                             }
+                                             
+                                         }];
+    
 }
 
 @end
