@@ -526,19 +526,22 @@
                  animated:YES
         withLayoutChanges:^{
             
-            NSArray *indexPathsToAdd = [self _answerIndexPathsForQuestion:questionAnswered
-                                                  withParticipantResponse:question
-                                                                atSection:indexPath.section];
-            
-            [collectionView insertItemsAtIndexPaths:indexPathsToAdd];
+            // if the cells are non-standard, reset 'em..
+            if ([collectionView numberOfItemsInSection:indexPath.section] != questionAnswered.answers.count) {
+                
+                NSArray *indexPathsToAdd = [self _answerIndexPathsForQuestion:questionAnswered
+                                                      withParticipantResponse:question
+                                                                    atSection:indexPath.section];
+                
+                [collectionView insertItemsAtIndexPaths:indexPathsToAdd];
+                
+            }
             
             [[HCRDataManager sharedManager] removeAnswerForQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
             
         }];
         
     } else {
-        
-        BOOL existingAnswer = (question.answer || question.answerString);
         
         [[HCRDataManager sharedManager] setAnswerCode:answer.code withFreeformString:freeformString forQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
         
@@ -548,8 +551,8 @@
                  animated:YES
         withLayoutChanges:^{
             
-            // if it's a freeform answer and there's already something there, don't add or remove anything
-            if ( !(answer.freeform.boolValue && existingAnswer) ) {
+            // if the cells appear normal, remove some
+            if ([collectionView numberOfItemsInSection:indexPath.section] == questionAnswered.answers.count) {
                 
                 NSArray *indexPathsToDelete = [self _answerIndexPathsForQuestion:questionAnswered
                                                          withParticipantResponse:question
