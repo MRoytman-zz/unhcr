@@ -24,3 +24,5 @@
 #import "NSString+HCRAdditions.h"
 #import "UIView+EAAdditions.h"
 #import "SCErrorManager.h"
+
+#import <UIColor+MLPFlatColors.h>

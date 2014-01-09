@@ -40,6 +40,7 @@
     self.title = @"Survey";
     
     self.collectionView.scrollEnabled = NO;
+    self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
     // LAYOUT AND REUSABLES
     [self.collectionView registerClass:[HCRSurveyCell class]
@@ -173,8 +174,9 @@
                                                       forIndexPath:indexPath];
             
             // ADD QUESTION
+            HCRSurveyAnswerSetParticipantQuestion *question = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView];
             header.titleString = [self _questionStringForSection:indexPath.section inCollectionView:collectionView];
-            header.questionAnswered = ([self _participantQuestionForSection:indexPath.section inCollectionView:collectionView].answer != nil);
+            header.questionAnswered = (question.answer != nil || question.answerString != nil);
             
             return header;
         } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
@@ -209,56 +211,7 @@
         
         // CONTENTS OF SURVEY PAGES
         
-        // get question and answer codes
-        HCRSurveyQuestion *questionAnswered = [self _surveyQuestionForSection:indexPath.section inCollectionView:collectionView];
-        NSString *questionCode = questionAnswered.questionCode;
-        
-        NSInteger participantID = [self _participantIDForSurveyView:collectionView];
-        
-        // if answer already exists, unset it and reload info
-        HCRSurveyAnswerSetParticipantQuestion *question = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView];
-        if (question.answer) {
-            
-            [self _reloadData:YES
-                   inSections:[NSIndexSet indexSetWithIndex:indexPath.section]
-           withCollectionView:collectionView
-                     animated:YES
-            withLayoutChanges:^{
-                
-                NSArray *indexPathsToAdd = [self _answerIndexPathsForQuestion:questionAnswered
-                                                      withParticipantResponse:question
-                                                                    atSection:indexPath.section];
-                
-                [collectionView insertItemsAtIndexPaths:indexPathsToAdd];
-                
-                [[HCRDataManager sharedManager] removeAnswerForQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
-                
-            }];
-            
-        } else {
-            
-            HCRSurveyQuestionAnswer *answer = [questionAnswered.answers objectAtIndex:indexPath.row];
-            NSNumber *answerCode = answer.code;
-            
-            [[HCRDataManager sharedManager] setAnswer:answerCode forQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
-            
-            [self _reloadData:YES
-                   inSections:[NSIndexSet indexSetWithIndex:indexPath.section]
-           withCollectionView:collectionView
-                     animated:YES
-            withLayoutChanges:^{
-                
-                NSArray *indexPathsToDelete = [self _answerIndexPathsForQuestion:questionAnswered
-                                                         withParticipantResponse:question
-                                                                       atSection:indexPath.section];
-                
-                [collectionView deleteItemsAtIndexPaths:indexPathsToDelete];
-                
-            }];
-            
-        }
-        
-        // highlight cell / transform section
+        [self _surveyAnswerCellPressedInCollectionView:collectionView AtIndexPath:indexPath withFreeformAnswer:nil];
         
     } else {
         NSAssert(NO, @"Unhandled collectionView type..");
@@ -334,6 +287,33 @@
     
 }
 
+#pragma mark - HCRDataFieldCell Delegate
+
+- (void)dataEntryFieldCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell {
+    
+    // TODO: center signInCell in view
+    
+}
+
+- (void)dataEntryFieldCellDidPressDone:(HCRDataEntryFieldCell *)signInCell {
+    
+    [signInCell.inputField resignFirstResponder];
+    
+}
+
+- (void)dataEntryFieldCellDidResignFirstResponder:(HCRDataEntryFieldCell *)signInCell {
+    
+    HCRSurveyAnswerFreeformCell *freeformCell = (HCRSurveyAnswerFreeformCell *)signInCell;
+    NSParameterAssert([freeformCell isKindOfClass:[HCRSurveyAnswerFreeformCell class]]);
+    
+    NSIndexPath *cellIndexPath = [freeformCell.participantView indexPathForCell:freeformCell];
+    
+    if (signInCell.inputField.text) {
+        [self _surveyAnswerCellPressedInCollectionView:freeformCell.participantView AtIndexPath:cellIndexPath withFreeformAnswer:(signInCell.inputField.text) ? signInCell.inputField.text : nil];
+    }
+    
+}
+
 #pragma mark - Getters & Setters
 
 - (HCRSurveyAnswerSet *)answerSet {
@@ -388,40 +368,60 @@
 
 - (UICollectionViewCell *)_cellForParticipantCollectionView:(UICollectionView *)collectionView atIndexPath:(NSIndexPath *)indexPath {
     
+    HCRCollectionCell *cell;
     
-    HCRSurveyAnswerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kSurveyAnswerCellIdentifier
-                                                                          forIndexPath:indexPath];
-    
-    // get question code
+    // initial vars
+    HCRSurveyQuestion *surveyQuestion = [self _surveyQuestionForSection:indexPath.section inCollectionView:collectionView];
     HCRSurveyAnswerSetParticipantQuestion *participantQuestion = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView];
-    HCRSurveyQuestion *question = [[HCRDataManager sharedManager] surveyQuestionWithQuestionID:participantQuestion.question];
     
+    // get answer
     HCRSurveyQuestionAnswer *answer;
-    NSString *titleString;
-    BOOL answered = NO;
-    
     if (participantQuestion.answer) {
+        // traditional answer
+        answer = [surveyQuestion answerForAnswerCode:participantQuestion.answer];
+    } else {
+        // get answer for index
+        NSArray *answerStrings = surveyQuestion.answers;
+        answer = [answerStrings objectAtIndex:indexPath.row];
+    }
+    
+    BOOL answered = (participantQuestion.answer != nil || participantQuestion.answerString != nil);
+    BOOL freeformAnswer = [answer.freeform boolValue];
+    
+    if (surveyQuestion.freeformLabel ||
+        freeformAnswer) {
         
-        // get answer for answer
-        answer = [question answerForAnswerCode:participantQuestion.answer];
-        titleString = (participantQuestion.answerString) ? participantQuestion.answerString : answer.string;
-        answered = YES;
+        // FREE FORM CELL
+        HCRSurveyAnswerFreeformCell *freeformCell =
+        [collectionView dequeueReusableCellWithReuseIdentifier:kSurveyAnswerFreeformCellIdentifier
+                                                  forIndexPath:indexPath];
+        cell = freeformCell;
+        
+        freeformCell.participantView = (HCRSurveyParticipantView *)collectionView;
+        freeformCell.answered = answered;
+        
+        NSString *labelTitle = (surveyQuestion.freeformLabel) ? surveyQuestion.freeformLabel : answer.string;
+        freeformCell.labelTitle = [NSString stringWithFormat:@"%@:",[labelTitle capitalizedString]];
+        freeformCell.inputPlaceholder = @"(tap here to answer)";
+        freeformCell.inputField.text = participantQuestion.answerString;
+        
+        freeformCell.fieldType = HCRDataEntryFieldTypeNumber;
+        freeformCell.dataDelegate = self;
+        
+        freeformCell.lastFieldInSeries = YES;
         
     } else {
         
-        // get answer for index
-        NSArray *answerStrings = question.answers;
-        answer = [answerStrings objectAtIndex:indexPath.row ofClass:@"HCRSurveyQuestionAnswer"];
+        // NORMAL ANSWER CELL
         
-        // check freeform status
-        BOOL freeform = [answer.freeform boolValue];
+        HCRSurveyAnswerCell *answerCell =
+        [collectionView dequeueReusableCellWithReuseIdentifier:kSurveyAnswerCellIdentifier
+                                                  forIndexPath:indexPath];
+        cell = answerCell;
         
-        titleString = (freeform) ? [NSString stringWithFormat:@"%@ (freeform)",answer.string] : answer.string;
-        
+        answerCell.title = (participantQuestion.answerString) ? participantQuestion.answerString : answer.string;
+        answerCell.answered = answered;
     }
-    
-    cell.title = titleString;
-    cell.answered = answered;
     
     [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
@@ -436,6 +436,7 @@
     
     surveyCell.participantDataSourceDelegate = self;
     surveyCell.participantID = @(indexPath.row);
+    surveyCell.participantCollection.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
     return surveyCell;
     
@@ -487,6 +488,60 @@
     }
     
     return indexPaths;
+    
+}
+
+- (void)_surveyAnswerCellPressedInCollectionView:(UICollectionView *)collectionView AtIndexPath:(NSIndexPath *)indexPath withFreeformAnswer:(NSString *)freeformString {
+    
+    // get question and answer codes
+    HCRSurveyQuestion *questionAnswered = [self _surveyQuestionForSection:indexPath.section inCollectionView:collectionView];
+    NSString *questionCode = questionAnswered.questionCode;
+    
+    NSInteger participantID = [self _participantIDForSurveyView:collectionView];
+    
+    // TODO: figure out logic for when a blank freeform question is answered - how to UNSET it!
+    
+    // if answer already exists, unset it and reload info
+    HCRSurveyAnswerSetParticipantQuestion *question = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView];
+    if (question.answer) {
+        
+        [self _reloadData:YES
+               inSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+       withCollectionView:collectionView
+                 animated:YES
+        withLayoutChanges:^{
+            
+            NSArray *indexPathsToAdd = [self _answerIndexPathsForQuestion:questionAnswered
+                                                  withParticipantResponse:question
+                                                                atSection:indexPath.section];
+            
+            [collectionView insertItemsAtIndexPaths:indexPathsToAdd];
+            
+            [[HCRDataManager sharedManager] removeAnswerForQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
+            
+        }];
+        
+    } else {
+        
+        HCRSurveyQuestionAnswer *answer = [questionAnswered.answers objectAtIndex:indexPath.row];
+        
+        [[HCRDataManager sharedManager] setAnswerCode:answer.code withFreeformString:freeformString forQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
+        
+        [self _reloadData:YES
+               inSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+       withCollectionView:collectionView
+                 animated:YES
+        withLayoutChanges:^{
+            
+            NSArray *indexPathsToDelete = [self _answerIndexPathsForQuestion:questionAnswered
+                                                     withParticipantResponse:question
+                                                                   atSection:indexPath.section];
+            
+            [collectionView deleteItemsAtIndexPaths:indexPathsToDelete];
+            
+        }];
+        
+    }
     
 }
 

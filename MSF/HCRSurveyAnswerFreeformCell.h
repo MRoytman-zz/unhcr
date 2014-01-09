@@ -6,8 +6,14 @@
 //  Copyright (c) 2014 Sean Conrad. All rights reserved.
 //
 
-#import "HCRCollectionCell.h"
+#import "HCRDataEntryFieldCell.h"
 
-@interface HCRSurveyAnswerFreeformCell : HCRCollectionCell
+@class HCRSurveyParticipantView;
+
+@interface HCRSurveyAnswerFreeformCell : HCRDataEntryFieldCell
+
+@property (nonatomic) BOOL answered;
+
+@property (nonatomic, strong) HCRSurveyParticipantView *participantView;
 
 @end

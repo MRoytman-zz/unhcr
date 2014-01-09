@@ -274,12 +274,12 @@ NSString *const kSurveyResultClass = @"TestFlight";
             }
             
             if (conditionPasses) {
-                [self setAnswer:nil forQuestion:question.questionCode withAnswerSetID:answerSet.localID withParticipantID:participantID];
+                [self setAnswerCode:nil withFreeformString:nil forQuestion:question.questionCode withAnswerSetID:answerSet.localID withParticipantID:participantID];
             }
             
         } else {
             HCRDebug(@"No conditions found! Adding question: %@",question);
-            [self setAnswer:nil forQuestion:question.questionCode withAnswerSetID:answerSet.localID withParticipantID:participantID];
+            [self setAnswerCode:nil withFreeformString:nil forQuestion:question.questionCode withAnswerSetID:answerSet.localID withParticipantID:participantID];
         }
         
     }
@@ -398,9 +398,10 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
-- (void)setAnswer:(NSNumber *)answerCode forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID {
+- (void)setAnswerCode:(NSNumber *)answerCode withFreeformString:(NSString *)answerString forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID {
     
     [self _setAnswer:answerCode
+          withString:answerString
          forQuestion:questionCode
      withAnswerSetID:answerSetID
    withParticipantID:participantID
@@ -411,6 +412,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
 - (void)removeAnswerForQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID {
     
     [self _setAnswer:nil
+          withString:nil
          forQuestion:questionCode
      withAnswerSetID:answerSetID
    withParticipantID:participantID
@@ -430,7 +432,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
     NSInteger completedResponses = 0;
     
     for (HCRSurveyAnswerSetParticipantQuestion *question in currentQuestions) {
-        if (question.answer) {
+        if (question.answer || question.answerString) {
             completedResponses++;
         }
     }
@@ -645,7 +647,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
-- (void)_setAnswer:(NSNumber *)answerCode forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID forceSet:(BOOL)forceSet {
+- (void)_setAnswer:(NSNumber *)answerCode withString:(NSString *)answerString forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID forceSet:(BOOL)forceSet {
     
     NSParameterAssert(questionCode);
     
@@ -665,8 +667,15 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
     questionData.question = questionCode;
     
+    // set default answer & string
     if (answerCode || forceSet) {
         questionData.answer = answerCode;
+        questionData.answerString = [[self surveyQuestionWithQuestionID:questionCode] answerForAnswerCode:answerCode].string;
+    }
+    
+    // if 'freeform' string is given, overwrite input answerString
+    if (answerString || forceSet) {
+        questionData.answerString = answerString;
     }
     
     [self _sync];

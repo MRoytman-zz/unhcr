@@ -14,6 +14,7 @@
 
 @property (nonatomic, readwrite) UILabel *titleLabel;
 @property (nonatomic, readwrite) UITextField *inputField;
+@property (nonatomic, strong) UIButton *doneAccessoryView;
 
 @end
 
@@ -125,20 +126,45 @@
     self.inputField.secureTextEntry = isPasswordType;
     self.inputField.autocorrectionType = (isPasswordType) ? UITextAutocorrectionTypeNo : UITextAutocorrectionTypeDefault;
     
+    UIKeyboardType keyboardType;
+    BOOL hideAccessoryView;
+    
+    if (fieldType == HCRDataEntryFieldTypeNumber &&
+        !self.doneAccessoryView) {
+        
+        self.doneAccessoryView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, 40)];
+        self.inputField.inputAccessoryView = self.doneAccessoryView;
+        
+        self.doneAccessoryView.backgroundColor = [UIColor flatGrayColor];
+        
+        [self.doneAccessoryView setTitle:@"Done" forState:UIControlStateNormal];
+        
+        self.doneAccessoryView.titleLabel.font = [UIFont boldSystemFontOfSize:20];
+        
+        [self.doneAccessoryView addTarget:self action:@selector(_doneButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        
+    }
+    
     switch (fieldType) {
         case HCRDataEntryFieldTypeDefault:
         case HCRDataEntryFieldTypePassword:
-            self.inputField.keyboardType = UIKeyboardTypeDefault;
+            keyboardType = UIKeyboardTypeDefault;
+            hideAccessoryView = YES;
             break;
             
         case HCRDataEntryFieldTypeEmail:
-            self.inputField.keyboardType = UIKeyboardTypeEmailAddress;
+            keyboardType = UIKeyboardTypeEmailAddress;
+            hideAccessoryView = YES;
             break;
             
         case HCRDataEntryFieldTypeNumber:
-            self.inputField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+            keyboardType = UIKeyboardTypeNumberPad;
+            hideAccessoryView = NO;
             break;
     }
+    
+    self.inputField.keyboardType = keyboardType;
+    self.inputField.inputAccessoryView.hidden = hideAccessoryView;
     
 }
 
@@ -148,6 +174,14 @@
     
     self.inputField.returnKeyType = (lastFieldInSeries) ? UIReturnKeyDone : UIReturnKeyNext;
     
+}
+
+#pragma mark - Private Methods
+
+- (void)_doneButtonPressed {
+    if ([self.dataDelegate respondsToSelector:@selector(dataEntryFieldCellDidPressDone:)]) {
+        [self.dataDelegate dataEntryFieldCellDidPressDone:self];
+    }
 }
 
 @end

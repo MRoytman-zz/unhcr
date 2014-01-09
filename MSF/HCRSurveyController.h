@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import "HCRDataEntryFieldCell.h"
+
 @interface HCRSurveyController : UICollectionViewController
-<UICollectionViewDelegateFlowLayout>
+<UICollectionViewDelegateFlowLayout, HCRDataEntryFieldCellDelegate>
 
 @property (nonatomic, strong) NSString *answerSetID;
 

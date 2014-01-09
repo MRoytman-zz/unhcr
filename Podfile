@@ -4,3 +4,4 @@ link_with 'RIS', 'MSF'
 
 pod 'Parse', '~> 1.2.15'
 pod 'MBProgressHUD', '~> 0.8'
+pod 'UIColor+MLPFlatColors', '~> 1.0'
