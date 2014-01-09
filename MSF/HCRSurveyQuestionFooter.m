@@ -12,8 +12,7 @@
 
 @interface HCRSurveyQuestionFooter ()
 
-@property UIColor *unansweredBackgroundColor;
-@property UIColor *defaultBackgroundColor;
+@property UIImageView *msfImage;
 
 @end
 
@@ -27,29 +26,42 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.defaultBackgroundColor = [UIColor tableBackgroundColor];
-        self.unansweredBackgroundColor = [UIColor headerUnansweredBackgroundColor];
-        self.backgroundColor = self.defaultBackgroundColor;
+        
+        self.msfImage = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [self addSubview:self.msfImage];
+        
+        self.msfImage.image = [UIImage imageNamed:@"msf-logo-medium"];
+        self.msfImage.contentMode = UIViewContentModeScaleAspectFit;
+        
     }
     return self;
 }
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    self.showMSFLogo = NO;
     
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-//    self.backgroundColor = (self.questionAnswered) ? self.defaultBackgroundColor : self.unansweredBackgroundColor;
+    self.msfImage.hidden = !self.showMSFLogo;
+    self.msfImage.frame = UIEdgeInsetsInsetRect(self.bounds, UIEdgeInsetsMake(30, 10, 20, 10));
     
+}
+
+#pragma mark - Class Methods
+
++ (CGSize)preferredFooterSizeForCollectionView:(UICollectionView *)collectionView {
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      140);
 }
 
 #pragma mark - Getters & Setters
 
-- (void)setQuestionAnswered:(BOOL)questionAnswered {
-    _questionAnswered = questionAnswered;
+- (void)setShowMSFLogo:(BOOL)showMSFLogo {
+    _showMSFLogo = showMSFLogo;
     [self setNeedsLayout];
 }
 

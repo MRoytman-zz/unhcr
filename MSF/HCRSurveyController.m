@@ -217,7 +217,8 @@
                                                withReuseIdentifier:kSurveyFooterIdentifier
                                                       forIndexPath:indexPath];
             
-//            footer.questionAnswered = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView].answer.boolValue;
+            BOOL bottomLine = (indexPath.section == collectionView.numberOfSections - 1);
+            footer.showMSFLogo = bottomLine;
             
             return footer;
         }
@@ -282,7 +283,9 @@
     } else if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
         
         // CONTENTS OF SURVEY PAGES
-        return (section == collectionView.numberOfSections - 1) ? [HCRSurveyQuestionFooter preferredFooterSizeForCollectionView:collectionView] : [HCRSurveyQuestionFooter preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
+        BOOL bottomLine = (section == collectionView.numberOfSections - 1);
+        
+        return (bottomLine) ? [HCRSurveyQuestionFooter preferredFooterSizeForCollectionView:collectionView] : [HCRSurveyQuestionFooter preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
         
     } else {
         NSAssert(NO, @"Unhandled collectionView type..");
