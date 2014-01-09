@@ -239,7 +239,7 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
                                 kLayoutFooterLabel: kLayoutFooterLabelPress}];
     }
     
-    if (completedAnswerSets > 0) {
+    if (completedAnswerSets.count > 0) {
         [layoutData addObject:@{kLayoutHeaderLabel: kLayoutHeaderLabelCompleted,
                                 kLayoutCells: completedAnswerSets}];
     }
