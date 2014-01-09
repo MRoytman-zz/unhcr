@@ -14,6 +14,9 @@
 
 @interface HCRSurveyController ()
 
+@property UITapGestureRecognizer *tapRecognizer;
+@property UITextField *textFieldToDismiss;
+
 @property (nonatomic, readonly) HCRSurveyAnswerSet *answerSet;
 @property (nonatomic, readonly) UICollectionViewFlowLayout *flowLayout;
 
@@ -41,6 +44,11 @@
     
     self.collectionView.scrollEnabled = NO;
     self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+    
+    self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_dismissKeyboard)];
+    [self.view addGestureRecognizer:self.tapRecognizer];
+    
+    self.tapRecognizer.cancelsTouchesInView = NO;
     
     // LAYOUT AND REUSABLES
     [self.collectionView registerClass:[HCRSurveyCell class]
@@ -291,7 +299,10 @@
 
 - (void)dataEntryFieldCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell {
     
-    // TODO: center signInCell in view
+    HCRSurveyAnswerFreeformCell *freeformCell = (HCRSurveyAnswerFreeformCell *)signInCell;
+    NSParameterAssert([freeformCell isKindOfClass:[HCRSurveyAnswerFreeformCell class]]);
+    
+    self.textFieldToDismiss = signInCell.inputField;
     
 }
 
@@ -303,14 +314,14 @@
 
 - (void)dataEntryFieldCellDidResignFirstResponder:(HCRDataEntryFieldCell *)signInCell {
     
+    self.textFieldToDismiss = nil;
+    
     HCRSurveyAnswerFreeformCell *freeformCell = (HCRSurveyAnswerFreeformCell *)signInCell;
     NSParameterAssert([freeformCell isKindOfClass:[HCRSurveyAnswerFreeformCell class]]);
     
     NSIndexPath *cellIndexPath = [freeformCell.participantView indexPathForCell:freeformCell];
     
-    if (signInCell.inputField.text) {
-        [self _surveyAnswerCellPressedInCollectionView:freeformCell.participantView AtIndexPath:cellIndexPath withFreeformAnswer:(signInCell.inputField.text) ? signInCell.inputField.text : nil];
-    }
+    [self _surveyAnswerCellPressedInCollectionView:freeformCell.participantView AtIndexPath:cellIndexPath withFreeformAnswer:(signInCell.inputField.text.length > 0) ? signInCell.inputField.text : nil];
     
 }
 
@@ -499,11 +510,15 @@
     
     NSInteger participantID = [self _participantIDForSurveyView:collectionView];
     
-    // TODO: figure out logic for when a blank freeform question is answered - how to UNSET it!
-    
     // if answer already exists, unset it and reload info
     HCRSurveyAnswerSetParticipantQuestion *question = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView];
-    if (question.answer) {
+    
+    // get answer - by code if it's an existing answer, or by index if it's fresh
+    HCRSurveyQuestionAnswer *answer = (question.answer) ? [questionAnswered answerForAnswerCode:question.answer] : [questionAnswered.answers objectAtIndex:indexPath.row];
+    
+    // if there is no freeform string AND there is no answer of any sort, remove it
+    if (!freeformString &&
+        (question.answer || question.answerString || answer.freeform.boolValue)) {
         
         [self _reloadData:YES
                inSections:[NSIndexSet indexSetWithIndex:indexPath.section]
@@ -523,7 +538,7 @@
         
     } else {
         
-        HCRSurveyQuestionAnswer *answer = [questionAnswered.answers objectAtIndex:indexPath.row];
+        BOOL existingAnswer = (question.answer || question.answerString);
         
         [[HCRDataManager sharedManager] setAnswerCode:answer.code withFreeformString:freeformString forQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
         
@@ -533,16 +548,27 @@
                  animated:YES
         withLayoutChanges:^{
             
-            NSArray *indexPathsToDelete = [self _answerIndexPathsForQuestion:questionAnswered
-                                                     withParticipantResponse:question
-                                                                   atSection:indexPath.section];
-            
-            [collectionView deleteItemsAtIndexPaths:indexPathsToDelete];
+            // if it's a freeform answer and there's already something there, don't add or remove anything
+            if ( !(answer.freeform.boolValue && existingAnswer) ) {
+                
+                NSArray *indexPathsToDelete = [self _answerIndexPathsForQuestion:questionAnswered
+                                                         withParticipantResponse:question
+                                                                       atSection:indexPath.section];
+                
+                [collectionView deleteItemsAtIndexPaths:indexPathsToDelete];
+                
+            }
             
         }];
         
     }
     
+}
+
+- (void)_dismissKeyboard {
+    HCRDebug(@"tapped!");
+    [self.textFieldToDismiss resignFirstResponder];
+    self.textFieldToDismiss = nil;
 }
 
 @end
