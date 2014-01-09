@@ -10,4 +10,6 @@
 
 @interface HCRSurveyQuestionHeader : HCRHeaderView
 
+@property (nonatomic) BOOL questionAnswered;
+
 @end

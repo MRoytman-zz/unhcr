@@ -263,12 +263,24 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 #ifdef TARGET_RIS
     titleString = @"Refugee\nInformation\nService";
 #elif defined(TARGET_MSF)
-    titleString = @"Médecins\nSans Frontières\nField Survey Tool";
+    titleString = @"\n\n\n";
 #endif
     
     NSAttributedString *attributedTitleString = [[NSAttributedString alloc] initWithString:titleString
                                                                                 attributes:titleAttributes];
     titleLabel.attributedText = attributedTitleString;
+    
+#ifdef TARGET_MSF
+    // add logo
+    
+    CGRect logoFrame = UIEdgeInsetsInsetRect(self.masterHeader.bounds, UIEdgeInsetsMake(30, 20, 10, 120));
+    UIImageView *msfLogo = [[UIImageView alloc] initWithFrame:logoFrame];
+    [self.masterHeader addSubview:msfLogo];
+    
+    msfLogo.image = [UIImage imageNamed:@"msf-logo-medium"];
+    msfLogo.contentMode = UIViewContentModeScaleAspectFit;
+    
+#endif
     
     // LAYOUT AND REUSABLES
     [self.collectionView registerClass:[HCRHeaderView class]

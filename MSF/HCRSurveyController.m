@@ -113,11 +113,19 @@
         // CONTENTS OF SURVEY PAGES
         
         HCRSurveyAnswerSetParticipantQuestion *question = [self _participantQuestionForSection:section inCollectionView:collectionView];
-        HCRSurveyQuestion *surveyQuestion = [[HCRDataManager sharedManager] surveyQuestionWithQuestionID:question.question];
         
-        // if answers is empty, return 1 - it's freeform!
-        numberOfItemsInSection = (surveyQuestion.answers) ? surveyQuestion.answers.count : 1;
-        
+        if (question.answer) {
+            numberOfItemsInSection = 1; // the answer is all that remains :)
+        } else {
+            HCRSurveyQuestion *surveyQuestion = [[HCRDataManager sharedManager] surveyQuestionWithQuestionID:question.question];
+            
+            if (surveyQuestion.freeformLabel) {
+                numberOfItemsInSection = 1; // free-form question
+            } else {
+                numberOfItemsInSection = surveyQuestion.answers.count; // normal :)
+            }
+        }
+
     } else {
         
         // WTF
@@ -139,10 +147,7 @@
     } else if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
         
         // CONTENTS OF SURVEY PAGES
-        NSInteger participantID = [self _participantIDForSurveyView:collectionView];
-        
         return [self _cellForParticipantCollectionView:collectionView
-                                     withParticipantID:participantID
                                            atIndexPath:indexPath];
         
     } else {
@@ -168,6 +173,8 @@
                                                       forIndexPath:indexPath];
             
             // ADD QUESTION
+            header.titleString = [self _questionStringForSection:indexPath.section inCollectionView:collectionView];
+            header.questionAnswered = ([self _participantQuestionForSection:indexPath.section inCollectionView:collectionView].answer != nil);
             
             return header;
         } else if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
@@ -175,6 +182,9 @@
             [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
                                                withReuseIdentifier:kSurveyFooterIdentifier
                                                       forIndexPath:indexPath];
+            
+//            footer.questionAnswered = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView].answer.boolValue;
+            
             return footer;
         }
         
@@ -198,8 +208,57 @@
     } else if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
         
         // CONTENTS OF SURVEY PAGES
+        
+        // get question and answer codes
+        HCRSurveyQuestion *questionAnswered = [self _surveyQuestionForSection:indexPath.section inCollectionView:collectionView];
+        NSString *questionCode = questionAnswered.questionCode;
+        
+        NSInteger participantID = [self _participantIDForSurveyView:collectionView];
+        
+        // if answer already exists, unset it and reload info
+        HCRSurveyAnswerSetParticipantQuestion *question = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView];
+        if (question.answer) {
+            
+            [self _reloadData:YES
+                   inSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+           withCollectionView:collectionView
+                     animated:YES
+            withLayoutChanges:^{
+                
+                NSArray *indexPathsToAdd = [self _answerIndexPathsForQuestion:questionAnswered
+                                                      withParticipantResponse:question
+                                                                    atSection:indexPath.section];
+                
+                [collectionView insertItemsAtIndexPaths:indexPathsToAdd];
+                
+                [[HCRDataManager sharedManager] removeAnswerForQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
+                
+            }];
+            
+        } else {
+            
+            HCRSurveyQuestionAnswer *answer = [questionAnswered.answers objectAtIndex:indexPath.row];
+            NSNumber *answerCode = answer.code;
+            
+            [[HCRDataManager sharedManager] setAnswer:answerCode forQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
+            
+            [self _reloadData:YES
+                   inSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+           withCollectionView:collectionView
+                     animated:YES
+            withLayoutChanges:^{
+                
+                NSArray *indexPathsToDelete = [self _answerIndexPathsForQuestion:questionAnswered
+                                                         withParticipantResponse:question
+                                                                       atSection:indexPath.section];
+                
+                [collectionView deleteItemsAtIndexPaths:indexPathsToDelete];
+                
+            }];
+            
+        }
+        
         // highlight cell / transform section
-        // record answer in data manager
         
     } else {
         NSAssert(NO, @"Unhandled collectionView type..");
@@ -294,38 +353,75 @@
 
 #pragma mark - Private Methods
 
-- (void)_reloadLayout {
+- (void)_reloadAllData {
+    [self _reloadData:YES inSections:nil withCollectionView:self.collectionView animated:NO withLayoutChanges:nil];
+}
+
+- (void)_reloadData:(BOOL)reloadData inSections:(NSIndexSet *)sections withCollectionView:(UICollectionView *)collectionView animated:(BOOL)animated withLayoutChanges:(void (^)(void))layoutChanges {
     
-    [self.collectionView reloadData];
+    if (animated == NO ||
+        (reloadData && !layoutChanges)) {
+        [collectionView reloadData];
+    }
+    
+    if (layoutChanges) {
+        [collectionView performBatchUpdates:layoutChanges completion:^(BOOL finished) {
+            if (reloadData) {
+                if (sections) {
+                    [collectionView reloadSections:sections];
+                } else {
+                    [collectionView reloadData];
+                }
+            }
+        }];
+    }
+    
 }
 
 - (void)_refreshModelData {
     
     [[HCRDataManager sharedManager] refreshSurveyResponsesForAllParticipantsWithAnswerSet:self.answerSet];
     
-    [self _reloadLayout];
+    [self _reloadData:YES inSections:nil withCollectionView:self.collectionView animated:YES withLayoutChanges:nil];
     
 }
 
-- (UICollectionViewCell *)_cellForParticipantCollectionView:(UICollectionView *)collectionView withParticipantID:(NSInteger)participantID atIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)_cellForParticipantCollectionView:(UICollectionView *)collectionView atIndexPath:(NSIndexPath *)indexPath {
+    
     
     HCRSurveyAnswerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kSurveyAnswerCellIdentifier
                                                                           forIndexPath:indexPath];
     
     // get question code
-    NSString *questionCode = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView].question;
+    HCRSurveyAnswerSetParticipantQuestion *participantQuestion = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView];
+    HCRSurveyQuestion *question = [[HCRDataManager sharedManager] surveyQuestionWithQuestionID:participantQuestion.question];
     
-    // get answer strings
-    HCRSurveyQuestion *question = [[HCRDataManager sharedManager] surveyQuestionWithQuestionID:questionCode];
-    NSArray *answerStrings = question.answers;
-    HCRSurveyQuestionAnswer *answer = [answerStrings objectAtIndex:indexPath.row ofClass:@"HCRSurveyQuestionAnswer"];
+    HCRSurveyQuestionAnswer *answer;
+    NSString *titleString;
+    BOOL answered = NO;
     
-    // check freeform status
-    BOOL freeform = [answer.freeform boolValue];
-    
-    NSString *titleString = (freeform) ? [NSString stringWithFormat:@"%@ (freeform)",answer.string] : answer.string;
+    if (participantQuestion.answer) {
+        
+        // get answer for answer
+        answer = [question answerForAnswerCode:participantQuestion.answer];
+        titleString = (participantQuestion.answerString) ? participantQuestion.answerString : answer.string;
+        answered = YES;
+        
+    } else {
+        
+        // get answer for index
+        NSArray *answerStrings = question.answers;
+        answer = [answerStrings objectAtIndex:indexPath.row ofClass:@"HCRSurveyQuestionAnswer"];
+        
+        // check freeform status
+        BOOL freeform = [answer.freeform boolValue];
+        
+        titleString = (freeform) ? [NSString stringWithFormat:@"%@ (freeform)",answer.string] : answer.string;
+        
+    }
     
     cell.title = titleString;
+    cell.answered = answered;
     
     [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
@@ -359,6 +455,38 @@
     // get question code
     NSInteger participantID = [self _participantIDForSurveyView:collectionView];
     return [[self.answerSet participantWithID:participantID].questions objectAtIndex:section];
+    
+}
+
+- (HCRSurveyQuestion *)_surveyQuestionForSection:(NSInteger)section inCollectionView:(UICollectionView *)collectionView {
+    
+    HCRSurveyAnswerSetParticipantQuestion *question = [self _participantQuestionForSection:section inCollectionView:collectionView];
+    return [[HCRDataManager sharedManager] surveyQuestionWithQuestionID:question.question];
+    
+}
+
+- (NSString *)_questionStringForSection:(NSInteger)section inCollectionView:(UICollectionView *)collectionView {
+    HCRSurveyQuestion *question = [self _surveyQuestionForSection:section inCollectionView:collectionView];
+    NSString *questionNumber = question.questionCode;
+    NSString *questionString = question.questionString;
+    
+    return [NSString stringWithFormat:@"%@: %@",questionNumber,questionString];
+}
+
+- (NSArray *)_answerIndexPathsForQuestion:(HCRSurveyQuestion *)question withParticipantResponse:(HCRSurveyAnswerSetParticipantQuestion *)response atSection:(NSInteger)section {
+    
+    NSMutableArray *indexPaths = @[].mutableCopy;
+    
+    for (HCRSurveyQuestionAnswer *answer in question.answers) {
+        if (response &&
+            answer.code != response.answer) {
+            NSUInteger answerIndex = [question.answers indexOfObject:answer];
+            NSIndexPath *deadIndexPath = [NSIndexPath indexPathForRow:answerIndex inSection:section];
+            [indexPaths addObject:deadIndexPath];
+        }
+    }
+    
+    return indexPaths;
     
 }
 

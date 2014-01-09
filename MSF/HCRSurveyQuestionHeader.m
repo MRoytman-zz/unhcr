@@ -8,6 +8,17 @@
 
 #import "HCRSurveyQuestionHeader.h"
 
+////////////////////////////////////////////////////////////////////////////////
+
+@interface HCRSurveyQuestionHeader ()
+
+@property UIColor *unansweredBackgroundColor;
+@property UIColor *defaultBackgroundColor;
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////
+
 @implementation HCRSurveyQuestionHeader
 
 - (id)initWithFrame:(CGRect)frame
@@ -15,8 +26,23 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.defaultBackgroundColor = [UIColor tableBackgroundColor];
+        self.unansweredBackgroundColor = [UIColor headerUnansweredBackgroundColor];
+        self.backgroundColor = self.defaultBackgroundColor;
     }
     return self;
+}
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    self.backgroundColor = (self.questionAnswered) ? self.defaultBackgroundColor : self.unansweredBackgroundColor;
+    
 }
 
 #pragma mark - Class Methods
@@ -48,5 +74,12 @@
 //                      height);
 //    
 //}
+
+#pragma mark - Getters & Setters
+
+- (void)setQuestionAnswered:(BOOL)questionAnswered {
+    _questionAnswered = questionAnswered;
+    [self setNeedsLayout];
+}
 
 @end

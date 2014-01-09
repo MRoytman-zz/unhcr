@@ -10,6 +10,7 @@
 
 @interface HCRSurveyAnswerCell : HCRTableCell
 
-@property (nonatomic) BOOL *freeform;
+@property (nonatomic) BOOL freeform;
+@property (nonatomic) BOOL answered;
 
 @end

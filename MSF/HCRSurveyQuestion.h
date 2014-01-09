@@ -8,6 +8,8 @@
 
 #import "HCRArchivalObject.h"
 
+@class HCRSurveyQuestionAnswer;
+
 @interface HCRSurveyQuestion : HCRArchivalObject
 
 @property (nonatomic, strong) NSArray *answers;
@@ -23,5 +25,7 @@
 @property (nonatomic, strong) NSString *note;
 
 + (HCRSurveyQuestion *)newQuestionWithDictionary:(NSDictionary *)dictionary;
+
+- (HCRSurveyQuestionAnswer *)answerForAnswerCode:(NSNumber *)answerCode;
 
 @end

@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, HCRCollectionCellProcessingViewPosition) {
 @property (nonatomic) CGFloat trailingSpaceForContent;
 
 @property (nonatomic, strong) UIColor *highlightedColor;
+@property UIColor *defaultBackgroundColor;
 
 @property (nonatomic, readonly) UIView *bottomLineView;
 

@@ -20,4 +20,8 @@
 + (UIColor *)tableSelectedCellColor;
 + (UIColor *)tableHeaderTitleColor;
 
++ (UIColor *)headerUnansweredBackgroundColor;
+
++ (UIColor *)cellAnsweredBackgroundColor;
+
 @end

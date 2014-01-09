@@ -10,4 +10,6 @@
 
 @interface HCRSurveyQuestionFooter : HCRFooterView
 
+@property (nonatomic) BOOL questionAnswered;
+
 @end

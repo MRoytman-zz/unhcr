@@ -16,6 +16,7 @@
     if (self) {
         self.question = [decoder decodeObjectForKey:HCRPrefKeyAnswerSetsParticipantsResponsesQuestion];
         self.answer = [decoder decodeObjectForKey:HCRPrefKeyAnswerSetsParticipantsResponsesAnswer];
+        self.answerString = [decoder decodeObjectForKey:HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString];
     }
     return self;
 }
@@ -23,6 +24,7 @@
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:self.question forKey:HCRPrefKeyAnswerSetsParticipantsResponsesQuestion];
     [encoder encodeObject:self.answer forKey:HCRPrefKeyAnswerSetsParticipantsResponsesAnswer];
+    [encoder encodeObject:self.answerString forKey:HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString];
 }
 
 //- (NSArray *)propertyList {
@@ -48,6 +50,8 @@
             newQuestion.question = object;
         } else if ([key isEqualToString:HCRPrefKeyAnswerSetsParticipantsResponsesAnswer]) {
             newQuestion.answer = object;
+        } else if ([key isEqualToString:HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString]) {
+            newQuestion.answerString = object;
         }
         
     }

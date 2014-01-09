@@ -59,4 +59,12 @@
                            alpha:1.0];
 }
 
++ (UIColor *)headerUnansweredBackgroundColor {
+    return [[UIColor redColor] colorWithAlphaComponent:0.1];
+}
+
++ (UIColor *)cellAnsweredBackgroundColor {
+    return [[UIColor greenColor] colorWithAlphaComponent:0.2];
+}
+
 @end

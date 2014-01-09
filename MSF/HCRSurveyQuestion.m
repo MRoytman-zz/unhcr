@@ -101,4 +101,18 @@
     
 }
 
+#pragma mark - Public Methods
+
+- (HCRSurveyQuestionAnswer *)answerForAnswerCode:(NSNumber *)answerCode {
+    
+    for (HCRSurveyQuestionAnswer *answer in self.answers) {
+        if (answer.code == answerCode) {
+            return answer;
+        }
+    }
+    
+    return nil;
+    
+}
+
 @end

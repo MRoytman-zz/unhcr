@@ -50,6 +50,7 @@ NSString *const HCRPrefKeyAnswerSetsParticipantsGender = @"participantGender";
 NSString *const HCRPrefKeyAnswerSetsParticipantsResponses = @"HCRPrefKeyAnswerSetsParticipantsResponses";
 NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesQuestion = @"HCRPrefKeyAnswerSetsParticipantsResponsesQuestion";
 NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesAnswer = @"HCRPrefKeyAnswerSetsParticipantsResponsesAnswer";
+NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString = @"HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString";
 
 NSString *const HCRPrefKeyAnswerSetsDurationStart = @"HCRPrefKeyAnswerSetsDurationStart";
 NSString *const HCRPrefKeyAnswerSetsDurationEnd = @"HCRPrefKeyAnswerSetsDurationEnd";
@@ -266,7 +267,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
                 conditionPasses = [self _passCondition:condition forAnswerSet:answerSet forParticipantID:participantID];
                 
                 if (conditionPasses == NO) {
-                    HCRWarning(@"Condition failed for question %@: %@",question.questionCode,condition);
+                    HCRDebug(@"Condition failed for question %@",question.questionCode);
                     break;
                 }
                 
@@ -399,29 +400,21 @@ NSString *const kSurveyResultClass = @"TestFlight";
 
 - (void)setAnswer:(NSNumber *)answerCode forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID {
     
-    NSParameterAssert(questionCode);
+    [self _setAnswer:answerCode
+         forQuestion:questionCode
+     withAnswerSetID:answerSetID
+   withParticipantID:participantID
+            forceSet:NO];
     
-    // must exist
-    HCRSurveyAnswerSet *targetAnswerSet = [self.localSurvey.answerSetDictionary objectForKey:answerSetID ofClass:@"HCRSurveyAnswerSet"];
-    NSParameterAssert(targetAnswerSet);
+}
+
+- (void)removeAnswerForQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID {
     
-    // drill down to this particular response
-    HCRSurveyAnswerSetParticipant *targetParticipant = [targetAnswerSet participantWithID:participantID];
-    HCRSurveyAnswerSetParticipantQuestion *questionData = [targetParticipant questionWithID:questionCode];
-    
-    if (!questionData) {
-        HCRSurveyAnswerSetParticipantQuestion *newQuestion = [HCRSurveyAnswerSetParticipantQuestion new];
-        [targetParticipant.questions addObject:newQuestion];
-        questionData = newQuestion;
-    }
-    
-    questionData.question = questionCode;
-    
-    if (answerCode) {
-        questionData.answer = answerCode;
-    }
-    
-    [self _sync];
+    [self _setAnswer:nil
+         forQuestion:questionCode
+     withAnswerSetID:answerSetID
+   withParticipantID:participantID
+            forceSet:YES];
     
 }
 
@@ -649,6 +642,34 @@ NSString *const kSurveyResultClass = @"TestFlight";
     }
     
     return YES;
+    
+}
+
+- (void)_setAnswer:(NSNumber *)answerCode forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID forceSet:(BOOL)forceSet {
+    
+    NSParameterAssert(questionCode);
+    
+    // must exist
+    HCRSurveyAnswerSet *targetAnswerSet = [self.localSurvey.answerSetDictionary objectForKey:answerSetID ofClass:@"HCRSurveyAnswerSet"];
+    NSParameterAssert(targetAnswerSet);
+    
+    // drill down to this particular response
+    HCRSurveyAnswerSetParticipant *targetParticipant = [targetAnswerSet participantWithID:participantID];
+    HCRSurveyAnswerSetParticipantQuestion *questionData = [targetParticipant questionWithID:questionCode];
+    
+    if (!questionData) {
+        HCRSurveyAnswerSetParticipantQuestion *newQuestion = [HCRSurveyAnswerSetParticipantQuestion new];
+        [targetParticipant.questions addObject:newQuestion];
+        questionData = newQuestion;
+    }
+    
+    questionData.question = questionCode;
+    
+    if (answerCode || forceSet) {
+        questionData.answer = answerCode;
+    }
+    
+    [self _sync];
     
 }
 

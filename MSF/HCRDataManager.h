@@ -55,6 +55,7 @@ extern NSString *const HCRPrefKeyAnswerSetsParticipantsGender;
 extern NSString *const HCRPrefKeyAnswerSetsParticipantsResponses;
 extern NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesQuestion;
 extern NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesAnswer;
+extern NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString;
 
 extern NSString *const HCRPrefKeyAnswerSetsDurationStart;
 extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
@@ -86,6 +87,7 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 - (void)refreshSurveyResponsesForAllParticipantsWithAnswerSet:(HCRSurveyAnswerSet *)answerSet;
 - (void)refreshSurveyResponsesForParticipantID:(NSInteger)participantID withAnswerSet:(HCRSurveyAnswerSet *)answerSet;
 - (void)setAnswer:(NSNumber *)answerCode forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID;
+- (void)removeAnswerForQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID;
 
 //// general
 //- (NSDictionary *)getAnswerSetWithID:(NSString *)answerSetID;

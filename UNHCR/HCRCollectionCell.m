@@ -38,7 +38,8 @@ static const CGFloat kAppDescriptionHeight = 210.0;
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.contentView.backgroundColor = [UIColor whiteColor];
+        self.defaultBackgroundColor = [UIColor whiteColor];
+        self.contentView.backgroundColor = self.defaultBackgroundColor;
         
         self.highlightedColor = [UIColor UNHCRBlue];
         
@@ -58,6 +59,7 @@ static const CGFloat kAppDescriptionHeight = 210.0;
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    self.contentView.backgroundColor = self.defaultBackgroundColor;
     
     self.bottomLineView.hidden = NO;
     

@@ -126,6 +126,7 @@
 		4F8C0999187CF67800317764 /* HCRSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8C0998187CF67800317764 /* HCRSurvey.m */; };
 		4F8C099C187D06FD00317764 /* HCRSurveyQuestionConditionResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8C099B187D06FD00317764 /* HCRSurveyQuestionConditionResponse.m */; };
 		4F8C09A2187D4E8A00317764 /* HCRArchivalObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8C09A1187D4E8A00317764 /* HCRArchivalObject.m */; };
+		4F8C09A4187E042400317764 /* MSF.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F8C09A3187E042400317764 /* MSF.xcassets */; };
 		4FA1FB0B187518F400CB786B /* HCRHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */; };
 		4FA1FB0D1875196500CB786B /* MKMapView+HCRMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702C17FF56680081F201 /* MKMapView+HCRMapView.m */; };
 		4FA716DA18751B7D00BCE0A6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F59A7C71825BF96006EFE41 /* AudioToolbox.framework */; };
@@ -313,6 +314,7 @@
 		4F8C099B187D06FD00317764 /* HCRSurveyQuestionConditionResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSurveyQuestionConditionResponse.m; sourceTree = "<group>"; };
 		4F8C09A0187D4E8A00317764 /* HCRArchivalObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRArchivalObject.h; sourceTree = "<group>"; };
 		4F8C09A1187D4E8A00317764 /* HCRArchivalObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRArchivalObject.m; sourceTree = "<group>"; };
+		4F8C09A3187E042400317764 /* MSF.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MSF.xcassets; sourceTree = "<group>"; };
 		4FCBC00B1873577900D96D7F /* MSF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSF.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FD838E61800D88200B49498 /* EAEmailUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAEmailUtilities.h; path = ../UNHCR/EAEmailUtilities.h; sourceTree = "<group>"; };
 		4FD838E71800D88200B49498 /* EAEmailUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAEmailUtilities.m; path = ../UNHCR/EAEmailUtilities.m; sourceTree = "<group>"; };
@@ -537,6 +539,7 @@
 				4F1B66E918760A3000506D66 /* msf-build.h */,
 				4F4F4B581872634B00E0ADE8 /* HCRAppDelegate.h */,
 				4F4F4B591872634B00E0ADE8 /* HCRAppDelegate.m */,
+				4F8C09A3187E042400317764 /* MSF.xcassets */,
 				4F419DD91878C2150000C7DA /* Managers/Singletons */,
 				4F0CBF6F187A4327003DF444 /* Survey Controller */,
 				4F49ABEF187B45DD00A4B896 /* Survey Views */,
@@ -953,6 +956,7 @@
 				4F72040818750E59006E95B2 /* HMS.xcassets in Resources */,
 				4F720436187510C0006E95B2 /* click0.mp3 in Resources */,
 				4F720435187510C0006E95B2 /* click1.mp3 in Resources */,
+				4F8C09A4187E042400317764 /* MSF.xcassets in Resources */,
 				4F720437187510C0006E95B2 /* notice.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

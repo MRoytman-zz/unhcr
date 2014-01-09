@@ -8,6 +8,18 @@
 
 #import "HCRSurveyQuestionFooter.h"
 
+////////////////////////////////////////////////////////////////////////////////
+
+@interface HCRSurveyQuestionFooter ()
+
+@property UIColor *unansweredBackgroundColor;
+@property UIColor *defaultBackgroundColor;
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////
+
+
 @implementation HCRSurveyQuestionFooter
 
 - (id)initWithFrame:(CGRect)frame
@@ -15,17 +27,30 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.defaultBackgroundColor = [UIColor tableBackgroundColor];
+        self.unansweredBackgroundColor = [UIColor headerUnansweredBackgroundColor];
+        self.backgroundColor = self.defaultBackgroundColor;
     }
     return self;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    
 }
-*/
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+//    self.backgroundColor = (self.questionAnswered) ? self.defaultBackgroundColor : self.unansweredBackgroundColor;
+    
+}
+
+#pragma mark - Getters & Setters
+
+- (void)setQuestionAnswered:(BOOL)questionAnswered {
+    _questionAnswered = questionAnswered;
+    [self setNeedsLayout];
+}
 
 @end
