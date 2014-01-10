@@ -85,7 +85,7 @@ static const NSTimeInterval kAnimationTiming = 0.3;
     if (currentParticipant.age && currentParticipant.gender) {
         [participantString appendString:[NSString stringWithFormat:@" (%@/%@)",
                                          currentParticipant.age,
-                                         (currentParticipant.gender == 0) ? @"m" : @"f"]];
+                                         (currentParticipant.gender.integerValue == 0) ? @"m" : @"f"]];
     }
     
     self.participantLabel.text = [participantString uppercaseString];

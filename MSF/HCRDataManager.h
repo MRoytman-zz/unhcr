@@ -92,6 +92,7 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 // answer set answers
 - (void)setAnswerCode:(NSNumber *)answerCode withFreeformString:(NSString *)answerString forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID;
 - (void)removeAnswerForQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID;
+- (void)removeQuestionWithCode:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID;
 
 // convenience
 - (NSDate *)surveyQuestionsLastUpdated;

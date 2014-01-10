@@ -254,7 +254,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
         
         if (question.skip.boolValue) {
             
-            HCRDebug(@"Skipping question %@",question.questionCode);
+//            HCRDebug(@"Skipping question %@",question.questionCode);
             
         } else if (question.conditions) {
             
@@ -265,7 +265,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
                 conditionPasses = [self _passCondition:condition forAnswerSet:answerSet forParticipantID:participantID];
                 
                 if (conditionPasses == NO) {
-                    HCRDebug(@"Condition failed for question %@",question.questionCode);
+//                    HCRDebug(@"Condition failed for question %@",question.questionCode);
                     break;
                 }
                 
@@ -273,11 +273,13 @@ NSString *const kSurveyResultClass = @"TestFlight";
             
             if (conditionPasses) {
                 [self setAnswerCode:nil withFreeformString:nil forQuestion:question.questionCode withAnswerSetID:answerSet.localID withParticipantID:participantID];
+            } else {
+                [self removeQuestionWithCode:question.questionCode withAnswerSetID:answerSet.localID withParticipantID:participantID];
             }
             
         } else {
-            HCRDebug(@"No conditions found! Adding question: %@",question);
-            [self setAnswerCode:nil withFreeformString:nil forQuestion:question.questionCode withAnswerSetID:answerSet.localID withParticipantID:participantID];
+            HCRError(@"No conditions found!");
+            NSAssert(NO, @"All questions must have conditions; even if just an empty array in database.");
         }
         
     }
@@ -341,6 +343,18 @@ NSString *const kSurveyResultClass = @"TestFlight";
      withAnswerSetID:answerSetID
    withParticipantID:participantID
             forceSet:YES];
+    
+}
+
+- (void)removeQuestionWithCode:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID {
+    
+    HCRSurveyAnswerSetParticipant *participant = [[self surveyAnswerSetWithLocalID:answerSetID] participantWithID:participantID];
+    
+    HCRSurveyAnswerSetParticipantQuestion *question = [participant questionWithID:questionCode];
+    
+    [participant.questions removeObject:question];
+    
+    [self _sync];
     
 }
 
@@ -447,7 +461,8 @@ NSString *const kSurveyResultClass = @"TestFlight";
         HCRSurveyAnswerSetParticipantQuestion *question = [participant questionWithID:condition.response.question];
         NSNumber *answer = question.answer;
         
-        if (condition.response.answer != answer) {
+        if (!answer ||
+            ![answer isEqualToNumber:condition.response.answer]) {
             return NO;
         }
         
@@ -461,7 +476,8 @@ NSString *const kSurveyResultClass = @"TestFlight";
         
         HCRSurveyAnswerSetParticipant *participant = [answerSet participantWithID:participantID];
         
-        if (participant.age < condition.minimumAge) {
+        if (!participant.age ||
+            participant.age.integerValue < condition.minimumAge.integerValue) {
             return NO;
         }
         
@@ -469,7 +485,8 @@ NSString *const kSurveyResultClass = @"TestFlight";
         
         HCRSurveyAnswerSetParticipant *participant = [answerSet participantWithID:participantID];
         
-        if (participant.age > condition.maximumAge) {
+        if (!participant.age ||
+            participant.age.integerValue > condition.maximumAge.integerValue) {
             return NO;
         }
         
@@ -477,7 +494,8 @@ NSString *const kSurveyResultClass = @"TestFlight";
         
         HCRSurveyAnswerSetParticipant *participant = [answerSet participantWithID:participantID];
         
-        if (participant.gender != condition.gender) {
+        if (!participant.gender ||
+            ![participant.gender isEqualToNumber:condition.gender]) {
             return NO;
         }
         
@@ -520,6 +538,14 @@ NSString *const kSurveyResultClass = @"TestFlight";
     // if 'freeform' string is given, overwrite input answerString
     if (answerString || forceSet) {
         questionData.answerString = answerString;
+    }
+    
+    // set age and gender
+    // TODO: get this dynamic from the server somehow
+    if ([questionCode isEqualToString:@"6"]) {
+        targetParticipant.age = (questionData.answerString) ? @(questionData.answerString.integerValue) : nil;
+    } else if ([questionCode isEqualToString:@"7"]) {
+        targetParticipant.gender = questionData.answer;
     }
     
     [self _sync];

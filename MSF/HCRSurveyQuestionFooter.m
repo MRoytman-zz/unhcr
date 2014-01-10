@@ -39,6 +39,8 @@
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    
+    self.msfImage.hidden = YES;
     self.showMSFLogo = NO;
     
 }
