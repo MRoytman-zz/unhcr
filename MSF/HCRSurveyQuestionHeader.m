@@ -24,6 +24,9 @@ static const CGFloat kYContentTrailing = 10;
 @property UIColor *unansweredBackgroundColor;
 @property UIColor *defaultBackgroundColor;
 
+@property (nonatomic, strong) HCRSurveyQuestion *surveyQuestion;
+@property (nonatomic, strong) NSNumber *participantID;
+
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +75,7 @@ static const CGFloat kYContentTrailing = 10;
 
 #pragma mark - Class Methods
 
-+ (CGSize)sizeForHeaderInCollectionView:(UICollectionView *)collectionView withQuestionData:(HCRSurveyQuestion *)surveyQuestion {
++ (CGSize)sizeForHeaderInCollectionView:(HCRSurveyParticipantView *)collectionView withQuestionData:(HCRSurveyQuestion *)surveyQuestion {
     
     CGFloat height;
     
@@ -83,7 +86,7 @@ static const CGFloat kYContentTrailing = 10;
     height = kYContentPadding + kYContentTrailing;
     
     // then add height of label
-    NSAttributedString *attributedString = [HCRSurveyQuestionHeader _attributedStringForSurveyQuestion:surveyQuestion];
+    NSAttributedString *attributedString = [HCRSurveyQuestionHeader _attributedStringForSurveyQuestion:surveyQuestion withParticipantID:collectionView.participantID];
     CGSize preferredSize = [attributedString.string sizeforMultiLineStringWithBoundingSize:finalBounding withAttributes:[HCRSurveyQuestionHeader _attributesForSurveyQuestion] rounded:YES];
     
     height += preferredSize.height;
@@ -100,10 +103,13 @@ static const CGFloat kYContentTrailing = 10;
     [self setNeedsLayout];
 }
 
-- (void)setSurveyQuestion:(HCRSurveyQuestion *)surveyQuestion {
+#pragma mark - Public Methods
+
+- (void)setSurveyQuestion:(HCRSurveyQuestion *)surveyQuestion withParticipantID:(NSNumber *)participantID {
     _surveyQuestion = surveyQuestion;
+    _participantID = participantID;
     
-    self.questionString = (surveyQuestion) ? [HCRSurveyQuestionHeader _attributedStringForSurveyQuestion:surveyQuestion] : nil;
+    self.questionString = (surveyQuestion) ? [HCRSurveyQuestionHeader _attributedStringForSurveyQuestion:surveyQuestion withParticipantID:participantID] : nil;
     self.titleLabel.attributedText = self.questionString;
     
     [self setNeedsLayout];
@@ -112,13 +118,18 @@ static const CGFloat kYContentTrailing = 10;
 
 #pragma mark - Private Methods
 
-+ (NSAttributedString *)_attributedStringForSurveyQuestion:(HCRSurveyQuestion *)surveyQuestion {
++ (NSAttributedString *)_attributedStringForSurveyQuestion:(HCRSurveyQuestion *)surveyQuestion withParticipantID:(NSNumber *)participantID {
     
     NSString *questionLabel = [[NSString stringWithFormat:@"Question %@",surveyQuestion.questionCode] uppercaseString];
     NSString *questionString = surveyQuestion.questionString;
     NSString *totalString = [NSString stringWithFormat:@"%@\n%@",
                              questionLabel,
                              questionString];
+    
+    if ([totalString rangeOfString:@"%@"].location != NSNotFound) {
+        NSString *participantName = [NSString stringWithFormat:@"Participant %@",participantID];
+        totalString = [totalString stringByReplacingOccurrencesOfString:@"%@" withString:participantName];
+    }
     
     NSDictionary *questionAttributes = [HCRSurveyQuestionHeader _attributesForSurveyQuestion];
     NSMutableDictionary *labelAttributes = questionAttributes.mutableCopy;

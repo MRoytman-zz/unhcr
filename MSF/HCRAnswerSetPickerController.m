@@ -257,23 +257,38 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 
 - (void)_openSurveyButtonPressedAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRSurveyAnswerSet *answerSet = [self _answerSetForIndexPath:indexPath];
+    HCRAnswerSetCell *cell = (HCRAnswerSetCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
     
-    HCRSurveyController *surveyController = [[HCRSurveyController alloc] initWithCollectionViewLayout:[HCRSurveyController preferredLayout]];
-    surveyController.answerSetID = answerSet.localID;
+    cell.processingAction = YES;
     
-    UINavigationController *navController = [[UINavigationController alloc] initWithNavigationBarClass:[UINavigationBar class] toolbarClass:[HCRParticipantToolbar class]];
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
-    navController.viewControllers = @[surveyController];
-    navController.toolbarHidden = NO;
-    
-    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                 target:self
-                                                                                 action:@selector(_closeButtonPressed)];
-    
-    surveyController.navigationItem.leftBarButtonItem = closeButton;
-    
-    [self.navigationController presentViewController:navController animated:YES completion:nil];
+    dispatch_async(queue, ^{
+        
+        // background code
+        HCRSurveyAnswerSet *answerSet = [self _answerSetForIndexPath:indexPath];
+        
+        HCRSurveyController *surveyController = [[HCRSurveyController alloc] initWithCollectionViewLayout:[HCRSurveyController preferredLayout]];
+        surveyController.answerSetID = answerSet.localID;
+        
+        UINavigationController *navController = [[UINavigationController alloc] initWithNavigationBarClass:[UINavigationBar class] toolbarClass:[HCRParticipantToolbar class]];
+        
+        navController.viewControllers = @[surveyController];
+        
+        UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                     target:self
+                                                                                     action:@selector(_closeButtonPressed)];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            // completion code (update UI, etc)
+            navController.toolbarHidden = NO;
+            surveyController.navigationItem.leftBarButtonItem = closeButton;
+            [self.navigationController presentViewController:navController animated:YES completion:nil];
+            
+        });
+        
+    });
     
 }
 

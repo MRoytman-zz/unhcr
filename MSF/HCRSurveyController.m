@@ -26,6 +26,8 @@
 
 @property UIBarButtonItem *doneBarButton;
 
+@property (nonatomic, strong) HCRSurveyAnswerSetParticipant *currentParticipant;
+
 @property (nonatomic, readonly) HCRSurveyAnswerSet *answerSet;
 @property (nonatomic, readonly) UICollectionViewFlowLayout *flowLayout;
 
@@ -51,7 +53,7 @@
     
     self.title = @"Lebanon: Access to Care";
     
-    self.collectionView.scrollEnabled = NO;
+//    self.collectionView.scrollEnabled = NO;
     self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
     // KEYBOARD AND INPUTS
@@ -61,7 +63,17 @@
     self.tapRecognizer.cancelsTouchesInView = NO;
     
     // TOOLBAR
+    HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
+    NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
     
+    toolbar.addParticipants.target = self;
+    toolbar.addParticipants.action = @selector(_addParticipantButtonPressed);
+    
+    toolbar.nextParticipant.target = self;
+    toolbar.nextParticipant.action = @selector(_nextParticipantButtonPressed);
+    
+    toolbar.previousParticipant.target = self;
+    toolbar.previousParticipant.action = @selector(_previousParticipantButtonPressed);
     
     // NOTIFICATIONS
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -95,7 +107,9 @@
     NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
     
     if (toolbar.items.count == 0) {
-        [self _refreshParticipantDataWithParticipantID:0];
+        // this means it's the first load - workaround for toolbar not loading in proper order
+        self.currentParticipant = [self.answerSet participantWithID:0];
+        [self _refreshParticipantData];
     }
     
 }
@@ -225,8 +239,11 @@
             // ADD QUESTION
             HCRSurveyAnswerSetParticipantQuestion *question = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView];
             
-//            header.titleString = [self _questionStringForSection:indexPath.section inCollectionView:collectionView];
-            header.surveyQuestion = [self _surveyQuestionForSection:indexPath.section inCollectionView:collectionView];
+            HCRSurveyQuestion *surveyQuestion = [self _surveyQuestionForSection:indexPath.section inCollectionView:collectionView];
+            
+            [header setSurveyQuestion:surveyQuestion
+                    withParticipantID:@([self _participantIDForSurveyView:collectionView])];
+            
             header.questionAnswered = (question.answer != nil || question.answerString != nil);
             
             return header;
@@ -283,7 +300,8 @@
     } else if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
         
         // CONTENTS OF SURVEY PAGES
-        return [HCRSurveyQuestionHeader sizeForHeaderInCollectionView:collectionView withQuestionData:[self _surveyQuestionForSection:section inCollectionView:collectionView]];
+        return [HCRSurveyQuestionHeader sizeForHeaderInCollectionView:(HCRSurveyParticipantView *)collectionView
+                                                     withQuestionData:[self _surveyQuestionForSection:section inCollectionView:collectionView]];
         
     } else {
         NSAssert(NO, @"Unhandled collectionView type..");
@@ -420,6 +438,22 @@
     
 }
 
+- (void)setCurrentParticipant:(HCRSurveyAnswerSetParticipant *)currentParticipant {
+    _currentParticipant = currentParticipant;
+    
+    // set data
+    [self _refreshParticipantData];
+    
+    // slide to correct position..
+    CGFloat screenWidth = CGRectGetWidth([UIScreen mainScreen].bounds);
+    CGPoint targetOffset = CGPointMake(screenWidth * currentParticipant.participantID.integerValue,
+                                       self.collectionView.contentOffset.y);
+
+    [self.collectionView setContentOffset:targetOffset
+                                 animated:YES];
+    
+}
+
 #pragma mark - Private Methods (Layout)
 
 - (void)_reloadAllData {
@@ -434,10 +468,13 @@
     };
     
     void (^refreshParticipants)(void) = ^{
+        
         if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
             NSInteger participantID = [self _participantIDForSurveyView:collectionView];
-            [self _refreshParticipantDataWithParticipantID:participantID];
+            self.currentParticipant = [self.answerSet participantWithID:participantID];
         }
+        
+        [self _refreshParticipantData];
     };
     
     if (animated == NO ||
@@ -488,6 +525,74 @@
     self.keyboardBounds = [[dictionary objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     self.keyboardAnimationTime = [[dictionary objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     self.keyboardAnimationOptions = [[dictionary objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue] << 16;
+}
+
+#pragma mark - Private Methods (Navigation)
+
+- (void)_doneButtonPressed {
+    
+    [UIAlertView showConfirmationDialogWithTitle:@"Submit Survey"
+                                         message:@"Are you sure you want to submit this survey? Once you submit the survey, you may not make any changes."
+                                         handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                             
+                                             if (buttonIndex != alertView.cancelButtonIndex) {
+                                                 
+                                                 [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+                                                 
+                                             }
+                                             
+                                         }];
+    
+}
+
+- (void)_addParticipantButtonPressed {
+    
+    HCRSurveyAnswerSetParticipant *newParticipant = [[HCRDataManager sharedManager] createNewParticipantForAnswerSet:self.answerSet];
+    
+    self.currentParticipant = newParticipant;
+    [self _reloadAllData];
+    
+}
+
+- (void)_nextParticipantButtonPressed {
+    
+    // get next participant OR first
+    NSInteger targetID = self.currentParticipant.participantID.integerValue + 1;
+    HCRSurveyAnswerSetParticipant *nextParticipant = [self.answerSet participantWithID:targetID];
+    
+    if (!nextParticipant) {
+        nextParticipant = [self.answerSet participantWithID:0];
+    }
+    
+    self.currentParticipant = nextParticipant;
+    
+}
+
+- (void)_previousParticipantButtonPressed {
+    
+    NSInteger targetID = self.currentParticipant.participantID.integerValue - 1;
+    
+    HCRSurveyAnswerSetParticipant *previousParticipant = [self.answerSet participantWithID:targetID];
+    
+    if (!previousParticipant) {
+        previousParticipant = [self.answerSet participantWithID:(self.answerSet.participants.count - 1)];
+    }
+    
+    self.currentParticipant = previousParticipant;
+    
+}
+
+- (void)_refreshParticipantData {
+    
+    HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
+    NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
+    
+    toolbar.participants = self.answerSet.participants;
+    
+    if (self.currentParticipant) {
+        toolbar.currentParticipant = self.currentParticipant;
+    }
+    
 }
 
 #pragma mark - Private Methods
@@ -699,50 +804,6 @@
     UIBarButtonItem *newItem = (allAnswersComplete) ? self.doneBarButton : nil;
     
     [self.navigationItem setRightBarButtonItem:newItem animated:YES];
-    
-}
-
-- (void)_doneButtonPressed {
-    
-    [UIAlertView showConfirmationDialogWithTitle:@"Submit Survey"
-                                         message:@"Are you sure you want to submit this survey? Once you submit the survey, you may not make any changes."
-                                         handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                             
-                                             if (buttonIndex != alertView.cancelButtonIndex) {
-                                                 
-                                                 [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-                                                 
-                                             }
-                                             
-                                         }];
-    
-}
-
-- (void)_addParticipantButtonPressed {
-    
-    
-    
-}
-
-- (void)_nextParticipantButtonPressed {
-    
-    
-    
-}
-
-- (void)_previousParticipantButtonPressed {
-    
-    
-    
-}
-
-- (void)_refreshParticipantDataWithParticipantID:(NSInteger)participantID {
-    
-    HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
-    NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
-    
-    toolbar.participants = self.answerSet.participants;
-    toolbar.currentParticipant = [self.answerSet participantWithID:participantID];
     
 }
 

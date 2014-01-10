@@ -16,6 +16,9 @@
         self.participantID = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsParticipantID];
         self.minimumParticipants = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsMinParticipants];
         self.response = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsResponse];
+        self.minimumAge = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsMinAge];
+        self.maximumAge = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsMaxAge];
+        self.gender = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsGender];
     }
     return self;
 }
@@ -24,15 +27,10 @@
     [encoder encodeObject:self.participantID forKey:HCRPrefKeyQuestionsConditionsParticipantID];
     [encoder encodeObject:self.minimumParticipants forKey:HCRPrefKeyQuestionsConditionsMinParticipants];
     [encoder encodeObject:self.response forKey:HCRPrefKeyQuestionsConditionsResponse];
+    [encoder encodeObject:self.minimumAge forKey:HCRPrefKeyQuestionsConditionsMinAge];
+    [encoder encodeObject:self.maximumAge forKey:HCRPrefKeyQuestionsConditionsMaxAge];
+    [encoder encodeObject:self.gender forKey:HCRPrefKeyQuestionsConditionsGender];
 }
-
-//- (NSArray *)propertyList {
-//    return @[
-//             NSStringFromSelector(@selector(participantID)),
-//             NSStringFromSelector(@selector(minimumParticipants)),
-//             NSStringFromSelector(@selector(response))
-//             ];
-//}
 
 #pragma mark - Class Methods
 
@@ -50,6 +48,15 @@
             newCondition.minimumParticipants = object;
         } else if ([key isEqualToString:HCRPrefKeyQuestionsConditionsResponse]) {
             newCondition.response = [HCRSurveyQuestionConditionResponse newResponseWithDictionary:object];
+        } else if ([key isEqualToString:HCRPrefKeyQuestionsConditionsMinAge]) {
+            newCondition.minimumAge = object;
+        } else if ([key isEqualToString:HCRPrefKeyQuestionsConditionsMaxAge]) {
+            newCondition.maximumAge = object;
+        } else if ([key isEqualToString:HCRPrefKeyQuestionsConditionsGender]) {
+            newCondition.gender = object;
+        } else {
+            HCRError(@"Unhandled condition detected! %@",dictionary);
+            NSAssert(NO, @"Unhandled condition detected!");
         }
         
     }

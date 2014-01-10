@@ -14,6 +14,9 @@
 @property (nonatomic, strong) NSNumber *participantID;
 @property (nonatomic, strong) NSNumber *minimumParticipants;
 @property (nonatomic, strong) HCRSurveyQuestionConditionResponse *response;
+@property (nonatomic, strong) NSNumber *minimumAge;
+@property (nonatomic, strong) NSNumber *maximumAge;
+@property (nonatomic, strong) NSNumber *gender;
 
 + (HCRSurveyQuestionCondition *)newConditionWithDictionary:(NSDictionary *)dictionary;
 + (NSArray *)newConditionsArrayFromArray:(NSArray *)array;

@@ -24,4 +24,6 @@
 
 - (HCRSurveyAnswerSetParticipant *)participantWithID:(NSInteger)participantID;
 
+- (HCRSurveyAnswerSetParticipant *)newParticipant;
+
 @end

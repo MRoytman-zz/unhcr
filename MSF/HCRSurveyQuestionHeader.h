@@ -7,15 +7,19 @@
 //
 
 #import "HCRHeaderView.h"
+#import "HCRSurveyParticipantView.h"
 
 @class HCRSurveyQuestion;
 
 @interface HCRSurveyQuestionHeader : HCRHeaderView
 
-+ (CGSize)sizeForHeaderInCollectionView:(UICollectionView *)collectionView withQuestionData:(HCRSurveyQuestion *)surveyQuestion;
-
-@property (nonatomic, strong) HCRSurveyQuestion *surveyQuestion;
+@property (nonatomic, readonly) HCRSurveyQuestion *surveyQuestion;
+@property (nonatomic, readonly) NSNumber *participantID;
 
 @property (nonatomic) BOOL questionAnswered;
+
++ (CGSize)sizeForHeaderInCollectionView:(HCRSurveyParticipantView *)collectionView withQuestionData:(HCRSurveyQuestion *)surveyQuestion;
+
+- (void)setSurveyQuestion:(HCRSurveyQuestion *)surveyQuestion withParticipantID:(NSNumber *)participantID;
 
 @end

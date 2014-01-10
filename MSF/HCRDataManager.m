@@ -25,10 +25,13 @@ NSString *const HCRPrefKeyQuestionsQuestion = @"question";
 NSString *const HCRPrefKeyQuestionsQuestionCode = @"questionId";
 NSString *const HCRPrefKeyQuestionsConditions = @"conditions";
 NSString *const HCRPrefKeyQuestionsConditionsParticipantID = @"participantID";
+NSString *const HCRPrefKeyQuestionsConditionsMinParticipants = @"minParticipants";
+NSString *const HCRPrefKeyQuestionsConditionsMinAge = @"minAge";
+NSString *const HCRPrefKeyQuestionsConditionsMaxAge = @"maxAge";
+NSString *const HCRPrefKeyQuestionsConditionsGender = @"gender";
 NSString *const HCRPrefKeyQuestionsConditionsResponse = @"response";
 NSString *const HCRPrefKeyQuestionsConditionsResponseQuestion = @"question";
 NSString *const HCRPrefKeyQuestionsConditionsResponseAnswer = @"answer";
-NSString *const HCRPrefKeyQuestionsConditionsMinParticipants = @"minParticipants";
 NSString *const HCRPrefKeyQuestionsDefaultAnswer = @"defaultAnswer";
 NSString *const HCRPrefKeyQuestionsSkip = @"skip";
 NSString *const HCRPrefKeyQuestionsRequiredAnswers = @"answersRequired";
@@ -181,6 +184,20 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
+#pragma mark - Public Methods (Participant Management)
+
+- (HCRSurveyAnswerSetParticipant *)createNewParticipantForAnswerSet:(HCRSurveyAnswerSet *)answerSet {
+    
+    HCRSurveyAnswerSetParticipant *newParticipant = [answerSet newParticipant];
+    [answerSet.participants addObject:newParticipant];
+    
+    [self.localSurvey.answerSetDictionary setObject:answerSet forKey:answerSet.localID];
+    [self _sync];
+    
+    return newParticipant;
+    
+}
+
 #pragma mark - Public Methods (Question Management)
 
 // TODO: (remote) get list of possible surveys to work with
@@ -329,22 +346,31 @@ NSString *const kSurveyResultClass = @"TestFlight";
 
 #pragma mark - Public Methods
 
+- (void)save {
+    [self _sync];
+}
+
 - (NSInteger)percentCompleteForAnswerSet:(HCRSurveyAnswerSet *)answerSet {
     
-    // TODO: handle this better - overall questions?
-    
-    HCRSurveyAnswerSetParticipant *participant = [answerSet participantWithID:0];
-    NSArray *currentQuestions = participant.questions;
-    
+    NSInteger totalQuestions = 0;
     NSInteger completedResponses = 0;
     
-    for (HCRSurveyAnswerSetParticipantQuestion *question in currentQuestions) {
-        if (question.answer || question.answerString) {
-            completedResponses++;
+    for (HCRSurveyAnswerSetParticipant *participant in answerSet.participants) {
+        
+        NSArray *currentQuestions = participant.questions;
+        
+        for (HCRSurveyAnswerSetParticipantQuestion *question in currentQuestions) {
+            
+            totalQuestions++;
+            
+            if (question.answer || question.answerString) {
+                completedResponses++;
+            }
         }
+        
     }
     
-    return (currentQuestions.count > 0) ? 100 * completedResponses / currentQuestions.count : 0;
+    return (totalQuestions > 0) ? 100 * completedResponses / totalQuestions : 0;
     
 }
 
@@ -431,6 +457,30 @@ NSString *const kSurveyResultClass = @"TestFlight";
             return NO;
         }
     
+    } else if (condition.minimumAge) {
+        
+        HCRSurveyAnswerSetParticipant *participant = [answerSet participantWithID:participantID];
+        
+        if (participant.age < condition.minimumAge) {
+            return NO;
+        }
+        
+    } else if (condition.maximumAge) {
+        
+        HCRSurveyAnswerSetParticipant *participant = [answerSet participantWithID:participantID];
+        
+        if (participant.age > condition.maximumAge) {
+            return NO;
+        }
+        
+    } else if (condition.gender) {
+        
+        HCRSurveyAnswerSetParticipant *participant = [answerSet participantWithID:participantID];
+        
+        if (participant.gender != condition.gender) {
+            return NO;
+        }
+        
     } else {
         HCRError(@"Unhandled survey question condition: %@",condition);
         NSParameterAssert(NO);

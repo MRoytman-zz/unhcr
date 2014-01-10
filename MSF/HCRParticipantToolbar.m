@@ -10,7 +10,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const NSTimeInterval kAnimationTiming = 0.2;
+static const NSTimeInterval kAnimationTiming = 0.3;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -57,7 +57,7 @@ static const NSTimeInterval kAnimationTiming = 0.2;
         self.participantLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         
         self.participantLabel.textAlignment = NSTextAlignmentCenter;
-        self.participantLabel.transform = CGAffineTransformMakeTranslation(0, 50); // looks good
+        self.participantLabel.transform = CGAffineTransformMakeTranslation(-1 * CGRectGetWidth(self.participantLabel.bounds), 0); // looks good
         
     }
     return self;

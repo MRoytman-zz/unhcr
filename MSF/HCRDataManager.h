@@ -30,10 +30,13 @@ extern NSString *const HCRPrefKeyQuestionsQuestion;
 extern NSString *const HCRPrefKeyQuestionsQuestionCode;
 extern NSString *const HCRPrefKeyQuestionsConditions;
 extern NSString *const HCRPrefKeyQuestionsConditionsParticipantID;
+extern NSString *const HCRPrefKeyQuestionsConditionsMinParticipants;
+extern NSString *const HCRPrefKeyQuestionsConditionsMinAge;
+extern NSString *const HCRPrefKeyQuestionsConditionsMaxAge;
+extern NSString *const HCRPrefKeyQuestionsConditionsGender;
 extern NSString *const HCRPrefKeyQuestionsConditionsResponse;
 extern NSString *const HCRPrefKeyQuestionsConditionsResponseQuestion;
 extern NSString *const HCRPrefKeyQuestionsConditionsResponseAnswer;
-extern NSString *const HCRPrefKeyQuestionsConditionsMinParticipants;
 extern NSString *const HCRPrefKeyQuestionsDefaultAnswer;
 extern NSString *const HCRPrefKeyQuestionsSkip;
 extern NSString *const HCRPrefKeyQuestionsRequiredAnswers;
@@ -71,6 +74,11 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 
 - (HCRSurveyQuestion *)surveyQuestionWithQuestionID:(NSString *)questionID;
 - (HCRSurveyAnswerSet *)surveyAnswerSetWithLocalID:(NSString *)localID;
+
+- (void)save;
+
+// participants
+- (HCRSurveyAnswerSetParticipant *)createNewParticipantForAnswerSet:(HCRSurveyAnswerSet *)answerSet;
 
 // question management
 - (void)refreshSurveyQuestionsWithCompletion:(void (^)(NSError *error))completionBlock;

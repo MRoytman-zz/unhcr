@@ -12,6 +12,7 @@
 
 @interface HCRSurvey ()
 
+@property BOOL dirtyQuestions;
 @property NSArray *sortedQuestions;
 
 @end
@@ -36,9 +37,16 @@
 
 #pragma mark - Getters & Setters
 
+- (void)setQuestionDictionary:(NSMutableDictionary *)questionDictionary {
+    _questionDictionary = questionDictionary;
+    self.dirtyQuestions = YES;
+}
+
 - (NSArray *)questions {
     
-    if (!self.sortedQuestions && self.questionDictionary) {
+    if ((!self.sortedQuestions || self.dirtyQuestions) && self.questionDictionary) {
+        
+        self.dirtyQuestions = NO;
         
         // sort it!
         // https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/SortDescriptors/Articles/Creating.html#//apple_ref/doc/uid/20001845-BAJEAIEE
