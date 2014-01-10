@@ -74,12 +74,6 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 
 // question management
 - (void)refreshSurveyQuestionsWithCompletion:(void (^)(NSError *error))completionBlock;
-//- (NSDictionary *)getSurveyQuestionDataForQuestionCode:(NSString *)questionCode;
-//- (NSString *)getSurveyQuestionCodeForParticipantResponseData:(NSDictionary *)responseData;
-//- (NSArray *)getSurveyAnswerDataArrayForSurveyQuestionCode:(NSString *)questionCode;
-//- (NSArray *)getSurveyAnswerStringsForSurveyQuestionCode:(NSString *)questionCode;
-//- (BOOL)getSurveyAnswerFreeformStatusFromSurveyAnswerData:(NSDictionary *)answerData;
-//- (NSNumber *)getSurveyAnswerDefaultAnswerFromSurveyAnswerData:(NSDictionary *)answerData;
 
 // answer set management
 - (void)createNewSurveyAnswerSet;
@@ -91,21 +85,6 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 - (void)setAnswerCode:(NSNumber *)answerCode withFreeformString:(NSString *)answerString forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID;
 - (void)removeAnswerForQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID;
 
-//// general
-//- (NSDictionary *)getAnswerSetWithID:(NSString *)answerSetID;
-//- (NSString *)getIDForAnswerSet:(NSDictionary *)answerSet;
-//- (NSDate *)getCreatedDateForAnswerSet:(NSDictionary *)answerSet;
-//
-//// participants
-//- (NSArray *)getParticipantsForAnswerSet:(NSDictionary *)answerSet;
-//- (NSDictionary *)getParticipantDataForAnswerSet:(NSDictionary *)answerSet withParticipantID:(NSInteger)participantID;
-//
-//// responses
-//- (NSArray *)getQuestionsForParticipantID:(NSInteger)participantID withAnswerSet:(NSDictionary *)answerSet;
-//- (NSArray *)getQuestionsAndAnswersForParticipantID:(NSInteger)participantID withAnswerSet:(NSDictionary *)answerSet;
-//- (NSNumber *)getAnswerForParticipantID:(NSInteger)participantID forQuestionCode:(NSString *)questionCode withAnswerSet:(NSDictionary *)answerSet;
-//- (NSDictionary *)getQuestionAndAnswerDictionaryForParticipantID:(NSInteger)participantID withQuestionCode:(NSString *)questionCode withAnswerSet:(NSDictionary *)answerSet;
-//
 // convenience
 - (NSDate *)surveyQuestionsLastUpdated;
 - (NSInteger)percentCompleteForAnswerSet:(HCRSurveyAnswerSet *)answerSet;

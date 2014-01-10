@@ -8,7 +8,13 @@
 
 #import "HCRHeaderView.h"
 
+@class HCRSurveyQuestion;
+
 @interface HCRSurveyQuestionHeader : HCRHeaderView
+
++ (CGSize)sizeForHeaderInCollectionView:(UICollectionView *)collectionView withQuestionData:(HCRSurveyQuestion *)surveyQuestion;
+
+@property (nonatomic, strong) HCRSurveyQuestion *surveyQuestion;
 
 @property (nonatomic) BOOL questionAnswered;
 

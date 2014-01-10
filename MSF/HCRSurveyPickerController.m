@@ -87,7 +87,7 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if ([[HCRDataManager sharedManager] localQuestionsArray] == nil) {
+    if ([[HCRDataManager sharedManager] localQuestionsArray].count == 0) {
         [self _refreshSurveyData];
     }
     

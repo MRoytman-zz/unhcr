@@ -9,6 +9,7 @@
 #import "HCRSurveyController.h"
 #import "HCRSurveyCell.h"
 #import "HCRSurveyParticipantView.h"
+#import "HCRParticipantToolbar.h"
 
 #import <MBProgressHUD.h>
 
@@ -48,7 +49,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    self.title = @"Survey";
+    self.title = @"Lebanon: Access to Care";
     
     self.collectionView.scrollEnabled = NO;
     self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
@@ -59,6 +60,10 @@
     
     self.tapRecognizer.cancelsTouchesInView = NO;
     
+    // TOOLBAR
+    
+    
+    // NOTIFICATIONS
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(_keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
@@ -80,6 +85,18 @@
     
     // refresh on load
     [self _refreshModelData];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
+    NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
+    
+    if (toolbar.items.count == 0) {
+        [self _refreshParticipantDataWithParticipantID:0];
+    }
     
 }
 
@@ -207,7 +224,9 @@
             
             // ADD QUESTION
             HCRSurveyAnswerSetParticipantQuestion *question = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView];
-            header.titleString = [self _questionStringForSection:indexPath.section inCollectionView:collectionView];
+            
+//            header.titleString = [self _questionStringForSection:indexPath.section inCollectionView:collectionView];
+            header.surveyQuestion = [self _surveyQuestionForSection:indexPath.section inCollectionView:collectionView];
             header.questionAnswered = (question.answer != nil || question.answerString != nil);
             
             return header;
@@ -264,7 +283,7 @@
     } else if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
         
         // CONTENTS OF SURVEY PAGES
-        return [HCRHeaderView preferredHeaderSizeForCollectionView:collectionView];
+        return [HCRSurveyQuestionHeader sizeForHeaderInCollectionView:collectionView withQuestionData:[self _surveyQuestionForSection:section inCollectionView:collectionView]];
         
     } else {
         NSAssert(NO, @"Unhandled collectionView type..");
@@ -302,9 +321,10 @@
         
         // SURVEY PAGES
         UINavigationBar *navBar = self.navigationController.navigationBar;
+        UIToolbar *toolbar = self.navigationController.toolbar;
         UIEdgeInsets navigationInsets = UIEdgeInsetsMake(CGRectGetMinY(navBar.frame) + CGRectGetHeight(navBar.bounds),
                                                          0,
-                                                         0,
+                                                         CGRectGetHeight(toolbar.bounds),
                                                          0);
         
         return UIEdgeInsetsInsetRect(self.view.bounds, navigationInsets).size;
@@ -413,10 +433,17 @@
         [self _updateAnswersCompleted:(percentComplete == 100)];
     };
     
+    void (^refreshParticipants)(void) = ^{
+        if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
+            NSInteger participantID = [self _participantIDForSurveyView:collectionView];
+            [self _refreshParticipantDataWithParticipantID:participantID];
+        }
+    };
+    
     if (animated == NO ||
         (reloadData && !layoutChanges)) {
         [collectionView reloadData];
-        
+        refreshParticipants();
         percentCompleteCheck();
         
     }
@@ -426,9 +453,11 @@
             if (reloadData) {
                 if (sections) {
                     [collectionView reloadSections:sections];
+                    refreshParticipants();
                     percentCompleteCheck();
                 } else {
                     [collectionView reloadData];
+                    refreshParticipants();
                     percentCompleteCheck();
                 }
             }
@@ -577,7 +606,7 @@
     
     for (HCRSurveyQuestionAnswer *answer in question.answers) {
         if (response &&
-            answer.code != response.answer) {
+            answer.code.integerValue != response.answer.integerValue) {
             NSUInteger answerIndex = [question.answers indexOfObject:answer];
             NSIndexPath *deadIndexPath = [NSIndexPath indexPathForRow:answerIndex inSection:section];
             [indexPaths addObject:deadIndexPath];
@@ -655,7 +684,6 @@
 }
 
 - (void)_dismissKeyboard {
-    HCRDebug(@"tapped!");
     [self.textFieldToDismiss resignFirstResponder];
     self.textFieldToDismiss = nil;
 }
@@ -687,6 +715,34 @@
                                              }
                                              
                                          }];
+    
+}
+
+- (void)_addParticipantButtonPressed {
+    
+    
+    
+}
+
+- (void)_nextParticipantButtonPressed {
+    
+    
+    
+}
+
+- (void)_previousParticipantButtonPressed {
+    
+    
+    
+}
+
+- (void)_refreshParticipantDataWithParticipantID:(NSInteger)participantID {
+    
+    HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
+    NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
+    
+    toolbar.participants = self.answerSet.participants;
+    toolbar.currentParticipant = [self.answerSet participantWithID:participantID];
     
 }
 

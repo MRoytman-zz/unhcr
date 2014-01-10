@@ -8,6 +8,16 @@
 
 #import "HCRSurvey.h"
 
+////////////////////////////////////////////////////////////////////////////////
+
+@interface HCRSurvey ()
+
+@property NSArray *sortedQuestions;
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////
+
 @implementation HCRSurvey
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -26,15 +36,26 @@
 
 #pragma mark - Getters & Setters
 
-//- (NSArray *)propertyList {
-//    return @[
-//             NSStringFromSelector(@selector(questionDictionary)),
-//             NSStringFromSelector(@selector(questionDictionary)),
-//             ];
-//}
-
 - (NSArray *)questions {
-    return self.questionDictionary.allValues;
+    
+    if (!self.sortedQuestions && self.questionDictionary) {
+        
+        // sort it!
+        // https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/SortDescriptors/Articles/Creating.html#//apple_ref/doc/uid/20001845-BAJEAIEE
+        // http://stackoverflow.com/questions/8633932/how-to-sort-an-array-with-alphanumeric-values
+        
+        NSMutableArray *sortedArray = @[].mutableCopy;
+        NSArray *sortedKeys = [self.questionDictionary.allKeys sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
+        
+        for (NSString *key in sortedKeys) {
+            [sortedArray addObject:[self.questionDictionary objectForKey:key]];
+        }
+        
+        self.sortedQuestions = sortedArray;
+        
+    }
+    
+    return self.sortedQuestions;
 }
 
 - (NSArray *)answerSets {

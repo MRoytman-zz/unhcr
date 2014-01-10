@@ -12,6 +12,7 @@
 #import "HCRTableButtonCell.h"
 #import "EASoundManager.h"
 #import "HCRSurveyController.h"
+#import "HCRParticipantToolbar.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -261,7 +262,10 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     HCRSurveyController *surveyController = [[HCRSurveyController alloc] initWithCollectionViewLayout:[HCRSurveyController preferredLayout]];
     surveyController.answerSetID = answerSet.localID;
     
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:surveyController];
+    UINavigationController *navController = [[UINavigationController alloc] initWithNavigationBarClass:[UINavigationBar class] toolbarClass:[HCRParticipantToolbar class]];
+    
+    navController.viewControllers = @[surveyController];
+    navController.toolbarHidden = NO;
     
     UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                  target:self

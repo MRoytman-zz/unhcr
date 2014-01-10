@@ -129,6 +129,7 @@
 		4F8C09A4187E042400317764 /* MSF.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F8C09A3187E042400317764 /* MSF.xcassets */; };
 		4FA1FB0B187518F400CB786B /* HCRHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C940A17FCBE640003AA21 /* HCRHomeViewController.m */; };
 		4FA1FB0D1875196500CB786B /* MKMapView+HCRMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C702C17FF56680081F201 /* MKMapView+HCRMapView.m */; };
+		4FA46E50187F61EA00E775B7 /* HCRParticipantToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA46E4F187F61EA00E775B7 /* HCRParticipantToolbar.m */; };
 		4FA716DA18751B7D00BCE0A6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F59A7C71825BF96006EFE41 /* AudioToolbox.framework */; };
 		4FA716DB18751B8000BCE0A6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F59A7C51825BF91006EFE41 /* AVFoundation.framework */; };
 		4FA716DC18751B8800BCE0A6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866B0D17FAAD1F000350E4 /* MapKit.framework */; };
@@ -316,6 +317,8 @@
 		4F8C09A0187D4E8A00317764 /* HCRArchivalObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRArchivalObject.h; sourceTree = "<group>"; };
 		4F8C09A1187D4E8A00317764 /* HCRArchivalObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRArchivalObject.m; sourceTree = "<group>"; };
 		4F8C09A3187E042400317764 /* MSF.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MSF.xcassets; sourceTree = "<group>"; };
+		4FA46E4E187F61EA00E775B7 /* HCRParticipantToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRParticipantToolbar.h; sourceTree = "<group>"; };
+		4FA46E4F187F61EA00E775B7 /* HCRParticipantToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRParticipantToolbar.m; sourceTree = "<group>"; };
 		4FCBC00B1873577900D96D7F /* MSF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSF.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FD838E61800D88200B49498 /* EAEmailUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAEmailUtilities.h; path = ../UNHCR/EAEmailUtilities.h; sourceTree = "<group>"; };
 		4FD838E71800D88200B49498 /* EAEmailUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAEmailUtilities.m; path = ../UNHCR/EAEmailUtilities.m; sourceTree = "<group>"; };
@@ -534,6 +537,8 @@
 				4F49ABFA187B47F400A4B896 /* HCRSurveyAnswerFreeformCell.m */,
 				4FF7CD49187E7C3E00A2B8F2 /* HCRAnswerSetCell.h */,
 				4FF7CD4A187E7C3E00A2B8F2 /* HCRAnswerSetCell.m */,
+				4FA46E4E187F61EA00E775B7 /* HCRParticipantToolbar.h */,
+				4FA46E4F187F61EA00E775B7 /* HCRParticipantToolbar.m */,
 			);
 			name = "Survey Views";
 			sourceTree = "<group>";
@@ -1147,6 +1152,7 @@
 				4F720433187510B4006E95B2 /* HCRTallySheetDetailInputViewController.m in Sources */,
 				4F72042A1875108A006E95B2 /* HCRHeaderTallyView.m in Sources */,
 				4F8C0987187CEFB400317764 /* HCRSurveyQuestion.m in Sources */,
+				4FA46E50187F61EA00E775B7 /* HCRParticipantToolbar.m in Sources */,
 				4F72041018750FB2006E95B2 /* AssertionCategories.m in Sources */,
 				4F72042B1875108C006E95B2 /* HCRHeaderView.m in Sources */,
 				4F49ABFB187B47F400A4B896 /* HCRSurveyAnswerFreeformCell.m in Sources */,

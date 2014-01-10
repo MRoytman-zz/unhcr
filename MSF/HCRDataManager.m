@@ -197,8 +197,6 @@ NSString *const kSurveyResultClass = @"TestFlight";
             
             HCRDebug(@"Questions found: %d",objects.count);
             
-//            NSMutableArray *newArray = [NSMutableArray new];
-            
             NSMutableDictionary *newDictionary = @{}.mutableCopy;
             
             for (PFObject *object in objects) {
@@ -207,24 +205,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
                 
                 [newDictionary setObject:question forKey:question.questionCode];
                 
-//                [newArray addObject:question];
-                
             }
-            
-//            // sort it!
-//            // https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/SortDescriptors/Articles/Creating.html#//apple_ref/doc/uid/20001845-BAJEAIEE
-//            // http://stackoverflow.com/questions/8633932/how-to-sort-an-array-with-alphanumeric-values
-//            
-//            NSSortDescriptor *questionCodeDescriptor = [[NSSortDescriptor alloc] initWithKey:HCRPrefKeyQuestionsQuestionCode ascending:YES selector:@selector(localizedStandardCompare:)];
-//            
-//            NSArray *sortedArray = [newArray sortedArrayUsingDescriptors:@[questionCodeDescriptor]];
-//            
-//            self.localSurvey.questions = sortedArray;
-//            
-//            for (NSDictionary *sortedObject in sortedArray) {
-//                HCRSurveyQuestion *question = [HCRSurveyQuestion newQuestionWithDictionary:sortedObject];
-//                [survey setObject:question forKey:question.questionCode];
-//            }
             
             self.localSurvey.questionDictionary = newDictionary;
             
@@ -285,80 +266,6 @@ NSString *const kSurveyResultClass = @"TestFlight";
     }
     
 }
-
-//- (NSDictionary *)getSurveyQuestionDataForQuestionCode:(NSString *)questionCode {
-//    
-//    NSDictionary *questionDictionary;
-//    
-//    for (NSDictionary *question in self.localSurvey.questions) {
-//        
-//        if ([question[HCRPrefKeyQuestionsQuestionCode] isEqualToString:questionCode]) {
-//            questionDictionary = question;
-//            break;
-//        }
-//        
-//    }
-//    
-//    return questionDictionary;
-//    
-//}
-//
-//- (NSString *)getSurveyQuestionCodeForParticipantResponseData:(NSDictionary *)responseData {
-//    
-//    NSString *targetCode = [responseData objectForKey:HCRPrefKeyAnswerSetsParticipantsResponsesQuestion ofClass:@"NSString"];
-//    
-//    NSString *questionString;
-//    
-//    for (NSDictionary *questionData in self.localSurvey.questions) {
-//        NSString *questionCode = [questionData objectForKey:HCRPrefKeyQuestionsQuestionCode ofClass:@"NSString"];
-//        if ([questionCode isEqualToString:targetCode]) {
-//            questionString = questionCode;
-//            break;
-//        }
-//    }
-//    
-//    return questionString;
-//    
-//}
-//
-//- (NSArray *)getSurveyAnswerDataArrayForSurveyQuestionCode:(NSString *)questionCode {
-//    
-//    NSArray *answersArray;
-//    
-//    for (NSDictionary *questionData in self.localSurvey.questions) {
-//        NSString *innerCode = [questionData objectForKey:HCRPrefKeyQuestionsQuestionCode ofClass:@"NSString"];
-//        if ([innerCode isEqualToString:questionCode]) {
-//            answersArray = [questionData objectForKey:HCRPrefKeyQuestionsAnswers ofClass:@"NSArray" mustExist:NO];
-//            break;
-//        }
-//    }
-//    
-//    return answersArray;
-//    
-//}
-//
-//- (NSArray *)getSurveyAnswerStringsForSurveyQuestionCode:(NSString *)questionCode {
-//    
-//    NSArray *surveyAnswers = [self getSurveyAnswerDataArrayForSurveyQuestionCode:questionCode];
-//    
-//    NSMutableArray *answerStrings = @[].mutableCopy;
-//    
-//    for (NSDictionary *answer in surveyAnswers) {
-//        NSString *answerString = [answer objectForKey:HCRPrefKeyQuestionsAnswersString ofClass:@"NSString"];
-//        [answerStrings addObject:answerString];
-//    }
-//    
-//    return (answerStrings.count > 0) ? [NSArray arrayWithArray:answerStrings] : nil;
-//    
-//}
-//
-//- (BOOL)getSurveyAnswerFreeformStatusFromSurveyAnswerData:(NSDictionary *)answerData {
-//    return [[answerData objectForKey:HCRPrefKeyQuestionsAnswersFreeform ofClass:@"NSNumber" mustExist:NO] boolValue];
-//}
-//
-//- (NSNumber *)getSurveyAnswerDefaultAnswerFromSurveyAnswerData:(NSDictionary *)answerData {
-//    return [answerData objectForKey:HCRPrefKeyQuestionsDefaultAnswer ofClass:@"NSNumber" mustExist:NO];
-//}
 
 #pragma mark - Public Methods (Answer Management)
 
@@ -441,98 +348,6 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
-//#pragma mark - Public Methods (Answer Data)
-//
-//- (NSDictionary *)getAnswerSetWithID:(NSString *)answerSetID {
-//
-//    NSNumber *index = [self _indexForAnswerSetWithID:answerSetID];
-//
-//    if (index) {
-//        return [self.localSurveyAnswerSetsArray objectAtIndex:index.integerValue];
-//    } else {
-//        return nil;
-//    }
-//    
-//}
-//
-//- (NSString *)getIDForAnswerSet:(NSDictionary *)answerSet {
-//    return [answerSet objectForKey:HCRPrefKeyAnswerSetsLocalID ofClass:@"NSString"];
-//}
-//
-//- (NSDate *)getCreatedDateForAnswerSet:(NSDictionary *)answerSet {
-//    return [answerSet objectForKey:HCRPrefKeyAnswerSetsDurationStart ofClass:@"NSDate"];
-//}
-//
-//- (NSArray *)getParticipantsForAnswerSet:(NSDictionary *)answerSet {
-//    return [answerSet objectForKey:HCRPrefKeyAnswerSetsParticipants ofClass:@"NSArray"];
-//}
-//
-//- (NSInteger)getParticipantIDForParticipantData:(NSDictionary *)participant {
-//    
-//}
-//
-//- (NSDictionary *)getParticipantDataForAnswerSet:(NSDictionary *)answerSet withParticipantID:(NSInteger)participantID {
-//    
-//    NSDictionary *participantDictionary;
-//    
-//    for (NSDictionary *dictionary in [self getParticipantsForAnswerSet:answerSet]) {
-//        NSNumber *partyID = [dictionary objectForKey:HCRPrefKeyAnswerSetsParticipantsID ofClass:@"NSNumber"];
-//        if (partyID.integerValue == participantID) {
-//            participantDictionary = dictionary;
-//            break;
-//        }
-//    }
-//    
-//    return participantDictionary;
-//    
-//}
-//
-//- (NSArray *)getQuestionsAndAnswersForParticipantID:(NSInteger)participantID withAnswerSet:(NSDictionary *)answerSet {
-//    
-//    NSDictionary *participantData = [self getParticipantDataForAnswerSet:answerSet
-//                                                       withParticipantID:participantID];
-//    
-//    NSArray *totalResponses = [participantData objectForKey:HCRPrefKeyAnswerSetsParticipantsResponses
-//                                                    ofClass:@"NSArray"
-//                                                  mustExist:NO];
-//    
-//    return totalResponses;
-//    
-//}
-//
-//- (NSDictionary *)getAnswerDictionaryFromParticipantResponses:(NSArray *)responses withQuestionCode:(NSString *)questionCode {
-//    
-//    NSDictionary *responseData;
-//    
-//    for (NSDictionary *questionData in responses) {
-//        NSString *code = [questionData objectForKey:HCRPrefKeyAnswerSetsParticipantsResponsesQuestion ofClass:@"NSString"];
-//        if ([code isEqualToString:questionCode]) {
-//            responseData = questionData;
-//            break;
-//        }
-//    }
-//    
-//    return responseData;
-//    
-//}
-//
-//- (NSNumber *)getAnswerForParticipantID:(NSInteger)participantID forQuestionCode:(NSString *)questionCode withAnswerSet:(NSDictionary *)answerSet {
-//    
-//    NSArray *responses = [self getQuestionsAndAnswersForParticipantID:participantID withAnswerSet:answerSet];
-//    
-//    NSDictionary *responseData = [self getAnswerDictionaryFromParticipantResponses:responses withQuestionCode:questionCode];
-//    
-//    return [responseData objectForKey:HCRPrefKeyAnswerSetsParticipantsResponsesAnswer ofClass:@"NSNumber" mustExist:NO];
-//    
-//}
-//
-
-// (local) save array of people for each survey
-// (local) save answers given per participant for survey
-// (local) check conditions - per participant per question check of coded response
-// (remote) get survey ID (gets current value + increments it)
-// (remote) submit survey with ID, users, durection (updatedAt - createdAt), etc (relatively complex)
-
 #pragma mark - Private Methods
 
 - (HCRSurvey *)_restoreLocalSurveyFromDataStore {
@@ -589,27 +404,6 @@ NSString *const kSurveyResultClass = @"TestFlight";
     return object;
     
 }
-
-//- (NSNumber *)_indexForAnswerSetWithID:(NSString *)answerSetID {
-//    
-//    NSNumber *index; // is this OK? will it delete index 0 if none found?
-//    
-//    for (NSDictionary *answerSet in self.localSurveyAnswerSetsArray) {
-//        
-//        if ([[answerSet objectForKey:HCRPrefKeyAnswerSetsLocalID ofClass:@"NSString"] isEqualToString:answerSetID]) {
-//            index = @([self.localSurveyAnswerSetsArray indexOfObject:answerSet]);
-//            break;
-//        }
-//        
-//    }
-//    
-//    if (!index) {
-//        HCRWarning(@"No local answer set found with ID: %@",answerSetID);
-//    }
-//    
-//    return index;
-//    
-//}
 
 - (BOOL)_passCondition:(HCRSurveyQuestionCondition *)condition forAnswerSet:(HCRSurveyAnswerSet *)answerSet forParticipantID:(NSInteger)participantID {
     

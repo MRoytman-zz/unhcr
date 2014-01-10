@@ -7,11 +7,20 @@
 //
 
 #import "HCRSurveyQuestionHeader.h"
+#import "HCRSurveyQuestion.h"
+
+////////////////////////////////////////////////////////////////////////////////
+
+static const CGFloat kXContentIndent = 20;
+static const CGFloat kXContentTrailing = 20;
+static const CGFloat kYContentPadding = 20;
+static const CGFloat kYContentTrailing = 10;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRSurveyQuestionHeader ()
 
+@property NSAttributedString *questionString;
 @property UIColor *unansweredBackgroundColor;
 @property UIColor *defaultBackgroundColor;
 
@@ -29,12 +38,19 @@
         self.defaultBackgroundColor = [UIColor tableBackgroundColor];
         self.unansweredBackgroundColor = [UIColor headerUnansweredBackgroundColor];
         self.backgroundColor = self.defaultBackgroundColor;
+        
+        self.titleLabel.numberOfLines = 0;
+        self.titleLabel.textColor = [UIColor flatDarkBlackColor];
+        
     }
     return self;
 }
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    
+    self.surveyQuestion = nil;
+    self.questionAnswered = NO;
     
 }
 
@@ -43,37 +59,39 @@
     
     self.backgroundColor = (self.questionAnswered) ? self.defaultBackgroundColor : self.unansweredBackgroundColor;
     
+    CGSize boundingSize = [HCRSurveyQuestionHeader _boundingSizeForContainingView:self];
+    CGSize labelSize = [self.questionString.string sizeforMultiLineStringWithBoundingSize:boundingSize
+                                                                                 withAttributes:[HCRSurveyQuestionHeader _attributesForSurveyQuestion]
+                                                                                  rounded:YES];
+    self.titleLabel.frame = CGRectMake(kXContentIndent,
+                                       kYContentPadding,
+                                       labelSize.width,
+                                       labelSize.height);
+    
 }
 
 #pragma mark - Class Methods
 
-//+ (CGSize)sizeForCellInCollectionView:(UICollectionView *)collectionView withQuestionData:(NSDictionary *)questionData {
-//    
-//    CGFloat height;
-//    
-//    // vars we need
-//    NSArray *stringArray = [HCREmergencyCell _arrayOfStringsForValueLabelsWithEmergencyDictionary:emergencyDictionary];
-//    CGSize finalBounding = [HCREmergencyCell _boundingSizeForValueLabelInViewWithWidth:boundingSize.width];
-//    
-//    // start with padding
-//    NSInteger amountOfPadding = (stringArray.count - 1) * kYLabelPadding;
-//    height = kEmergencyBannerHeight + kEmergencyBannerHeight + kYLabelOffset + amountOfPadding + kYLabelTrailing;
-//    
-//    // then add size of objects
-//    for (NSString *string in stringArray) {
-//        
-//        CGSize stringSize = [string sizeforMultiLineStringWithBoundingSize:finalBounding
-//                                                                  withFont:[HCREmergencyCell _preferredFontForLabelBold:YES]
-//                                                                   rounded:YES];
-//        
-//        height += stringSize.height;
-//        
-//    }
-//    
-//    return CGSizeMake(boundingSize.width,
-//                      height);
-//    
-//}
++ (CGSize)sizeForHeaderInCollectionView:(UICollectionView *)collectionView withQuestionData:(HCRSurveyQuestion *)surveyQuestion {
+    
+    CGFloat height;
+    
+    // the maximum dimensions the label can be
+    CGSize finalBounding = [HCRSurveyQuestionHeader _boundingSizeForContainingView:collectionView];
+    
+    // start with padding
+    height = kYContentPadding + kYContentTrailing;
+    
+    // then add height of label
+    NSAttributedString *attributedString = [HCRSurveyQuestionHeader _attributedStringForSurveyQuestion:surveyQuestion];
+    CGSize preferredSize = [attributedString.string sizeforMultiLineStringWithBoundingSize:finalBounding withAttributes:[HCRSurveyQuestionHeader _attributesForSurveyQuestion] rounded:YES];
+    
+    height += preferredSize.height;
+    
+    return CGSizeMake(preferredSize.width,
+                      height);
+    
+}
 
 #pragma mark - Getters & Setters
 
@@ -81,5 +99,63 @@
     _questionAnswered = questionAnswered;
     [self setNeedsLayout];
 }
+
+- (void)setSurveyQuestion:(HCRSurveyQuestion *)surveyQuestion {
+    _surveyQuestion = surveyQuestion;
+    
+    self.questionString = (surveyQuestion) ? [HCRSurveyQuestionHeader _attributedStringForSurveyQuestion:surveyQuestion] : nil;
+    self.titleLabel.attributedText = self.questionString;
+    
+    [self setNeedsLayout];
+    
+}
+
+#pragma mark - Private Methods
+
++ (NSAttributedString *)_attributedStringForSurveyQuestion:(HCRSurveyQuestion *)surveyQuestion {
+    
+    NSString *questionLabel = [[NSString stringWithFormat:@"Question %@",surveyQuestion.questionCode] uppercaseString];
+    NSString *questionString = surveyQuestion.questionString;
+    NSString *totalString = [NSString stringWithFormat:@"%@\n%@",
+                             questionLabel,
+                             questionString];
+    
+    NSDictionary *questionAttributes = [HCRSurveyQuestionHeader _attributesForSurveyQuestion];
+    NSMutableDictionary *labelAttributes = questionAttributes.mutableCopy;
+    [labelAttributes setObject:[HCRSurveyQuestionHeader _fontForQuestionBold:NO] forKey:NSFontAttributeName];
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:totalString
+                                                                                         attributes:questionAttributes];
+    
+    [attributedString setAttributes:labelAttributes range:[totalString rangeOfString:questionLabel]];
+    
+    return attributedString;
+    
+}
+
++ (CGSize)_boundingSizeForContainingView:(UIView *)containingView {
+    
+    return CGSizeMake(CGRectGetWidth(containingView.bounds) - kXContentIndent - kXContentTrailing,
+                      HUGE_VALF);
+    
+}
+
++ (UIFont *)_fontForQuestionBold:(BOOL)bold {
+    
+    CGFloat fontSize = (bold) ? 16 : 14;
+    
+    return (bold) ? [UIFont boldSystemFontOfSize:fontSize] : [UIFont systemFontOfSize:fontSize];
+}
+
++ (NSDictionary *)_attributesForSurveyQuestion {
+    
+    NSMutableParagraphStyle *paragraphStyle = [NSParagraphStyle defaultParagraphStyle].mutableCopy;
+    paragraphStyle.paragraphSpacing = 5;
+    
+    return @{NSFontAttributeName: [HCRSurveyQuestionHeader _fontForQuestionBold:YES],
+             NSParagraphStyleAttributeName: paragraphStyle};
+    
+}
+
 
 @end

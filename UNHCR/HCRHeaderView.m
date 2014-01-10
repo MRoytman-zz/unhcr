@@ -28,7 +28,7 @@ static const CGFloat kBottomLineHeight = 0.5;
 
 @interface HCRHeaderView ()
 
-@property UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *titleLabel;
 @property UILabel *subtitleLabel;
 
 @property UIView *headerBottomLineView;
@@ -52,6 +52,14 @@ static const CGFloat kBottomLineHeight = 0.5;
         
         self.headerBottomLineView.backgroundColor = [UIColor tableDividerColor];
         
+        // title label
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        [self addSubview:self.titleLabel];
+        
+        self.titleLabel.textColor = [UIColor tableHeaderTitleColor];
+        self.titleLabel.textAlignment = NSTextAlignmentLeft;
+
+        
     }
     return self;
 }
@@ -60,12 +68,20 @@ static const CGFloat kBottomLineHeight = 0.5;
     [super prepareForReuse];
     
     self.backgroundColor = [UIColor tableBackgroundColor];
-    self.titleString = nil;
+    
+    if (self.titleString) {
+        self.titleString = nil;
+    }
     
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
+    self.titleLabel.frame = CGRectMake(kXLabelPadding,
+                                       CGRectGetHeight(self.bounds) - kLabelHeight,
+                                       CGRectGetWidth(self.bounds) - 2 * kXLabelPadding,
+                                       kLabelHeight);
     
     self.headerBottomLineView.frame = CGRectMake(0,
                                                  CGRectGetHeight(self.bounds) - kBottomLineHeight,
@@ -106,31 +122,16 @@ static const CGFloat kBottomLineHeight = 0.5;
     
     NSString *newString = titleString;
     
-    if (!titleString) {
-        [self.titleLabel removeFromSuperview];
-        self.titleLabel = nil;
-    } else if (!self.titleLabel) {
-        
-        CGRect labelRect = CGRectMake(kXLabelPadding,
-                                      CGRectGetHeight(self.bounds) - kLabelHeight,
-                                      CGRectGetWidth(self.bounds) - 2 * kXLabelPadding,
-                                      kLabelHeight);
-        
-        self.titleLabel = [[UILabel alloc] initWithFrame:labelRect];
-        [self addSubview:self.titleLabel];
-        
-        if (self.titleStyle == HCRHeaderTitleStyleDefault) {
-            self.titleLabel.font = [UIFont helveticaNeueFontOfSize:kTitleLabelDefaultFontSize];
-            newString = [newString uppercaseString];
-        } else {
-            self.titleLabel.font = [UIFont helveticaNeueFontOfSize:kTitleLabelFontSize];
-        }
-        
-        self.titleLabel.textColor = [UIColor tableHeaderTitleColor];
-        self.titleLabel.textAlignment = NSTextAlignmentLeft;
+    if (self.titleStyle == HCRHeaderTitleStyleDefault) {
+        self.titleLabel.font = [UIFont helveticaNeueFontOfSize:kTitleLabelDefaultFontSize];
+        newString = [newString uppercaseString];
+    } else {
+        self.titleLabel.font = [UIFont helveticaNeueFontOfSize:kTitleLabelFontSize];
     }
     
     self.titleLabel.text = newString;
+    
+    [self setNeedsLayout];
     
 }
 
