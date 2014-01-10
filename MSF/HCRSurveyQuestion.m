@@ -9,6 +9,13 @@
 #import "HCRSurveyQuestion.h"
 #import "HCRDataManager.h"
 
+////////////////////////////////////////////////////////////////////////////////
+
+NSString *const HCRSurveyQuestionKeyboardStringKey = @"string";
+NSString *const HCRSurveyQuestionKeyboardNumberKey = @"number";
+
+////////////////////////////////////////////////////////////////////////////////
+
 @implementation HCRSurveyQuestion
 
 - (id)initWithCoder:(NSCoder *)decoder {
@@ -42,22 +49,6 @@
     [encoder encodeObject:self.keyboard forKey:HCRPrefKeyQuestionsKeyboard];
     [encoder encodeObject:self.note forKey:HCRPrefKeyQuestionsNote];
 }
-
-//- (NSArray *)propertyList {
-//    return @[
-//             NSStringFromSelector(@selector(answers)),
-//             NSStringFromSelector(@selector(updatedAt)),
-//             NSStringFromSelector(@selector(questionString)),
-//             NSStringFromSelector(@selector(questionCode)),
-//             NSStringFromSelector(@selector(conditions)),
-//             NSStringFromSelector(@selector(defaultAnswer)),
-//             NSStringFromSelector(@selector(skip)),
-//             NSStringFromSelector(@selector(numberOfAnswersRequired)),
-//             NSStringFromSelector(@selector(freeformLabel)),
-//             NSStringFromSelector(@selector(keyboard)),
-//             NSStringFromSelector(@selector(note)),
-//             ];
-//}
 
 #pragma mark - Class Methods
 

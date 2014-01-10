@@ -10,6 +10,13 @@
 
 @class HCRSurveyQuestionAnswer;
 
+////////////////////////////////////////////////////////////////////////////////
+
+extern NSString *const HCRSurveyQuestionKeyboardStringKey;
+extern NSString *const HCRSurveyQuestionKeyboardNumberKey;
+
+////////////////////////////////////////////////////////////////////////////////
+
 @interface HCRSurveyQuestion : HCRArchivalObject
 
 @property (nonatomic, strong) NSArray *answers;

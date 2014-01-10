@@ -10,6 +10,7 @@
 #import "HCRSurveyCell.h"
 #import "HCRSurveyParticipantView.h"
 #import "HCRParticipantToolbar.h"
+#import "HCRSurveyQuestion.h"
 
 #import <MBProgressHUD.h>
 
@@ -651,7 +652,18 @@
         freeformCell.inputPlaceholder = @"(tap here to answer)";
         freeformCell.inputField.text = participantQuestion.answerString;
         
-        freeformCell.fieldType = (freeformAnswer) ? HCRDataEntryFieldTypeDefault : HCRDataEntryFieldTypeNumber;
+        HCRDataEntryFieldType fieldType;
+        
+        if ([surveyQuestion.keyboard isEqualToString:HCRSurveyQuestionKeyboardNumberKey]) {
+            fieldType = HCRDataEntryFieldTypeNumber;
+        } else if ([surveyQuestion.keyboard isEqualToString:HCRSurveyQuestionKeyboardStringKey]) {
+            fieldType = HCRDataEntryFieldTypeDefault;
+        } else {
+            NSAssert(NO, @"Unhandled keyboard field type!");
+            fieldType = HCRDataEntryFieldTypeDefault;
+        }
+        
+        freeformCell.fieldType = fieldType;
         freeformCell.dataDelegate = self;
         
         freeformCell.lastFieldInSeries = YES;
