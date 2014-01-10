@@ -19,6 +19,8 @@ static const NSTimeInterval kAnimationTiming = 0.3;
 @property UILabel *participantLabel;
 @property UIBarButtonItem *flexSpace;
 
+@property (nonatomic, readwrite) UIColor *defaultToolbarColor;
+
 @property (nonatomic, readwrite) UIBarButtonItem *previousParticipant;
 @property (nonatomic, readwrite) UIBarButtonItem *nextParticipant;
 @property (nonatomic, readwrite) UIBarButtonItem *addParticipants;
@@ -35,6 +37,8 @@ static const NSTimeInterval kAnimationTiming = 0.3;
     if (self) {
         
         // Initialization code
+        self.defaultToolbarColor = self.backgroundColor;
+        
         self.previousParticipant = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
                                                                                  target:nil
                                                                                  action:NULL];

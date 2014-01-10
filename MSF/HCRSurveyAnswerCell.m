@@ -26,6 +26,7 @@
     if (self) {
         // Initialization code
         self.answeredColor = [UIColor cellAnsweredBackgroundColor];
+        self.titleLabel.adjustsFontSizeToFitWidth = YES;
     }
     return self;
 }

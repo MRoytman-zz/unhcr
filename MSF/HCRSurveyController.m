@@ -609,6 +609,11 @@
         toolbar.currentParticipant = self.currentParticipant;
     }
     
+    NSInteger percentComplete = [[HCRDataManager sharedManager] percentCompleteForParticipantID:self.currentParticipant.participantID.integerValue withAnswerSet:self.answerSet];
+    
+    toolbar.backgroundColor = (percentComplete == 100) ? [UIColor flatGreenColor] : toolbar.defaultToolbarColor;
+    
+    
 }
 
 #pragma mark - Private Methods

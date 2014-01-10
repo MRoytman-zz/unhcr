@@ -388,6 +388,26 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
+- (NSInteger)percentCompleteForParticipantID:(NSInteger)participantID withAnswerSet:(HCRSurveyAnswerSet *)answerSet {
+    
+    NSInteger totalQuestions = 0;
+    NSInteger completedResponses = 0;
+    
+    NSArray *currentQuestions = [answerSet participantWithID:participantID].questions;
+    
+    for (HCRSurveyAnswerSetParticipantQuestion *question in currentQuestions) {
+        
+        totalQuestions++;
+        
+        if (question.answer || question.answerString) {
+            completedResponses++;
+        }
+    }
+    
+    return (totalQuestions > 0) ? 100 * completedResponses / totalQuestions : 0;
+    
+}
+
 #pragma mark - Private Methods
 
 - (HCRSurvey *)_restoreLocalSurveyFromDataStore {
@@ -462,7 +482,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
         NSNumber *answer = question.answer;
         
         if (!answer ||
-            ![answer isEqualToNumber:condition.response.answer]) {
+            answer.integerValue != condition.response.answer.integerValue) {
             return NO;
         }
         

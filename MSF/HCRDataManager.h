@@ -97,5 +97,6 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 // convenience
 - (NSDate *)surveyQuestionsLastUpdated;
 - (NSInteger)percentCompleteForAnswerSet:(HCRSurveyAnswerSet *)answerSet;
+- (NSInteger)percentCompleteForParticipantID:(NSInteger)participantID withAnswerSet:(HCRSurveyAnswerSet *)answerSet;
 
 @end

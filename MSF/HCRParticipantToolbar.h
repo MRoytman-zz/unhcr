@@ -19,4 +19,6 @@
 @property (nonatomic, readonly) UIBarButtonItem *nextParticipant;
 @property (nonatomic, readonly) UIBarButtonItem *addParticipants;
 
+@property (nonatomic, readonly) UIColor *defaultToolbarColor;
+
 @end
