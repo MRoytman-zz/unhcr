@@ -515,21 +515,10 @@
         [self _updateAnswersCompleted:(percentComplete == 100)];
     };
     
-    void (^refreshParticipants)(void) = ^{
-        
-        if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
-            NSInteger participantID = [self _participantIDForSurveyView:collectionView];
-            self.currentParticipant = [self.answerSet participantWithID:participantID];
-        }
-        
-        [self _refreshToolbarData];
-    };
-    
     // completion code (update UI, etc)
     if (animated == NO ||
         (reloadData && !layoutChanges)) {
         [collectionView reloadData];
-        refreshParticipants();
         percentCompleteCheck();
     }
     
@@ -538,11 +527,9 @@
             if (reloadData) {
                 if (sections) {
                     [collectionView reloadSections:sections];
-                    refreshParticipants();
                     percentCompleteCheck();
                 } else {
                     [collectionView reloadData];
-                    refreshParticipants();
                     percentCompleteCheck();
                 }
                 
@@ -640,11 +627,13 @@
         [self _refreshModelDataForCollectionView:self.collectionView];
         
         [self _reloadLayoutData:YES
-                     inSections:nil
+                     inSections:[NSIndexSet indexSetWithIndex:0]
              withCollectionView:self.collectionView
                        animated:YES
               withLayoutChanges:^{
+                  
                   [self.collectionView deleteItemsAtIndexPaths:@[oldIndexPath]];
+                  
               }];
         
         // TODO: participant surveys are disappearing! nooo!
@@ -1051,7 +1040,7 @@
 - (HCRSurveyCell *)_surveyCellForCurrectParticipant {
     
     NSIndexPath *indexPathForSurvey =
-    [NSIndexPath indexPathForItem:self.currentParticipant.participantID.integerValue
+    [NSIndexPath indexPathForItem:[self.answerSet.participants indexOfObject:self.currentParticipant]
                         inSection:0];
     
     HCRSurveyCell *survey = (HCRSurveyCell *)[self.collectionView cellForItemAtIndexPath:indexPathForSurvey];

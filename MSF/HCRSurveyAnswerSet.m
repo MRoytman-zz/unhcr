@@ -43,12 +43,13 @@
 
 - (HCRSurveyAnswerSetParticipant *)participantWithID:(NSInteger)participantID {
     
-    if (participantID > self.participants.count - 1 ||
-        participantID < 0) {
-        return nil;
+    for (HCRSurveyAnswerSetParticipant *participant in self.participants) {
+        if (participant.participantID.integerValue == participantID) {
+            return participant;
+        }
     }
     
-    return [self.participants objectAtIndex:participantID ofClass:@"HCRSurveyAnswerSetParticipant"];
+    return nil;
     
 }
 
