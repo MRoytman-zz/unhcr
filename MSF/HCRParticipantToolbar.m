@@ -77,7 +77,7 @@ static const NSTimeInterval kAnimationTiming = 0.3;
         
         self.centerButton = [[UIButton alloc] initWithFrame:CGRectZero];
         [self addSubview:self.centerButton];
-        
+                
     }
     return self;
 }
@@ -122,12 +122,13 @@ static const NSTimeInterval kAnimationTiming = 0.3;
     self.participantLabel.text = [[self.currentParticipant localizedParticipantName] uppercaseString];
     
     CGFloat targetTranslation = (showTrashIcon) ? -20 : 0;
+    CGAffineTransform slide = (showTrashIcon) ? CGAffineTransformMakeTranslation(targetTranslation, 0) : CGAffineTransformIdentity;
     [UIView animateWithDuration:kAnimationTiming animations:^{
         
         self.participantLabel.alpha = 1.0;
         
         // TODO: get dynamically and determine whether it's even needed dynamically
-        self.participantLabel.transform = CGAffineTransformMakeTranslation(targetTranslation, 0);
+        self.participantLabel.transform = slide;
         
     } completion:^(BOOL finished) {
         
