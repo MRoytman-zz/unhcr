@@ -248,14 +248,14 @@ NSString *const kSurveyResultClass = @"TestFlight";
 
 - (void)refreshSurveyResponsesForParticipantID:(NSInteger)participantID withAnswerSet:(HCRSurveyAnswerSet *)answerSet {
     
-    NSArray *questionArray = [NSArray arrayWithArray:self.localSurvey.questions]; // may get manipulated inline
+    NSDate *start = [NSDate date];
     
-    for (HCRSurveyQuestion *question in questionArray) {
+    HCRSurveyAnswerSetParticipant *targetParticpant = [answerSet participantWithID:participantID];
+    
+    for (HCRSurveyQuestion *question in self.localSurvey.questions) {
         
         if (question.skip.boolValue) {
-            
-//            HCRDebug(@"Skipping question %@",question.questionCode);
-            
+            // do nothing
         } else if (question.conditions) {
             
             // make sure they pass ALL tests!
@@ -272,9 +272,25 @@ NSString *const kSurveyResultClass = @"TestFlight";
             }
             
             if (conditionPasses) {
-                [self setAnswerCode:nil withFreeformString:nil forQuestion:question.questionCode withAnswerSetID:answerSet.localID withParticipantID:participantID];
+                
+                [self _setAnswer:nil
+                      withString:nil
+                     forQuestion:question.questionCode
+                 forParticipant:targetParticpant
+                        forceSet:NO
+                            sort:NO
+                            sync:NO];
+                
+//                [self setAnswerCode:nil
+//                 withFreeformString:nil
+//                        forQuestion:question.questionCode
+//                    withAnswerSetID:answerSet.localID
+//                  withParticipantID:participantID];
+                
             } else {
-                [self removeQuestionWithCode:question.questionCode withAnswerSetID:answerSet.localID withParticipantID:participantID];
+                [self _removeQuestionWithCode:question.questionCode
+                              withParticipant:targetParticpant
+                                         sync:NO];
             }
             
         } else {
@@ -283,6 +299,11 @@ NSString *const kSurveyResultClass = @"TestFlight";
         }
         
     }
+    
+    [self _sortQuestionsForParticipant:[answerSet participantWithID:participantID]
+                                  sync:YES];
+    
+    HCRDebug(@"refresh time: %.2f",-1 * start.timeIntervalSinceNow);
     
 }
 
@@ -326,23 +347,37 @@ NSString *const kSurveyResultClass = @"TestFlight";
 
 - (void)setAnswerCode:(NSNumber *)answerCode withFreeformString:(NSString *)answerString forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID {
     
+    HCRSurveyAnswerSet *targetAnswerSet = [self.localSurvey.answerSetDictionary objectForKey:answerSetID ofClass:@"HCRSurveyAnswerSet"];
+    NSParameterAssert(targetAnswerSet);
+    
+    // drill down to this particular response
+    HCRSurveyAnswerSetParticipant *targetParticipant = [targetAnswerSet participantWithID:participantID];
+    
     [self _setAnswer:answerCode
           withString:answerString
          forQuestion:questionCode
-     withAnswerSetID:answerSetID
-   withParticipantID:participantID
-            forceSet:NO];
+      forParticipant:targetParticipant
+            forceSet:NO
+                sort:YES
+                sync:YES];
     
 }
 
 - (void)removeAnswerForQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID {
     
+    HCRSurveyAnswerSet *targetAnswerSet = [self.localSurvey.answerSetDictionary objectForKey:answerSetID ofClass:@"HCRSurveyAnswerSet"];
+    NSParameterAssert(targetAnswerSet);
+    
+    // drill down to this particular response
+    HCRSurveyAnswerSetParticipant *targetParticipant = [targetAnswerSet participantWithID:participantID];
+    
     [self _setAnswer:nil
           withString:nil
          forQuestion:questionCode
-     withAnswerSetID:answerSetID
-   withParticipantID:participantID
-            forceSet:YES];
+      forParticipant:targetParticipant
+            forceSet:YES
+                sort:YES
+                sync:YES];
     
 }
 
@@ -350,11 +385,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
     HCRSurveyAnswerSetParticipant *participant = [[self surveyAnswerSetWithLocalID:answerSetID] participantWithID:participantID];
     
-    HCRSurveyAnswerSetParticipantQuestion *question = [participant questionWithID:questionCode];
-    
-    [participant.questions removeObject:question];
-    
-    [self _sync];
+    [self _removeQuestionWithCode:questionCode withParticipant:participant sync:YES];
     
 }
 
@@ -529,16 +560,12 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
-- (void)_setAnswer:(NSNumber *)answerCode withString:(NSString *)answerString forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID forceSet:(BOOL)forceSet {
+- (void)_setAnswer:(NSNumber *)answerCode withString:(NSString *)answerString forQuestion:(NSString *)questionCode forParticipant:(HCRSurveyAnswerSetParticipant *)targetParticipant forceSet:(BOOL)forceSet sort:(BOOL)sort sync:(BOOL)sync {
     
     NSParameterAssert(questionCode);
     
     // must exist
-    HCRSurveyAnswerSet *targetAnswerSet = [self.localSurvey.answerSetDictionary objectForKey:answerSetID ofClass:@"HCRSurveyAnswerSet"];
-    NSParameterAssert(targetAnswerSet);
     
-    // drill down to this particular response
-    HCRSurveyAnswerSetParticipant *targetParticipant = [targetAnswerSet participantWithID:participantID];
     HCRSurveyAnswerSetParticipantQuestion *questionData = [targetParticipant questionWithID:questionCode];
     
     if (!questionData) {
@@ -568,7 +595,35 @@ NSString *const kSurveyResultClass = @"TestFlight";
         targetParticipant.gender = questionData.answer;
     }
     
-    [self _sync];
+    if (sort) {
+        [self _sortQuestionsForParticipant:targetParticipant sync:NO];
+    }
+    
+    if (sync) {
+        [self _sync];
+    }
+    
+}
+
+- (void)_removeQuestionWithCode:(NSString *)questionCode withParticipant:(HCRSurveyAnswerSetParticipant *)participant sync:(BOOL)sync {
+    
+    HCRSurveyAnswerSetParticipantQuestion *question = [participant questionWithID:questionCode];
+    
+    [participant.questions removeObject:question];
+    
+    if (sync) {
+        [self _sync];
+    }
+    
+}
+
+- (void)_sortQuestionsForParticipant:(HCRSurveyAnswerSetParticipant *)targetParticipant sync:(BOOL)sync {
+    
+    [targetParticipant.questions sortUsingSelector:@selector(compareToParticipantQuestion:)];
+    
+    if (sync) {
+        [self _sync];
+    }
     
 }
 

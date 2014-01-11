@@ -59,4 +59,12 @@
     return newQuestion;
 }
 
+#pragma mark - Public Methods
+
+- (NSComparisonResult)compareToParticipantQuestion:(HCRSurveyAnswerSetParticipantQuestion *)question {
+    
+    return [self.question localizedStandardCompare:question.question];
+    
+}
+
 @end

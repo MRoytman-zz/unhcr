@@ -61,7 +61,7 @@ static const NSTimeInterval kAnimationTiming = 0.3;
         self.participantLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         
         self.participantLabel.textAlignment = NSTextAlignmentCenter;
-        self.participantLabel.transform = CGAffineTransformMakeTranslation(-1 * CGRectGetWidth(self.participantLabel.bounds), 0); // looks good
+        self.participantLabel.alpha = 0.0;
         
     }
     return self;
@@ -73,30 +73,63 @@ static const NSTimeInterval kAnimationTiming = 0.3;
     
     _participants = participants;
     
-    [UIView animateWithDuration:kAnimationTiming animations:^{
-        
-        self.items = (participants.count > 1) ? @[self.previousParticipant,self.flexSpace,self.nextParticipant] : @[self.flexSpace,self.addParticipants];
-        
-    }];
+    [self _updateToolbar];
     
 }
 
 - (void)setCurrentParticipant:(HCRSurveyAnswerSetParticipant *)currentParticipant {
     _currentParticipant = currentParticipant;
     
-    NSMutableString *participantString = [NSString stringWithFormat:@"Participant %@",currentParticipant.participantID].mutableCopy;
+    [self _updateToolbar];
     
-    if (currentParticipant.age && currentParticipant.gender) {
+}
+
+#pragma mark - Private Methods
+
+- (void)_updateToolbar {
+    
+    // set buttons
+    NSMutableArray *buttonArray = @[].mutableCopy;
+    
+    if ([self.participants containsObject:self.currentParticipant]) {
+        
+        if ([self.participants indexOfObject:self.currentParticipant] != 0) {
+            [buttonArray addObject:self.previousParticipant];
+        }
+        
+        [buttonArray addObject:self.flexSpace];
+        
+        if (self.currentParticipant == [self.participants lastObject]) {
+            [buttonArray addObject:self.addParticipants];
+        } else {
+            [buttonArray addObject:self.nextParticipant];
+        }
+        
+    } else {
+        
+        [buttonArray addObject:self.flexSpace];
+        [buttonArray addObject:self.addParticipants];
+    }
+    
+    // set label
+    NSMutableString *participantString = (self.currentParticipant.participantID.integerValue == 0) ? @"Head of Household".mutableCopy : [NSString stringWithFormat:@"Participant %@",self.currentParticipant.participantID].mutableCopy;
+    
+    if (self.currentParticipant.age && self.currentParticipant.gender) {
         [participantString appendString:[NSString stringWithFormat:@" (%@/%@)",
-                                         currentParticipant.age,
-                                         (currentParticipant.gender.integerValue == 0) ? @"m" : @"f"]];
+                                         self.currentParticipant.age,
+                                         (self.currentParticipant.gender.integerValue == 0) ? @"m" : @"f"]];
     }
     
     self.participantLabel.text = [participantString uppercaseString];
     
+    [self setItems:buttonArray animated:YES];
+    
     [UIView animateWithDuration:kAnimationTiming animations:^{
-        self.participantLabel.transform = CGAffineTransformIdentity;
+        
+        self.participantLabel.alpha = 1.0;
+        
     }];
+
     
 }
 

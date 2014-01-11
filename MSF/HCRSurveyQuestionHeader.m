@@ -127,7 +127,7 @@ static const CGFloat kYContentTrailing = 10;
                              questionString];
     
     if ([totalString rangeOfString:@"%@"].location != NSNotFound) {
-        NSString *participantName = [NSString stringWithFormat:@"Participant %@",participantID];
+        NSString *participantName = (participantID.integerValue == 0) ? @"Head of Household".mutableCopy : [NSString stringWithFormat:@"Participant %@",participantID];
         totalString = [totalString stringByReplacingOccurrencesOfString:@"%@" withString:participantName];
     }
     

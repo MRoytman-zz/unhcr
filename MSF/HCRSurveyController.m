@@ -98,8 +98,10 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    // refresh on load
-    [self _refreshModelDataForCollectionView:nil];
+    // test whether likely first load - if so, refresh
+    if ([self.answerSet participantWithID:0].questions.count == 0) {
+        [self _refreshModelDataForCollectionView:nil];
+    }
     
 }
 
@@ -112,7 +114,7 @@
     if (toolbar.items.count == 0) {
         // this means it's the first load - workaround for toolbar not loading in proper order
         self.currentParticipant = [self.answerSet participantWithID:0];
-        [self _refreshParticipantData];
+        [self _refreshToolbarData];
     }
     
 }
@@ -445,7 +447,7 @@
     _currentParticipant = currentParticipant;
     
     // set data
-    [self _refreshParticipantData];
+    [self _refreshToolbarData];
     
     // slide to correct position..
     CGFloat screenWidth = CGRectGetWidth([UIScreen mainScreen].bounds);
@@ -473,7 +475,6 @@
 - (void)_refreshModelDataForParticipantID:(NSInteger)participantID {
     
     [[HCRDataManager sharedManager] refreshSurveyResponsesForParticipantID:participantID withAnswerSet:self.answerSet];
-    
 }
 
 - (void)_reloadAllData {
@@ -494,7 +495,7 @@
             self.currentParticipant = [self.answerSet participantWithID:participantID];
         }
         
-        [self _refreshParticipantData];
+        [self _refreshToolbarData];
     };
     
     // completion code (update UI, etc)
@@ -562,11 +563,10 @@
     
     HCRSurveyAnswerSetParticipant *newParticipant = [[HCRDataManager sharedManager] createNewParticipantForAnswerSet:self.answerSet];
     
-    self.currentParticipant = newParticipant;
-    
     [self _refreshModelDataForParticipantID:newParticipant.participantID.integerValue];
     [self _reloadAllData];
     
+    self.currentParticipant = newParticipant;
     
 }
 
@@ -576,11 +576,11 @@
     NSInteger targetID = self.currentParticipant.participantID.integerValue + 1;
     HCRSurveyAnswerSetParticipant *nextParticipant = [self.answerSet participantWithID:targetID];
     
-    if (!nextParticipant) {
-        nextParticipant = [self.answerSet participantWithID:0];
+    if (nextParticipant) {
+        self.currentParticipant = nextParticipant;
+    } else {
+        NSAssert(NO, @"Should not be able to toggle to this participant!");
     }
-    
-    self.currentParticipant = nextParticipant;
     
 }
 
@@ -590,15 +590,15 @@
     
     HCRSurveyAnswerSetParticipant *previousParticipant = [self.answerSet participantWithID:targetID];
     
-    if (!previousParticipant) {
-        previousParticipant = [self.answerSet participantWithID:(self.answerSet.participants.count - 1)];
+    if (previousParticipant) {
+        self.currentParticipant = previousParticipant;
+    } else {
+        NSAssert(NO, @"Should not be able to toggle to this participant!");
     }
-    
-    self.currentParticipant = previousParticipant;
     
 }
 
-- (void)_refreshParticipantData {
+- (void)_refreshToolbarData {
     
     HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
     NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
@@ -609,6 +609,7 @@
         toolbar.currentParticipant = self.currentParticipant;
     }
     
+    // check for 100% completion
     NSInteger percentComplete = [[HCRDataManager sharedManager] percentCompleteForParticipantID:self.currentParticipant.participantID.integerValue withAnswerSet:self.answerSet];
     
     toolbar.backgroundColor = (percentComplete == 100) ? [UIColor flatGreenColor] : toolbar.defaultToolbarColor;

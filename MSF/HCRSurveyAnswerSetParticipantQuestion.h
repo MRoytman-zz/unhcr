@@ -16,4 +16,6 @@
 
 + (HCRSurveyAnswerSetParticipantQuestion *)newQuestionWithDictionary:(NSDictionary *)dictionary;
 
+- (NSComparisonResult)compareToParticipantQuestion:(HCRSurveyAnswerSetParticipantQuestion *)question;
+
 @end
