@@ -46,6 +46,8 @@
 
 - (void)setParticipantID:(NSNumber *)participantID {
     
+    _participantID = participantID;
+    
     self.participantCollection.participantID = participantID;
     
     [self.participantCollection reloadData];
@@ -53,6 +55,8 @@
 }
 
 - (void)setParticipantDataSourceDelegate:(id<UICollectionViewDataSource,UICollectionViewDelegate>)participantDataSourceDelegate {
+    
+    _participantDataSourceDelegate = participantDataSourceDelegate;
     
     self.participantCollection.dataSource = participantDataSourceDelegate;
     self.participantCollection.delegate = participantDataSourceDelegate;

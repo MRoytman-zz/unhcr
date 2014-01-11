@@ -11,6 +11,7 @@
 
 @interface HCRSurveyQuestionCondition : HCRArchivalObject
 
+@property (nonatomic, strong) NSArray *orArray;
 @property (nonatomic, strong) NSNumber *participantID;
 @property (nonatomic, strong) NSNumber *minimumParticipants;
 @property (nonatomic, strong) HCRSurveyQuestionConditionResponse *response;

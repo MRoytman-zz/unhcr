@@ -27,13 +27,6 @@
     [encoder encodeObject:self.answerString forKey:HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString];
 }
 
-//- (NSArray *)propertyList {
-//    return @[
-//             NSStringFromSelector(@selector(question)),
-//             NSStringFromSelector(@selector(answer))
-//             ];
-//}
-
 #pragma mark - Class Methods
 
 + (HCRSurveyAnswerSetParticipantQuestion *)newQuestionWithDictionary:(NSDictionary *)dictionary {

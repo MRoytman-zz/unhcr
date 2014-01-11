@@ -21,5 +21,8 @@
 + (HCRSurveyAnswerSetParticipant *)newParticipantForAnswerSet:(HCRSurveyAnswerSet *)answerSet;
 
 - (HCRSurveyAnswerSetParticipantQuestion *)questionWithID:(NSString *)questionID;
+- (HCRSurveyAnswerSetParticipantQuestion *)firstUnansweredQuestion;
+
+- (NSString *)localizedParticipantName;
 
 @end

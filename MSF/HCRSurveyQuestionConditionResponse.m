@@ -15,6 +15,7 @@
     if (self) {
         self.question = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsResponseQuestion];
         self.answer = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsResponseAnswer];
+        self.answerArray = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsResponseAnswerArray];
     }
     return self;
 }
@@ -22,14 +23,8 @@
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:self.question forKey:HCRPrefKeyQuestionsConditionsResponseQuestion];
     [encoder encodeObject:self.answer forKey:HCRPrefKeyQuestionsConditionsResponseAnswer];
+    [encoder encodeObject:self.answerArray forKey:HCRPrefKeyQuestionsConditionsResponseAnswerArray];
 }
-
-//- (NSArray *)propertyList {
-//    return @[
-//             NSStringFromSelector(@selector(question)),
-//             NSStringFromSelector(@selector(answer))
-//             ];
-//}
 
 #pragma mark - Class Methods
 
@@ -46,7 +41,11 @@
         if ([key isEqualToString:HCRPrefKeyQuestionsConditionsResponseQuestion]) {
             newResponse.question = object;
         } else if ([key isEqualToString:HCRPrefKeyQuestionsConditionsResponseAnswer]) {
+            NSParameterAssert([object isKindOfClass:[NSNumber class]]);
             newResponse.answer = object;
+        } else if ([key isEqualToString:HCRPrefKeyQuestionsConditionsResponseAnswerArray]) {
+            NSParameterAssert([object isKindOfClass:[NSArray class]]);
+            newResponse.answerArray = object;
         }
         
     }

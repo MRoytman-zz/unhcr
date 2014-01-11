@@ -8,11 +8,23 @@
 
 #import "HCRSurveyQuestionCondition.h"
 
+////////////////////////////////////////////////////////////////////////////////
+
+@interface HCRSurveyQuestionCondition ()
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////
+
 @implementation HCRSurveyQuestionCondition
 
 - (id)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if (self) {
+        self.orArray = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsOrArray];
+        
+        HCRDebug(@"orArray: %@",self.orArray);
+        
         self.participantID = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsParticipantID];
         self.minimumParticipants = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsMinParticipants];
         self.response = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsResponse];
@@ -24,6 +36,7 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
+    [encoder encodeObject:self.orArray forKey:HCRPrefKeyQuestionsConditionsOrArray];
     [encoder encodeObject:self.participantID forKey:HCRPrefKeyQuestionsConditionsParticipantID];
     [encoder encodeObject:self.minimumParticipants forKey:HCRPrefKeyQuestionsConditionsMinParticipants];
     [encoder encodeObject:self.response forKey:HCRPrefKeyQuestionsConditionsResponse];
@@ -42,7 +55,9 @@
         
         id object = [dictionary objectForKey:key];
         
-        if ([key isEqualToString:HCRPrefKeyQuestionsConditionsParticipantID]) {
+        if ([key isEqualToString:HCRPrefKeyQuestionsConditionsOrArray]) {
+            newCondition.orArray = [HCRSurveyQuestionCondition newConditionsArrayFromArray:object];
+        } else if ([key isEqualToString:HCRPrefKeyQuestionsConditionsParticipantID]) {
             newCondition.participantID = object;
         } else if ([key isEqualToString:HCRPrefKeyQuestionsConditionsMinParticipants]) {
             newCondition.minimumParticipants = object;
@@ -77,7 +92,7 @@
         [newConditions addObject:newCondition];
     }
     
-    return newConditions;
+    return [NSArray arrayWithArray:newConditions];
     
 }
 

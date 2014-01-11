@@ -50,6 +50,7 @@
     self.inputField.text = nil;
     self.labelTitle = nil;
     self.inputPlaceholder = nil;
+    self.lastFieldInSeries = NO;
     
 }
 

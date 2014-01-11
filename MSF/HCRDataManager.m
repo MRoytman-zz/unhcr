@@ -24,6 +24,7 @@ NSString *const HCRPrefKeyQuestionsUpdated = @"updated";
 NSString *const HCRPrefKeyQuestionsQuestion = @"question";
 NSString *const HCRPrefKeyQuestionsQuestionCode = @"questionId";
 NSString *const HCRPrefKeyQuestionsConditions = @"conditions";
+NSString *const HCRPrefKeyQuestionsConditionsOrArray = @"orArray";
 NSString *const HCRPrefKeyQuestionsConditionsParticipantID = @"participantID";
 NSString *const HCRPrefKeyQuestionsConditionsMinParticipants = @"minParticipants";
 NSString *const HCRPrefKeyQuestionsConditionsMinAge = @"minAge";
@@ -32,6 +33,7 @@ NSString *const HCRPrefKeyQuestionsConditionsGender = @"gender";
 NSString *const HCRPrefKeyQuestionsConditionsResponse = @"response";
 NSString *const HCRPrefKeyQuestionsConditionsResponseQuestion = @"question";
 NSString *const HCRPrefKeyQuestionsConditionsResponseAnswer = @"answer";
+NSString *const HCRPrefKeyQuestionsConditionsResponseAnswerArray = @"answers";
 NSString *const HCRPrefKeyQuestionsDefaultAnswer = @"defaultAnswer";
 NSString *const HCRPrefKeyQuestionsSkip = @"skip";
 NSString *const HCRPrefKeyQuestionsRequiredAnswers = @"answersRequired";
@@ -63,7 +65,7 @@ NSString *const HCRPrefKeyAnswerSetsDurationEnd = @"HCRPrefKeyAnswerSetsDuration
 NSString *const kSurveyResultClass = @"Test";
 #else
 #ifdef PRODUCTION
-NSString *const kSurveyResultClass = @"SurveyResult";
+NSString *const kSurveyResultClass = @"Result";
 #else
 NSString *const kSurveyResultClass = @"TestFlight";
 #endif
@@ -198,6 +200,15 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
+- (void)removeParticipant:(HCRSurveyAnswerSetParticipant *)participant fromAnswerSet:(HCRSurveyAnswerSet *)answerSet {
+    
+    [answerSet.participants removeObject:participant];
+    
+    [self.localSurvey.answerSetDictionary setObject:answerSet forKey:answerSet.localID];
+    [self _sync];
+    
+}
+
 #pragma mark - Public Methods (Question Management)
 
 // TODO: (remote) get list of possible surveys to work with
@@ -225,6 +236,8 @@ NSString *const kSurveyResultClass = @"TestFlight";
             }
             
             self.localSurvey.questionDictionary = newDictionary;
+            
+            [self _sync];
             
         }
         
@@ -262,10 +275,11 @@ NSString *const kSurveyResultClass = @"TestFlight";
             BOOL conditionPasses = YES;
             for (HCRSurveyQuestionCondition *condition in question.conditions) {
                 
+                // if $or array exists, make sure they pass ONE test
+                // (but continue the loop; there may be non-$or conditions to test
                 conditionPasses = [self _passCondition:condition forAnswerSet:answerSet forParticipantID:participantID];
                 
                 if (conditionPasses == NO) {
-//                    HCRDebug(@"Condition failed for question %@",question.questionCode);
                     break;
                 }
                 
@@ -280,12 +294,6 @@ NSString *const kSurveyResultClass = @"TestFlight";
                         forceSet:NO
                             sort:NO
                             sync:NO];
-                
-//                [self setAnswerCode:nil
-//                 withFreeformString:nil
-//                        forQuestion:question.questionCode
-//                    withAnswerSetID:answerSet.localID
-//                  withParticipantID:participantID];
                 
             } else {
                 [self _removeQuestionWithCode:question.questionCode
@@ -498,7 +506,25 @@ NSString *const kSurveyResultClass = @"TestFlight";
 
 - (BOOL)_passCondition:(HCRSurveyQuestionCondition *)condition forAnswerSet:(HCRSurveyAnswerSet *)answerSet forParticipantID:(NSInteger)participantID {
     
-    if (condition.participantID) {
+    if (condition.orArray) {
+        
+        BOOL anyPass = NO;
+        for (HCRSurveyQuestionCondition *innerCondition in condition.orArray) {
+            
+            anyPass = [self _passCondition:innerCondition forAnswerSet:answerSet forParticipantID:participantID];
+            
+            if (anyPass) {
+                break;
+            }
+            
+        }
+        
+        // if NONE pass, break it
+        if (!anyPass) {
+            return NO;
+        }
+        
+    } else if (condition.participantID) {
         
         NSInteger conditionalID = condition.participantID.integerValue;
         
@@ -511,11 +537,44 @@ NSString *const kSurveyResultClass = @"TestFlight";
         HCRSurveyAnswerSetParticipant *participant = [answerSet participantWithID:participantID];
         HCRSurveyAnswerSetParticipantQuestion *question = [participant questionWithID:condition.response.question];
         NSNumber *answer = question.answer;
+        NSString *answerString = question.answerString;
         
-        if (!answer ||
-            answer.integerValue != condition.response.answer.integerValue) {
+        if (!answer && !answerString) {
             return NO;
         }
+        
+        // TODO: on server migrate everything to array and only accept one answer.. maybe..
+        
+        // fails if answer does not match answer
+        id conditionalAnswer = condition.response.answer;
+        if (conditionalAnswer &&
+            ![answer isEqualToNumber:(NSNumber *)conditionalAnswer] &&
+            ![answerString isEqualToString:(NSString *)conditionalAnswer]) {
+            
+            return NO;
+        }
+        
+        // fails if NONE of the answers match answer
+        NSArray *conditionalAnswers = condition.response.answerArray;
+        if (conditionalAnswers) {
+            
+            BOOL matches = NO;
+            
+            for (id conditionalAnswer in conditionalAnswers) {
+                
+                if ([answer isEqualToNumber:(NSNumber *)conditionalAnswer] ||
+                    [answerString isEqualToString:(NSString *)[NSString stringWithFormat:@"%@",conditionalAnswer]]) {
+                    matches = YES;
+                    break;
+                }
+            }
+            
+            if (!matches) {
+                return NO;
+            }
+        }
+        
+        
         
     } else if (condition.minimumParticipants) {
         

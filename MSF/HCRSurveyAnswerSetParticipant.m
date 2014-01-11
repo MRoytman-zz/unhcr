@@ -37,9 +37,9 @@
     
     HCRSurveyAnswerSetParticipant *participant = [HCRSurveyAnswerSetParticipant new];
     
-    NSInteger targetID = answerSet.participants.count;
+    HCRSurveyAnswerSetParticipant *lastParticipant = (HCRSurveyAnswerSetParticipant *)[answerSet.participants lastObject];
+    participant.participantID = (lastParticipant) ? @(lastParticipant.participantID.integerValue + 1) : @(0);
     
-    participant.participantID = @(targetID);
     participant.questions = @[].mutableCopy;
     
     return participant;
@@ -57,6 +57,33 @@
     }
     
     return nil;
+    
+}
+
+- (HCRSurveyAnswerSetParticipantQuestion *)firstUnansweredQuestion {
+    
+    for (HCRSurveyAnswerSetParticipantQuestion *questionObject in self.questions) {
+        if (!questionObject.answer &&
+            !questionObject.answerString) {
+            return questionObject;
+        }
+    }
+    
+    return nil;
+    
+}
+
+- (NSString *)localizedParticipantName {
+    
+    NSMutableString *participantString = (self.participantID.integerValue == 0) ? @"Head of Household".mutableCopy : [NSString stringWithFormat:@"Participant %@",self.participantID].mutableCopy;
+    
+    if (self.age && self.gender) {
+        [participantString appendString:[NSString stringWithFormat:@" (%@/%@)",
+                                         self.age,
+                                         (self.gender.integerValue == 0) ? @"m" : @"f"]];
+    }
+    
+    return participantString;
     
 }
 

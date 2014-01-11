@@ -56,7 +56,10 @@
     
     self.title = @"Lebanon: Access to Care";
     
-    self.collectionView.scrollEnabled = NO;
+//    self.collectionView.scrollEnabled = NO;
+    self.collectionView.backgroundColor = [UIColor tableBackgroundColor];
+    self.collectionView.pagingEnabled = YES;
+    self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
     // KEYBOARD AND INPUTS
@@ -69,14 +72,21 @@
     HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
     NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
     
-    toolbar.addParticipants.target = self;
-    toolbar.addParticipants.action = @selector(_addParticipantButtonPressed);
+    toolbar.addParticipant.target = self;
+    toolbar.addParticipant.action = @selector(_addParticipantButtonPressed);
     
     toolbar.nextParticipant.target = self;
     toolbar.nextParticipant.action = @selector(_nextParticipantButtonPressed);
     
     toolbar.previousParticipant.target = self;
     toolbar.previousParticipant.action = @selector(_previousParticipantButtonPressed);
+    
+    toolbar.removeParticipant.target = self;
+    toolbar.removeParticipant.action = @selector(_removeParticipantButtonPressed);
+    
+    [toolbar.centerButton addTarget:self
+                             action:@selector(_toolbarParticipantPressed:)
+                   forControlEvents:UIControlEventTouchUpInside];
     
     // NOTIFICATIONS
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -111,17 +121,15 @@
     HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
     NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
     
-    if (toolbar.items.count == 0) {
+    if (!toolbar.currentParticipant) {
         // this means it's the first load - workaround for toolbar not loading in proper order
         self.currentParticipant = [self.answerSet participantWithID:0];
-        [self _refreshToolbarData];
     }
     
 }
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
 }
 
 #pragma mark - Class Methods
@@ -247,7 +255,7 @@
             HCRSurveyQuestion *surveyQuestion = [self _surveyQuestionForSection:indexPath.section inCollectionView:collectionView];
             
             [header setSurveyQuestion:surveyQuestion
-                    withParticipantID:@([self _participantIDForSurveyView:collectionView])];
+                      withParticipant:self.currentParticipant];
             
             header.questionAnswered = (question.answer != nil || question.answerString != nil);
             
@@ -305,8 +313,10 @@
     } else if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
         
         // CONTENTS OF SURVEY PAGES
+        HCRSurveyQuestion *question = [self _surveyQuestionForSection:section inCollectionView:collectionView];
         return [HCRSurveyQuestionHeader sizeForHeaderInCollectionView:(HCRSurveyParticipantView *)collectionView
-                                                     withQuestionData:[self _surveyQuestionForSection:section inCollectionView:collectionView]];
+                                                     withQuestionData:question
+                                                      withParticipant:self.currentParticipant];
         
     } else {
         NSAssert(NO, @"Unhandled collectionView type..");
@@ -364,6 +374,20 @@
     }
     
 }
+
+#pragma mark - UIScrollView
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    [self _updateCurrentParticipantWithActiveScrollView:scrollView];
+    
+}
+
+//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+//    
+//    [self _updateCurrentParticipantWithActiveScrollView:scrollView];
+//    
+//}
 
 #pragma mark - HCRDataFieldCell Delegate
 
@@ -444,6 +468,7 @@
 }
 
 - (void)setCurrentParticipant:(HCRSurveyAnswerSetParticipant *)currentParticipant {
+    
     _currentParticipant = currentParticipant;
     
     // set data
@@ -451,11 +476,13 @@
     
     // slide to correct position..
     CGFloat screenWidth = CGRectGetWidth([UIScreen mainScreen].bounds);
-    CGPoint targetOffset = CGPointMake(screenWidth * currentParticipant.participantID.integerValue,
+    CGPoint targetOffset = CGPointMake(screenWidth * [self.answerSet.participants indexOfObject:currentParticipant],
                                        self.collectionView.contentOffset.y);
 
     [self.collectionView setContentOffset:targetOffset
                                  animated:YES];
+    
+    [self _refreshModelDataForParticipantID:currentParticipant.participantID.integerValue];
     
 }
 
@@ -572,12 +599,9 @@
 
 - (void)_nextParticipantButtonPressed {
     
-    // get next participant OR first
-    NSInteger targetID = self.currentParticipant.participantID.integerValue + 1;
-    HCRSurveyAnswerSetParticipant *nextParticipant = [self.answerSet participantWithID:targetID];
-    
-    if (nextParticipant) {
-        self.currentParticipant = nextParticipant;
+    HCRSurveyAnswerSetParticipant *participant = [self _nextParticipantFromCurrentParticipant];
+    if (participant) {
+        self.currentParticipant = participant;
     } else {
         NSAssert(NO, @"Should not be able to toggle to this participant!");
     }
@@ -586,34 +610,65 @@
 
 - (void)_previousParticipantButtonPressed {
     
-    NSInteger targetID = self.currentParticipant.participantID.integerValue - 1;
-    
-    HCRSurveyAnswerSetParticipant *previousParticipant = [self.answerSet participantWithID:targetID];
-    
-    if (previousParticipant) {
-        self.currentParticipant = previousParticipant;
+    HCRSurveyAnswerSetParticipant *participant = [self _previousParticipantFromCurrentParticipant];
+    if (participant) {
+        self.currentParticipant = participant;
     } else {
         NSAssert(NO, @"Should not be able to toggle to this participant!");
     }
     
 }
 
-- (void)_refreshToolbarData {
+- (void)_removeParticipantButtonPressed {
     
-    HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
-    NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
-    
-    toolbar.participants = self.answerSet.participants;
-    
-    if (self.currentParticipant) {
-        toolbar.currentParticipant = self.currentParticipant;
+    if (self.answerSet.participants.count > 1) {
+        
+        NSIndexPath *oldIndexPath = [NSIndexPath indexPathForItem:[self.answerSet.participants indexOfObject:self.currentParticipant] inSection:0];
+        HCRSurveyAnswerSetParticipant *oldParticipant = self.currentParticipant;
+        
+        HCRSurveyAnswerSetParticipant *nextParticipant = [self _nextParticipantFromCurrentParticipant];
+        HCRSurveyAnswerSetParticipant *prevParticipant = [self _previousParticipantFromCurrentParticipant];
+        
+        HCRSurveyAnswerSetParticipant *newParticipant = (nextParticipant) ? nextParticipant : prevParticipant;
+        
+        if (!newParticipant) {
+            newParticipant = [self.answerSet.participants objectAtIndex:0];
+        }
+        
+        [[HCRDataManager sharedManager] removeParticipant:oldParticipant fromAnswerSet:self.answerSet];
+        
+        [self _refreshModelDataForCollectionView:self.collectionView];
+        
+        [self _reloadLayoutData:YES
+                     inSections:nil
+             withCollectionView:self.collectionView
+                       animated:YES
+              withLayoutChanges:^{
+                  [self.collectionView deleteItemsAtIndexPaths:@[oldIndexPath]];
+              }];
+        
+        // TODO: participant surveys are disappearing! nooo!
+        self.currentParticipant = newParticipant;
+        
     }
     
-    // check for 100% completion
-    NSInteger percentComplete = [[HCRDataManager sharedManager] percentCompleteForParticipantID:self.currentParticipant.participantID.integerValue withAnswerSet:self.answerSet];
+}
+
+- (void)_refreshToolbarData {
     
-    toolbar.backgroundColor = (percentComplete == 100) ? [UIColor flatGreenColor] : toolbar.defaultToolbarColor;
-    
+    if (self.currentParticipant) {
+        HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
+        NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
+        
+        toolbar.participants = self.answerSet.participants;
+        
+        toolbar.currentParticipant = self.currentParticipant;
+        
+        // check for 100% completion
+        NSInteger percentComplete = [[HCRDataManager sharedManager] percentCompleteForParticipantID:self.currentParticipant.participantID.integerValue withAnswerSet:self.answerSet];
+        
+        toolbar.backgroundColor = (percentComplete == 100) ? [UIColor flatGreenColor] : toolbar.defaultToolbarColor;
+    }
     
 }
 
@@ -700,8 +755,10 @@
     HCRSurveyCell *surveyCell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kSurveyCellIdentifier
                                                                                forIndexPath:indexPath];
     
+    HCRSurveyAnswerSetParticipant *participant = [self.answerSet.participants objectAtIndex:indexPath.row];
+    
     surveyCell.participantDataSourceDelegate = self;
-    surveyCell.participantID = @(indexPath.row);
+    surveyCell.participantID = participant.participantID;
     surveyCell.participantCollection.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
     return surveyCell;
@@ -714,6 +771,13 @@
     NSParameterAssert([surveyView isKindOfClass:[HCRSurveyParticipantView class]]);
     
     return surveyView.participantID.integerValue;
+    
+}
+
+- (HCRSurveyAnswerSetParticipantQuestion *)_currentParticipantQuestionForSection:(NSInteger)section {
+    
+    // get question code
+    return [self.currentParticipant.questions objectAtIndex:section];
     
 }
 
@@ -767,24 +831,22 @@
         [oldQuestionCodes addObject:question.question];
     }
     
-    HCRSurveyAnswerSetParticipant *participant = [self.answerSet participantWithID:self.currentParticipant.participantID.integerValue];
-    
     // for all section questions, check if the participant has them
     for (NSString *questionCode in oldQuestionCodes) {
         
         // if not, add to delete
-        if (![participant questionWithID:questionCode]) {
+        if (![self.currentParticipant questionWithID:questionCode]) {
             [indexesToDelete addIndex:[oldQuestionCodes indexOfObject:questionCode]];
         }
         
     }
     
     // for all participant questions, check if section has them
-    for (HCRSurveyAnswerSetParticipantQuestion *question in participant.questions) {
+    for (HCRSurveyAnswerSetParticipantQuestion *question in self.currentParticipant.questions) {
         
         // if not, add
         if (![oldQuestionCodes containsObject:question.question]) {
-            [indexesToAdd addIndex:[participant.questions indexOfObject:question]];
+            [indexesToAdd addIndex:[self.currentParticipant.questions indexOfObject:question]];
         }
         
     }
@@ -933,6 +995,92 @@
     
     [self.navigationItem setRightBarButtonItem:newItem animated:YES];
     
+}
+
+- (void)_updateCurrentParticipantWithActiveScrollView:(UIScrollView *)scrollView {
+    
+    // only do this for the core collectionview
+    if ([scrollView isKindOfClass:[HCRSurveyParticipantView class]]) {
+        return;
+    }
+    
+    CGFloat width = CGRectGetWidth(scrollView.bounds);
+    NSInteger page = (scrollView.contentOffset.x + 0.5 * width) / width;
+    
+    if (self.currentParticipant.participantID.integerValue != page) {
+        self.currentParticipant = [self.answerSet.participants objectAtIndex:page];
+    }
+    
+}
+
+- (void)_toolbarParticipantPressed:(UIButton *)toolbarButton {
+    
+    if (self.currentParticipant) {
+        
+        NSIndexPath *indexPath = [self _indexPathForCurrentParticipantFirstUnansweredQuestion];
+        
+        if (indexPath) {
+            
+            HCRSurveyCell *surveyCell = [self _surveyCellForCurrectParticipant];
+            
+            [surveyCell.participantCollection scrollToItemAtIndexPath:indexPath
+                                                     atScrollPosition:UICollectionViewScrollPositionCenteredVertically
+                                                             animated:YES];
+        }
+        
+    }
+    
+}
+
+- (NSIndexPath *)_indexPathForCurrentParticipantFirstUnansweredQuestion {
+    
+    HCRSurveyAnswerSetParticipantQuestion *unanasweredQuestion = [self.currentParticipant firstUnansweredQuestion];
+    
+    for (HCRSurveyAnswerSetParticipantQuestion *question in self.currentParticipant.questions) {
+        if (question == unanasweredQuestion) {
+            
+            return [NSIndexPath indexPathForItem:0
+                                       inSection:[self.currentParticipant.questions indexOfObject:question]];
+            
+        }
+    }
+    
+    return nil;
+}
+
+- (HCRSurveyCell *)_surveyCellForCurrectParticipant {
+    
+    NSIndexPath *indexPathForSurvey =
+    [NSIndexPath indexPathForItem:self.currentParticipant.participantID.integerValue
+                        inSection:0];
+    
+    HCRSurveyCell *survey = (HCRSurveyCell *)[self.collectionView cellForItemAtIndexPath:indexPathForSurvey];
+    NSParameterAssert([survey isKindOfClass:[HCRSurveyCell class]]);
+    
+    return survey;
+    
+}
+
+- (HCRSurveyAnswerSetParticipant *)_nextParticipantFromCurrentParticipant {
+    
+    NSInteger indexOfNextParticipant = [self.answerSet.participants indexOfObject:self.currentParticipant] + 1;
+    
+    if (indexOfNextParticipant <= self.answerSet.participants.count - 1) {
+        return [self.answerSet.participants objectAtIndex:indexOfNextParticipant];
+    } else {
+        return nil;
+    }
+}
+
+- (HCRSurveyAnswerSetParticipant *)_previousParticipantFromCurrentParticipant {
+    
+    NSInteger indexOfPreviousParticipant = [self.answerSet.participants indexOfObject:self.currentParticipant] - 1;
+    
+    if (indexOfPreviousParticipant >= 0) {
+        return [self.answerSet.participants objectAtIndex:indexOfPreviousParticipant];
+    } else {
+        return nil;
+    }
 }
 
 @end

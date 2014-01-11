@@ -14,12 +14,12 @@
 @interface HCRSurveyQuestionHeader : HCRHeaderView
 
 @property (nonatomic, readonly) HCRSurveyQuestion *surveyQuestion;
-@property (nonatomic, readonly) NSNumber *participantID;
+@property (nonatomic, readonly) HCRSurveyAnswerSetParticipant *participant;
 
 @property (nonatomic) BOOL questionAnswered;
 
-+ (CGSize)sizeForHeaderInCollectionView:(HCRSurveyParticipantView *)collectionView withQuestionData:(HCRSurveyQuestion *)surveyQuestion;
++ (CGSize)sizeForHeaderInCollectionView:(HCRSurveyParticipantView *)collectionView withQuestionData:(HCRSurveyQuestion *)surveyQuestion withParticipant:(HCRSurveyAnswerSetParticipant *)participant;
 
-- (void)setSurveyQuestion:(HCRSurveyQuestion *)surveyQuestion withParticipantID:(NSNumber *)participantID;
+- (void)setSurveyQuestion:(HCRSurveyQuestion *)surveyQuestion withParticipant:(HCRSurveyAnswerSetParticipant *)participant;
 
 @end

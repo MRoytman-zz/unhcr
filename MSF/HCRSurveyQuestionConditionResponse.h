@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) NSString *question;
 @property (nonatomic, strong) NSNumber *answer;
+@property (nonatomic, strong) NSArray *answerArray;
 
 + (HCRSurveyQuestionConditionResponse *)newResponseWithDictionary:(NSDictionary *)dictionary;
 
