@@ -22,8 +22,9 @@
 @property (nonatomic, strong) NSDate *durationEnd;
 @property (nonatomic, strong) NSMutableArray *participants;
 
-- (HCRSurveyAnswerSetParticipant *)participantWithID:(NSInteger)participantID;
++ (HCRSurveyAnswerSet *)newAnswerSet;
 
+- (HCRSurveyAnswerSetParticipant *)participantWithID:(NSInteger)participantID;
 - (HCRSurveyAnswerSetParticipant *)newParticipant;
 
 @end

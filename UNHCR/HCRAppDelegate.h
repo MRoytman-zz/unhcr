@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HCRAppDelegate : UIResponder <UIApplicationDelegate>
+#import <HockeySDK/HockeySDK.h>
+
+@interface HCRAppDelegate : UIResponder
+<UIApplicationDelegate, BITHockeyManagerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

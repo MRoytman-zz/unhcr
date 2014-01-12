@@ -30,6 +30,7 @@ NSString *const HCRPrefKeyQuestionsConditionsMinParticipants = @"minParticipants
 NSString *const HCRPrefKeyQuestionsConditionsMinAge = @"minAge";
 NSString *const HCRPrefKeyQuestionsConditionsMaxAge = @"maxAge";
 NSString *const HCRPrefKeyQuestionsConditionsGender = @"gender";
+NSString *const HCRPrefKeyQuestionsConditionsConsent = @"consent";
 NSString *const HCRPrefKeyQuestionsConditionsResponse = @"response";
 NSString *const HCRPrefKeyQuestionsConditionsResponseQuestion = @"question";
 NSString *const HCRPrefKeyQuestionsConditionsResponseAnswer = @"answer";
@@ -290,7 +291,8 @@ NSString *const kSurveyResultClass = @"TestFlight";
                 [self _setAnswer:nil
                       withString:nil
                      forQuestion:question.questionCode
-                 forParticipant:targetParticpant
+                  forParticipant:targetParticpant
+                    forAnswerSet:answerSet
                         forceSet:NO
                             sort:NO
                             sync:NO];
@@ -327,16 +329,17 @@ NSString *const kSurveyResultClass = @"TestFlight";
         self.localSurvey.answerSetDictionary = @{}.mutableCopy;
     }
     
-    HCRSurveyAnswerSet *surveyAnswerSet = [HCRSurveyAnswerSet new];
-    
-    surveyAnswerSet.localID = [NSString stringWithNewUUID];
-    surveyAnswerSet.teamID = [[HCRUser currentUser] teamID];
-    surveyAnswerSet.userID = [[HCRUser currentUser] objectId];
-    surveyAnswerSet.durationStart = [NSDate date];
-    
-    surveyAnswerSet.participants = @[[HCRSurveyAnswerSetParticipant newParticipantForAnswerSet:surveyAnswerSet]].mutableCopy;
+    HCRSurveyAnswerSet *surveyAnswerSet = [HCRSurveyAnswerSet newAnswerSet];
     
     [self.localSurvey.answerSetDictionary setObject:surveyAnswerSet forKey:surveyAnswerSet.localID];
+    [self _sync];
+    
+}
+
+- (void)removeAllAnswerSets {
+    
+    self.localSurvey.answerSetDictionary = @{}.mutableCopy;
+    
     [self _sync];
     
 }
@@ -365,6 +368,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
           withString:answerString
          forQuestion:questionCode
       forParticipant:targetParticipant
+        forAnswerSet:targetAnswerSet
             forceSet:NO
                 sort:YES
                 sync:YES];
@@ -383,6 +387,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
           withString:nil
          forQuestion:questionCode
       forParticipant:targetParticipant
+        forAnswerSet:targetAnswerSet
             forceSet:YES
                 sort:YES
                 sync:YES];
@@ -609,6 +614,23 @@ NSString *const kSurveyResultClass = @"TestFlight";
             return NO;
         }
         
+    } else if (condition.consent) {
+        
+        if (!answerSet.consent) {
+            // fail if local consent has no response and the condition is non-NULL
+            if (![condition.consent isEqual:[NSNull null]]) {
+                return NO;
+            }
+            
+        } else {
+            // fail if consent is NULL OR if values don't equal
+            if ([condition.consent isEqual:[NSNull null]]) {
+                return NO;
+            } else if (![answerSet.consent isEqualToNumber:condition.consent]) {
+                return NO;
+            }
+        }
+        
     } else {
         HCRError(@"Unhandled survey question condition: %@",condition);
         NSParameterAssert(NO);
@@ -619,7 +641,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
 }
 
-- (void)_setAnswer:(NSNumber *)answerCode withString:(NSString *)answerString forQuestion:(NSString *)questionCode forParticipant:(HCRSurveyAnswerSetParticipant *)targetParticipant forceSet:(BOOL)forceSet sort:(BOOL)sort sync:(BOOL)sync {
+- (void)_setAnswer:(NSNumber *)answerCode withString:(NSString *)answerString forQuestion:(NSString *)questionCode forParticipant:(HCRSurveyAnswerSetParticipant *)targetParticipant forAnswerSet:(HCRSurveyAnswerSet *)answerSet forceSet:(BOOL)forceSet sort:(BOOL)sort sync:(BOOL)sync {
     
     NSParameterAssert(questionCode);
     
@@ -646,9 +668,11 @@ NSString *const kSurveyResultClass = @"TestFlight";
         questionData.answerString = answerString;
     }
     
-    // set age and gender
+    // set age and gender and consent
     // TODO: get this dynamic from the server somehow
-    if ([questionCode isEqualToString:@"6"]) {
+    if ([questionCode isEqualToString:@"0"]) {
+        answerSet.consent = (questionData.answer) ? @(questionData.answer && questionData.answer.integerValue == 1) : nil;
+    } else if ([questionCode isEqualToString:@"6"]) {
         targetParticipant.age = (questionData.answerString) ? @(questionData.answerString.integerValue) : nil;
     } else if ([questionCode isEqualToString:@"7"]) {
         targetParticipant.gender = questionData.answer;

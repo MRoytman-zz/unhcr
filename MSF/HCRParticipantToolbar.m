@@ -77,7 +77,7 @@ static const NSTimeInterval kAnimationTiming = 0.3;
         
         self.centerButton = [[UIButton alloc] initWithFrame:CGRectZero];
         [self addSubview:self.centerButton];
-                
+        
     }
     return self;
 }

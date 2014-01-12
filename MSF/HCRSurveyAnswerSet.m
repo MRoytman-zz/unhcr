@@ -39,6 +39,23 @@
     [encoder encodeObject:self.participants forKey:HCRPrefKeyAnswerSetsParticipants];
 }
 
+#pragma mark - Class Methods
+
++ (HCRSurveyAnswerSet *)newAnswerSet {
+    
+    HCRSurveyAnswerSet *answerSet = [HCRSurveyAnswerSet new];
+    
+    answerSet.localID = [NSString stringWithNewUUID];
+    answerSet.teamID = [[HCRUser currentUser] teamID];
+    answerSet.userID = [[HCRUser currentUser] objectId];
+    answerSet.durationStart = [NSDate date];
+    
+    answerSet.participants = @[[HCRSurveyAnswerSetParticipant newParticipantForAnswerSet:answerSet]].mutableCopy;
+    
+    return answerSet;
+    
+}
+
 #pragma mark - Public Methods
 
 - (HCRSurveyAnswerSetParticipant *)participantWithID:(NSInteger)participantID {

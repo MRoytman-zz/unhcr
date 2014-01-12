@@ -62,6 +62,8 @@
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
     
+    self.navigationController.toolbarHidden = YES;
+    
     // KEYBOARD AND INPUTS
     self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_dismissKeyboard)];
     [self.view addGestureRecognizer:self.tapRecognizer];
@@ -357,7 +359,7 @@
         UIToolbar *toolbar = self.navigationController.toolbar;
         UIEdgeInsets navigationInsets = UIEdgeInsetsMake(CGRectGetMinY(navBar.frame) + CGRectGetHeight(navBar.bounds),
                                                          0,
-                                                         CGRectGetHeight(toolbar.bounds),
+                                                         (self.navigationController.toolbarHidden) ? 0 : CGRectGetHeight(toolbar.bounds),
                                                          0);
         
         return UIEdgeInsetsInsetRect(self.view.bounds, navigationInsets).size;
@@ -646,6 +648,7 @@
 - (void)_refreshToolbarData {
     
     if (self.currentParticipant) {
+        
         HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
         NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
         
@@ -656,7 +659,12 @@
         // check for 100% completion
         NSInteger percentComplete = [[HCRDataManager sharedManager] percentCompleteForParticipantID:self.currentParticipant.participantID.integerValue withAnswerSet:self.answerSet];
         
-        toolbar.backgroundColor = (percentComplete == 100) ? [UIColor flatGreenColor] : toolbar.defaultToolbarColor;
+        toolbar.backgroundColor = (percentComplete == 100) ? [UIColor flatGreenColor] : toolbar.defaultToolbarColor;\
+        
+        NSNumber *currentConsent = self.answerSet.consent;
+        [self.navigationController setToolbarHidden:![currentConsent boolValue]
+                                           animated:YES];
+        
     }
     
 }
@@ -950,6 +958,18 @@
                               
                               if ([collectionView numberOfSections] != [self.answerSet participantWithID:participantID].questions.count) {
                                   [self _updateCollectionView:collectionView withOldQuestions:oldQuestions];
+                              }
+                              
+                              if ([questionCode isEqualToString:@"0"]) {
+                                  dispatch_async(dispatch_get_main_queue(), ^{
+                                      
+                                      [collectionView scrollToItemAtIndexPath:[self _indexPathForCurrentParticipantFirstUnansweredQuestion]
+                                                             atScrollPosition:UICollectionViewScrollPositionCenteredVertically
+                                                                     animated:YES];
+                                      
+                                      [self _refreshToolbarData];
+                                      
+                                  });
                               }
                               
                               self.selectingCell = NO;

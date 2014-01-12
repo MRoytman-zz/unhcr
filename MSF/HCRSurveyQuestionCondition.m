@@ -22,15 +22,13 @@
     self = [super init];
     if (self) {
         self.orArray = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsOrArray];
-        
-        HCRDebug(@"orArray: %@",self.orArray);
-        
         self.participantID = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsParticipantID];
         self.minimumParticipants = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsMinParticipants];
         self.response = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsResponse];
         self.minimumAge = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsMinAge];
         self.maximumAge = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsMaxAge];
         self.gender = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsGender];
+        self.consent = [decoder decodeObjectForKey:HCRPrefKeyQuestionsConditionsConsent];
     }
     return self;
 }
@@ -43,6 +41,7 @@
     [encoder encodeObject:self.minimumAge forKey:HCRPrefKeyQuestionsConditionsMinAge];
     [encoder encodeObject:self.maximumAge forKey:HCRPrefKeyQuestionsConditionsMaxAge];
     [encoder encodeObject:self.gender forKey:HCRPrefKeyQuestionsConditionsGender];
+    [encoder encodeObject:self.consent forKey:HCRPrefKeyQuestionsConditionsConsent];
 }
 
 #pragma mark - Class Methods
@@ -69,6 +68,8 @@
             newCondition.maximumAge = object;
         } else if ([key isEqualToString:HCRPrefKeyQuestionsConditionsGender]) {
             newCondition.gender = object;
+        } else if ([key isEqualToString:HCRPrefKeyQuestionsConditionsConsent]) {
+            newCondition.consent = object;
         } else {
             HCRError(@"Unhandled condition detected! %@",dictionary);
             NSAssert(NO, @"Unhandled condition detected!");

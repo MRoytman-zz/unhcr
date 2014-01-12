@@ -23,6 +23,7 @@ NSString *const kAnswerSetPickerTableCellIdentifier = @"kAnswerSetPickerTableCel
 NSString *const kAnswerSetPickerButtonCellIdentifier = @"kSurveyPickerButtonCellIdentifier";
 
 NSString *const kLayoutCellLabelNewSurvey = @"Start New Survey";
+NSString *const kLayoutCellLabelRemoveAll = @"Delete All Surveys";
 
 NSString *const kLayoutHeaderLabelInProgress = @"Surveys in Progress";
 NSString *const kLayoutHeaderLabelCompleted = @"Completed Surveys";
@@ -35,6 +36,7 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 
 @property NSDateFormatter *dateFormatter;
 
+@property (nonatomic, readonly) NSArray *answerSetsInProgress;
 @property (nonatomic, readonly) NSArray *layoutDataArray;
 
 @end
@@ -81,7 +83,7 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self _reloadLayoutData];
+    [self.collectionView reloadData];
 }
 
 #pragma mark - Class Methods
@@ -126,7 +128,8 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
         cellTitle = titleString;
     }
     
-    if ([cellTitle isEqualToString:kLayoutCellLabelNewSurvey]) {
+    if ([cellTitle isEqualToString:kLayoutCellLabelNewSurvey] ||
+        [cellTitle isEqualToString:kLayoutCellLabelRemoveAll]) {
         
         HCRTableButtonCell *buttonCell =
         [self.collectionView dequeueReusableCellWithReuseIdentifier:kAnswerSetPickerButtonCellIdentifier
@@ -196,6 +199,8 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     
     if ([cellTitle isEqualToString:kLayoutCellLabelNewSurvey]) {
         [self _newSurveyButtonPressed];
+    } else if ([cellTitle isEqualToString:kLayoutCellLabelRemoveAll]) {
+        [self _removeAllButtonpressed];
     } else {
         [self _openSurveyButtonPressedAtIndexPath:indexPath];
     }
@@ -217,6 +222,19 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 }
 
 #pragma mark - Getters & Setters
+
+- (NSArray *)answerSetsInProgress {
+    
+    // get number of existing answerSets
+    for (NSDictionary *layoutData in self.layoutDataArray) {
+        if ([[layoutData objectForKey:kLayoutHeaderLabel ofClass:@"NSString" mustExist:NO] isEqualToString:kLayoutHeaderLabelInProgress]) {
+            return [layoutData objectForKey:kLayoutCells ofClass:@"NSArray"];
+        }
+    }
+    
+    return nil;
+    
+}
 
 - (NSArray *)layoutDataArray {
     
@@ -246,7 +264,10 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     }
     
     [layoutData addObject:@{kLayoutCells: @[
-                                    @{kLayoutCellLabel: kLayoutCellLabelNewSurvey}
+                                    @{kLayoutCellLabel: kLayoutCellLabelNewSurvey},
+#ifdef DEBUG
+                                    @{kLayoutCellLabel: kLayoutCellLabelRemoveAll}
+#endif
                                     ]}];
     
     return layoutData;
@@ -294,9 +315,35 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 
 - (void)_newSurveyButtonPressed {
     
-    [[HCRDataManager sharedManager] createNewSurveyAnswerSet];
+    NSUInteger freshCellsSection = 0;
     
-    [self _reloadLayoutData];
+    [self.collectionView performBatchUpdates:^{
+        
+        if (self.answerSetsInProgress.count == 0) {
+            [[HCRDataManager sharedManager] createNewSurveyAnswerSet];
+            [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:freshCellsSection]];
+        } else {
+            [[HCRDataManager sharedManager] createNewSurveyAnswerSet];
+            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.answerSetsInProgress.count - 1
+                                                                               inSection:freshCellsSection]]];
+        }
+        
+        
+    } completion:^(BOOL finished) {
+        [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:freshCellsSection]];
+    }];
+    
+}
+
+- (void)_removeAllButtonpressed {
+    
+    [[HCRDataManager sharedManager] removeAllAnswerSets];
+    
+    [self.collectionView performBatchUpdates:^{
+        [self.collectionView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections - 1)]];
+    } completion:^(BOOL finished) {
+        [self.collectionView reloadData];
+    }];
     
 }
 
@@ -319,10 +366,25 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
                                              if (buttonIndex == 0) {
                                                  // do nothing
                                              } else {
-                                                 NSIndexPath *indexPath = [self.collectionView indexPathForCell:tableCell];
-                                                 HCRSurveyAnswerSet *answerSet = [self _answerSetForIndexPath:indexPath];
-                                                 [[HCRDataManager sharedManager] removeAnswerSetWithID:answerSet.localID];
-                                                 [self _reloadLayoutData];
+                                                 
+                                                 NSIndexSet *dirtySections = [NSIndexSet indexSetWithIndex:0];
+                                                 
+                                                 [self.collectionView performBatchUpdates:^{
+                                                     
+                                                     NSIndexPath *indexPath = [self.collectionView indexPathForCell:tableCell];
+                                                     HCRSurveyAnswerSet *answerSet = [self _answerSetForIndexPath:indexPath];
+                                                     [[HCRDataManager sharedManager] removeAnswerSetWithID:answerSet.localID];
+                                                     
+                                                     if (self.answerSetsInProgress.count > 0) {
+                                                         [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
+                                                     } else {
+                                                         [self.collectionView deleteSections:dirtySections];
+                                                     }
+                                                     
+                                                 } completion:^(BOOL finished) {
+                                                     [self.collectionView reloadSections:dirtySections];
+                                                 }];
+                                                 
                                              }
                                              
                                          }];
@@ -339,7 +401,7 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
                                                  // do nothing
                                              } else {
                                                  
-                                                 [self _reloadLayoutData];
+                                                 [self.collectionView reloadData];
                                                  [self.navigationController dismissViewControllerAnimated:YES completion:nil];
                                              }
                                              
@@ -348,20 +410,6 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 }
 
 #pragma mark - Private Methods
-
-- (void)_reloadLayoutData {
-    
-    BOOL safelyAnimate = (self.collectionView.numberOfSections == self.layoutDataArray.count);
-    
-    if (safelyAnimate) {
-        [self.collectionView performBatchUpdates:^{
-            [self.collectionView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)]];
-        } completion:nil];
-    } else {
-        [self.collectionView reloadData];
-    }
-    
-}
 
 - (NSDictionary *)_layoutDataForSection:(NSInteger)section {
     NSDictionary *sectionData = [self.layoutDataArray objectAtIndex:section ofClass:@"NSDictionary"];

@@ -19,6 +19,12 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
+    // HOCKEYAPP
+    [[BITHockeyManager sharedHockeyManager] configureWithBetaIdentifier:@"a33f2777773b92f585cde5dfbb41c8e0"
+                                                         liveIdentifier:nil
+                                                               delegate:self];
+    [[BITHockeyManager sharedHockeyManager] startManager];
+    
     // PARSE
     [Parse setApplicationId:@"goqitVsTnj11mpYdZltuuZuUvEPzUiv5Lf2Znghl"
                   clientKey:@"j4alKFSNJlVAHonKJi857Ziq5QrqDuiq2kjjKq6H"];

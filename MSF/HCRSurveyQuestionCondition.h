@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSNumber *minimumAge;
 @property (nonatomic, strong) NSNumber *maximumAge;
 @property (nonatomic, strong) NSNumber *gender;
+@property (nonatomic, strong) NSNumber *consent;
 
 + (HCRSurveyQuestionCondition *)newConditionWithDictionary:(NSDictionary *)dictionary;
 + (NSArray *)newConditionsArrayFromArray:(NSArray *)array;
