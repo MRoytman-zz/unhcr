@@ -534,7 +534,7 @@
                     [collectionView reloadData];
                     percentCompleteCheck();
                 }
-                
+                [self _refreshToolbarData];
             }
         }];
     }

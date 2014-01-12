@@ -120,7 +120,10 @@ static const CGFloat kYContentTrailing = 10;
 
 + (NSAttributedString *)_attributedStringForSurveyQuestion:(HCRSurveyQuestion *)surveyQuestion withParticipant:(HCRSurveyAnswerSetParticipant *)participant {
     
-    NSString *questionLabel = [[NSString stringWithFormat:@"Question %@",surveyQuestion.questionCode] uppercaseString];
+    // TODO: need to drive this from the web somehow
+    NSString *label = ([surveyQuestion.questionCode isEqualToString:@"0"]) ? @"Consent Form" : [NSString stringWithFormat:@"Question %@",surveyQuestion.questionCode];
+    
+    NSString *questionLabel = [label uppercaseString];
     NSString *questionString = surveyQuestion.questionString;
     NSString *totalString = [NSString stringWithFormat:@"%@\n%@",
                              questionLabel,
