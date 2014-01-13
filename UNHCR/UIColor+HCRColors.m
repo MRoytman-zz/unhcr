@@ -60,7 +60,7 @@
 }
 
 + (UIColor *)headerUnansweredBackgroundColor {
-    return [[UIColor redColor] colorWithAlphaComponent:0.1];
+    return [[UIColor redColor] colorWithAlphaComponent:0.25];
 }
 
 + (UIColor *)cellAnsweredBackgroundColor {
