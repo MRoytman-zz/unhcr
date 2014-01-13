@@ -13,7 +13,7 @@
 static const CGFloat kBottomLineHeight = 0.5;
 
 static const CGFloat kPreferredIndent = 20.0;
-static const CGFloat kPreferredTrailingSpace = 10.0;
+static const CGFloat kPreferredTrailingSpace = 25.0;
 
 static const CGFloat kDefaultCellHeight = 48.0;
 static const CGFloat kAppDescriptionHeight = 210.0;

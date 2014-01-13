@@ -296,15 +296,10 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
         
         navController.viewControllers = @[surveyController];
         
-        UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                     target:self
-                                                                                     action:@selector(_closeButtonPressed)];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             
             // completion code (update UI, etc)
             navController.toolbarHidden = NO;
-            surveyController.navigationItem.leftBarButtonItem = closeButton;
             [self.navigationController presentViewController:navController animated:YES completion:nil];
             
         });
@@ -385,24 +380,6 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
                                                      [self.collectionView reloadSections:dirtySections];
                                                  }];
                                                  
-                                             }
-                                             
-                                         }];
-    
-}
-
-- (void)_closeButtonPressed {
-    
-    [UIAlertView showConfirmationDialogWithTitle:@"Cancel Survey"
-                                         message:@"Are you sure you want to cancel the survey? Your progress will be saved and you can return to it at any time."
-                                         handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                             
-                                             if (buttonIndex == alertView.cancelButtonIndex) {
-                                                 // do nothing
-                                             } else {
-                                                 
-                                                 [self.collectionView reloadData];
-                                                 [self.navigationController dismissViewControllerAnimated:YES completion:nil];
                                              }
                                              
                                          }];

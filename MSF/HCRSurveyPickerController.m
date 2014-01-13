@@ -20,7 +20,7 @@ NSString *const kSurveyPickerFooterIdentifier = @"kSurveyPickerFooterIdentifier"
 NSString *const kSurveyPickerButtonCellIdentifier = @"kSurveyPickerButtonCellIdentifier";
 
 NSString *const kLayoutCellLabelLebanon = @"Lebanon: Access to Care";
-NSString *const kLayoutCellLabelRefresh = @"Refresh";
+NSString *const kLayoutCellLabelRefresh = @"Refresh Surveys";
 NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
 
 ////////////////////////////////////////////////////////////////////////////////

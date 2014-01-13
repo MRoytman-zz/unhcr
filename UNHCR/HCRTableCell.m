@@ -114,6 +114,31 @@ static const CGFloat kDetailXPadding = 4.0;
 
 #pragma mark - Class Methods
 
++ (CGSize)sizeForCollectionView:(UICollectionView *)collectionView withAnswerString:(NSString *)answerString {
+    
+    CGFloat height = 0;
+    
+    // initial/minimum padding
+    static CGFloat kTopPadding = 12;
+    static CGFloat kBottomPadding = 12;
+    height += kTopPadding + kBottomPadding;
+    
+    // the maximum dimensions the label can be
+    CGSize finalBounding = [HCRTableCell _boundingSizeForContainingView:collectionView];
+    
+    // then add height of label
+    CGSize preferredSize = [answerString sizeforMultiLineStringWithBoundingSize:finalBounding
+                                                                       withFont:[HCRTableCell preferredFontForTitleLabel]
+                                                                        rounded:YES];
+    
+    height += preferredSize.height;
+    
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      MAX(height,
+                          [HCRCollectionCell preferredSizeForCollectionView:collectionView].height));
+    
+}
+
 + (CGFloat)preferredIndentForContentWithBadgeImage {
     
     return 2 * kBadgePadding + kBadgeDimension;
@@ -242,6 +267,13 @@ static const CGFloat kDetailXPadding = 4.0;
 }
 
 #pragma mark - Private Methods
+
++ (CGSize)_boundingSizeForContainingView:(UIView *)containingView {
+    
+    return CGSizeMake(CGRectGetWidth(containingView.bounds) - [HCRCollectionCell preferredIndentForContent] - [HCRCollectionCell preferredTrailingSpaceForContent],
+                      HUGE_VALF);
+    
+}
 
 - (void)_createDetailLabelWithFontSize:(CGFloat)fontSize {
     

@@ -26,6 +26,7 @@
 @property UITextField *textFieldToDismiss;
 
 @property UIBarButtonItem *doneBarButton;
+@property UIBarButtonItem *closeBarButton;
 
 @property BOOL selectingCell;
 
@@ -111,24 +112,28 @@
     [super viewWillAppear:animated];
     
     // test whether likely first load - if so, refresh
-    if ([self.answerSet participantWithID:0].questions.count == 0) {
+    if (!self.currentParticipant) {
         [self _refreshModelDataForCollectionView:nil];
+        self.currentParticipant = [self.answerSet.participants objectAtIndex:0];
     }
+    
+    NSInteger percentComplete = [[HCRDataManager sharedManager] percentCompleteForAnswerSet:self.answerSet];
+    [self _updateAnswersCompleted:(percentComplete == 100)];
     
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
-    NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
-    
-    if (!toolbar.currentParticipant) {
-        // this means it's the first load - workaround for toolbar not loading in proper order
-        self.currentParticipant = [self.answerSet participantWithID:0];
-    }
-    
-}
+//- (void)viewDidAppear:(BOOL)animated {
+//    [super viewDidAppear:animated];
+//    
+//    HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
+//    NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
+//    
+//    if (!toolbar.currentParticipant) {
+//        // this means it's the first load - workaround for toolbar not loading in proper order
+//        self.currentParticipant = [self.answerSet participantWithID:0];
+//    }
+//    
+//}
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -367,13 +372,15 @@
     } else if ([collectionView isKindOfClass:[HCRSurveyParticipantView class]]) {
         
         // CONTENTS OF SURVEY PAGES
-        UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)collectionView.collectionViewLayout;
-        return flowLayout.itemSize;
+        // TODO: much of this re-used from cellForItemAtIndexPath
+        NSString *answerString = [self _answerStringForCollectionView:(HCRSurveyParticipantView *)collectionView
+                                                          atIndexPath:indexPath];
+        return [HCRSurveyAnswerCell sizeForCollectionView:collectionView withAnswerString:answerString];
         
-    } else {
-        NSAssert(NO, @"Unhandled collectionView type..");
-        return CGSizeZero;
     }
+    
+    NSAssert(NO, @"Unhandled collectionView type..");
+    return CGSizeZero;
     
 }
 
@@ -384,12 +391,6 @@
     [self _updateCurrentParticipantWithActiveScrollView:scrollView];
     
 }
-
-//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-//    
-//    [self _updateCurrentParticipantWithActiveScrollView:scrollView];
-//    
-//}
 
 #pragma mark - HCRDataFieldCell Delegate
 
@@ -559,6 +560,10 @@
 
 #pragma mark - Private Methods (Navigation)
 
+- (void)_closeButtonPressed {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)_doneButtonPressed {
     
     [UIAlertView showConfirmationDialogWithTitle:@"Submit Survey"
@@ -680,15 +685,7 @@
     HCRSurveyAnswerSetParticipantQuestion *participantQuestion = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView];
     
     // get answer
-    HCRSurveyQuestionAnswer *answer;
-    if (participantQuestion.answer) {
-        // traditional answer
-        answer = [surveyQuestion answerForAnswerCode:participantQuestion.answer];
-    } else {
-        // get answer for index
-        NSArray *answerStrings = surveyQuestion.answers;
-        answer = [answerStrings objectAtIndex:indexPath.row];
-    }
+    HCRSurveyQuestionAnswer *answer = [self _answerDataForSurveyQuestion:surveyQuestion withParticipantData:participantQuestion atIndexPath:indexPath];
     
     BOOL answered = (participantQuestion.answer != nil || participantQuestion.answerString != nil);
     BOOL freeformAnswer = [answer.freeform boolValue];
@@ -995,14 +992,22 @@
 - (void)_updateAnswersCompleted:(BOOL)allAnswersComplete {
     
     if (!self.doneBarButton) {
-        self.doneBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+        self.doneBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
                                                                            target:self
                                                                            action:@selector(_doneButtonPressed)];
     }
     
-    UIBarButtonItem *newItem = (allAnswersComplete) ? self.doneBarButton : nil;
+    if (!self.closeBarButton) {
+        self.closeBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                            target:self
+                                                                            action:@selector(_closeButtonPressed)];
+    }
     
-    [self.navigationItem setRightBarButtonItem:newItem animated:YES];
+    UIBarButtonItem *rightItem = (allAnswersComplete) ? self.doneBarButton : nil;
+    UIBarButtonItem *leftItem = (allAnswersComplete) ? nil : self.closeBarButton;
+    
+    [self.navigationItem setRightBarButtonItem:rightItem animated:YES];
+    [self.navigationItem setLeftBarButtonItem:leftItem animated:YES];
     
 }
 
@@ -1089,6 +1094,30 @@
         return [self.answerSet.participants objectAtIndex:indexOfPreviousParticipant];
     } else {
         return nil;
+    }
+}
+
+- (NSString *)_answerStringForCollectionView:(HCRSurveyParticipantView *)collectionView atIndexPath:(NSIndexPath *)indexPath {
+    
+    HCRSurveyQuestion *surveyQuestion = [self _surveyQuestionForSection:indexPath.section inCollectionView:collectionView];
+    HCRSurveyAnswerSetParticipantQuestion *participantQuestion = [self _participantQuestionForSection:indexPath.section inCollectionView:collectionView];
+    
+    // get answer
+    HCRSurveyQuestionAnswer *answer = [self _answerDataForSurveyQuestion:surveyQuestion withParticipantData:participantQuestion atIndexPath:indexPath];
+    
+    return (participantQuestion.answerString) ? participantQuestion.answerString : answer.string;
+    
+}
+
+- (HCRSurveyQuestionAnswer *)_answerDataForSurveyQuestion:(HCRSurveyQuestion *)surveyQuestion withParticipantData:(HCRSurveyAnswerSetParticipantQuestion *)participantQuestion atIndexPath:(NSIndexPath *)indexPath {
+    
+    if (participantQuestion.answer) {
+        // traditional answer
+        return [surveyQuestion answerForAnswerCode:participantQuestion.answer];
+    } else {
+        // get answer for index
+        NSArray *answerStrings = surveyQuestion.answers;
+        return [answerStrings objectAtIndex:indexPath.row];
     }
 }
 

@@ -26,7 +26,8 @@
     if (self) {
         // Initialization code
         self.answeredColor = [UIColor cellAnsweredBackgroundColor];
-        self.titleLabel.adjustsFontSizeToFitWidth = YES;
+        self.titleLabel.numberOfLines = 0;
+        self.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
     }
     return self;
 }
