@@ -197,13 +197,15 @@
         // CONTENTS OF SURVEY PAGES
         
         HCRSurveyAnswerSetParticipantQuestion *question = [self _participantQuestionForSection:section inCollectionView:collectionView];
+        HCRSurveyQuestion *surveyQuestion = [[HCRDataManager sharedManager] surveyQuestionWithQuestionID:question.question];
         
-        if (question.answer) {
+        if (question.answer &&
+            !surveyQuestion.numberOfAnswersRequired) {
             numberOfItemsInSection = 1; // the answer is all that remains :)
         } else {
-            HCRSurveyQuestion *surveyQuestion = [[HCRDataManager sharedManager] surveyQuestionWithQuestionID:question.question];
             
-            if (surveyQuestion.freeformLabel) {
+            if (surveyQuestion.freeformLabel &&
+                !surveyQuestion.numberOfAnswersRequired) {
                 numberOfItemsInSection = 1; // free-form question
             } else {
                 numberOfItemsInSection = surveyQuestion.answers.count; // normal :)
@@ -874,7 +876,22 @@
         // get answer - by code if it's an existing answer, or by index if it's fresh
         HCRSurveyQuestionAnswer *answer = (question.answer) ? [questionAnswered answerForAnswerCode:question.answer] : [questionAnswered.answers objectAtIndex:indexPath.row];
         
+        // TODO: resurrect this
         // if there is no freeform string AND there is no answer of any sort, remove it
+//        if (questionAnswered.numberOfAnswersRequired) {
+//            
+//            // apply custom logic for multi-select..
+//            [[HCRDataManager sharedManager] setAnswerCode:answer.code withFreeformString:freeformString forQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
+//            
+//            [self _refreshModelDataForCollectionView:collectionView];
+//            
+//            [collectionView reloadData];
+//            
+//            answerCell.processingAction = NO;
+//            self.selectingCell = NO;
+//            
+//        } else
+        
         if (!freeformString &&
             (question.answer || question.answerString || answer.freeform.boolValue)) {
             

@@ -89,7 +89,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 @property NSMutableParagraphStyle *baseParagraphStyle;
 
-@property NSArray *layoutDataArrayAuthorized;
+@property (nonatomic, readonly) NSArray *layoutDataArrayAuthorized;
 @property NSArray *layoutDataArraySignedOut;
 @property NSArray *layoutDataArrayUnauthorizedSignedIn;
 
@@ -122,52 +122,6 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         
         self.dateFormatterPlain = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMM forceEuropeanFormat:YES];
         self.dateFormatterTimeStamp = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMMHHmm forceEuropeanFormat:YES];
-        
-#ifdef TARGET_RIS
-        self.layoutDataArray = @[
-                                     @[
-                                         @{kLayoutCellLabelKey: kLayoutCellLabelEmergencies,
-                                           kLayoutCellIconKey: @"emergency"},
-                                         @{kLayoutCellLabelKey: kLayoutCellLabelMessages,
-                                           kLayoutCellIconKey: @"message"},
-                                         @{kLayoutCellLabelKey: kLayoutCellLabelCamps,
-                                           kLayoutCellIconKey: @"camp"}
-
-                                         ],
-                                     @[
-                                         @{kLayoutCellLabelKey: kLayoutCellLabelDomiz,
-                                           kLayoutCellIconKey: @"bookmark"},
-                                         @{kLayoutCellLabelKey: kLayoutCellLabelGraph,
-                                           kLayoutCellIconKey: kLayoutCellIconNone},
-                                         @{kLayoutCellLabelKey: kLayoutCellLabelBulletin,
-                                           kLayoutCellIconKey: @"bulletin"}
-                                         ],
-                                     @[
-                                         @{kLayoutCellLabelKey: kLayoutCellLabelSignOut,
-                                           kLayoutCellIconKey: kLayoutCellIconNone}
-                                         ]
-                                     ];
-        
-#elif defined(TARGET_MSF)
-        self.layoutDataArrayAuthorized = @[
-                                 @[
-                                     @{kLayoutCellLabelKey: kLayoutCellLabelSurveys,
-                                       kLayoutCellIconKey: @"bulletin"}
-                                     ],
-                                 @[
-                                     @{kLayoutCellLabelKey: kLayoutCellLabelAlerts,
-                                       kLayoutCellIconKey: @"emergency"},
-                                     @{kLayoutCellLabelKey: kLayoutCellLabelMessages,
-                                       kLayoutCellIconKey: @"message"},
-                                     @{kLayoutCellLabelKey: kLayoutCellLabelDirectory,
-                                       kLayoutCellIconKey: @"camp"},
-                                     ],
-                                 @[
-                                     @{kLayoutCellLabelKey: kLayoutCellLabelSignOut,
-                                       kLayoutCellIconKey: kLayoutCellIconNone}
-                                     ]
-                                 ];
-#endif
         
         // applies to all targets
         self.layoutDataArraySignedOut = @[
@@ -783,6 +737,62 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     return [[HCRUser currentUser] surveyUserAuthorized];
 }
 
+- (NSArray *)layoutDataArrayAuthorized {
+    
+#ifdef TARGET_RIS
+    return @[
+             @[
+                 @{kLayoutCellLabelKey: kLayoutCellLabelEmergencies,
+                   kLayoutCellIconKey: @"emergency"},
+                 @{kLayoutCellLabelKey: kLayoutCellLabelMessages,
+                   kLayoutCellIconKey: @"message"},
+                 @{kLayoutCellLabelKey: kLayoutCellLabelCamps,
+                   kLayoutCellIconKey: @"camp"}
+                 
+                 ],
+             @[
+                 @{kLayoutCellLabelKey: kLayoutCellLabelDomiz,
+                   kLayoutCellIconKey: @"bookmark"},
+                 @{kLayoutCellLabelKey: kLayoutCellLabelGraph,
+                   kLayoutCellIconKey: kLayoutCellIconNone},
+                 @{kLayoutCellLabelKey: kLayoutCellLabelBulletin,
+                   kLayoutCellIconKey: @"bulletin"}
+                 ],
+             @[
+                 @{kLayoutCellLabelKey: kLayoutCellLabelSignOut,
+                   kLayoutCellIconKey: kLayoutCellIconNone}
+                 ]
+             ];
+    
+#elif defined(TARGET_MSF)
+    NSMutableArray *dataArray = @[].mutableCopy;
+    
+    [dataArray addObject:@[
+                           @{kLayoutCellLabelKey: kLayoutCellLabelSurveys,
+                             kLayoutCellIconKey: @"bulletin"}
+                           ]];
+    
+    if (![HCRUser currentUser].hideConstruction) {
+        [dataArray addObject:@[
+                               @{kLayoutCellLabelKey: kLayoutCellLabelAlerts,
+                                 kLayoutCellIconKey: @"emergency"},
+                               @{kLayoutCellLabelKey: kLayoutCellLabelMessages,
+                                 kLayoutCellIconKey: @"message"},
+                               @{kLayoutCellLabelKey: kLayoutCellLabelDirectory,
+                                 kLayoutCellIconKey: @"camp"},
+                               ]];
+    }
+    
+    [dataArray addObject:@[
+                           @{kLayoutCellLabelKey: kLayoutCellLabelSignOut,
+                             kLayoutCellIconKey: kLayoutCellIconNone}
+                           ]];
+    
+    return dataArray;
+#endif
+    
+}
+
 - (NSArray *)messagesReceivedArray {
     
     // TODO: debug only - need to retrieve live data
@@ -970,19 +980,22 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     if (!layoutSectionsCountMatches) {
         [self.collectionView reloadData];
-    }
-    
-    [self.collectionView performBatchUpdates:^{
-        [self.collectionView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)]];
-    } completion:^(BOOL finished) {
-        
-        // if signed in but NOT authorized, retrieve updated authorization status every N seconds
-        // else do nothing
         if (self.signedIn && !self.authorized) {
             [self _waitForAuthorization];
         }
-        
-    }];
+    } else {
+        [self.collectionView performBatchUpdates:^{
+            [self.collectionView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections)]];
+        } completion:^(BOOL finished) {
+            
+            // if signed in but NOT authorized, retrieve updated authorization status every N seconds
+            // else do nothing
+            if (self.signedIn && !self.authorized) {
+                [self _waitForAuthorization];
+            }
+            
+        }];
+    }
     
 }
 

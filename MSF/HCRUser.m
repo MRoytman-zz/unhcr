@@ -16,6 +16,7 @@
 
 NSString *const HCRUserAuthorizedKey = @"authorized";
 NSString *const HCRUserTeamIDKey = @"teamId";
+NSString *const HCRUserHideConstructionKey = @"hideBetaFeatures";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -36,6 +37,10 @@ NSString *const HCRUserTeamIDKey = @"teamId";
 
 - (NSString *)teamID {
     return [[HCRUser currentUser] objectForKey:HCRUserTeamIDKey ofClass:@"NSString" mustExist:NO];
+}
+
+- (BOOL)hideConstruction {
+    return [[[HCRUser currentUser] objectForKey:HCRUserHideConstructionKey ofClass:@"NSNumber" mustExist:NO] boolValue];
 }
 
 + (void)surveySignInWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL succeeded, NSError *error))completionBlock {
