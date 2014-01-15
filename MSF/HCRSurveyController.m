@@ -32,6 +32,7 @@
 
 @property (nonatomic, strong) HCRSurveyAnswerSetParticipant *currentParticipant;
 
+@property (nonatomic, readonly) HCRSurvey *survey;
 @property (nonatomic, readonly) HCRSurveyAnswerSet *answerSet;
 @property (nonatomic, readonly) UICollectionViewFlowLayout *flowLayout;
 
@@ -121,19 +122,6 @@
     [self _updateAnswersCompleted:(percentComplete == 100)];
     
 }
-
-//- (void)viewDidAppear:(BOOL)animated {
-//    [super viewDidAppear:animated];
-//    
-//    HCRParticipantToolbar *toolbar = (HCRParticipantToolbar *)self.navigationController.toolbar;
-//    NSParameterAssert([toolbar isKindOfClass:[HCRParticipantToolbar class]]);
-//    
-//    if (!toolbar.currentParticipant) {
-//        // this means it's the first load - workaround for toolbar not loading in proper order
-//        self.currentParticipant = [self.answerSet participantWithID:0];
-//    }
-//    
-//}
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -457,6 +445,13 @@
 
 #pragma mark - Getters & Setters
 
+- (HCRSurvey *)survey {
+    
+    // TODO: refactor, point to dynamic survey with ID set by preceding controller
+    return [[[HCRDataManager sharedManager] localSurveys] objectAtIndex:0];
+    
+}
+
 - (HCRSurveyAnswerSet *)answerSet {
     
     return [[HCRDataManager sharedManager] surveyAnswerSetWithLocalID:self.answerSetID];
@@ -584,12 +579,32 @@
 
 - (void)_addParticipantButtonPressed {
     
-    HCRSurveyAnswerSetParticipant *newParticipant = [[HCRDataManager sharedManager] createNewParticipantForAnswerSet:self.answerSet];
+    void (^addParticipant)(void) = ^{
+        HCRSurveyAnswerSetParticipant *newParticipant = [[HCRDataManager sharedManager] createNewParticipantForAnswerSet:self.answerSet];
+        
+        [self _refreshModelDataForParticipantID:newParticipant.participantID.integerValue];
+        [self _reloadAllData];
+        
+        self.currentParticipant = newParticipant;
+    };
     
-    [self _refreshModelDataForParticipantID:newParticipant.participantID.integerValue];
-    [self _reloadAllData];
+    HCRSurveyAnswerSetParticipant *headParticipant = [self.answerSet participantWithID:0];
+    HCRSurveyAnswerSetParticipantQuestion *question = [headParticipant questionWithID:self.survey.participantsQuestion];
+    NSString *statedParticipants = question.answerString;
     
-    self.currentParticipant = newParticipant;
+    if (self.answerSet.participants.count >= statedParticipants.integerValue) {
+        
+        [UIAlertView showConfirmationDialogWithTitle:@"Add Participant?"
+                                             message:@"Adding another participant will exceed the number of participants you specified earlier in the survey, and may lead to bad survey data. Are you sure you want to add another participant?"
+                                             handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                                 if (buttonIndex != alertView.cancelButtonIndex) {
+                                                     addParticipant();
+                                                 }
+                                             }];
+        
+    } else {
+        addParticipant();
+    }
     
 }
 
@@ -1133,6 +1148,7 @@
         return [surveyQuestion answerForAnswerCode:participantQuestion.answer];
     } else {
         // get answer for index
+        NSParameterAssert(indexPath);
         NSArray *answerStrings = surveyQuestion.answers;
         return [answerStrings objectAtIndex:indexPath.row];
     }

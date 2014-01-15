@@ -13,6 +13,7 @@
 @interface HCRSurveyController : UICollectionViewController
 <UICollectionViewDelegateFlowLayout, HCRDataEntryFieldCellDelegate>
 
+@property (nonatomic, strong) NSString *surveyID;
 @property (nonatomic, strong) NSString *answerSetID;
 
 + (UICollectionViewLayout *)preferredLayout;

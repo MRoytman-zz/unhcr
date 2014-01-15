@@ -26,6 +26,7 @@
     if (self) {
         self.questionDictionary = [decoder decodeObjectForKey:HCRPrefKeyQuestions];
         self.answerSetDictionary = [decoder decodeObjectForKey:HCRPrefKeyAnswerSets];
+        self.localID = [decoder decodeObjectForKey:HCRPrefKeySurveyLocalID];
         self.title = [decoder decodeObjectForKey:HCRPrefKeySurveyTitle];
         self.ageQuestion = [decoder decodeObjectForKey:HCRPrefKeySurveyAgeQuestion];
         self.genderQuestion = [decoder decodeObjectForKey:HCRPrefKeySurveyGenderQuestion];
@@ -37,6 +38,7 @@
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:self.questionDictionary forKey:HCRPrefKeyQuestions];
     [encoder encodeObject:self.answerSetDictionary forKey:HCRPrefKeyAnswerSets];
+    [encoder encodeObject:self.localID forKey:HCRPrefKeySurveyLocalID];
     [encoder encodeObject:self.title forKey:HCRPrefKeySurveyTitle];
     [encoder encodeObject:self.ageQuestion forKey:HCRPrefKeySurveyAgeQuestion];
     [encoder encodeObject:self.genderQuestion forKey:HCRPrefKeySurveyGenderQuestion];

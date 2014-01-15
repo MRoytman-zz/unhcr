@@ -20,6 +20,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // NSUD KEYS
+extern NSString *const HCRPrefKeySurveyLocalID;
 extern NSString *const HCRPrefKeySurveyTitle;
 extern NSString *const HCRPrefKeySurveyAgeQuestion;
 extern NSString *const HCRPrefKeySurveyGenderQuestion;
@@ -77,7 +78,7 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 
 + (id)sharedManager;
 
-- (NSArray *)localSurveysArray;
+- (NSArray *)localSurveys;
 - (NSArray *)localQuestionsArray;
 - (NSArray *)localAnswerSetsArray;
 

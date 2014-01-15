@@ -201,7 +201,7 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
 
 - (NSArray *)layoutDataArray {
     
-    NSArray *surveys = [[HCRDataManager sharedManager] localSurveysArray];
+    NSArray *surveys = [[HCRDataManager sharedManager] localSurveys];
     
     NSMutableArray *layoutData = @[].mutableCopy;
     NSMutableArray *surveysData = @[].mutableCopy;

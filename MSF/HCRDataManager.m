@@ -14,6 +14,7 @@
 
 // NSUD KEYS
 NSString *const HCRPrefKeySurvey = @"HCRPrefKeySurvey";
+NSString *const HCRPrefKeySurveyLocalID = @"objectId";
 NSString *const HCRPrefKeySurveyTitle = @"description";
 NSString *const HCRPrefKeySurveyAgeQuestion = @"ageQuestion";
 NSString *const HCRPrefKeySurveyGenderQuestion = @"genderQuestion";
@@ -72,7 +73,7 @@ NSString *const kSurveyResultClass = @"Test";
 #ifdef PRODUCTION
 NSString *const kSurveyResultClass = @"Result";
 #else
-NSString *const kSurveyResultClass = @"TestFlight";
+NSString *const kSurveyResultClass = @"Result-TestFlight";
 #endif
 #endif
 
