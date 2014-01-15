@@ -14,6 +14,10 @@
 
 // NSUD KEYS
 NSString *const HCRPrefKeySurvey = @"HCRPrefKeySurvey";
+NSString *const HCRPrefKeySurveyTitle = @"description";
+NSString *const HCRPrefKeySurveyAgeQuestion = @"ageQuestion";
+NSString *const HCRPrefKeySurveyGenderQuestion = @"genderQuestion";
+NSString *const HCRPrefKeySurveyParticipantsQuestion = @"participantsQuestion";
 
 NSString *const HCRPrefKeyQuestions = @"HCRPrefKeyQuestions";
 NSString *const HCRPrefKeyQuestionsAnswers = @"answers";
@@ -77,6 +81,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
 @interface HCRDataManager ()
 
 @property (nonatomic, strong) HCRSurvey *localSurvey;
+@property (nonatomic, strong) NSArray *localSurveys;
 
 @end
 
@@ -134,6 +139,7 @@ NSString *const kSurveyResultClass = @"TestFlight";
     if ( self != nil )
     {
         self.localSurvey = [self _restoreLocalSurveyFromDataStore];
+        self.localSurveys = @[self.localSurvey];
     }
     return self;
 }
@@ -147,10 +153,12 @@ NSString *const kSurveyResultClass = @"TestFlight";
 
 #pragma mark - Public Methods
 
+- (NSArray *)localSurveysArray {
+    return self.localSurveys;
+}
+
 - (NSArray *)localQuestionsArray {
-    
     return self.localSurvey.questions;
-    
 }
 
 - (HCRSurveyQuestion *)surveyQuestionWithQuestionID:(NSString *)questionID {
@@ -207,6 +215,52 @@ NSString *const kSurveyResultClass = @"TestFlight";
     
     [self.localSurvey.answerSetDictionary setObject:answerSet forKey:answerSet.localID];
     [self _sync];
+    
+}
+
+#pragma mark - Public Methods (Survey Management)
+
+- (void)refreshSurveysWithCompletion:(void (^)(NSError *))completionBlock {
+    
+    // TODO: also refresh questions as part of this method, potentially, or at least refactor to be Parse driven
+    
+    PFQuery *surveysQuery = [PFQuery queryWithClassName:@"Survey"];
+    
+    [surveysQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        
+        if (error) {
+            [[SCErrorManager sharedManager] showAlertForError:error withErrorSource:SCErrorSourceParse withCompletion:nil];
+        } else {
+            
+            HCRDebug(@"Surveys found: %d",objects.count);
+            
+            for (PFObject *object in objects) {
+                
+                 self.localSurvey.title = [object objectForKey:HCRPrefKeySurveyTitle
+                                                       ofClass:@"NSString"
+                                                     mustExist:NO];
+                
+                self.localSurvey.ageQuestion = [object objectForKey:HCRPrefKeySurveyAgeQuestion
+                                                            ofClass:@"NSString"
+                                                          mustExist:NO];
+                
+                self.localSurvey.genderQuestion = [object objectForKey:HCRPrefKeySurveyGenderQuestion
+                                                               ofClass:@"NSString"
+                                                             mustExist:NO];
+                
+                self.localSurvey.participantsQuestion = [object objectForKey:HCRPrefKeySurveyParticipantsQuestion
+                                                                     ofClass:@"NSString"
+                                                                   mustExist:NO];
+                
+            }
+            
+            [self _sync];
+            
+        }
+        
+        completionBlock(error);
+        
+    }];
     
 }
 
@@ -672,9 +726,9 @@ NSString *const kSurveyResultClass = @"TestFlight";
     // TODO: get this dynamic from the server somehow
     if ([questionCode isEqualToString:@"0"]) {
         answerSet.consent = (questionData.answer) ? @(questionData.answer && questionData.answer.integerValue == 1) : nil;
-    } else if ([questionCode isEqualToString:@"6"]) {
+    } else if ([questionCode isEqualToString:self.localSurvey.ageQuestion]) {
         targetParticipant.age = (questionData.answerString) ? @(questionData.answerString.integerValue) : nil;
-    } else if ([questionCode isEqualToString:@"7"]) {
+    } else if ([questionCode isEqualToString:self.localSurvey.genderQuestion]) {
         targetParticipant.gender = questionData.answer;
     }
     

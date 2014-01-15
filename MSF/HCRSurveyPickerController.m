@@ -12,6 +12,8 @@
 #import "EAEmailUtilities.h"
 #import "HCRAnswerSetPickerController.h"
 
+#import <MBProgressHUD.h>
+
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kSurveyPickerHeaderIdentifier = @"kSurveyPickerHeaderIdentifier";
@@ -19,7 +21,6 @@ NSString *const kSurveyPickerFooterIdentifier = @"kSurveyPickerFooterIdentifier"
 
 NSString *const kSurveyPickerButtonCellIdentifier = @"kSurveyPickerButtonCellIdentifier";
 
-NSString *const kLayoutCellLabelLebanon = @"Lebanon: Access to Care";
 NSString *const kLayoutCellLabelRefresh = @"Refresh Surveys";
 NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
 
@@ -27,10 +28,10 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
 
 @interface HCRSurveyPickerController ()
 
-@property NSArray *layoutDataArray;
+@property (nonatomic, readonly) NSArray *layoutDataArray;
 @property NSDateFormatter *dateFormatter;
 
-@property (nonatomic, weak) HCRTableButtonCell *lebanonCell;
+@property (nonatomic, strong) NSMutableArray *surveyCells;
 @property (nonatomic, weak) HCRTableButtonCell *refreshCell;
 
 @property (nonatomic) BOOL refreshingSurvey;
@@ -45,17 +46,7 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
-        
-        self.layoutDataArray = @[
-                                 @[
-                                     @{kLayoutCellLabel: kLayoutCellLabelLebanon}
-                                     ],
-                                 @[
-                                     @{kLayoutCellLabel: kLayoutCellLabelRefresh},
-                                     @{kLayoutCellLabel: kLayoutCellLabelRequestNew}
-                                     ]
-                                 ];
-        
+        self.surveyCells = @[].mutableCopy;
         self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMMHHmm forceEuropeanFormat:YES];
     }
     return self;
@@ -87,6 +78,7 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    // TODO: this is not the correct detection for this event; should be based on # of surveys
     if ([[HCRDataManager sharedManager] localQuestionsArray].count == 0) {
         [self _refreshSurveyData];
     }
@@ -116,33 +108,24 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    HCRCollectionCell *cell;
-    
     NSString *cellTitle = [self _layoutLabelForIndexPath:indexPath];
     
-    if ([cellTitle isEqualToString:kLayoutCellLabelLebanon] ||
-        [cellTitle isEqualToString:kLayoutCellLabelRequestNew] ||
-        [cellTitle isEqualToString:kLayoutCellLabelRefresh]) {
-        
-        HCRTableButtonCell *buttonCell =
-        [self.collectionView dequeueReusableCellWithReuseIdentifier:kSurveyPickerButtonCellIdentifier
-                                                       forIndexPath:indexPath];
-        
-        cell = buttonCell;
-        
-        buttonCell.tableButtonTitle = cellTitle;
-        
-        if ([cellTitle isEqualToString:kLayoutCellLabelLebanon]) {
-            self.lebanonCell = buttonCell;
-        } else if ([cellTitle isEqualToString:kLayoutCellLabelRefresh]) {
-            self.refreshCell = buttonCell;
-        }
-        
+    HCRTableButtonCell *buttonCell =
+    [self.collectionView dequeueReusableCellWithReuseIdentifier:kSurveyPickerButtonCellIdentifier
+                                                   forIndexPath:indexPath];
+    
+    buttonCell.tableButtonTitle = cellTitle;
+    
+    if ([cellTitle isEqualToString:kLayoutCellLabelRefresh]) {
+        self.refreshCell = buttonCell;
+    } else if (![cellTitle isEqualToString:kLayoutCellLabelRequestNew]) {
+        // if NOT the request new cell, it is a survey
+        [self.surveyCells addObject:buttonCell];
     }
     
-    [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
+    [buttonCell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
     
-    return cell;
+    return buttonCell;
     
 }
 
@@ -163,11 +146,14 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
                                                                    withReuseIdentifier:kSurveyPickerFooterIdentifier
                                                                           forIndexPath:indexPath];
         
-        if ([[self _layoutLabelForIndexPath:indexPath] isEqualToString:kLayoutCellLabelLebanon]) {
+        NSString *cellTitle = [self _layoutLabelForIndexPath:indexPath];
+        if (![cellTitle isEqualToString:kLayoutCellLabelRefresh] &&
+            ![cellTitle isEqualToString:kLayoutCellLabelRequestNew]) {
             
             NSDate *lastUpdated = [[HCRDataManager sharedManager] surveyQuestionsLastUpdated];
             footer.titleString = [NSString stringWithFormat:@"Revision: %@",
                                   (lastUpdated) ? [self.dateFormatter stringFromDate:lastUpdated] : @"n/a"];
+            
         }
         
         return footer;
@@ -183,14 +169,16 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
     
     NSString *cellTitle = [self _layoutLabelForIndexPath:indexPath];
     
-    if ([cellTitle isEqualToString:kLayoutCellLabelLebanon] &&
-        self.refreshingSurvey == NO) {
-        [self _lebanonStudyButtonPressed];
-    } else if ([cellTitle isEqualToString:kLayoutCellLabelRequestNew] &&
-               self.refreshingSurvey == NO) {
-        [self _newStudyButtonPressedFromIndexPath:indexPath];
-    } else if ([cellTitle isEqualToString:kLayoutCellLabelRefresh]) {
-        [self _refreshButtonPressed];
+    if (self.refreshingSurvey == NO) {
+        
+        if ([cellTitle isEqualToString:kLayoutCellLabelRequestNew]) {
+            [self _newStudyButtonPressedFromIndexPath:indexPath];
+        } else if ([cellTitle isEqualToString:kLayoutCellLabelRefresh]) {
+            [self _refreshButtonPressed];
+        } else {
+            [self _openStudyButtonPressed];
+        }
+        
     }
     
 }
@@ -211,11 +199,39 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
 
 #pragma mark - Getters & Setters
 
+- (NSArray *)layoutDataArray {
+    
+    NSArray *surveys = [[HCRDataManager sharedManager] localSurveysArray];
+    
+    NSMutableArray *layoutData = @[].mutableCopy;
+    NSMutableArray *surveysData = @[].mutableCopy;
+    
+    for (HCRSurvey *survey in surveys) {
+        if (survey.title) {
+            [surveysData addObject:@{kLayoutCellLabel:survey.title}];
+        }
+    }
+    
+    if (surveysData.count > 0) {
+        [layoutData addObject:surveysData];
+    }
+    
+    [layoutData addObject:@[
+                            @{kLayoutCellLabel: kLayoutCellLabelRefresh},
+                            @{kLayoutCellLabel: kLayoutCellLabelRequestNew}
+                            ]];
+    
+    return layoutData;
+    
+}
+
 - (void)setRefreshingSurvey:(BOOL)refreshingSurvey {
     _refreshingSurvey = refreshingSurvey;
     
-    self.lebanonCell.processingAction = refreshingSurvey;
-    self.lebanonCell.tableButton.enabled = !refreshingSurvey;
+    for (HCRTableButtonCell *surveyCell in self.surveyCells) {
+        surveyCell.processingAction = refreshingSurvey;
+        surveyCell.tableButton.enabled = !refreshingSurvey;
+    }
     
     self.refreshCell.tableButton.enabled = !refreshingSurvey;
 }
@@ -239,7 +255,7 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
     
 }
 
-- (void)_lebanonStudyButtonPressed {
+- (void)_openStudyButtonPressed {
     
     if ([[HCRDataManager sharedManager] localQuestionsArray] == nil) {
         
@@ -310,12 +326,32 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
     
     self.refreshingSurvey = YES;
     
-    [[HCRDataManager sharedManager] refreshSurveyQuestionsWithCompletion:^(NSError *error) {
-        
-        self.refreshingSurvey = NO;
+    MBProgressHUD *progressHUD;
+    if (self.surveyCells.count == 0) {
+        progressHUD = [[MBProgressHUD alloc] initWithView:self.collectionView];
+        [self.collectionView addSubview:progressHUD];
+        progressHUD.removeFromSuperViewOnHide = YES;
+        progressHUD.labelText = @"Updating";
+        progressHUD.mode = MBProgressHUDModeIndeterminate;
+        [progressHUD show:YES];
+    }
+    
+    [[HCRDataManager sharedManager] refreshSurveysWithCompletion:^(NSError *error) {
         
         if (!error) {
-            [self.collectionView reloadData];
+            
+            [[HCRDataManager sharedManager] refreshSurveyQuestionsWithCompletion:^(NSError *error) {
+                
+                [progressHUD hide:YES];
+                self.refreshingSurvey = NO;
+                
+                if (!error) {
+                    self.surveyCells = @[].mutableCopy;
+                    [self.collectionView reloadData];
+                }
+                
+            }];
+            
         }
         
     }];

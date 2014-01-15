@@ -20,6 +20,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // NSUD KEYS
+extern NSString *const HCRPrefKeySurveyTitle;
+extern NSString *const HCRPrefKeySurveyAgeQuestion;
+extern NSString *const HCRPrefKeySurveyGenderQuestion;
+extern NSString *const HCRPrefKeySurveyParticipantsQuestion;
+
 extern NSString *const HCRPrefKeyQuestions;
 extern NSString *const HCRPrefKeyQuestionsAnswers;
 extern NSString *const HCRPrefKeyQuestionsAnswersCode;
@@ -72,6 +77,7 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 
 + (id)sharedManager;
 
+- (NSArray *)localSurveysArray;
 - (NSArray *)localQuestionsArray;
 - (NSArray *)localAnswerSetsArray;
 
@@ -83,6 +89,9 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 // participants
 - (HCRSurveyAnswerSetParticipant *)createNewParticipantForAnswerSet:(HCRSurveyAnswerSet *)answerSet;
 - (void)removeParticipant:(HCRSurveyAnswerSetParticipant *)participant fromAnswerSet:(HCRSurveyAnswerSet *)answerSet;
+
+// survey management
+- (void)refreshSurveysWithCompletion:(void (^)(NSError *error))completionBlock;
 
 // question management
 - (void)refreshSurveyQuestionsWithCompletion:(void (^)(NSError *error))completionBlock;

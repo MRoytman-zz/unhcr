@@ -26,6 +26,10 @@
     if (self) {
         self.questionDictionary = [decoder decodeObjectForKey:HCRPrefKeyQuestions];
         self.answerSetDictionary = [decoder decodeObjectForKey:HCRPrefKeyAnswerSets];
+        self.title = [decoder decodeObjectForKey:HCRPrefKeySurveyTitle];
+        self.ageQuestion = [decoder decodeObjectForKey:HCRPrefKeySurveyAgeQuestion];
+        self.genderQuestion = [decoder decodeObjectForKey:HCRPrefKeySurveyGenderQuestion];
+        self.participantsQuestion = [decoder decodeObjectForKey:HCRPrefKeySurveyParticipantsQuestion];
     }
     return self;
 }
@@ -33,6 +37,10 @@
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:self.questionDictionary forKey:HCRPrefKeyQuestions];
     [encoder encodeObject:self.answerSetDictionary forKey:HCRPrefKeyAnswerSets];
+    [encoder encodeObject:self.title forKey:HCRPrefKeySurveyTitle];
+    [encoder encodeObject:self.ageQuestion forKey:HCRPrefKeySurveyAgeQuestion];
+    [encoder encodeObject:self.genderQuestion forKey:HCRPrefKeySurveyGenderQuestion];
+    [encoder encodeObject:self.participantsQuestion forKey:HCRPrefKeySurveyParticipantsQuestion];
 }
 
 #pragma mark - Getters & Setters

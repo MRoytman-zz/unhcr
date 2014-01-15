@@ -16,4 +16,9 @@
 @property (nonatomic, strong) NSMutableDictionary *questionDictionary;
 @property (nonatomic, strong) NSMutableDictionary *answerSetDictionary;
 
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *ageQuestion;
+@property (nonatomic, strong) NSString *genderQuestion;
+@property (nonatomic, strong) NSString *participantsQuestion;
+
 @end
