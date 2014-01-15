@@ -594,8 +594,10 @@
     
     if (self.answerSet.participants.count >= statedParticipants.integerValue) {
         
+        NSString *bodyText = [NSString stringWithFormat:@"The number of participants will exceed the number of participants you specified in question #%@. Proceeding may cause bad survey data. Are you sure you want to add another participant to the survey?",self.survey.participantsQuestion];
+        
         [UIAlertView showConfirmationDialogWithTitle:@"Add Participant?"
-                                             message:@"Adding another participant will exceed the number of participants you specified earlier in the survey, and may lead to bad survey data. Are you sure you want to add another participant?"
+                                             message:bodyText
                                              handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                                  if (buttonIndex != alertView.cancelButtonIndex) {
                                                      addParticipant();
