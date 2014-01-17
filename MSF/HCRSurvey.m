@@ -15,6 +15,11 @@
 @property BOOL dirtyQuestions;
 @property NSArray *sortedQuestions;
 
+@property BOOL dirtyAnswerSets;
+@property NSArray *sortedAnswerSets;
+
+@property (nonatomic, readwrite) NSMutableDictionary *answerSetDictionary;
+
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -52,9 +57,16 @@
     self.dirtyQuestions = YES;
 }
 
+- (void)setAnswerSetDictionary:(NSMutableDictionary *)answerSetDictionary {
+    _answerSetDictionary = answerSetDictionary;
+    self.dirtyAnswerSets = YES;
+}
+
 - (NSArray *)questions {
     
-    if ((!self.sortedQuestions || self.dirtyQuestions) && self.questionDictionary) {
+    if (!self.questionDictionary) {
+        
+    } else if (!self.sortedQuestions || self.dirtyQuestions) {
         
         self.dirtyQuestions = NO;
         
@@ -77,7 +89,65 @@
 }
 
 - (NSArray *)answerSets {
-    return self.answerSetDictionary.allValues;
+    
+    if (!self.answerSetDictionary) {
+        self.sortedAnswerSets = nil;
+    } else if (!self.sortedAnswerSets || self.dirtyAnswerSets) {
+        
+        self.dirtyAnswerSets = NO;
+        
+        // sort it!
+        // https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/SortDescriptors/Articles/Creating.html#//apple_ref/doc/uid/20001845-BAJEAIEE
+        // http://stackoverflow.com/questions/8633932/how-to-sort-an-array-with-alphanumeric-values
+        
+        NSMutableArray *answerSetArray = @[].mutableCopy;
+        for (NSString *key in self.answerSetDictionary.allKeys) {
+            [answerSetArray addObject:[self.answerSetDictionary objectForKey:key]];
+        }
+        
+        [answerSetArray sortUsingSelector:@selector(compareStartedDateToAnswerSet:)];
+        
+        self.sortedAnswerSets = answerSetArray;
+        
+    }
+    
+    return self.sortedAnswerSets;
+    
+}
+
+- (void)addQuestionDictionary:(NSDictionary *)questionDictionary {
+    
+    self.questionDictionary = questionDictionary.mutableCopy;
+    self.dirtyQuestions = YES;
+    
+}
+
+- (void)addAnswerSet:(HCRSurveyAnswerSet *)answerSet {
+    
+    if (self.answerSetDictionary == nil) {
+        self.answerSetDictionary = @{}.mutableCopy;
+    }
+    
+    [self.answerSetDictionary setObject:answerSet forKey:answerSet.localID];
+    self.dirtyAnswerSets = YES;
+    
+}
+
+- (void)removeAnswerSetWithLocalID:(NSString *)localID {
+    
+    [self.answerSetDictionary removeObjectForKey:localID];
+    self.dirtyAnswerSets = YES;
+    
+    if (self.answerSetDictionary.count == 0) {
+        self.answerSetDictionary = nil;
+    }
+    
+}
+
+- (void)removeAllAnswerSets {
+    
+    self.answerSetDictionary = nil;
+    
 }
 
 @end

@@ -123,6 +123,15 @@
     
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    
+    // scroll to top unanswered question UNLESS it's the very first question
+    if ([self _indexPathForCurrentParticipantFirstUnansweredQuestion].row != 0) {
+        [self _scrollToUnansweredQuestionForCurrentParticipant];
+    }
+    
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -187,17 +196,15 @@
         HCRSurveyAnswerSetParticipantQuestion *question = [self _participantQuestionForSection:section inCollectionView:collectionView];
         HCRSurveyQuestion *surveyQuestion = [[HCRDataManager sharedManager] surveyQuestionWithQuestionID:question.question];
         
-        if (question.answer &&
-            !surveyQuestion.numberOfAnswersRequired) {
+        if (question.answer ||
+            surveyQuestion.freeformLabel) {
+            
             numberOfItemsInSection = 1; // the answer is all that remains :)
+            
         } else {
             
-            if (surveyQuestion.freeformLabel &&
-                !surveyQuestion.numberOfAnswersRequired) {
-                numberOfItemsInSection = 1; // free-form question
-            } else {
-                numberOfItemsInSection = surveyQuestion.answers.count; // normal :)
-            }
+            numberOfItemsInSection = surveyQuestion.answers.count; // normal :)
+            
         }
 
     } else {
@@ -558,22 +565,12 @@
 #pragma mark - Private Methods (Navigation)
 
 - (void)_closeButtonPressed {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)_doneButtonPressed {
     
-    [UIAlertView showConfirmationDialogWithTitle:@"Submit Survey"
-                                         message:@"Are you sure you want to submit this survey? Once you submit the survey, you may not make any changes."
-                                         handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                             
-                                             if (buttonIndex != alertView.cancelButtonIndex) {
-                                                 
-                                                 [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-                                                 
-                                             }
-                                             
-                                         }];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     
 }
 
@@ -594,7 +591,7 @@
     
     if (self.answerSet.participants.count >= statedParticipants.integerValue) {
         
-        NSString *bodyText = [NSString stringWithFormat:@"The number of participants will exceed the number of participants you specified in question #%@. Proceeding may cause bad survey data. Are you sure you want to add another participant to the survey?",self.survey.participantsQuestion];
+        NSString *bodyText = [NSString stringWithFormat:@"Adding another participant will exceed the number of household you specified in question #%@. Proceeding may cause survey data to be incorrect. Are you sure you want to add another participant to the survey?",self.survey.participantsQuestion];
         
         [UIAlertView showConfirmationDialogWithTitle:@"Add Participant?"
                                              message:bodyText
@@ -683,7 +680,7 @@
         // check for 100% completion
         NSInteger percentComplete = [[HCRDataManager sharedManager] percentCompleteForParticipantID:self.currentParticipant.participantID.integerValue withAnswerSet:self.answerSet];
         
-        toolbar.backgroundColor = (percentComplete == 100) ? [UIColor flatGreenColor] : toolbar.defaultToolbarColor;\
+        toolbar.backgroundColor = (percentComplete == 100) ? [UIColor flatGreenColor] : toolbar.defaultToolbarColor;
         
         NSNumber *currentConsent = self.answerSet.consent;
         [self.navigationController setToolbarHidden:![currentConsent boolValue]
@@ -1026,7 +1023,7 @@
 - (void)_updateAnswersCompleted:(BOOL)allAnswersComplete {
     
     if (!self.doneBarButton) {
-        self.doneBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+        self.doneBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                            target:self
                                                                            action:@selector(_doneButtonPressed)];
     }
@@ -1038,7 +1035,7 @@
     }
     
     UIBarButtonItem *rightItem = (allAnswersComplete) ? self.doneBarButton : nil;
-    UIBarButtonItem *leftItem = (allAnswersComplete) ? nil : self.closeBarButton;
+    UIBarButtonItem *leftItem = self.closeBarButton;
     
     [self.navigationItem setRightBarButtonItem:rightItem animated:YES];
     [self.navigationItem setLeftBarButtonItem:leftItem animated:YES];
@@ -1065,16 +1062,7 @@
     
     if (self.currentParticipant) {
         
-        NSIndexPath *indexPath = [self _indexPathForCurrentParticipantFirstUnansweredQuestion];
-        
-        if (indexPath) {
-            
-            HCRSurveyCell *surveyCell = [self _surveyCellForCurrectParticipant];
-            
-            [surveyCell.participantCollection scrollToItemAtIndexPath:indexPath
-                                                     atScrollPosition:UICollectionViewScrollPositionCenteredVertically
-                                                             animated:YES];
-        }
+        [self _scrollToUnansweredQuestionForCurrentParticipant];
         
     }
     
@@ -1154,6 +1142,21 @@
         NSArray *answerStrings = surveyQuestion.answers;
         return [answerStrings objectAtIndex:indexPath.row];
     }
+}
+
+- (void)_scrollToUnansweredQuestionForCurrentParticipant {
+    
+    NSIndexPath *indexPath = [self _indexPathForCurrentParticipantFirstUnansweredQuestion];
+    
+    if (indexPath) {
+        
+        HCRSurveyCell *surveyCell = [self _surveyCellForCurrectParticipant];
+        
+        [surveyCell.participantCollection scrollToItemAtIndexPath:indexPath
+                                                 atScrollPosition:UICollectionViewScrollPositionCenteredVertically
+                                                         animated:YES];
+    }
+    
 }
 
 @end

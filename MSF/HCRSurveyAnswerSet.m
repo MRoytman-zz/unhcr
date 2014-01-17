@@ -76,4 +76,10 @@
     
 }
 
+- (NSComparisonResult)compareStartedDateToAnswerSet:(HCRSurveyAnswerSet *)answerSet {
+    
+    return [self.durationStart compare:answerSet.durationStart];
+    
+}
+
 @end

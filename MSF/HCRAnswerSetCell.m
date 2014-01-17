@@ -26,7 +26,7 @@
     if (self) {
         // Initialization code
         self.percentCompleteView = [[UIView alloc] initWithFrame:CGRectZero];
-        [self.contentView addSubview:self.percentCompleteView];
+        [self.contentView insertSubview:self.percentCompleteView belowSubview:self.titleLabel];
         
         self.percentCompleteView.backgroundColor = [UIColor cellAnsweredBackgroundColor];
         
@@ -36,16 +36,24 @@
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    self.submitted = NO;
     self.percentComplete = 0;
+    self.answerSetID = nil;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     
+    // if the survey is completed, but not submitted, color yellow - else green
+    self.percentCompleteView.backgroundColor = (!self.submitted) ? [[UIColor flatYellowColor] colorWithAlphaComponent:0.5] : [UIColor cellAnsweredBackgroundColor];
+    
     self.percentCompleteView.frame = CGRectMake(0,
                                                 0,
                                                 (self.percentComplete / 100.0) * CGRectGetWidth(self.contentView.bounds),
                                                 CGRectGetHeight(self.contentView.bounds));
+    
+    self.percentCompleteView.alpha = (self.processingAction) ? 0.5 : 1.0;
+    self.titleLabel.alpha = (self.processingAction) ? 0.5 : 1.0;
     
 }
 
@@ -53,6 +61,16 @@
 
 - (void)setPercentComplete:(NSInteger)percentComplete {
     _percentComplete = percentComplete;
+    [self setNeedsLayout];
+}
+
+- (void)setSubmitted:(BOOL)submitted {
+    _submitted = submitted;
+    [self setNeedsLayout];
+}
+
+- (void)setProcessingAction:(BOOL)processingAction {
+    [super setProcessingAction:processingAction];
     [self setNeedsLayout];
 }
 

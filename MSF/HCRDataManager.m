@@ -7,6 +7,7 @@
 //
 
 #import "HCRDataManager.h"
+#import "HCRSurveySubmission.h"
 
 #import <Parse/Parse.h>
 
@@ -66,15 +67,11 @@ NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString = @"HCRPre
 NSString *const HCRPrefKeyAnswerSetsDurationStart = @"HCRPrefKeyAnswerSetsDurationStart";
 NSString *const HCRPrefKeyAnswerSetsDurationEnd = @"HCRPrefKeyAnswerSetsDurationEnd";
 
-// PARSE CLASSES
-#ifdef DEBUG
-NSString *const kSurveyResultClass = @"Test";
-#else
+// INCREMENTOR
 #ifdef PRODUCTION
-NSString *const kSurveyResultClass = @"Result";
+NSString *const kSurveyIDField = @"householdId";
 #else
-NSString *const kSurveyResultClass = @"Result-TestFlight";
-#endif
+NSString *const kSurveyIDField = @"testId";
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -237,9 +234,11 @@ NSString *const kSurveyResultClass = @"Result-TestFlight";
             
             for (PFObject *object in objects) {
                 
-                 self.localSurvey.title = [object objectForKey:HCRPrefKeySurveyTitle
-                                                       ofClass:@"NSString"
-                                                     mustExist:NO];
+                self.localSurvey.localID = object.objectId;
+                
+                self.localSurvey.title = [object objectForKey:HCRPrefKeySurveyTitle
+                                                      ofClass:@"NSString"
+                                                    mustExist:NO];
                 
                 self.localSurvey.ageQuestion = [object objectForKey:HCRPrefKeySurveyAgeQuestion
                                                             ofClass:@"NSString"
@@ -317,8 +316,6 @@ NSString *const kSurveyResultClass = @"Result-TestFlight";
 
 - (void)refreshSurveyResponsesForParticipantID:(NSInteger)participantID withAnswerSet:(HCRSurveyAnswerSet *)answerSet {
     
-    NSDate *start = [NSDate date];
-    
     HCRSurveyAnswerSetParticipant *targetParticpant = [answerSet participantWithID:participantID];
     
     for (HCRSurveyQuestion *question in self.localSurvey.questions) {
@@ -368,8 +365,6 @@ NSString *const kSurveyResultClass = @"Result-TestFlight";
     [self _sortQuestionsForParticipant:[answerSet participantWithID:participantID]
                                   sync:YES];
     
-    HCRDebug(@"refresh time: %.2f",-1 * start.timeIntervalSinceNow);
-    
 }
 
 #pragma mark - Public Methods (Answer Management)
@@ -380,32 +375,23 @@ NSString *const kSurveyResultClass = @"Result-TestFlight";
     // store initial vars necessary
     // add to list of local surveys in-process
     
-    if (self.localSurvey.answerSetDictionary == nil) {
-        self.localSurvey.answerSetDictionary = @{}.mutableCopy;
-    }
-    
     HCRSurveyAnswerSet *surveyAnswerSet = [HCRSurveyAnswerSet newAnswerSet];
     
-    [self.localSurvey.answerSetDictionary setObject:surveyAnswerSet forKey:surveyAnswerSet.localID];
+    [self.localSurvey addAnswerSet:surveyAnswerSet];
     [self _sync];
     
 }
 
 - (void)removeAllAnswerSets {
     
-    self.localSurvey.answerSetDictionary = @{}.mutableCopy;
-    
+    [self.localSurvey removeAllAnswerSets];
     [self _sync];
     
 }
 
 - (void)removeAnswerSetWithID:(NSString *)answerSetID {
     
-    [self.localSurvey.answerSetDictionary removeObjectForKey:answerSetID];
-    
-    if (self.localSurvey.answerSetDictionary.allKeys.count == 0) {
-        self.localSurvey.answerSetDictionary = nil;
-    }
+    [self.localSurvey removeAnswerSetWithLocalID:answerSetID];
     
     [self _sync];
     
@@ -461,6 +447,92 @@ NSString *const kSurveyResultClass = @"Result-TestFlight";
 
 - (void)save {
     [self _sync];
+}
+
+- (void)submitAnswerSet:(HCRSurveyAnswerSet *)answerSet withCompletion:(void (^)(NSError *))completionBlock {
+    
+    // set and increment household ID (e.g. testId or householdId)
+    // create new Parse object for proper class (e.g. Test or Result)
+    // fill in answer set details in new parse object in CSV columns
+    PFQuery *householdIDQuery = [PFQuery queryWithClassName:@"Survey"];
+    [householdIDQuery getObjectInBackgroundWithId:self.localSurvey.localID block:^(PFObject *object, NSError *error) {
+        
+        if (error) {
+            completionBlock(error);
+        } else {
+            
+            NSString *surveyID = object[kSurveyIDField];
+            NSInteger participantCount = answerSet.participants.count;
+            
+            __block BOOL failed = NO;
+            __block NSInteger completedCount = 0;
+            
+            for (HCRSurveyAnswerSetParticipant *participant in answerSet.participants) {
+                
+                HCRSurveySubmission *surveySubmission = [HCRSurveySubmission new];
+                surveySubmission.teamID = [HCRUser currentUser].teamID;
+                surveySubmission.userID = [HCRUser currentUser].objectId;
+                surveySubmission.consent = answerSet.consent;
+                surveySubmission.householdID = surveyID;
+                surveySubmission.participantID = participant.participantID;
+                surveySubmission.age = participant.age;
+                surveySubmission.gender = participant.gender;
+                surveySubmission.duration = answerSet.duration;
+                
+                // answer codes & strings
+                NSMutableDictionary *codeDictionary = @{}.mutableCopy;
+                NSMutableDictionary *stringDictionary = @{}.mutableCopy;
+                
+                for (HCRSurveyAnswerSetParticipantQuestion *question in participant.questions) {
+                    
+                    if (question.answer) {
+                        codeDictionary[question.question] = question.answer;
+                    }
+                    
+                    if (question.answerString) {
+                        stringDictionary[question.question] = question.answerString;
+                    }
+                    
+                }
+                
+                surveySubmission.answerCodes = codeDictionary;
+                surveySubmission.answerStrings = stringDictionary;
+                
+                [surveySubmission saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    
+                    // check for last participant
+                    completedCount++;
+                    
+                    if (!failed &&
+                        completedCount != participantCount) {
+                        // if not failed but not completed, do nothing, just wait for the next
+                    } else if (error || !succeeded) {
+                        
+                        failed = YES;
+                        completionBlock(error);
+                        
+                    } else if (completedCount == participantCount) {
+                        
+                        // this is the final completed block, and all have succceeeded
+                        answerSet.householdID = surveyID;
+                        [self _sync];
+                        
+                        [object incrementKey:kSurveyIDField];
+                        [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                            
+                            completionBlock(error);
+                            
+                        }];
+                        
+                    }
+                    
+                }];
+                
+            }
+        }
+                                                
+    }];
+    
 }
 
 - (NSInteger)percentCompleteForAnswerSet:(HCRSurveyAnswerSet *)answerSet {
@@ -701,6 +773,10 @@ NSString *const kSurveyResultClass = @"Result-TestFlight";
     NSParameterAssert(questionCode);
     
     // must exist
+    
+    if ([questionCode isEqualToString:@"0"] || !questionCode) {
+        HCRDebug(@"QUESTION 0! OR NIL!");
+    }
     
     HCRSurveyAnswerSetParticipantQuestion *questionData = [targetParticipant questionWithID:questionCode];
     

@@ -14,6 +14,8 @@
 #import "HCRSurveyController.h"
 #import "HCRParticipantToolbar.h"
 
+#import <Reachability/Reachability.h>
+
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kAnswerSetPickerHeaderIdentifier = @"kAnswerSetPickerHeaderIdentifier";
@@ -24,11 +26,14 @@ NSString *const kAnswerSetPickerButtonCellIdentifier = @"kSurveyPickerButtonCell
 
 NSString *const kLayoutCellLabelNewSurvey = @"Start New Survey";
 NSString *const kLayoutCellLabelRemoveAll = @"Delete All Surveys";
+NSString *const kLayoutCellLabelSubmit = @"Submit All Surveys";
 
 NSString *const kLayoutHeaderLabelInProgress = @"Surveys in Progress";
-NSString *const kLayoutHeaderLabelCompleted = @"Completed Surveys";
+NSString *const kLayoutHeaderLabelUnsubmitted = @"Unsubmitted Surveys";
+NSString *const kLayoutHeaderLabelSubmitted = @"Completed Surveys";
 
-NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
+NSString *const kLayoutFooterLabelPress = @"(swipe left to delete)";
+NSString *const kLayoutFooterLabelUnsubmitted = @"(tap to submit)";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -36,8 +41,14 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 
 @property NSDateFormatter *dateFormatter;
 
+@property NSMutableSet *answerSetIDsBeingSubmitted;
+
+@property (nonatomic, readonly) NSArray *answerSetsSubmitted;
+@property (nonatomic, readonly) NSArray *answerSetsUnsubmitted;
 @property (nonatomic, readonly) NSArray *answerSetsInProgress;
 @property (nonatomic, readonly) NSArray *layoutDataArray;
+
+@property (nonatomic, weak) HCRTableButtonCell *submitButtonCell;
 
 @end
 
@@ -50,7 +61,9 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     self = [super initWithCollectionViewLayout:layout];
     if (self) {
         // Custom initialization
+        self.answerSetIDsBeingSubmitted = [NSMutableSet new];
         self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMMHHmm forceEuropeanFormat:YES];
+        
     }
     return self;
 }
@@ -83,7 +96,17 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.collectionView reloadData];
+    
+    [self _reloadData];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    // determine reachability status
+    [self _submitAllCompletedAnswerSetsWithCompletion:nil];
+    
 }
 
 #pragma mark - Class Methods
@@ -129,7 +152,8 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     }
     
     if ([cellTitle isEqualToString:kLayoutCellLabelNewSurvey] ||
-        [cellTitle isEqualToString:kLayoutCellLabelRemoveAll]) {
+        [cellTitle isEqualToString:kLayoutCellLabelRemoveAll] ||
+        [cellTitle isEqualToString:kLayoutCellLabelSubmit]) {
         
         HCRTableButtonCell *buttonCell =
         [self.collectionView dequeueReusableCellWithReuseIdentifier:kAnswerSetPickerButtonCellIdentifier
@@ -138,6 +162,16 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
         cell = buttonCell;
         
         buttonCell.tableButtonTitle = cellTitle;
+        
+        if ([cellTitle isEqualToString:kLayoutCellLabelSubmit]) {
+            self.submitButtonCell = buttonCell;
+            
+            if (self.answerSetIDsBeingSubmitted.count > 0) {
+                buttonCell.processingAction = YES;
+                buttonCell.tableButton.enabled = NO;
+            }
+            
+        }
         
     } else {
         
@@ -150,13 +184,22 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
         cell = tableCell;
         
         tableCell.title = cellTitle;
+        tableCell.processingViewPosition = HCRCollectionCellProcessingViewPositionCenter;
         
         NSInteger percentComplete = [[HCRDataManager sharedManager] percentCompleteForAnswerSet:answerSet];
         tableCell.percentComplete = percentComplete;
         
+        tableCell.answerSetID = answerSet.localID;
+        
         if (percentComplete != 100) {
             tableCell.processingViewPosition = HCRCollectionCellProcessingViewPositionCenter;
             [tableCell.deleteGestureRecognizer addTarget:self action:@selector(_deleteGestureRecognizer:)];
+        } else {
+            
+            BOOL answerSetBeingUploaded = [self.answerSetIDsBeingSubmitted containsObject:answerSet.localID];
+            
+            tableCell.processingAction = answerSetBeingUploaded;
+            tableCell.submitted = (answerSet.householdID != nil);
         }
         
     }
@@ -201,6 +244,8 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
         [self _newSurveyButtonPressed];
     } else if ([cellTitle isEqualToString:kLayoutCellLabelRemoveAll]) {
         [self _removeAllButtonpressed];
+    } else if ([cellTitle isEqualToString:kLayoutCellLabelSubmit]) {
+        [self _submitCompletedSurveysButtonPressed];
     } else {
         [self _openSurveyButtonPressedAtIndexPath:indexPath];
     }
@@ -217,11 +262,39 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     
-    return (section == 0) ? [HCRHeaderView preferredHeaderSizeForCollectionView:collectionView] : [HCRHeaderView preferredHeaderSizeWithoutTitleForCollectionView:collectionView];
+    BOOL hasHeaderString = ([self _layoutHeaderStringForSection:section] != nil);
+    
+    return (hasHeaderString) ? [HCRHeaderView preferredHeaderSizeForCollectionView:collectionView] : [HCRHeaderView preferredHeaderSizeWithoutTitleForCollectionView:collectionView];
     
 }
 
 #pragma mark - Getters & Setters
+
+- (NSArray *)answerSetsSubmitted {
+    
+    // get number of existing answerSets
+    for (NSDictionary *layoutData in self.layoutDataArray) {
+        if ([[layoutData objectForKey:kLayoutHeaderLabel ofClass:@"NSString" mustExist:NO] isEqualToString:kLayoutHeaderLabelSubmitted]) {
+            return [layoutData objectForKey:kLayoutCells ofClass:@"NSArray"];
+        }
+    }
+    
+    return nil;
+    
+}
+
+- (NSArray *)answerSetsUnsubmitted {
+    
+    // get number of existing answerSets
+    for (NSDictionary *layoutData in self.layoutDataArray) {
+        if ([[layoutData objectForKey:kLayoutHeaderLabel ofClass:@"NSString" mustExist:NO] isEqualToString:kLayoutHeaderLabelUnsubmitted]) {
+            return [layoutData objectForKey:kLayoutCells ofClass:@"NSArray"];
+        }
+    }
+    
+    return nil;
+    
+}
 
 - (NSArray *)answerSetsInProgress {
     
@@ -241,12 +314,19 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     // TODO: this is called like a hundred times - should refactor
     NSMutableArray *layoutData = @[].mutableCopy;
     
+    NSMutableArray *submittedAnswerSets = @[].mutableCopy;
     NSMutableArray *completedAnswerSets = @[].mutableCopy;
     NSMutableArray *incompleteAnswerSets = @[].mutableCopy;
     
     for (HCRSurveyAnswerSet *answerSet in [[HCRDataManager sharedManager] localAnswerSetsArray]) {
         if ([[HCRDataManager sharedManager] percentCompleteForAnswerSet:answerSet] == 100) {
-            [completedAnswerSets addObject:answerSet];
+            
+            if (answerSet.householdID) {
+                [submittedAnswerSets addObject:answerSet];
+            } else {
+                [completedAnswerSets addObject:answerSet];
+            }
+            
         } else {
             [incompleteAnswerSets addObject:answerSet];
         }
@@ -259,8 +339,21 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     }
     
     if (completedAnswerSets.count > 0) {
-        [layoutData addObject:@{kLayoutHeaderLabel: kLayoutHeaderLabelCompleted,
-                                kLayoutCells: completedAnswerSets}];
+        [layoutData addObject:@{kLayoutHeaderLabel: kLayoutHeaderLabelUnsubmitted,
+                                kLayoutCells: completedAnswerSets,
+                                kLayoutFooterLabel: kLayoutFooterLabelUnsubmitted}];
+    }
+    
+    if (submittedAnswerSets.count > 0) {
+        [layoutData addObject:@{kLayoutHeaderLabel: kLayoutHeaderLabelSubmitted,
+                                kLayoutCells: submittedAnswerSets}];
+    }
+    
+    if (completedAnswerSets.count > 0) {
+        [layoutData addObject:@{kLayoutCells: @[
+                                        @{kLayoutCellLabel: kLayoutCellLabelSubmit}
+                                        ]
+                                }];
     }
     
     [layoutData addObject:@{kLayoutCells: @[
@@ -268,7 +361,8 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 #ifdef DEBUG
                                     @{kLayoutCellLabel: kLayoutCellLabelRemoveAll}
 #endif
-                                    ]}];
+                                    ]
+                            }];
     
     return layoutData;
     
@@ -276,35 +370,59 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
 
 #pragma mark - Private Methods (Buttons)
 
+- (void)_submitCompletedSurveysButtonPressed {
+    
+    [self _submitAllCompletedAnswerSetsWithCompletion:^(NSError *error) {
+        if (error) {
+            [[SCErrorManager sharedManager] showAlertForError:error
+                                              withErrorSource:SCErrorSourceParse
+                                               withCompletion:nil];
+        }
+    }];
+    
+}
+
 - (void)_openSurveyButtonPressedAtIndexPath:(NSIndexPath *)indexPath {
     
     HCRAnswerSetCell *cell = (HCRAnswerSetCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+    HCRSurveyAnswerSet *answerSet = [self _answerSetForIndexPath:indexPath];
     
-    cell.processingAction = YES;
-    
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    
-    dispatch_async(queue, ^{
+    if ([self.answerSetsInProgress containsObject:answerSet]) {
         
-        // background code
-        HCRSurveyAnswerSet *answerSet = [self _answerSetForIndexPath:indexPath];
+        cell.processingAction = YES;
         
-        HCRSurveyController *surveyController = [[HCRSurveyController alloc] initWithCollectionViewLayout:[HCRSurveyController preferredLayout]];
-        surveyController.answerSetID = answerSet.localID;
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         
-        UINavigationController *navController = [[UINavigationController alloc] initWithNavigationBarClass:[UINavigationBar class] toolbarClass:[HCRParticipantToolbar class]];
-        
-        navController.viewControllers = @[surveyController];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(queue, ^{
             
-            // completion code (update UI, etc)
-            navController.toolbarHidden = NO;
-            [self.navigationController presentViewController:navController animated:YES completion:nil];
+            // background code
+            HCRSurveyController *surveyController = [[HCRSurveyController alloc] initWithCollectionViewLayout:[HCRSurveyController preferredLayout]];
+            surveyController.answerSetID = answerSet.localID;
+            
+            UINavigationController *navController = [[UINavigationController alloc] initWithNavigationBarClass:[UINavigationBar class] toolbarClass:[HCRParticipantToolbar class]];
+            
+            navController.viewControllers = @[surveyController];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                // completion code (update UI, etc)
+                navController.toolbarHidden = NO;
+                [self.navigationController presentViewController:navController animated:YES completion:nil];
+                
+            });
             
         });
         
-    });
+    } else {
+        
+        cell.processingAction = YES;
+        
+        [self _submitAnswerSet:answerSet withCompletion:^(NSError *error) {
+            cell.processingAction = NO;
+            [self _reloadData];
+        }];
+        
+    }
     
 }
 
@@ -312,33 +430,75 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     
     NSUInteger freshCellsSection = 0;
     
+    __block NSIndexPath *indexPath;
+    
     [self.collectionView performBatchUpdates:^{
         
         if (self.answerSetsInProgress.count == 0) {
             [[HCRDataManager sharedManager] createNewSurveyAnswerSet];
             [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:freshCellsSection]];
+            indexPath = [NSIndexPath indexPathForItem:0
+                                            inSection:freshCellsSection];
         } else {
             [[HCRDataManager sharedManager] createNewSurveyAnswerSet];
-            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.answerSetsInProgress.count - 1
-                                                                               inSection:freshCellsSection]]];
+             indexPath = [NSIndexPath indexPathForItem:self.answerSetsInProgress.count - 1
+                                                         inSection:freshCellsSection];
+            [self.collectionView insertItemsAtIndexPaths:@[indexPath]];
         }
         
-        
     } completion:^(BOOL finished) {
-        [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:freshCellsSection]];
+        
+        [self _reloadSections:[NSIndexSet indexSetWithIndex:freshCellsSection]];
+        
+        [self.collectionView scrollToItemAtIndexPath:indexPath
+                                    atScrollPosition:UICollectionViewScrollPositionCenteredVertically
+                                            animated:YES];
+        
     }];
     
 }
 
 - (void)_removeAllButtonpressed {
     
-    [[HCRDataManager sharedManager] removeAllAnswerSets];
-    
-    [self.collectionView performBatchUpdates:^{
-        [self.collectionView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.collectionView.numberOfSections - 1)]];
-    } completion:^(BOOL finished) {
-        [self.collectionView reloadData];
-    }];
+    [UIAlertView showConfirmationDialogWithTitle:@"Delete All Surveys?"
+                                         message:@"Are you sure you want to delete all submitted and in-progress surveys? This cannot be undone."
+                                         handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                             
+                                             if (buttonIndex != alertView.cancelButtonIndex) {
+                                                 
+                                                 NSMutableIndexSet *dirtySections = [NSMutableIndexSet new];
+                                                 NSMutableArray *answerSetsToDelete = @[].mutableCopy;
+                                                 
+                                                 for (NSArray *sectionData in self.layoutDataArray) {
+                                                     
+                                                     NSInteger section = [self.layoutDataArray indexOfObject:sectionData];
+                                                     NSString *sectionHeader = [self _layoutHeaderStringForSection:section];
+                                                     
+                                                     if ([sectionHeader isEqualToString:kLayoutHeaderLabelInProgress] ||
+                                                         [sectionHeader isEqualToString:kLayoutHeaderLabelSubmitted]) {
+                                                         
+                                                         [dirtySections addIndex:section];
+                                                         
+                                                     }
+                                                     
+                                                 }
+                                                 
+                                                 [answerSetsToDelete addObjectsFromArray:self.answerSetsSubmitted];
+                                                 [answerSetsToDelete addObjectsFromArray:self.answerSetsInProgress];
+                                                 
+                                                 for (HCRSurveyAnswerSet *answerSet in answerSetsToDelete) {
+                                                     [[HCRDataManager sharedManager] removeAnswerSetWithID:answerSet.localID];
+                                                 }
+                                                 
+                                                 [self.collectionView performBatchUpdates:^{
+                                                     [self.collectionView deleteSections:dirtySections];
+                                                 } completion:^(BOOL finished) {
+                                                     [self _reloadData];
+                                                 }];
+                                                 
+                                             }
+                                             
+                                         }];
     
 }
 
@@ -351,16 +511,14 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     tableCell.processingAction = YES;
     
     NSString *bodyString = [NSString stringWithFormat:@"Are you sure you want to delete the survey created at %@ and remove it completely?",tableCell.title];
-    [UIAlertView showConfirmationDialogWithTitle:@"Delete Survey"
+    [UIAlertView showConfirmationDialogWithTitle:@"Delete Survey?"
                                          message:bodyString
                                          handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                              
                                              tableCell.userInteractionEnabled = YES;
                                              tableCell.processingAction = NO;
                                              
-                                             if (buttonIndex == 0) {
-                                                 // do nothing
-                                             } else {
+                                             if (buttonIndex != alertView.cancelButtonIndex) {
                                                  
                                                  NSIndexSet *dirtySections = [NSIndexSet indexSetWithIndex:0];
                                                  
@@ -377,7 +535,7 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
                                                      }
                                                      
                                                  } completion:^(BOOL finished) {
-                                                     [self.collectionView reloadSections:dirtySections];
+                                                     [self _reloadSections:dirtySections];
                                                  }];
                                                  
                                              }
@@ -434,6 +592,101 @@ NSString *const kLayoutFooterLabelPress = @"(swipe left to delete a survey)";
     NSArray *cellsData = [self _layoutCellsForSection:indexPath.section];
     HCRSurveyAnswerSet *answerSet = [cellsData objectAtIndex:indexPath.row ofClass:@"HCRSurveyAnswerSet"];
     return answerSet;
+}
+
+- (void)_reloadData {
+    [self.collectionView reloadData];
+}
+
+- (void)_reloadSections:(NSIndexSet *)sections {
+    [self.collectionView reloadSections:sections];
+}
+
+- (void)_reloadItemsAtIndexPaths:(NSArray *)indexPaths {
+    [self.collectionView reloadItemsAtIndexPaths:indexPaths];
+}
+
+- (void)_submitAnswerSet:(HCRSurveyAnswerSet *)answerSet withCompletion:(void (^)(NSError *error))completionBlock {
+    
+#warning UNCOMMENT THIS STUFF
+    
+//    if (!answerSet.householdID) {
+    
+        [self.answerSetIDsBeingSubmitted addObject:answerSet.localID];
+        
+        NSIndexPath *indexPath = [self _indexPathForAnswerSet:answerSet];
+        [self _reloadItemsAtIndexPaths:@[indexPath]];
+        
+        if (!answerSet.duration) {
+            answerSet.durationEnd = [NSDate date];
+            answerSet.duration = @(answerSet.durationEnd.timeIntervalSinceReferenceDate - answerSet.durationStart.timeIntervalSinceReferenceDate);
+        }
+        
+        [[HCRDataManager sharedManager] submitAnswerSet:answerSet withCompletion:^(NSError *error) {
+            
+            [self.answerSetIDsBeingSubmitted removeObject:answerSet.localID];
+            
+            if (completionBlock) {
+                completionBlock(error);
+            }
+            
+        }];
+        
+//    } else {
+//        HCRWarning(@"Answer set already submitted!");
+//        if (completionBlock) {
+//            completionBlock(nil);
+//        }
+//    }
+    
+}
+
+- (void)_submitAllCompletedAnswerSetsWithCompletion:(void (^)(NSError *error))completionBlock {
+    
+    self.submitButtonCell.tableButton.enabled = NO;
+    self.submitButtonCell.processingAction = YES;
+    
+    for (HCRSurveyAnswerSet *answerSet in self.answerSetsUnsubmitted) {
+        
+        // get cell for answer set
+        // if no cell, just upload directly
+        [self _submitAnswerSet:answerSet withCompletion:^(NSError *error) {
+            
+            self.submitButtonCell.tableButton.enabled = YES;
+            self.submitButtonCell.processingAction = NO;
+            
+            [self _reloadData];
+            
+            if (completionBlock) {
+                completionBlock(error);
+            }
+            
+        }];
+        
+    }
+    
+}
+
+- (NSIndexPath *)_indexPathForAnswerSet:(HCRSurveyAnswerSet *)answerSet {
+    
+    for (NSArray *sectionData in self.layoutDataArray) {
+        
+        NSInteger currentSection = [self.layoutDataArray indexOfObject:sectionData];
+        
+        NSArray *answerSets = [self _layoutCellsForSection:currentSection];
+        
+        for (HCRSurveyAnswerSet *layoutAnswerSet in answerSets) {
+            if (layoutAnswerSet == answerSet) {
+                NSInteger currentRow = [answerSets indexOfObject:layoutAnswerSet];
+                return [NSIndexPath indexPathForItem:currentRow
+                                           inSection:currentSection];
+            }
+        }
+        
+    }
+    
+    return nil;
+    
 }
 
 @end

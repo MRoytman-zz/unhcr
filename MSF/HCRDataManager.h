@@ -85,7 +85,9 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 - (HCRSurveyQuestion *)surveyQuestionWithQuestionID:(NSString *)questionID;
 - (HCRSurveyAnswerSet *)surveyAnswerSetWithLocalID:(NSString *)localID;
 
+// save and submit
 - (void)save;
+- (void)submitAnswerSet:(HCRSurveyAnswerSet *)answerSet withCompletion:(void (^)(NSError *error))completionBlock;
 
 // participants
 - (HCRSurveyAnswerSetParticipant *)createNewParticipantForAnswerSet:(HCRSurveyAnswerSet *)answerSet;

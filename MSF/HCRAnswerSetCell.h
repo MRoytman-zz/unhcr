@@ -10,6 +10,9 @@
 
 @interface HCRAnswerSetCell : HCRTableCell
 
+@property (nonatomic, strong) NSString *answerSetID;
+
+@property (nonatomic) BOOL submitted;
 @property (nonatomic) NSInteger percentComplete;
 
 @end

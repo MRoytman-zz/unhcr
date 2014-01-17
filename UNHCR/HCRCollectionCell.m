@@ -126,6 +126,8 @@ static const CGFloat kAppDescriptionHeight = 210.0;
         self.spinner.hidesWhenStopped = YES;
         [self.spinner startAnimating];
         
+        [self.contentView bringSubviewToFront:self.spinner];
+        
     } else {
         [self.spinner stopAnimating];
     }

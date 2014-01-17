@@ -9,6 +9,7 @@
 #import "HCRAppDelegate.h"
 #import "HCRHomeViewController.h"
 #import "HCRUser.h"
+#import "HCRSurveySubmission.h"
 
 #import <Parse/Parse.h>
 
@@ -27,6 +28,7 @@
 #endif
     
     // PARSE
+    [HCRSurveySubmission registerSubclass];
     [HCRUser registerSubclass];
     [Parse setApplicationId:@"CZX2WArPOqFH6kWTNG30JWPfYVGO1SjmA0j3dwTH"
                   clientKey:@"l88Td8IxqYphPYso4Z8tbtonEH49aJpKOcuXSUfE"];

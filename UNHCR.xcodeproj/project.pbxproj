@@ -54,6 +54,7 @@
 		4F59A7C81825BF96006EFE41 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F59A7C71825BF96006EFE41 /* AudioToolbox.framework */; };
 		4F6137CE181DBBE200FF982F /* HCRCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */; };
 		4F6137D1181EF6C400FF982F /* HCRDataEntryFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6137D0181EF6C400FF982F /* HCRDataEntryFieldCell.m */; };
+		4F641CD118865FF000D5A482 /* HCRSurveySubmission.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F641CD018865FF000D5A482 /* HCRSurveySubmission.m */; };
 		4F71C0F118133D0B00672C6A /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
 		4F72040818750E59006E95B2 /* HMS.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4F4B75187263D700E0ADE8 /* HMS.xcassets */; };
 		4F72040918750E75006E95B2 /* Common.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F1C940717FCB8010003AA21 /* Common.xcassets */; };
@@ -261,6 +262,8 @@
 		4F6137CD181DBBE200FF982F /* HCRCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRCollectionCell.m; sourceTree = "<group>"; };
 		4F6137CF181EF6C400FF982F /* HCRDataEntryFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRDataEntryFieldCell.h; sourceTree = "<group>"; };
 		4F6137D0181EF6C400FF982F /* HCRDataEntryFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRDataEntryFieldCell.m; sourceTree = "<group>"; };
+		4F641CCF18865FF000D5A482 /* HCRSurveySubmission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSurveySubmission.h; sourceTree = "<group>"; };
+		4F641CD018865FF000D5A482 /* HCRSurveySubmission.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRSurveySubmission.m; sourceTree = "<group>"; };
 		4F71C0EF18133D0B00672C6A /* SCGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCGraphView.h; sourceTree = "<group>"; };
 		4F71C0F018133D0B00672C6A /* SCGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCGraphView.m; sourceTree = "<group>"; };
 		4F72043818751335006E95B2 /* HCRSharedPrefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRSharedPrefix.h; sourceTree = "<group>"; };
@@ -808,6 +811,8 @@
 				4F8C098F187CF0A300317764 /* HCRSurveyAnswerSetParticipant.m */,
 				4F8C0991187CF0BD00317764 /* HCRSurveyAnswerSetParticipantQuestion.h */,
 				4F8C0992187CF0BD00317764 /* HCRSurveyAnswerSetParticipantQuestion.m */,
+				4F641CCF18865FF000D5A482 /* HCRSurveySubmission.h */,
+				4F641CD018865FF000D5A482 /* HCRSurveySubmission.m */,
 			);
 			name = "Survey Objects";
 			sourceTree = "<group>";
@@ -1176,6 +1181,7 @@
 				4FA716E318751C2E00BCE0A6 /* HCRRequestDataViewController.m in Sources */,
 				4FA716E018751BFA00BCE0A6 /* HCRCampOverviewController.m in Sources */,
 				4FA716E218751C2900BCE0A6 /* HCRContactViewController.m in Sources */,
+				4F641CD118865FF000D5A482 /* HCRSurveySubmission.m in Sources */,
 				4F7204271875107E006E95B2 /* HCRTableCell.m in Sources */,
 				4F49AC01187BBD8200A4B896 /* HCRSurveyParticipantView.m in Sources */,
 				4F72041518750FC2006E95B2 /* EAEmailUtilities.m in Sources */,

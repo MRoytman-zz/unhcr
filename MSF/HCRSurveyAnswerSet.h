@@ -27,4 +27,6 @@
 - (HCRSurveyAnswerSetParticipant *)participantWithID:(NSInteger)participantID;
 - (HCRSurveyAnswerSetParticipant *)newParticipant;
 
+- (NSComparisonResult)compareStartedDateToAnswerSet:(HCRSurveyAnswerSet *)answerSet;
+
 @end
