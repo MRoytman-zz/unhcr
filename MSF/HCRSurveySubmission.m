@@ -21,7 +21,7 @@ NSString *const kSurveyResultClass = @"Test";
 #ifdef PRODUCTION
 NSString *const kSurveyResultClass = @"Result";
 #else
-NSString *const kSurveyResultClass = @"Result-TestFlight";
+NSString *const kSurveyResultClass = @"TestFlight";
 #endif
 #endif
 

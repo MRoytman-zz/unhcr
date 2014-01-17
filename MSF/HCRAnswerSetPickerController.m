@@ -358,9 +358,7 @@ NSString *const kLayoutFooterLabelUnsubmitted = @"(tap to submit)";
     
     [layoutData addObject:@{kLayoutCells: @[
                                     @{kLayoutCellLabel: kLayoutCellLabelNewSurvey},
-#ifdef DEBUG
                                     @{kLayoutCellLabel: kLayoutCellLabelRemoveAll}
-#endif
                                     ]
                             }];
     
