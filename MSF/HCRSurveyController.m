@@ -570,7 +570,34 @@
 
 - (void)_doneButtonPressed {
     
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    HCRSurveyAnswerSetParticipant *headParticipant = [self.answerSet participantWithID:0];
+    HCRSurveyAnswerSetParticipantQuestion *question = [headParticipant questionWithID:self.survey.participantsQuestion];
+    NSString *statedParticipants = question.answerString;
+    
+    // if participants match OR if consent question has been answered
+    if (self.answerSet.participants.count == statedParticipants.integerValue ||
+        [self.answerSet.consent isEqualToNumber:@0] ||
+        [self.answerSet.consent isEqualToNumber:@77]) {
+        
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+        
+    } else {
+        
+        NSString *body = [NSString stringWithFormat:@"You are attempting to submit a survey with %d participant%@, but in question %@ you indicated there were %d member%@ of the household. Are you sure you want to submit this survey?",
+                          self.answerSet.participants.count,
+                          (self.answerSet.participants.count == 1) ? @"" : @"s",
+                          self.survey.participantsQuestion,
+                          statedParticipants.integerValue,
+                          (statedParticipants.integerValue == 1) ? @"" : @"s"];
+        
+        [UIAlertView showConfirmationDialogWithTitle:@"Mismatched Participants"
+                                             message:body
+                                             handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                                 if (buttonIndex != alertView.cancelButtonIndex) {
+                                                     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+                                                 }
+                                             }];
+    }
     
 }
 

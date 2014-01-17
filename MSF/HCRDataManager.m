@@ -461,11 +461,14 @@ NSString *const kSurveyIDField = @"testId";
             completionBlock(error);
         } else {
             
-            NSString *surveyID = object[kSurveyIDField];
+            NSNumber *surveyID = object[kSurveyIDField];
             NSInteger participantCount = answerSet.participants.count;
             
             __block BOOL failed = NO;
             __block NSInteger completedCount = 0;
+            
+            BOOL consented = [answerSet.consent isEqualToNumber:@1];
+            NSNumber *householdID = (consented) ? surveyID : @0;
             
             for (HCRSurveyAnswerSetParticipant *participant in answerSet.participants) {
                 
@@ -473,7 +476,7 @@ NSString *const kSurveyIDField = @"testId";
                 surveySubmission.teamID = [HCRUser currentUser].teamID;
                 surveySubmission.userID = [HCRUser currentUser].objectId;
                 surveySubmission.consent = answerSet.consent;
-                surveySubmission.householdID = surveyID;
+                surveySubmission.householdID = householdID;
                 surveySubmission.participantID = participant.participantID;
                 surveySubmission.age = participant.age;
                 surveySubmission.gender = participant.gender;
@@ -506,23 +509,36 @@ NSString *const kSurveyIDField = @"testId";
                     if (!failed &&
                         completedCount != participantCount) {
                         // if not failed but not completed, do nothing, just wait for the next
-                    } else if (error || !succeeded) {
+                    } else if (!failed &&
+                               (error || !succeeded)) {
                         
                         failed = YES;
                         completionBlock(error);
                         
-                    } else if (completedCount == participantCount) {
+                    } else if (!failed &&
+                               completedCount == participantCount) {
                         
-                        // this is the final completed block, and all have succceeeded
-                        answerSet.householdID = surveyID;
-                        [self _sync];
-                        
-                        [object incrementKey:kSurveyIDField];
-                        [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        // if consent was given, increment
+                        // TODO: get this value from server, i.e. dynamic
+                        if (consented) {
+                            // this is the final completed block, and all have succceeeded
+                            answerSet.householdID = surveyID;
+                            [self _sync];
+                            
+                            [object incrementKey:kSurveyIDField];
+                            [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                
+                                completionBlock(error);
+                                
+                            }];
+                        } else {
+                            
+                            // else don't increment
+                            answerSet.householdID = householdID;
+                            [self _sync];
                             
                             completionBlock(error);
-                            
-                        }];
+                        }
                         
                     }
                     
@@ -773,11 +789,6 @@ NSString *const kSurveyIDField = @"testId";
     NSParameterAssert(questionCode);
     
     // must exist
-    
-    if ([questionCode isEqualToString:@"0"] || !questionCode) {
-        HCRDebug(@"QUESTION 0! OR NIL!");
-    }
-    
     HCRSurveyAnswerSetParticipantQuestion *questionData = [targetParticipant questionWithID:questionCode];
     
     if (!questionData) {

@@ -52,8 +52,8 @@
                                                 (self.percentComplete / 100.0) * CGRectGetWidth(self.contentView.bounds),
                                                 CGRectGetHeight(self.contentView.bounds));
     
-    self.percentCompleteView.alpha = (self.processingAction) ? 0.5 : 1.0;
-    self.titleLabel.alpha = (self.processingAction) ? 0.5 : 1.0;
+    self.percentCompleteView.alpha = (self.processingAction) ? 0.3 : 1.0;
+    self.titleLabel.alpha = (self.processingAction) ? 0.3 : 1.0;
     
 }
 

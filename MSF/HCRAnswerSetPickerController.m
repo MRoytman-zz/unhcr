@@ -595,22 +595,23 @@ NSString *const kLayoutFooterLabelUnsubmitted = @"(tap to submit)";
 }
 
 - (void)_reloadData {
+    self.submitButtonCell = nil;
     [self.collectionView reloadData];
 }
 
 - (void)_reloadSections:(NSIndexSet *)sections {
+    self.submitButtonCell = nil;
     [self.collectionView reloadSections:sections];
 }
 
 - (void)_reloadItemsAtIndexPaths:(NSArray *)indexPaths {
+    self.submitButtonCell = nil;
     [self.collectionView reloadItemsAtIndexPaths:indexPaths];
 }
 
 - (void)_submitAnswerSet:(HCRSurveyAnswerSet *)answerSet withCompletion:(void (^)(NSError *error))completionBlock {
     
-#warning UNCOMMENT THIS STUFF
-    
-//    if (!answerSet.householdID) {
+    if (!answerSet.householdID) {
     
         [self.answerSetIDsBeingSubmitted addObject:answerSet.localID];
         
@@ -632,12 +633,12 @@ NSString *const kLayoutFooterLabelUnsubmitted = @"(tap to submit)";
             
         }];
         
-//    } else {
-//        HCRWarning(@"Answer set already submitted!");
-//        if (completionBlock) {
-//            completionBlock(nil);
-//        }
-//    }
+    } else {
+        HCRWarning(@"Answer set already submitted!");
+        if (completionBlock) {
+            completionBlock(nil);
+        }
+    }
     
 }
 

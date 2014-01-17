@@ -14,7 +14,7 @@
 
 @property (nonatomic, strong) NSString *localID;
 @property (nonatomic, strong) NSString *userID;
-@property (nonatomic, strong) NSString *householdID;
+@property (nonatomic, strong) NSNumber *householdID;
 @property (nonatomic, strong) NSString *teamID;
 @property (nonatomic, strong) NSNumber *consent;
 @property (nonatomic, strong) NSNumber *duration;
