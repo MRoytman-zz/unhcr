@@ -14,6 +14,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 const CGFloat kMasterHeaderHeight = 90.0;
+const NSInteger kCellTagBaseline = 2412;
 
 NSString *const kAlertComposeFieldCellIdentifier = @"kAlertComposeFieldCellIdentifier";
 NSString *const kAlertComposeViewCellIdentifier = @"kAlertComposeViewCellIdentifier";
@@ -132,6 +133,10 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
                      action:@selector(_cancelButtonPressed)
            forControlEvents:UIControlEventTouchUpInside];
     
+    // GESTURE RECOGNIZERS
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_dismissKeyboard)];
+    [self.collectionView addGestureRecognizer:tapRecognizer];
+    
     // LAYOUT & REUSABLES
     [self.collectionView registerClass:[HCRDataEntryFieldCell class]
             forCellWithReuseIdentifier:kAlertComposeFieldCellIdentifier];
@@ -175,11 +180,18 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
         fieldCell.delegate = self;
         
         fieldCell.labelTitle = @"Name:";
-        fieldCell.inputPlaceholder = @"(required)";
+        
+        NSString *existingName = [HCRUser currentUser].fullName;
+        if (existingName) {
+            fieldCell.inputTextField.text = existingName;
+        } else {
+            fieldCell.inputPlaceholder = @"(required)";
+        }
         
         fieldCell.inputType = HCRDataEntryTypeDefault;
         
-        fieldCell.lastFieldInSeries = YES;
+        // customize view
+        fieldCell.inputTextField.returnKeyType = UIReturnKeyNext;
         
         cell = fieldCell;
         
@@ -202,6 +214,8 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
     }
     
     [cell setBottomLineStatusForCollectionView:collectionView atIndexPath:indexPath];
+    
+    cell.tag = kCellTagBaseline + indexPath.row;
     
     return cell;
     
@@ -237,6 +251,19 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
     return (section == collectionView.numberOfSections - 1) ? [HCRFooterView preferredFooterSizeForCollectionView:collectionView] : [HCRFooterView preferredFooterSizeWithBottomLineOnlyForCollectionView:collectionView];
 }
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    BOOL isTextView = [[self _cellIDForIndexPath:indexPath] isEqualToString:kAlertComposeViewCellIdentifier];
+    
+    if (isTextView) {
+        return [HCRDataEntryViewCell preferredSizeForCollectionView:collectionView];
+    } else {
+        HCRTableFlowLayout *flowLayout = (HCRTableFlowLayout *)self.collectionView.collectionViewLayout;
+        return flowLayout.itemSize;
+    }
+    
+}
+
 #pragma mark - HCRDataEntryCell Delegate
 
 - (void)dataEntryCellDidBecomeFirstResponder:(HCRDataEntryCell *)dataCell {
@@ -247,13 +274,19 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
 
 - (void)dataEntryCellDidResignFirstResponder:(HCRDataEntryCell *)dataCell {
     
-    [self _dismissKeyboard];
+//    [self _dismissKeyboard];
     
 }
 
 - (void)dataEntryCellDidPressDone:(HCRDataEntryCell *)dataCell {
     
-    [self _dismissKeyboard];
+    HCRDataEntryCell *nextDataCell = (HCRDataEntryCell *)[self.collectionView viewWithTag:dataCell.tag + 1];
+    
+    if (nextDataCell) {
+        [nextDataCell.inputView becomeFirstResponder];
+    } else {
+        [self _dismissKeyboard];
+    }
     
 }
 

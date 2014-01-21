@@ -10,6 +10,12 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+const CGFloat kYPadding = 10;
+
+const CGFloat kFontSize = 16.0;
+
+////////////////////////////////////////////////////////////////////////////////
+
 @interface HCRDataEntryViewCell ()
 
 @property (nonatomic, readwrite) UITextView *inputTextView;
@@ -31,11 +37,10 @@
         
         self.inputTextView.delegate = self;
         
-        self.inputTextView.font = [UIFont systemFontOfSize:14.0];
+        self.inputTextView.font = [UIFont systemFontOfSize:kFontSize];
         self.inputTextView.backgroundColor = self.contentView.backgroundColor;
         
         self.inputTextView.inputAccessoryView = self.doneAccessoryView;
-        self.inputTextView.inputAccessoryView.hidden = YES;
         
         self.inputView = self.inputTextView;
         
@@ -55,11 +60,20 @@
     [super layoutSubviews];
     
     self.inputTextView.frame = CGRectMake(self.indentForContent,
-                                       0,
-                                       CGRectGetWidth(self.bounds) - self.indentForContent,
-                                       CGRectGetHeight(self.bounds));
+                                          kYPadding,
+                                          CGRectGetWidth(self.bounds) - self.indentForContent - self.trailingSpaceForContent,
+                                          CGRectGetHeight(self.bounds) - 2 * kYPadding);
     
     [self bringSubviewToFront:self.bottomLineView];
+    
+}
+
+#pragma mark - Class Methods
+
++ (CGSize)preferredSizeForCollectionView:(UICollectionView *)collectionView {
+    
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      0.25 * CGRectGetHeight(collectionView.bounds));
     
 }
 

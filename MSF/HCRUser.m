@@ -16,7 +16,7 @@
 
 @implementation HCRUser
 
-@dynamic canSendAlerts, authorized, showConstruction, teamID;
+@dynamic canSendAlerts, authorized, showConstruction, teamID, fullName;
 
 #pragma mark - Class Methods
 

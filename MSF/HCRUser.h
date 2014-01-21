@@ -17,6 +17,7 @@
 @property BOOL authorized;
 @property BOOL showConstruction;
 @property NSString *teamID;
+@property NSString *fullName;
 
 + (void)surveySignInWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 
