@@ -123,9 +123,10 @@
     _fieldType = fieldType;
     
     BOOL isPasswordType = (fieldType == HCRDataEntryFieldTypePassword);
+    BOOL isEmailType = (fieldType == HCRDataEntryFieldTypeEmail);
     
     self.inputField.secureTextEntry = isPasswordType;
-    self.inputField.autocorrectionType = (isPasswordType) ? UITextAutocorrectionTypeNo : UITextAutocorrectionTypeDefault;
+    self.inputField.autocorrectionType = (isPasswordType || isEmailType) ? UITextAutocorrectionTypeNo : UITextAutocorrectionTypeDefault;
     
     UIKeyboardType keyboardType;
     BOOL hideAccessoryView;

@@ -16,10 +16,15 @@
 #import "HCRSurveyAnswerSet.h"
 #import "HCRSurveyAnswerSetParticipant.h"
 #import "HCRSurveyAnswerSetParticipantQuestion.h"
+#import "HCRSurveySubmission.h"
+
+#import "HCRAlert.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 // NSUD KEYS
+extern NSString *const HCRPrefKeyAlerts;
+
 extern NSString *const HCRPrefKeySurveyLocalID;
 extern NSString *const HCRPrefKeySurveyTitle;
 extern NSString *const HCRPrefKeySurveyAgeQuestion;
@@ -78,6 +83,13 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 
 + (id)sharedManager;
 
+// alerts
+- (NSArray *)localAlertsArray;
+- (NSArray *)unreadAlerts;
+- (HCRAlert *)alertWithID:(NSString *)objectID;
+- (void)refreshAlertsWithCompletion:(void (^)(NSError *error))completionBlock;
+
+// surveys
 - (NSArray *)localSurveys;
 - (NSArray *)localQuestionsArray;
 - (NSArray *)localAnswerSetsArray;
@@ -86,7 +98,7 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 - (HCRSurveyAnswerSet *)surveyAnswerSetWithLocalID:(NSString *)localID;
 
 // save and submit
-- (void)save;
+- (void)saveData;
 - (void)submitAnswerSet:(HCRSurveyAnswerSet *)answerSet withCompletion:(void (^)(NSError *error))completionBlock;
 
 // participants

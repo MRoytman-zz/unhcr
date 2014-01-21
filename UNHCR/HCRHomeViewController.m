@@ -22,6 +22,7 @@
 #import "EASoundManager.h"
 #import "HCRUser.h"
 #import "HCRSurveyPickerController.h"
+#import "HCRAlertListViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -75,8 +76,9 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 @property (nonatomic, readonly) BOOL signedIn;
 @property (nonatomic, readonly) BOOL authorized;
-
 @property (nonatomic, readonly) BOOL signInFieldsComplete;
+
+@property (nonatomic) BOOL refreshingAlerts;
 
 @property (nonatomic, weak) HCRDataEntryFieldCell *emailCell;
 @property (nonatomic, weak) HCRDataEntryFieldCell *passwordCell;
@@ -165,6 +167,10 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     }
 
     return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewDidLoad
@@ -265,10 +271,22 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         [self _waitForAuthorization];
     }
     
+    // NOTIFICATIONS
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_alertNotificationReceived:)
+                                                 name:HCRNotificationAlertNotificationReceived
+                                               object:nil];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+    if (self.authorized) {
+        [self _refreshAlertsWithDataReload:YES withCompletion:nil];
+    }
+    
 }
 
 #pragma mark - Class Methods
@@ -332,12 +350,31 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                 
             } else if ([cellTitle isEqualToString:kLayoutCellLabelEmergencies] ||
                        [cellTitle isEqualToString:kLayoutCellLabelAlerts]) {
-                tableCell.highlightDetail = YES;
-                tableCell.detailNumber = @([HCRDataSource globalEmergenciesData].count);
+                
                 tableCell.badgeImageView.backgroundColor = [UIColor colorWithRed:79 / 255.0
                                                                            green:79 / 255.0
                                                                             blue:79 / 255.0
                                                                            alpha:1.0];
+
+                
+#ifdef TARGET_RIS
+                tableCell.detailNumber = @([HCRDataSource globalEmergenciesData].count);
+#elif defined(TARGET_MSF)
+                if (self.refreshingAlerts) {
+                    tableCell.processingViewPosition = HCRCollectionCellProcessingViewPositionRight;
+                    tableCell.processingAction = YES;
+                } else {
+                    
+                    NSInteger unreadMessages = [[HCRDataManager sharedManager] unreadAlerts].count;
+                    
+                    if (unreadMessages > 0) {
+                        tableCell.detailNumber = @(unreadMessages);
+                        tableCell.highlightDetail = YES;
+                    }
+                    
+                }
+#endif
+                
             } else if ([cellTitle isEqualToString:kLayoutCellLabelDomiz]) {
                 // TODO: prototype only - in prod need to read this dynamically
                 tableCell.detailString = @"Overview";
@@ -541,9 +578,10 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         }];
     };
     
-    if ([cellTitle isEqualToString:kLayoutCellLabelEmergencies] ||
-        [cellTitle isEqualToString:kLayoutCellLabelAlerts]) {
+    if ([cellTitle isEqualToString:kLayoutCellLabelEmergencies]) {
         [self _emergenciesButtonPressed];
+    } else if ([cellTitle isEqualToString:kLayoutCellLabelAlerts]) {
+        [self _alertsButtonPressed];
     } else if ([cellTitle isEqualToString:kLayoutCellLabelMessages]) {
         [self _directMessagesButtonPressed];
     } else if ([cellTitle isEqualToString:kLayoutCellLabelCamps]) {
@@ -734,7 +772,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 }
 
 - (BOOL)authorized {
-    return [[HCRUser currentUser] surveyUserAuthorized];
+    return [[HCRUser currentUser] authorized];
 }
 
 - (NSArray *)layoutDataArrayAuthorized {
@@ -772,7 +810,9 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                              kLayoutCellIconKey: @"bulletin"}
                            ]];
     
-    if (![HCRUser currentUser].hideConstruction) {
+    if ([HCRUser currentUser].showConstruction) {
+        // this is behind-the-scenes beta view
+        // TODO: remove hideBetaFeatures from Parse data browser after v1.0 is approved
         [dataArray addObject:@[
                                @{kLayoutCellLabelKey: kLayoutCellLabelAlerts,
                                  kLayoutCellIconKey: @"emergency"},
@@ -780,6 +820,12 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                                  kLayoutCellIconKey: @"message"},
                                @{kLayoutCellLabelKey: kLayoutCellLabelDirectory,
                                  kLayoutCellIconKey: @"camp"},
+                               ]];
+    } else {
+        // this is 'default' public view
+        [dataArray addObject:@[
+                               @{kLayoutCellLabelKey: kLayoutCellLabelAlerts,
+                                 kLayoutCellIconKey: @"emergency"}
                                ]];
     }
     
@@ -829,6 +875,12 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     HCREmergencyListViewController *alertsController = [[HCREmergencyListViewController alloc] initWithCollectionViewLayout:[HCREmergencyListViewController preferredLayout]];
     
     [self _pushViewController:alertsController];
+}
+
+- (void)_alertsButtonPressed {
+    HCRAlertListViewController *alertList = [[HCRAlertListViewController alloc] initWithCollectionViewLayout:[HCRAlertListViewController preferredLayout]];
+    
+    [self _pushViewController:alertList];
 }
 
 - (void)_directMessagesButtonPressed {
@@ -1104,6 +1156,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                       withPassword:self.passwordCell.inputField.text
                     withCompletion:^(BOOL success) {
                         
+                        [self _refreshAlertsWithDataReload:YES withCompletion:nil];
+                        
                         if (success) {
                             
                             [self _reloadSectionsAnimated];
@@ -1145,7 +1199,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     HCRDebug(@"Refreshing authorization status..");
     static const NSTimeInterval loopDelay = 5.0;
     
-    if ([[HCRUser currentUser] surveyUserAuthorized]) {
+    if ([HCRUser currentUser].authorized) {
         
         HCRDebug(@"Authorized!");
         
@@ -1184,6 +1238,32 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         completionBlock(error);
         
     }];
+    
+}
+
+- (void)_refreshAlertsWithDataReload:(BOOL)reloadData withCompletion:(void (^)(NSError *error))completionBlock {
+    
+    self.refreshingAlerts = YES;
+    
+    [[HCRDataManager sharedManager] refreshAlertsWithCompletion:^(NSError *error) {
+        
+        self.refreshingAlerts = NO;
+        
+        if (reloadData) {
+            [self.collectionView reloadData];
+        }
+        
+        if (completionBlock) {
+            completionBlock(error);
+        }
+        
+    }];
+    
+}
+
+- (void)_alertNotificationReceived:(NSNotification *)notification {
+    
+    [self _refreshAlertsWithDataReload:YES withCompletion:nil];
     
 }
 

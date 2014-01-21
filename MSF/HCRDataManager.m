@@ -14,6 +14,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // NSUD KEYS
+NSString *const HCRPrefKeyAlerts = @"HCRPrefKeyAlerts";
+
 NSString *const HCRPrefKeySurvey = @"HCRPrefKeySurvey";
 NSString *const HCRPrefKeySurveyLocalID = @"objectId";
 NSString *const HCRPrefKeySurveyTitle = @"description";
@@ -78,6 +80,8 @@ NSString *const kSurveyIDField = @"testId";
 
 @interface HCRDataManager ()
 
+@property (nonatomic, strong) NSMutableArray *localAlerts;
+
 @property (nonatomic, strong) HCRSurvey *localSurvey;
 @property (nonatomic, strong) NSArray *localSurveys;
 
@@ -136,6 +140,7 @@ NSString *const kSurveyIDField = @"testId";
     self = [super init];
     if ( self != nil )
     {
+        self.localAlerts = [self _restoreLocalAlertsFromDataStore];
         self.localSurvey = [self _restoreLocalSurveyFromDataStore];
         self.localSurveys = @[self.localSurvey];
     }
@@ -150,6 +155,85 @@ NSString *const kSurveyIDField = @"testId";
 }
 
 #pragma mark - Public Methods
+
+- (void)saveData {
+    [self _sync];
+}
+
+#pragma mark - Public Methods (Alerts)
+
+- (NSArray *)localAlertsArray {
+    return self.localAlerts;
+}
+
+- (NSArray *)unreadAlerts {
+    
+    NSMutableArray *unreadAlerts = @[].mutableCopy;
+    
+    for (HCRAlert *alert in self.localAlerts) {
+        if (!alert.read) {
+            [unreadAlerts addObject:alert];
+        }
+    }
+    
+    return [NSArray arrayWithArray:unreadAlerts];
+}
+
+- (HCRAlert *)alertWithID:(NSString *)objectID {
+    
+    // TODO: build this
+    NSParameterAssert(NO);
+    return nil;
+    
+}
+
+- (void)refreshAlertsWithCompletion:(void (^)(NSError *))completionBlock {
+    
+    PFQuery *questionsQuery = [HCRAlert query];
+    
+    [questionsQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        
+        if (error) {
+            [[SCErrorManager sharedManager] showAlertForError:error withErrorSource:SCErrorSourceParse withCompletion:nil];
+        } else {
+            
+            HCRDebug(@"Alerts found: %d",objects.count);
+            
+            for (PFObject *object in objects) {
+                
+                BOOL exists = NO;
+                
+                for (HCRAlert *alert in self.localAlerts) {
+                    if ([alert.objectId isEqualToString:object.objectId]) {
+                        exists = YES;
+                        break;
+                    }
+                }
+                
+                if (!exists) {
+                    HCRDebug(@"New Alert found! Adding..");
+                    HCRAlert *newAlert = (HCRAlert *)object;
+                    newAlert.read = NO;
+                    
+                    [self.localAlerts addObject:newAlert];
+                    
+                }
+                
+            }
+            
+            [self.localAlerts sortUsingSelector:@selector(compareUsingCreatedDate:)];
+            
+            [self _sync];
+            
+        }
+        
+        completionBlock(error);
+        
+    }];
+    
+}
+
+#pragma mark - Public Methods (Surveys)
 
 - (NSArray *)localSurveysArray {
     return self.localSurveys;
@@ -190,6 +274,152 @@ NSString *const kSurveyIDField = @"testId";
     }
     
     return date;
+    
+}
+
+- (void)submitAnswerSet:(HCRSurveyAnswerSet *)answerSet withCompletion:(void (^)(NSError *))completionBlock {
+    
+    // set and increment household ID (e.g. testId or householdId)
+    // create new Parse object for proper class (e.g. Test or Result)
+    // fill in answer set details in new parse object in CSV columns
+    PFQuery *householdIDQuery = [PFQuery queryWithClassName:@"Survey"];
+    [householdIDQuery getObjectInBackgroundWithId:self.localSurvey.localID block:^(PFObject *object, NSError *error) {
+        
+        if (error) {
+            completionBlock(error);
+        } else {
+            
+            NSNumber *surveyID = object[kSurveyIDField];
+            NSInteger participantCount = answerSet.participants.count;
+            
+            __block BOOL failed = NO;
+            __block NSInteger completedCount = 0;
+            
+            BOOL consented = [answerSet.consent isEqualToNumber:@1];
+            NSNumber *householdID = (consented) ? surveyID : @0;
+            
+            for (HCRSurveyAnswerSetParticipant *participant in answerSet.participants) {
+                
+                HCRSurveySubmission *surveySubmission = [HCRSurveySubmission new];
+                surveySubmission.teamID = [HCRUser currentUser].teamID;
+                surveySubmission.userID = [HCRUser currentUser].objectId;
+                surveySubmission.consent = answerSet.consent;
+                surveySubmission.householdID = householdID;
+                surveySubmission.participantID = participant.participantID;
+                surveySubmission.age = participant.age;
+                surveySubmission.gender = participant.gender;
+                surveySubmission.duration = answerSet.duration;
+                
+                // answer codes & strings
+                NSMutableDictionary *codeDictionary = @{}.mutableCopy;
+                NSMutableDictionary *stringDictionary = @{}.mutableCopy;
+                
+                for (HCRSurveyAnswerSetParticipantQuestion *question in participant.questions) {
+                    
+                    if (question.answer) {
+                        codeDictionary[question.question] = question.answer;
+                    }
+                    
+                    if (question.answerString) {
+                        stringDictionary[question.question] = question.answerString;
+                    }
+                    
+                }
+                
+                surveySubmission.answerCodes = codeDictionary;
+                surveySubmission.answerStrings = stringDictionary;
+                
+                [surveySubmission saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    
+                    // check for last participant
+                    completedCount++;
+                    
+                    if (!failed &&
+                        completedCount != participantCount) {
+                        // if not failed but not completed, do nothing, just wait for the next
+                    } else if (!failed &&
+                               (error || !succeeded)) {
+                        
+                        failed = YES;
+                        completionBlock(error);
+                        
+                    } else if (!failed &&
+                               completedCount == participantCount) {
+                        
+                        // if consent was given, increment
+                        // TODO: get this value from server, i.e. dynamic
+                        if (consented) {
+                            // this is the final completed block, and all have succceeeded
+                            answerSet.householdID = surveyID;
+                            [self _sync];
+                            
+                            [object incrementKey:kSurveyIDField];
+                            [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                
+                                completionBlock(error);
+                                
+                            }];
+                        } else {
+                            
+                            // else don't increment
+                            answerSet.householdID = householdID;
+                            [self _sync];
+                            
+                            completionBlock(error);
+                        }
+                        
+                    }
+                    
+                }];
+                
+            }
+        }
+        
+    }];
+    
+}
+
+- (NSInteger)percentCompleteForAnswerSet:(HCRSurveyAnswerSet *)answerSet {
+    
+    NSInteger totalQuestions = 0;
+    NSInteger completedResponses = 0;
+    
+    for (HCRSurveyAnswerSetParticipant *participant in answerSet.participants) {
+        
+        NSArray *currentQuestions = participant.questions;
+        
+        for (HCRSurveyAnswerSetParticipantQuestion *question in currentQuestions) {
+            
+            totalQuestions++;
+            
+            if (question.answer || question.answerString) {
+                completedResponses++;
+            }
+        }
+        
+    }
+    
+    return (totalQuestions > 0) ? 100 * completedResponses / totalQuestions : 0;
+    
+}
+
+- (NSInteger)percentCompleteForParticipantID:(NSInteger)participantID withAnswerSet:(HCRSurveyAnswerSet *)answerSet {
+    
+    NSInteger totalQuestions = 0;
+    NSInteger completedResponses = 0;
+    
+    NSArray *currentQuestions = [answerSet participantWithID:participantID].questions;
+    
+    for (HCRSurveyAnswerSetParticipantQuestion *question in currentQuestions) {
+        
+        totalQuestions++;
+        
+        if (question.answer || question.answerString) {
+            completedResponses++;
+        }
+    }
+    
+    return (totalQuestions > 0) ? 100 * completedResponses / totalQuestions : 0;
     
 }
 
@@ -443,159 +673,22 @@ NSString *const kSurveyIDField = @"testId";
     
 }
 
-#pragma mark - Public Methods
-
-- (void)save {
-    [self _sync];
-}
-
-- (void)submitAnswerSet:(HCRSurveyAnswerSet *)answerSet withCompletion:(void (^)(NSError *))completionBlock {
-    
-    // set and increment household ID (e.g. testId or householdId)
-    // create new Parse object for proper class (e.g. Test or Result)
-    // fill in answer set details in new parse object in CSV columns
-    PFQuery *householdIDQuery = [PFQuery queryWithClassName:@"Survey"];
-    [householdIDQuery getObjectInBackgroundWithId:self.localSurvey.localID block:^(PFObject *object, NSError *error) {
-        
-        if (error) {
-            completionBlock(error);
-        } else {
-            
-            NSNumber *surveyID = object[kSurveyIDField];
-            NSInteger participantCount = answerSet.participants.count;
-            
-            __block BOOL failed = NO;
-            __block NSInteger completedCount = 0;
-            
-            BOOL consented = [answerSet.consent isEqualToNumber:@1];
-            NSNumber *householdID = (consented) ? surveyID : @0;
-            
-            for (HCRSurveyAnswerSetParticipant *participant in answerSet.participants) {
-                
-                HCRSurveySubmission *surveySubmission = [HCRSurveySubmission new];
-                surveySubmission.teamID = [HCRUser currentUser].teamID;
-                surveySubmission.userID = [HCRUser currentUser].objectId;
-                surveySubmission.consent = answerSet.consent;
-                surveySubmission.householdID = householdID;
-                surveySubmission.participantID = participant.participantID;
-                surveySubmission.age = participant.age;
-                surveySubmission.gender = participant.gender;
-                surveySubmission.duration = answerSet.duration;
-                
-                // answer codes & strings
-                NSMutableDictionary *codeDictionary = @{}.mutableCopy;
-                NSMutableDictionary *stringDictionary = @{}.mutableCopy;
-                
-                for (HCRSurveyAnswerSetParticipantQuestion *question in participant.questions) {
-                    
-                    if (question.answer) {
-                        codeDictionary[question.question] = question.answer;
-                    }
-                    
-                    if (question.answerString) {
-                        stringDictionary[question.question] = question.answerString;
-                    }
-                    
-                }
-                
-                surveySubmission.answerCodes = codeDictionary;
-                surveySubmission.answerStrings = stringDictionary;
-                
-                [surveySubmission saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    
-                    // check for last participant
-                    completedCount++;
-                    
-                    if (!failed &&
-                        completedCount != participantCount) {
-                        // if not failed but not completed, do nothing, just wait for the next
-                    } else if (!failed &&
-                               (error || !succeeded)) {
-                        
-                        failed = YES;
-                        completionBlock(error);
-                        
-                    } else if (!failed &&
-                               completedCount == participantCount) {
-                        
-                        // if consent was given, increment
-                        // TODO: get this value from server, i.e. dynamic
-                        if (consented) {
-                            // this is the final completed block, and all have succceeeded
-                            answerSet.householdID = surveyID;
-                            [self _sync];
-                            
-                            [object incrementKey:kSurveyIDField];
-                            [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                                
-                                completionBlock(error);
-                                
-                            }];
-                        } else {
-                            
-                            // else don't increment
-                            answerSet.householdID = householdID;
-                            [self _sync];
-                            
-                            completionBlock(error);
-                        }
-                        
-                    }
-                    
-                }];
-                
-            }
-        }
-                                                
-    }];
-    
-}
-
-- (NSInteger)percentCompleteForAnswerSet:(HCRSurveyAnswerSet *)answerSet {
-    
-    NSInteger totalQuestions = 0;
-    NSInteger completedResponses = 0;
-    
-    for (HCRSurveyAnswerSetParticipant *participant in answerSet.participants) {
-        
-        NSArray *currentQuestions = participant.questions;
-        
-        for (HCRSurveyAnswerSetParticipantQuestion *question in currentQuestions) {
-            
-            totalQuestions++;
-            
-            if (question.answer || question.answerString) {
-                completedResponses++;
-            }
-        }
-        
-    }
-    
-    return (totalQuestions > 0) ? 100 * completedResponses / totalQuestions : 0;
-    
-}
-
-- (NSInteger)percentCompleteForParticipantID:(NSInteger)participantID withAnswerSet:(HCRSurveyAnswerSet *)answerSet {
-    
-    NSInteger totalQuestions = 0;
-    NSInteger completedResponses = 0;
-    
-    NSArray *currentQuestions = [answerSet participantWithID:participantID].questions;
-    
-    for (HCRSurveyAnswerSetParticipantQuestion *question in currentQuestions) {
-        
-        totalQuestions++;
-        
-        if (question.answer || question.answerString) {
-            completedResponses++;
-        }
-    }
-    
-    return (totalQuestions > 0) ? 100 * completedResponses / totalQuestions : 0;
-    
-}
-
 #pragma mark - Private Methods
+
+- (void)_sync {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSData *encodedSurvey = [NSKeyedArchiver archivedDataWithRootObject:self.localSurvey];
+    [defaults setObject:encodedSurvey forKey:HCRPrefKeySurvey];
+    
+    [defaults setObject:self.localAlerts forKey:HCRPrefKeyAlerts];
+    
+    [defaults synchronize];
+    
+}
+
+#pragma mark - Private Methods (Surveys)
 
 - (HCRSurvey *)_restoreLocalSurveyFromDataStore {
     
@@ -610,16 +703,6 @@ NSString *const kSurveyIDField = @"testId";
     }
     
     return survey;
-    
-}
-
-- (void)_sync {
-    
-    NSData *encodedObject = [NSKeyedArchiver archivedDataWithRootObject:self.localSurvey];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:encodedObject forKey:HCRPrefKeySurvey];
-    [defaults synchronize];
     
 }
 
@@ -849,6 +932,21 @@ NSString *const kSurveyIDField = @"testId";
     if (sync) {
         [self _sync];
     }
+    
+}
+
+#pragma mark - Private Methods (Alerts)
+
+- (NSMutableArray *)_restoreLocalAlertsFromDataStore {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *localAlerts = [defaults objectForKey:HCRPrefKeyAlerts ofClass:@"NSArray" mustExist:NO];
+    
+    if (!localAlerts) {
+        localAlerts = @[].mutableCopy;
+    }
+    
+    return localAlerts.mutableCopy;
     
 }
 

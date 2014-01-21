@@ -14,34 +14,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-NSString *const HCRUserAuthorizedKey = @"authorized";
-NSString *const HCRUserTeamIDKey = @"teamId";
-NSString *const HCRUserHideConstructionKey = @"hideBetaFeatures";
-
-////////////////////////////////////////////////////////////////////////////////
-
 @implementation HCRUser
 
-#pragma mark - Overrides
+@dynamic canSendAlerts, authorized, showConstruction, teamID;
 
-+ (HCRUser *)currentUser {
-    return (HCRUser *)[PFUser currentUser];
-}
-
-#pragma mark - Public Methods
-
-- (BOOL)surveyUserAuthorized {
-    return ([[[HCRUser currentUser] objectForKey:HCRUserAuthorizedKey] boolValue] &&
-            [self teamID] != nil);
-}
-
-- (NSString *)teamID {
-    return [[HCRUser currentUser] objectForKey:HCRUserTeamIDKey ofClass:@"NSString" mustExist:NO];
-}
-
-- (BOOL)hideConstruction {
-    return [[[HCRUser currentUser] objectForKey:HCRUserHideConstructionKey ofClass:@"NSNumber" mustExist:NO] boolValue];
-}
+#pragma mark - Class Methods
 
 + (void)surveySignInWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL succeeded, NSError *error))completionBlock {
     
@@ -54,12 +31,10 @@ NSString *const HCRUserHideConstructionKey = @"hideBetaFeatures";
 
 + (void)surveyCreateUserWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL, NSError *))completionBlock {
     
-    PFUser *newUser = [PFUser user];
+    HCRUser *newUser = [HCRUser object];
     newUser.username = username;
     newUser.password = password;
     newUser.email = username;
-    
-    newUser[HCRUserAuthorizedKey] = @NO;
     
     [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (completionBlock) {

@@ -74,6 +74,8 @@ static const CGFloat kDetailXPadding = 4.0;
         self.deleteGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
         [self addGestureRecognizer:self.deleteGestureRecognizer];
         
+        self.trailingSpaceForContent = [HCRTableCell preferredTrailingSpaceForContent];
+        
         // DEBUG
 //        self.titleLabel.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.5];
 //        self.forwardImage.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5];
@@ -147,6 +149,12 @@ static const CGFloat kDetailXPadding = 4.0;
 
 + (UIFont *)preferredFontForTitleLabel {
     return [UIFont systemFontOfSize:kFontSizeLabel];
+}
+
++ (CGFloat)preferredTrailingSpaceForContent {
+    
+    return (kForwardButtonDimension * kForwardButtonWidthRatio) + kForwardButtonPadding;
+    
 }
 
 #pragma mark - Getters & Setters
@@ -229,6 +237,9 @@ static const CGFloat kDetailXPadding = 4.0;
     
     if (!self.detailLabel && detailNumber) {
         [self _createDetailLabelWithFontSize:kDetailNumberFontSize];
+    } else if (!detailNumber) {
+        [self.detailLabel removeFromSuperview];
+        self.detailLabel = nil;
     }
     
     self.detailLabel.text = [NSString stringWithFormat:@"%@",[self.numberFormatter stringFromNumber:detailNumber]];

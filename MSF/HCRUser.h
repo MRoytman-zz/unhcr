@@ -10,13 +10,13 @@
 
 #import <Parse/Parse.h>
 
-@interface HCRUser : PFUser<PFSubclassing>
+@interface HCRUser : PFUser
+<PFSubclassing>
 
-+ (HCRUser *)currentUser;
-
-- (BOOL)surveyUserAuthorized;
-- (NSString *)teamID;
-- (BOOL)hideConstruction;
+@property BOOL canSendAlerts;
+@property BOOL authorized;
+@property BOOL showConstruction;
+@property NSString *teamID;
 
 + (void)surveySignInWithUsername:(NSString *)username withPassword:(NSString *)password withCompletion:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 

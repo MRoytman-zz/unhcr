@@ -10,6 +10,8 @@
 
 #import "build.h"
 
+#import "HCRConstants.h"
+
 #import "HCRDataSource.h"
 #import "AssertionCategories.h"
 #import "UIColor+HCRColors.h"

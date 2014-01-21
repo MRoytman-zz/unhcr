@@ -18,6 +18,8 @@ static const CGFloat kPreferredTrailingSpace = 25.0;
 static const CGFloat kDefaultCellHeight = 48.0;
 static const CGFloat kAppDescriptionHeight = 210.0;
 
+static const CGFloat kPreferredSpinnerPadding = 10.0;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRCollectionCell ()
@@ -160,7 +162,7 @@ static const CGFloat kAppDescriptionHeight = 210.0;
     
     switch (self.processingViewPosition) {
         case HCRCollectionCellProcessingViewPositionLeft:
-            xPosition = self.indentForContent + CGRectGetMidX(self.spinner.bounds) + [HCRCollectionCell preferredIndentForContent];
+            xPosition = self.indentForContent + CGRectGetMidX(self.spinner.bounds) + kPreferredSpinnerPadding;
             break;
             
         case HCRCollectionCellProcessingViewPositionCenter:
@@ -168,7 +170,7 @@ static const CGFloat kAppDescriptionHeight = 210.0;
             break;
             
         case HCRCollectionCellProcessingViewPositionRight:
-            xPosition = CGRectGetWidth(self.contentView.bounds) - CGRectGetMidX(self.spinner.bounds) - [HCRCollectionCell preferredIndentForContent];
+            xPosition = CGRectGetWidth(self.contentView.bounds) - self.trailingSpaceForContent - CGRectGetMidX(self.spinner.bounds) - kPreferredSpinnerPadding;
             break;
     }
     
