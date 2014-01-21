@@ -106,11 +106,11 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         tallyCell.labelTitle = [self _stringForCellAtIndexPath:indexPath];
         tallyCell.inputPlaceholder = @"Enter Data";
         
-        tallyCell.inputField.tag = kTallyInputBaseTag + indexPath.row;
+        tallyCell.inputTextField.tag = kTallyInputBaseTag + indexPath.row;
         
-        tallyCell.dataDelegate = self;
+        tallyCell.delegate = self;
         
-        tallyCell.fieldType = HCRDataEntryFieldTypeNumber;
+        tallyCell.inputType = HCRDataEntryTypeNumber;
         
         tallyCell.lastFieldInSeries = (indexPath.row == [collectionView numberOfItemsInSection:indexPath.section] - 1);
         
@@ -194,7 +194,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 #pragma mark - HCRDataEntryFieldCell Delegate
 
-- (void)dataEntryFieldCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell {
+- (void)dataEntryCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell {
     
     CGFloat bottomOfHeader = CGRectGetMinY(self.collectionView.frame);
     CGFloat contentSpace = CGRectGetHeight(self.view.bounds) - kKeyboardHeight - bottomOfHeader;
@@ -214,16 +214,16 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
 }
 
-- (void)dataEntryFieldCellDidPressDone:(HCRDataEntryFieldCell *)signInCell {
+- (void)dataEntryCellDidPressDone:(HCRDataEntryFieldCell *)signInCell {
     
-    UITextField *nextField = (UITextField *)[self.collectionView viewWithTag:signInCell.inputField.tag + 1];
+    UITextField *nextField = (UITextField *)[self.collectionView viewWithTag:signInCell.inputTextField.tag + 1];
     
     if (nextField) {
         NSParameterAssert([nextField isKindOfClass:[UITextField class]]);
         [nextField becomeFirstResponder];
     } else {
         
-        [signInCell.inputField resignFirstResponder];
+        [signInCell.inputTextField resignFirstResponder];
         [self _resetCollectionContentOffset];
         
     }

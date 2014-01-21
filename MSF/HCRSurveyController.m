@@ -391,9 +391,9 @@
 
 #pragma mark - HCRDataFieldCell Delegate
 
-- (void)dataEntryFieldCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell {
+- (void)dataEntryCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell {
     
-    self.textFieldToDismiss = signInCell.inputField;
+    self.textFieldToDismiss = signInCell.inputTextField;
     
     // position text field / collection view
     HCRSurveyAnswerFreeformCell *freeformCell = (HCRSurveyAnswerFreeformCell *)signInCell;
@@ -416,13 +416,13 @@
     
 }
 
-- (void)dataEntryFieldCellDidPressDone:(HCRDataEntryFieldCell *)signInCell {
+- (void)dataEntryCellDidPressDone:(HCRDataEntryFieldCell *)signInCell {
     
-    [signInCell.inputField resignFirstResponder];
+    [signInCell.inputTextField resignFirstResponder];
     
 }
 
-- (void)dataEntryFieldCellDidResignFirstResponder:(HCRDataEntryFieldCell *)signInCell {
+- (void)dataEntryCellDidResignFirstResponder:(HCRDataEntryFieldCell *)signInCell {
     
     self.textFieldToDismiss = nil;
     
@@ -431,7 +431,7 @@
     
     NSIndexPath *cellIndexPath = [freeformCell.participantView indexPathForCell:freeformCell];
     
-    [self _surveyAnswerCellPressedInCollectionView:freeformCell.participantView AtIndexPath:cellIndexPath withFreeformAnswer:(signInCell.inputField.text.length > 0) ? signInCell.inputField.text : nil];
+    [self _surveyAnswerCellPressedInCollectionView:freeformCell.participantView AtIndexPath:cellIndexPath withFreeformAnswer:(signInCell.inputTextField.text.length > 0) ? signInCell.inputTextField.text : nil];
     
     // next loop so cells are regenerated
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -748,21 +748,21 @@
         NSString *labelTitle = (surveyQuestion.freeformLabel) ? surveyQuestion.freeformLabel : answer.string;
         freeformCell.labelTitle = [NSString stringWithFormat:@"%@:",[labelTitle capitalizedString]];
         freeformCell.inputPlaceholder = @"(tap here to answer)";
-        freeformCell.inputField.text = participantQuestion.answerString;
+        freeformCell.inputTextField.text = participantQuestion.answerString;
         
-        HCRDataEntryFieldType fieldType;
+        HCRDataEntryType fieldType;
         
         if ([surveyQuestion.keyboard isEqualToString:HCRSurveyQuestionKeyboardNumberKey]) {
-            fieldType = HCRDataEntryFieldTypeNumber;
+            fieldType = HCRDataEntryTypeNumber;
         } else if ([surveyQuestion.keyboard isEqualToString:HCRSurveyQuestionKeyboardStringKey]) {
-            fieldType = HCRDataEntryFieldTypeDefault;
+            fieldType = HCRDataEntryTypeDefault;
         } else {
             NSAssert(NO, @"Unhandled keyboard field type!");
-            fieldType = HCRDataEntryFieldTypeDefault;
+            fieldType = HCRDataEntryTypeDefault;
         }
         
-        freeformCell.fieldType = fieldType;
-        freeformCell.dataDelegate = self;
+        freeformCell.inputType = fieldType;
+        freeformCell.delegate = self;
         
         freeformCell.lastFieldInSeries = YES;
         

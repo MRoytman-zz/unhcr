@@ -14,7 +14,6 @@
 #import "HCRCollectionCell.h"
 #import "HCRTableButtonCell.h"
 #import "HCRTableCell.h"
-#import "HCRClusterPickerController.h"
 #import "HCRCampCollectionViewController.h"
 #import "HCRMessagesViewController.h"
 #import "HCRBulletinViewController.h"
@@ -361,11 +360,15 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                 tableCell.detailNumber = @([HCRDataSource globalEmergenciesData].count);
 #elif defined(TARGET_MSF)
                 if (self.refreshingAlerts) {
+                    
                     tableCell.processingViewPosition = HCRCollectionCellProcessingViewPositionRight;
                     tableCell.processingAction = YES;
+                    
                 } else {
                     
                     NSInteger unreadMessages = [[HCRDataManager sharedManager] unreadAlerts].count;
+                    
+                    tableCell.processingAction = NO; // TODO: should be unneeded - but bug where spinner doesn't stop!
                     
                     if (unreadMessages > 0) {
                         tableCell.detailNumber = @(unreadMessages);
@@ -444,21 +447,21 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                                                       forIndexPath:indexPath];
             cell = signInCell;
             
-            signInCell.dataDelegate = self;
+            signInCell.delegate = self;
             
             if (indexPath.row == ([collectionView numberOfItemsInSection:indexPath.section] - 1)) {
                 signInCell.lastFieldInSeries = YES;
             }
             
             if ([cellTitle isEqualToString:kLayoutSignedOutCellPassword]) {
-                signInCell.fieldType = HCRDataEntryFieldTypePassword;
+                signInCell.inputType = HCRDataEntryTypePassword;
             } else if ([cellTitle isEqualToString:kLayoutSignedOutCellEmail]) {
-                signInCell.fieldType = HCRDataEntryFieldTypeEmail;
+                signInCell.inputType = HCRDataEntryTypeEmail;
             }
             
             signInCell.labelTitle = cellTitle;
             
-            BOOL isEmailCell = (signInCell.fieldType == HCRDataEntryFieldTypeEmail);
+            BOOL isEmailCell = (signInCell.inputType == HCRDataEntryTypeEmail);
             signInCell.inputPlaceholder = (isEmailCell) ? @"name@example.com" : @"Required";
             
             if (isEmailCell) {
@@ -566,8 +569,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
     NSString *cellTitle = [self _layoutLabelForIndexPath:indexPath];
     
-    [self.emailCell.inputField resignFirstResponder];
-    [self.passwordCell.inputField resignFirstResponder];
+    [self.emailCell.inputTextField resignFirstResponder];
+    [self.passwordCell.inputTextField resignFirstResponder];
     
     void (^shakeCellTitle)(HCRDataEntryFieldCell *) = ^(HCRDataEntryFieldCell *cell){
         
@@ -730,7 +733,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 #pragma mark - HCRDataEntryFieldCell Delegate
 
-- (void)dataEntryFieldCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell {
+- (void)dataEntryCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell {
     
     CGFloat bottomOfHeader = CGRectGetMaxY(self.masterHeader.frame);
     CGFloat contentSpace = CGRectGetHeight(self.view.bounds) - kKeyboardHeight - bottomOfHeader;
@@ -750,15 +753,15 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
 }
 
-- (void)dataEntryFieldCellDidPressDone:(HCRDataEntryFieldCell *)signInCell {
+- (void)dataEntryCellDidPressDone:(HCRDataEntryFieldCell *)signInCell {
     
-    if (signInCell.fieldType == HCRDataEntryFieldTypeEmail) {
+    if (signInCell.inputType == HCRDataEntryTypeEmail) {
         
-        [self.passwordCell.inputField becomeFirstResponder];
+        [self.passwordCell.inputTextField becomeFirstResponder];
         
-    } else if (signInCell.fieldType == HCRDataEntryFieldTypePassword) {
+    } else if (signInCell.inputType == HCRDataEntryTypePassword) {
         
-        [self.passwordCell.inputField resignFirstResponder];
+        [self.passwordCell.inputTextField resignFirstResponder];
         
         [self _resetCollectionContentOffset];
     }
@@ -1152,8 +1155,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)_simpleSignIn {
     
-    [self _startSignInWithUsername:self.emailCell.inputField.text
-                      withPassword:self.passwordCell.inputField.text
+    [self _startSignInWithUsername:self.emailCell.inputTextField.text
+                      withPassword:self.passwordCell.inputTextField.text
                     withCompletion:^(BOOL success) {
                         
                         [self _refreshAlertsWithDataReload:YES withCompletion:nil];
@@ -1169,14 +1172,14 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)_simpleSignUp {
     
-    [self _createNewUserWithUsername:self.emailCell.inputField.text
-                        withPassword:self.passwordCell.inputField.text
+    [self _createNewUserWithUsername:self.emailCell.inputTextField.text
+                        withPassword:self.passwordCell.inputTextField.text
                       withCompletion:^(BOOL success) {
                           
                           if (success) {
                               [self _reloadSectionsAnimated];
-                              self.emailCell.inputField.text = nil;
-                              self.passwordCell.inputField.text = nil;
+                              self.emailCell.inputTextField.text = nil;
+                              self.passwordCell.inputTextField.text = nil;
                           }
                           
                           // TODO: handle this - create the user but set a flag at "not authorized"
@@ -1187,11 +1190,11 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 }
 
 - (BOOL)_emailFieldComplete {
-    return ([self.emailCell.inputField.text isValidEmailAddress]);
+    return ([self.emailCell.inputTextField.text isValidEmailAddress]);
 }
 
 - (BOOL)_passwordFieldComplete {
-    return (self.passwordCell.inputField.text.length > 0);
+    return (self.passwordCell.inputTextField.text.length > 0);
 }
 
 - (void)_waitForAuthorization {

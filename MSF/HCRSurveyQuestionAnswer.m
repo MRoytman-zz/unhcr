@@ -7,7 +7,6 @@
 //
 
 #import "HCRSurveyQuestionAnswer.h"
-#import "HCRDataManager.h"
 
 @implementation HCRSurveyQuestionAnswer
 

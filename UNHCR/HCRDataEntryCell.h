@@ -2,36 +2,42 @@
 //  HCRDataEntryCell.h
 //  UNHCR
 //
-//  Created by Sean Conrad on 10/6/13.
-//  Copyright (c) 2013 Sean Conrad. All rights reserved.
+//  Created by Sean Conrad on 1/20/14.
+//  Copyright (c) 2014 Sean Conrad. All rights reserved.
 //
 
 #import "HCRCollectionCell.h"
 
+@class HCRDataEntryCell;
+
 ////////////////////////////////////////////////////////////////////////////////
 
-typedef NS_ENUM(NSInteger, HCRDataEntryCellStatus) {
-    HCRDataEntryCellStatusNone,
-    HCRDataEntryCellStatusChildNotCompleted,
-    HCRDataEntryCellStatusChildCompleted,
-    HCRDataEntryCellStatusStepperInputReady,
-    HCRDataEntryCellStatusStatic
+typedef NS_ENUM(NSInteger, HCRDataEntryType) {
+    HCRDataEntryTypeDefault,
+    HCRDataEntryTypeEmail,
+    HCRDataEntryTypeNumber,
+    HCRDataEntryTypePassword
 };
+
+////////////////////////////////////////////////////////////////////////////////
+
+@protocol HCRDataEntryCellDelegate <NSObject>
+@optional
+- (void)dataEntryCellDidBecomeFirstResponder:(HCRDataEntryCell *)dataCell;
+- (void)dataEntryCellDidResignFirstResponder:(HCRDataEntryCell *)dataCell;
+- (void)dataEntryCellDidPressDone:(HCRDataEntryCell *)dataCell;
+@end
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRDataEntryCell : HCRCollectionCell
 
-@property (nonatomic) HCRDataEntryCellStatus cellStatus;
+@property (nonatomic, weak) id<HCRDataEntryCellDelegate> delegate;
 
-// dataDictionary fields
-// Header - BOOL - if present, line is header object and deserves more weight
-// Title - NSString - left aligned bolded string
-// Subtitle - NSString - left aligned non-bolded string below title
-// Input - NSString - right aligned string representing input (blue button if notCompleted, green checkmark if completed, black if static)
-@property (nonatomic, strong) NSDictionary *dataDictionary;
+@property (nonatomic) HCRDataEntryType inputType;
 
-@property (nonatomic, readonly) UIButton *dataEntryButton;
-@property (nonatomic, readonly) UIStepper *dataEntryStepper;
+@property (nonatomic, strong) UIView *inputView;
+
+@property (nonatomic, readonly) UIButton *doneAccessoryView;
 
 @end

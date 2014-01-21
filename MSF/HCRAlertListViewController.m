@@ -8,6 +8,7 @@
 
 #import "HCRAlertListViewController.h"
 #import "HCRTableFlowLayout.h"
+#import "HCRAlertComposeViewController.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -57,9 +58,9 @@
 
 - (void)_composeButtonPressed {
     
-//    HCREmergencyBroadcastController *broadcastController = [[HCREmergencyBroadcastController alloc] initWithCollectionViewLayout:[HCREmergencyBroadcastController preferredLayout]];
-//    
-//    [self presentViewController:broadcastController animated:YES completion:nil];
+    HCRAlertComposeViewController *alertCompose = [[HCRAlertComposeViewController alloc] initWithCollectionViewLayout:[HCRAlertComposeViewController preferredLayout]];
+    
+    [self.navigationController presentViewController:alertCompose animated:YES completion:nil];
     
 }
 

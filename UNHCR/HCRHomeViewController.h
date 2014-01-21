@@ -11,6 +11,6 @@
 #import "HCRGraphCell.h"
 
 @interface HCRHomeViewController : HCRCollectionViewController
-<UICollectionViewDelegateFlowLayout, HCRDataEntryFieldCellDelegate, SCGraphViewDataSource, SCGraphViewDelegate>
+<UICollectionViewDelegateFlowLayout, HCRDataEntryCellDelegate, SCGraphViewDataSource, SCGraphViewDelegate>
 
 @end

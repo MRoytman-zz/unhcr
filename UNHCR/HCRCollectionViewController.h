@@ -10,11 +10,13 @@
 
 #import "HCRHeaderView.h"
 #import "HCRFooterView.h"
+#import "HCRTableFlowLayout.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
 extern NSString *const kLayoutCells;
 extern NSString *const kLayoutCellLabel;
+extern NSString *const kLayoutCellID;
 extern NSString *const kLayoutHeaderLabel;
 extern NSString *const kLayoutFooterLabel;
 

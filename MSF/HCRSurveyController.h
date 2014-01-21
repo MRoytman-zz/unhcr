@@ -11,7 +11,7 @@
 #import "HCRDataEntryFieldCell.h"
 
 @interface HCRSurveyController : UICollectionViewController
-<UICollectionViewDelegateFlowLayout, HCRDataEntryFieldCellDelegate>
+<UICollectionViewDelegateFlowLayout, HCRDataEntryCellDelegate>
 
 @property (nonatomic, strong) NSString *surveyID;
 @property (nonatomic, strong) NSString *answerSetID;

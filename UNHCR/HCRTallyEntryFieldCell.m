@@ -32,7 +32,7 @@ static const CGFloat kInputLabelHeight = 25.0;
     if (self) {
         // Initialization code
         self.titleLabel.numberOfLines = 0;
-        self.inputField.textAlignment = NSTextAlignmentRight;
+        self.inputTextField.textAlignment = NSTextAlignmentRight;
         
         self.titleLabel.font = [HCRTallyEntryFieldCell _preferredFontForTitleLabel];
         
@@ -44,16 +44,16 @@ static const CGFloat kInputLabelHeight = 25.0;
     
     [super layoutSubviews];
     
-    self.inputField.frame = CGRectMake(CGRectGetMaxX(self.contentView.bounds) - kXTrailing - kInputWidth,
+    self.inputTextField.frame = CGRectMake(CGRectGetMaxX(self.contentView.bounds) - kXTrailing - kInputWidth,
                                        kYOffset,
                                        kInputWidth,
                                        kInputLabelHeight);
     
-    self.inputField.backgroundColor = self.contentView.backgroundColor;
+    self.inputTextField.backgroundColor = self.contentView.backgroundColor;
     
     self.titleLabel.frame = CGRectMake([HCRCollectionCell preferredIndentForContent],
                                        0,
-                                       CGRectGetMinX(self.inputField.frame) - [HCRCollectionCell preferredIndentForContent] - kXLabelPadding,
+                                       CGRectGetMinX(self.inputTextField.frame) - [HCRCollectionCell preferredIndentForContent] - kXLabelPadding,
                                        CGRectGetHeight(self.contentView.bounds));
     
     self.titleLabel.backgroundColor = self.contentView.backgroundColor;

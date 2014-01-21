@@ -11,6 +11,7 @@
 #import "HCRGraphCell.h"
 #import "HCRCollectionCell.h"
 #import "HCRDataEntryFieldCell.h"
+#import "HCRDataEntryViewCell.h"
 #import "HCREmergencyCell.h"
 #import "HCRBulletinCell.h"
 
@@ -18,6 +19,7 @@
 
 NSString *const kLayoutCells = @"kLayoutCells";
 NSString *const kLayoutCellLabel = @"kLayoutCellLabel";
+NSString *const kLayoutCellID = @"kLayoutCellID";
 NSString *const kLayoutHeaderLabel = @"kLayoutHeaderLabel";
 NSString *const kLayoutFooterLabel = @"kLayoutFooterLabel";
 
@@ -37,8 +39,7 @@ NSString *const kLayoutFooterLabel = @"kLayoutFooterLabel";
 }
 
 + (UICollectionViewLayout *)preferredLayout {
-    NSAssert(NO, @"Subclass must override this method. (TODO: Can this be done via protocol?)");
-    return nil;
+    return [HCRTableFlowLayout new];
 }
 
 #pragma mark - UICollectionView Delegate
@@ -53,7 +54,9 @@ NSString *const kLayoutFooterLabel = @"kLayoutFooterLabel";
         }
         
         if ([cell isKindOfClass:[HCRGraphCell class]] ||
+            [cell isKindOfClass:[HCRDataEntryCell class]] ||
             [cell isKindOfClass:[HCRDataEntryFieldCell class]] ||
+            [cell isKindOfClass:[HCRDataEntryViewCell class]] ||
             [cell isKindOfClass:[HCREmergencyCell class]] ||
             [cell isKindOfClass:[HCRBulletinCell class]]) {
             return;
@@ -78,6 +81,8 @@ NSString *const kLayoutFooterLabel = @"kLayoutFooterLabel";
         }
         
         if ([cell isKindOfClass:[HCRGraphCell class]] ||
+            [cell isKindOfClass:[HCRDataEntryCell class]] ||
+            [cell isKindOfClass:[HCRDataEntryViewCell class]] ||
             [cell isKindOfClass:[HCRDataEntryFieldCell class]]) {
             return;
         }

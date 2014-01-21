@@ -207,21 +207,21 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         NSString *fieldString = [self.fieldLayoutData objectAtIndex:indexPath.row ofClass:@"NSString"];
         fieldCell.labelTitle = fieldString;
         fieldCell.inputPlaceholder = @"Required";
-        fieldCell.inputField.tag = kInputFieldTagBaseline + indexPath.row;
+        fieldCell.inputTextField.tag = kInputFieldTagBaseline + indexPath.row;
         
-        fieldCell.dataDelegate = self;
+        fieldCell.delegate = self;
         
         if ([fieldString isEqualToString:kFieldCamp] || [fieldString isEqualToString:kFieldLocation]) {
-            fieldCell.fieldType = HCRDataEntryFieldTypeDefault;
+            fieldCell.inputType = HCRDataEntryTypeDefault;
             
             if ([fieldString isEqualToString:kFieldCamp]) {
-                fieldCell.inputField.text = @"Domiz, Iraq";
+                fieldCell.inputTextField.text = @"Domiz, Iraq";
             } else if ([fieldString isEqualToString:kFieldLocation]) {
-                fieldCell.inputField.text = @"Phase 4, Row 5";
+                fieldCell.inputTextField.text = @"Phase 4, Row 5";
             }
             
         } else if ([fieldString isEqualToString:kFieldDeaths] || [fieldString isEqualToString:kFieldHurt]) {
-            fieldCell.fieldType = HCRDataEntryFieldTypeNumber;
+            fieldCell.inputType = HCRDataEntryTypeNumber;
         }
         
         fieldCell.lastFieldInSeries = (indexPath.row == [collectionView numberOfItemsInSection:indexPath.section] - 1);
@@ -294,7 +294,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 #pragma mark - HCRDataEntryFieldCell Delegate
 
-- (void)dataEntryFieldCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell {
+- (void)dataEntryCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell {
     
     CGFloat bottomOfHeader = CGRectGetMaxY(self.masterHeader.frame);
     CGFloat contentSpace = CGRectGetHeight(self.view.bounds) - kKeyboardHeight - bottomOfHeader;
@@ -314,16 +314,16 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
     
 }
 
-- (void)dataEntryFieldCellDidPressDone:(HCRDataEntryFieldCell *)signInCell {
+- (void)dataEntryCellDidPressDone:(HCRDataEntryFieldCell *)signInCell {
     
-    UITextField *nextField = (UITextField *)[self.collectionView viewWithTag:signInCell.inputField.tag + 1];
+    UITextField *nextField = (UITextField *)[self.collectionView viewWithTag:signInCell.inputTextField.tag + 1];
     
     if (nextField) {
         NSParameterAssert([nextField isKindOfClass:[UITextField class]]);
         [nextField becomeFirstResponder];
     } else {
         
-        [signInCell.inputField resignFirstResponder];
+        [signInCell.inputTextField resignFirstResponder];
         [self _resetCollectionContentOffset];
         
     }

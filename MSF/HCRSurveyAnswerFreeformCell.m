@@ -41,7 +41,7 @@
     self.contentView.backgroundColor = (self.answered) ? [UIColor cellAnsweredBackgroundColor] : self.defaultBackgroundColor;
     
     self.titleLabel.backgroundColor = [UIColor clearColor];
-    self.inputField.backgroundColor = [UIColor clearColor];
+    self.inputTextField.backgroundColor = [UIColor clearColor];
     
 }
 

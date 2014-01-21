@@ -6,36 +6,10 @@
 //  Copyright (c) 2013 Sean Conrad. All rights reserved.
 //
 
-#import "HCRCollectionCell.h"
+#import "HCRDataEntryCell.h"
 
-@class HCRDataEntryFieldCell;
-
-////////////////////////////////////////////////////////////////////////////////
-
-typedef NS_ENUM(NSInteger, HCRDataEntryFieldType) {
-    HCRDataEntryFieldTypeDefault,
-    HCRDataEntryFieldTypeEmail,
-    HCRDataEntryFieldTypeNumber,
-    HCRDataEntryFieldTypePassword
-};
-
-////////////////////////////////////////////////////////////////////////////////
-
-@protocol HCRDataEntryFieldCellDelegate <NSObject>
-@optional
-- (void)dataEntryFieldCellDidBecomeFirstResponder:(HCRDataEntryFieldCell *)signInCell;
-- (void)dataEntryFieldCellDidResignFirstResponder:(HCRDataEntryFieldCell *)signInCell;
-- (void)dataEntryFieldCellDidPressDone:(HCRDataEntryFieldCell *)signInCell;
-@end
-
-////////////////////////////////////////////////////////////////////////////////
-
-@interface HCRDataEntryFieldCell : HCRCollectionCell
+@interface HCRDataEntryFieldCell : HCRDataEntryCell
 <UITextFieldDelegate>
-
-@property (nonatomic, weak) id<HCRDataEntryFieldCellDelegate> dataDelegate;
-
-@property (nonatomic) HCRDataEntryFieldType fieldType;
 
 @property (nonatomic) BOOL lastFieldInSeries;
 
@@ -43,6 +17,6 @@ typedef NS_ENUM(NSInteger, HCRDataEntryFieldType) {
 @property (nonatomic, strong) NSString *inputPlaceholder;
 
 @property (nonatomic, readonly) UILabel *titleLabel;
-@property (nonatomic, readonly) UITextField *inputField;
+@property (nonatomic, readonly) UITextField *inputTextField;
 
 @end

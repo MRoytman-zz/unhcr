@@ -11,7 +11,7 @@
 
 @interface HCRTallySheetDetailInputViewController : HCRCollectionViewController
 <UICollectionViewDelegateFlowLayout,
-HCRDataEntryFieldCellDelegate>
+HCRDataEntryCellDelegate>
 
 @property (nonatomic, strong) NSString *resourceName;
 @property (nonatomic, strong) NSArray *questionsArray;

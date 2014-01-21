@@ -11,7 +11,6 @@
 #import "HCRUser.h"
 #import "HCRSurveySubmission.h"
 #import "HCRAlert.h"
-#import "HCRDataManager.h"
 
 #import <Parse/Parse.h>
 

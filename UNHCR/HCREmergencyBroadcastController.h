@@ -11,6 +11,6 @@
 
 @interface HCREmergencyBroadcastController : HCRCollectionViewController
 <UICollectionViewDelegateFlowLayout,
-HCRDataEntryFieldCellDelegate>
+HCRDataEntryCellDelegate>
 
 @end

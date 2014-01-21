@@ -13,7 +13,7 @@
 @interface HCRDataEntryFieldCell ()
 
 @property (nonatomic, readwrite) UILabel *titleLabel;
-@property (nonatomic, readwrite) UITextField *inputField;
+@property (nonatomic, readwrite) UITextField *inputTextField;
 @property (nonatomic, strong) UIButton *doneAccessoryView;
 
 @end
@@ -30,13 +30,18 @@
         self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         [self.contentView addSubview:self.titleLabel];
         
-        self.inputField = [[UITextField alloc] initWithFrame:CGRectZero];
-        [self.contentView addSubview:self.inputField];
+        self.inputTextField = [[UITextField alloc] initWithFrame:CGRectZero];
+        [self.contentView addSubview:self.inputTextField];
         
-        self.inputField.delegate = self;
+        self.inputTextField.delegate = self;
         
-        self.inputField.font = [UIFont systemFontOfSize:(self.titleLabel.font.pointSize - 1.0)];
-        self.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        self.inputTextField.font = [UIFont systemFontOfSize:(self.titleLabel.font.pointSize - 1.0)];
+        self.inputTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        
+        self.inputTextField.inputAccessoryView = self.doneAccessoryView;
+        self.inputTextField.inputAccessoryView.hidden = YES;
+        
+        self.inputView = self.inputTextField;
         
         self.lastFieldInSeries = NO;
         
@@ -47,7 +52,7 @@
 - (void)prepareForReuse {
     [super prepareForReuse];
     
-    self.inputField.text = nil;
+    self.inputTextField.text = nil;
     self.labelTitle = nil;
     self.inputPlaceholder = nil;
     self.lastFieldInSeries = NO;
@@ -68,12 +73,12 @@
     
     static const CGFloat kXIndent = 8.0;
     CGFloat xInputOrigin = CGRectGetMaxX(self.titleLabel.frame);
-    self.inputField.frame = CGRectMake(xInputOrigin + kXIndent,
+    self.inputTextField.frame = CGRectMake(xInputOrigin + kXIndent,
                                        0,
                                        CGRectGetWidth(self.bounds) - xInputOrigin - (2 * kXIndent),
                                        CGRectGetHeight(self.bounds));
     
-    self.inputField.backgroundColor = self.contentView.backgroundColor;
+    self.inputTextField.backgroundColor = self.contentView.backgroundColor;
     
     [self bringSubviewToFront:self.bottomLineView];
     
@@ -82,20 +87,20 @@
 #pragma mark - UITextField Delegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    if ([self.dataDelegate respondsToSelector:@selector(dataEntryFieldCellDidBecomeFirstResponder:)]) {
-        [self.dataDelegate dataEntryFieldCellDidBecomeFirstResponder:self];
+    if ([self.delegate respondsToSelector:@selector(dataEntryCellDidBecomeFirstResponder:)]) {
+        [self.delegate dataEntryCellDidBecomeFirstResponder:self];
     }
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    if ([self.dataDelegate respondsToSelector:@selector(dataEntryFieldCellDidResignFirstResponder:)]) {
-        [self.dataDelegate dataEntryFieldCellDidResignFirstResponder:self];
+    if ([self.delegate respondsToSelector:@selector(dataEntryCellDidResignFirstResponder:)]) {
+        [self.delegate dataEntryCellDidResignFirstResponder:self];
     }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if ([self.dataDelegate respondsToSelector:@selector(dataEntryFieldCellDidPressDone:)]) {
-        [self.dataDelegate dataEntryFieldCellDidPressDone:self];
+    if ([self.delegate respondsToSelector:@selector(dataEntryCellDidPressDone:)]) {
+        [self.delegate dataEntryCellDidPressDone:self];
     }
     return NO;
 }
@@ -114,68 +119,7 @@
     
     _inputPlaceholder = inputPlaceholder;
     
-    self.inputField.placeholder = inputPlaceholder;
-    
-}
-
-- (void)setFieldType:(HCRDataEntryFieldType)fieldType {
-    
-    _fieldType = fieldType;
-    
-    BOOL isPasswordType = (fieldType == HCRDataEntryFieldTypePassword);
-    BOOL isEmailType = (fieldType == HCRDataEntryFieldTypeEmail);
-    
-    self.inputField.secureTextEntry = isPasswordType;
-    self.inputField.autocorrectionType = (isPasswordType || isEmailType) ? UITextAutocorrectionTypeNo : UITextAutocorrectionTypeDefault;
-    
-    UIKeyboardType keyboardType;
-    BOOL hideAccessoryView;
-    
-    if (fieldType == HCRDataEntryFieldTypeNumber &&
-        !self.doneAccessoryView) {
-        
-        CGFloat buttonHeight = 40;
-        self.doneAccessoryView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, buttonHeight)];
-        self.inputField.inputAccessoryView = self.doneAccessoryView;
-        
-        CGFloat lineHeight = 1;
-        UIView *topLineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, lineHeight)];
-        [self.doneAccessoryView addSubview:topLineView];
-        topLineView.backgroundColor = [UIColor darkGrayColor];
-        UIView *bottomLineView = [[UIView alloc] initWithFrame:CGRectMake(0, buttonHeight - lineHeight, 320, lineHeight)];
-        [self.doneAccessoryView addSubview:bottomLineView];
-        bottomLineView.backgroundColor = [UIColor darkGrayColor];
-        
-        self.doneAccessoryView.backgroundColor = [UIColor flatOrangeColor];
-        
-        [self.doneAccessoryView setTitle:@"Done" forState:UIControlStateNormal];
-        
-        self.doneAccessoryView.titleLabel.font = [UIFont boldSystemFontOfSize:20];
-        
-        [self.doneAccessoryView addTarget:self action:@selector(_doneButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        
-    }
-    
-    switch (fieldType) {
-        case HCRDataEntryFieldTypeDefault:
-        case HCRDataEntryFieldTypePassword:
-            keyboardType = UIKeyboardTypeDefault;
-            hideAccessoryView = YES;
-            break;
-            
-        case HCRDataEntryFieldTypeEmail:
-            keyboardType = UIKeyboardTypeEmailAddress;
-            hideAccessoryView = YES;
-            break;
-            
-        case HCRDataEntryFieldTypeNumber:
-            keyboardType = UIKeyboardTypeNumberPad;
-            hideAccessoryView = NO;
-            break;
-    }
-    
-    self.inputField.keyboardType = keyboardType;
-    self.inputField.inputAccessoryView.hidden = hideAccessoryView;
+    self.inputTextField.placeholder = inputPlaceholder;
     
 }
 
@@ -183,16 +127,43 @@
     
     _lastFieldInSeries = lastFieldInSeries;
     
-    self.inputField.returnKeyType = (lastFieldInSeries) ? UIReturnKeyDone : UIReturnKeyNext;
+    self.inputTextField.returnKeyType = (lastFieldInSeries) ? UIReturnKeyDone : UIReturnKeyNext;
     
 }
 
-#pragma mark - Private Methods
-
-- (void)_doneButtonPressed {
-    if ([self.dataDelegate respondsToSelector:@selector(dataEntryFieldCellDidPressDone:)]) {
-        [self.dataDelegate dataEntryFieldCellDidPressDone:self];
+- (void)setInputType:(HCRDataEntryType)inputType {
+    
+    [super setInputType:inputType];
+    
+    BOOL isPasswordType = (inputType == HCRDataEntryTypePassword);
+    BOOL isEmailType = (inputType == HCRDataEntryTypeEmail);
+    
+    self.inputTextField.secureTextEntry = isPasswordType;
+    self.inputTextField.autocorrectionType = (isPasswordType || isEmailType) ? UITextAutocorrectionTypeNo : UITextAutocorrectionTypeDefault;
+    
+    UIKeyboardType keyboardType;
+    BOOL hideAccessoryView;
+    
+    switch (inputType) {
+        case HCRDataEntryTypeDefault:
+        case HCRDataEntryTypePassword:
+            keyboardType = UIKeyboardTypeDefault;
+            hideAccessoryView = YES;
+            break;
+            
+        case HCRDataEntryTypeEmail:
+            keyboardType = UIKeyboardTypeEmailAddress;
+            hideAccessoryView = YES;
+            break;
+            
+        case HCRDataEntryTypeNumber:
+            keyboardType = UIKeyboardTypeNumberPad;
+            hideAccessoryView = NO;
+            break;
     }
+    
+    self.inputTextField.keyboardType = keyboardType;
+    self.inputTextField.inputAccessoryView.hidden = hideAccessoryView;
 }
 
 @end
