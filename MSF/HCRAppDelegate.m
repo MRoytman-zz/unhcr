@@ -30,6 +30,8 @@
     [defaults removePersistentDomainForName:appDomain];
 #endif
     
+    HCRLog(@"ENVIRONMENT: %@",HCRENVIRONMENT);
+    
     // PARSE
     [HCRAlert registerSubclass];
     [HCRSurveySubmission registerSubclass];
@@ -96,6 +98,10 @@
     // Store the deviceToken in the current installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
+    
+    // set environment on load so you don't get pushes you don't want
+    currentInstallation.channels = @[HCRENVIRONMENT];
+    
     [currentInstallation saveInBackground];
     
 }

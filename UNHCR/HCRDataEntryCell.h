@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, HCRDataEntryType) {
 - (void)dataEntryCellDidBecomeFirstResponder:(HCRDataEntryCell *)dataCell;
 - (void)dataEntryCellDidResignFirstResponder:(HCRDataEntryCell *)dataCell;
 - (void)dataEntryCellDidPressDone:(HCRDataEntryCell *)dataCell;
+- (void)dataEntryCellDidEnterText:(HCRDataEntryCell *)dataCell;
 @end
 
 ////////////////////////////////////////////////////////////////////////////////

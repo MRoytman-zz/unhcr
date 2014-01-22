@@ -41,6 +41,8 @@
         self.inputTextField.inputAccessoryView = self.doneAccessoryView;
         self.inputTextField.inputAccessoryView.hidden = YES;
         
+        [self.inputTextField addTarget:self action:@selector(_textFieldDidChange) forControlEvents:UIControlEventEditingChanged];
+        
         self.inputView = self.inputTextField;
         
         self.lastFieldInSeries = NO;
@@ -164,6 +166,16 @@
     
     self.inputTextField.keyboardType = keyboardType;
     self.inputTextField.inputAccessoryView.hidden = hideAccessoryView;
+}
+
+#pragma mark - Private Methods
+
+- (void)_textFieldDidChange {
+    
+    if ([self.delegate respondsToSelector:@selector(dataEntryCellDidEnterText:)]) {
+        [self.delegate dataEntryCellDidEnterText:self];
+    }
+    
 }
 
 @end

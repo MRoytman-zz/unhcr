@@ -32,7 +32,13 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
 @property UIView *masterHeader;
 @property NSArray *layoutData;
 
+@property (nonatomic, readonly) BOOL fieldsComplete;
+
+@property (nonatomic, weak) HCRTableButtonCell *submitButtonCell;
+
 @property (nonatomic, weak) UIView *currentResponder;
+@property (nonatomic, weak) UITextField *nameField;
+@property (nonatomic, weak) UITextView *messageView;
 
 @end
 
@@ -137,6 +143,8 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_dismissKeyboard)];
     [self.collectionView addGestureRecognizer:tapRecognizer];
     
+    tapRecognizer.cancelsTouchesInView = NO;
+    
     // LAYOUT & REUSABLES
     [self.collectionView registerClass:[HCRDataEntryFieldCell class]
             forCellWithReuseIdentifier:kAlertComposeFieldCellIdentifier];
@@ -193,6 +201,8 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
         // customize view
         fieldCell.inputTextField.returnKeyType = UIReturnKeyNext;
         
+        self.nameField = fieldCell.inputTextField;
+        
         cell = fieldCell;
         
     } else if ([cellID isEqualToString:kAlertComposeViewCellIdentifier]) {
@@ -201,6 +211,8 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
         
         viewCell.delegate = self;
         
+        self.messageView = viewCell.inputTextView;
+        
         cell = viewCell;
         
     } else if ([cellID isEqualToString:kAlertComposeButtonCellIdentifier]) {
@@ -208,6 +220,10 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
         HCRTableButtonCell *buttonCell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kAlertComposeButtonCellIdentifier forIndexPath:indexPath];
         
         buttonCell.tableButtonTitle = [self _cellLabelForIndexPath:indexPath];
+        
+        buttonCell.tableButton.enabled = self.fieldsComplete;
+        
+        self.submitButtonCell = buttonCell;
         
         cell = buttonCell;
         
@@ -241,6 +257,21 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
     
 }
 
+#pragma mark - UICollectionView Delegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+    if ([cell isKindOfClass:[HCRTableButtonCell class]]) {
+        HCRTableButtonCell *buttonCell = (HCRTableButtonCell *)cell;
+        if ([buttonCell.tableButtonTitle isEqualToString:kAlertComposeSubmitCellLabel] &&
+            self.submitButtonCell.tableButton.enabled) {
+            [self _submitButtonPressed];
+        }
+    }
+    
+}
+
 #pragma mark - UICollectionView Delegate Flow Layout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
@@ -266,6 +297,12 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
 
 #pragma mark - HCRDataEntryCell Delegate
 
+- (void)dataEntryCellDidEnterText:(HCRDataEntryCell *)dataCell {
+    
+    self.submitButtonCell.tableButton.enabled = self.fieldsComplete;
+    
+}
+
 - (void)dataEntryCellDidBecomeFirstResponder:(HCRDataEntryCell *)dataCell {
     
     self.currentResponder = dataCell.inputView;
@@ -274,7 +311,7 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
 
 - (void)dataEntryCellDidResignFirstResponder:(HCRDataEntryCell *)dataCell {
     
-//    [self _dismissKeyboard];
+    self.submitButtonCell.tableButton.enabled = self.fieldsComplete;
     
 }
 
@@ -290,7 +327,51 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
     
 }
 
+#pragma mark - Getters & Setters
+
+- (BOOL)fieldsComplete {
+    return (self.nameField.text.length > 0 && self.messageView.text.length > 0);
+}
+
 #pragma mark - Private Methods
+
+- (void)_submitButtonPressed {
+    
+    // set hud/spinners
+    self.submitButtonCell.processingAction = YES;
+    self.submitButtonCell.tableButton.enabled = NO;
+    self.nameField.userInteractionEnabled = NO;
+    self.nameField.textColor = [UIColor grayColor];
+    self.messageView.userInteractionEnabled = NO;
+    self.messageView.textColor = [UIColor grayColor];
+    
+    HCRUser *currentUser = [HCRUser currentUser];
+    currentUser.fullName = self.nameField.text;
+    [currentUser saveEventually];
+    
+    HCRAlert *newAlert = [HCRAlert newAlertToPush];
+    newAlert.authorID = currentUser.objectId;
+    newAlert.authorName = self.nameField.text;
+    newAlert.message = self.messageView.text;
+    
+    [newAlert saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        
+        self.submitButtonCell.processingAction = NO;
+        self.submitButtonCell.tableButton.enabled = YES;
+        self.nameField.userInteractionEnabled = YES;
+        self.nameField.textColor = [UIColor darkTextColor];
+        self.messageView.userInteractionEnabled = YES;
+        self.messageView.textColor = [UIColor darkTextColor];
+        
+        if (error) {
+            [[SCErrorManager sharedManager] showAlertForError:error withErrorSource:SCErrorSourceParse withCompletion:nil];
+        } else {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
+        
+    }];
+    
+}
 
 - (void)_cancelButtonPressed {
     

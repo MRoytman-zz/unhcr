@@ -81,6 +81,7 @@ NSString *const kSurveyIDField = @"testId";
 @interface HCRDataManager ()
 
 @property (nonatomic, strong) NSMutableArray *localAlerts;
+@property (nonatomic, readonly) NSArray *encodedAlerts;
 
 @property (nonatomic, strong) HCRSurvey *localSurvey;
 @property (nonatomic, strong) NSArray *localSurveys;
@@ -154,6 +155,16 @@ NSString *const kSurveyIDField = @"testId";
     [self _sync];
 }
 
+- (NSArray *)encodedAlerts {
+    NSMutableArray *alerts = @[].mutableCopy;
+    
+    for (HCRAlert *alert in self.localAlerts) {
+        [alerts addObject:[NSKeyedArchiver archivedDataWithRootObject:alert]];
+    }
+    
+    return [NSArray arrayWithArray:alerts];
+}
+
 #pragma mark - Public Methods
 
 - (void)saveData {
@@ -190,6 +201,7 @@ NSString *const kSurveyIDField = @"testId";
 - (void)refreshAlertsWithCompletion:(void (^)(NSError *))completionBlock {
     
     PFQuery *questionsQuery = [HCRAlert query];
+    [questionsQuery whereKey:@"environment" containsString:HCRENVIRONMENT];
     
     [questionsQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         
@@ -199,25 +211,12 @@ NSString *const kSurveyIDField = @"testId";
             
             HCRDebug(@"Alerts found: %d",objects.count);
             
+            self.localAlerts = @[].mutableCopy;
+            
             for (PFObject *object in objects) {
                 
-                BOOL exists = NO;
-                
-                for (HCRAlert *alert in self.localAlerts) {
-                    if ([alert.objectId isEqualToString:object.objectId]) {
-                        exists = YES;
-                        break;
-                    }
-                }
-                
-                if (!exists) {
-                    HCRDebug(@"New Alert found! Adding..");
-                    HCRAlert *newAlert = (HCRAlert *)object;
-                    newAlert.read = NO;
-                    
-                    [self.localAlerts addObject:newAlert];
-                    
-                }
+                HCRAlert *newAlert = [HCRAlert localAlertCopyFromPFObject:object];
+                [self.localAlerts addObject:newAlert];
                 
             }
             
@@ -682,7 +681,7 @@ NSString *const kSurveyIDField = @"testId";
     NSData *encodedSurvey = [NSKeyedArchiver archivedDataWithRootObject:self.localSurvey];
     [defaults setObject:encodedSurvey forKey:HCRPrefKeySurvey];
     
-    [defaults setObject:self.localAlerts forKey:HCRPrefKeyAlerts];
+    [defaults setObject:self.encodedAlerts forKey:HCRPrefKeyAlerts];
     
     [defaults synchronize];
     
@@ -940,13 +939,18 @@ NSString *const kSurveyIDField = @"testId";
 - (NSMutableArray *)_restoreLocalAlertsFromDataStore {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray *localAlerts = [defaults objectForKey:HCRPrefKeyAlerts ofClass:@"NSArray" mustExist:NO];
+    NSArray *encodedArray = [defaults objectForKey:HCRPrefKeyAlerts ofClass:@"NSArray" mustExist:NO];
     
-    if (!localAlerts) {
-        localAlerts = @[].mutableCopy;
+    if (!encodedArray) {
+        encodedArray = @[].mutableCopy;
     }
     
-    return localAlerts.mutableCopy;
+    NSMutableArray *localAlerts = @[].mutableCopy;
+    for (NSData *encodedAlert in encodedArray) {
+        [localAlerts addObject:[NSKeyedUnarchiver unarchiveObjectWithData:encodedAlert]];
+    }
+    
+    return localAlerts;
     
 }
 

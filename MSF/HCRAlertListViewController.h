@@ -9,5 +9,6 @@
 #import "HCRCollectionViewController.h"
 
 @interface HCRAlertListViewController : HCRCollectionViewController
+<UICollectionViewDelegateFlowLayout>
 
 @end

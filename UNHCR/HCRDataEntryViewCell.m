@@ -79,6 +79,12 @@ const CGFloat kFontSize = 16.0;
 
 #pragma mark - UITextField Delegate
 
+- (void)textViewDidChange:(UITextView *)textView {
+    if ([self.delegate respondsToSelector:@selector(dataEntryCellDidEnterText:)]) {
+        [self.delegate dataEntryCellDidEnterText:self];
+    }
+}
+
 - (void)textViewDidBeginEditing:(UITextView *)textView {
     if ([self.delegate respondsToSelector:@selector(dataEntryCellDidBecomeFirstResponder:)]) {
         [self.delegate dataEntryCellDidBecomeFirstResponder:self];

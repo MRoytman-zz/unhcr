@@ -150,6 +150,7 @@
 		4FA716E518751C9700BCE0A6 /* HCREmergencyListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8391818032B6300B49498 /* HCREmergencyListViewController.m */; };
 		4FA716E618751CA300BCE0A6 /* HCREmergencyBroadcastController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F28B92E182769D20071DF37 /* HCREmergencyBroadcastController.m */; };
 		4FA716E718751CBD00BCE0A6 /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
+		4FB11FD1189078270067930C /* HCRAlertCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB11FD0189078270067930C /* HCRAlertCell.m */; };
 		4FCBC00C1873577900D96D7F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC217F9E022000350E4 /* Foundation.framework */; };
 		4FCBC00D1873577900D96D7F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC417F9E022000350E4 /* CoreGraphics.framework */; };
 		4FCBC00E1873577900D96D7F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC617F9E022000350E4 /* UIKit.framework */; };
@@ -328,6 +329,8 @@
 		4F8C09A3187E042400317764 /* MSF.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MSF.xcassets; sourceTree = "<group>"; };
 		4FA46E4E187F61EA00E775B7 /* HCRParticipantToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRParticipantToolbar.h; sourceTree = "<group>"; };
 		4FA46E4F187F61EA00E775B7 /* HCRParticipantToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRParticipantToolbar.m; sourceTree = "<group>"; };
+		4FB11FCF189078270067930C /* HCRAlertCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRAlertCell.h; sourceTree = "<group>"; };
+		4FB11FD0189078270067930C /* HCRAlertCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRAlertCell.m; sourceTree = "<group>"; };
 		4FCBC00B1873577900D96D7F /* MSF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSF.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FD838E61800D88200B49498 /* EAEmailUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAEmailUtilities.h; path = ../UNHCR/EAEmailUtilities.h; sourceTree = "<group>"; };
 		4FD838E71800D88200B49498 /* EAEmailUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAEmailUtilities.m; path = ../UNHCR/EAEmailUtilities.m; sourceTree = "<group>"; };
@@ -462,6 +465,8 @@
 			children = (
 				4F263429188DCC9600009BAA /* HCRAlert.h */,
 				4F26342A188DCC9600009BAA /* HCRAlert.m */,
+				4FB11FCF189078270067930C /* HCRAlertCell.h */,
+				4FB11FD0189078270067930C /* HCRAlertCell.m */,
 				4F26342C188DE37E00009BAA /* HCRAlertListViewController.h */,
 				4F26342D188DE37E00009BAA /* HCRAlertListViewController.m */,
 				4F263433188E057400009BAA /* HCRAlertComposeViewController.h */,
@@ -1126,6 +1131,7 @@
 				4F72041B18750FD2006E95B2 /* NSString+HCRAdditions.m in Sources */,
 				4F72041718750FC8006E95B2 /* UIDevice+EAAdditions.m in Sources */,
 				4F72041118750FB8006E95B2 /* UIColor+HCRColors.m in Sources */,
+				4FB11FD1189078270067930C /* HCRAlertCell.m in Sources */,
 				4FA1FB0B187518F400CB786B /* HCRHomeViewController.m in Sources */,
 				4FA716DE18751BD000BCE0A6 /* HCRBulletinViewController.m in Sources */,
 				4F72042C18751090006E95B2 /* HCRFlowLayout.m in Sources */,
