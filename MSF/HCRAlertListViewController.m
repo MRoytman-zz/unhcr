@@ -65,7 +65,7 @@ NSString *const kAlertListFooterIdentifier = @"kAlertListFooterIdentifier";
              forControlEvents:UIControlEventValueChanged];
     
     // BAR BUTTONS
-    if ([HCRUser currentUser].canSendAlerts) {
+    if ([HCRUser currentUser].alertsAuthor) {
         
         UIBarButtonItem *composeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
                                                                                        target:self

@@ -350,6 +350,12 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
     [currentUser saveEventually];
     
     HCRAlert *newAlert = [HCRAlert newAlertToPush];
+    
+    // if current user is a test user, manually override alert environment
+    if (currentUser.testUser) {
+        newAlert.environment = HCREnvironmentDebug;
+    }
+    
     newAlert.authorID = currentUser.objectId;
     newAlert.authorName = self.nameField.text;
     newAlert.message = self.messageView.text;

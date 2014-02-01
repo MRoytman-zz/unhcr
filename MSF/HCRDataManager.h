@@ -81,6 +81,8 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 
 @interface HCRDataManager : NSObject
 
+@property (nonatomic, readonly) NSString *currentEnvironment;
+
 + (id)sharedManager;
 
 // alerts

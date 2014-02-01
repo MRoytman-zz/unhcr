@@ -13,7 +13,8 @@
 @interface HCRUser : PFUser
 <PFSubclassing>
 
-@property BOOL canSendAlerts;
+@property BOOL testUser;
+@property BOOL alertsAuthor;
 @property BOOL authorized;
 @property BOOL showConstruction;
 @property NSString *teamID;

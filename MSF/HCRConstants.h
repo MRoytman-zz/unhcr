@@ -11,14 +11,8 @@
 
 #define HCRNotificationAlertNotificationReceived @"HCRNotificationAlertNotificationReceived"
 
-#ifdef DEBUG
-#define HCRENVIRONMENT @"debug"
-#else
-#ifdef PRODUCTION
-#define HCRENVIRONMENT @"production"
-#else
-#define HCRENVIRONMENT @"testflight"
-#endif
-#endif
+#define HCREnvironmentDebug @"debug"
+#define HCREnvironmentProduction @"production"
+#define HCREnvironmentTestFlight @"testflight"
 
 #endif

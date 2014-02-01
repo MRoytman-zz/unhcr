@@ -150,6 +150,25 @@ NSString *const kSurveyIDField = @"testId";
 
 #pragma mark - Getters & Setters
 
+- (NSString *)currentEnvironment {
+    
+    HCRUser *currentUser = [HCRUser currentUser];
+    if (currentUser.testUser) {
+        return HCREnvironmentDebug;
+    }
+    
+#ifdef DEBUG
+    return HCREnvironmentDebug;
+#else
+#ifdef PRODUCTION
+    return HCREnvironmentProduction;
+#else
+    return HCREnvironmentTestFlight;
+#endif
+#endif
+    
+}
+
 - (void)setLocalSurvey:(HCRSurvey *)localSurvey {
     _localSurvey = localSurvey;
     [self _sync];
@@ -201,7 +220,7 @@ NSString *const kSurveyIDField = @"testId";
 - (void)refreshAlertsWithCompletion:(void (^)(NSError *))completionBlock {
     
     PFQuery *questionsQuery = [HCRAlert query];
-    [questionsQuery whereKey:@"environment" containsString:HCRENVIRONMENT];
+    [questionsQuery whereKey:@"environment" containsString:[[HCRDataManager sharedManager] currentEnvironment]];
     
     [questionsQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         

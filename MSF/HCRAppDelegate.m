@@ -30,8 +30,6 @@
     [defaults removePersistentDomainForName:appDomain];
 #endif
     
-    HCRLog(@"ENVIRONMENT: %@",HCRENVIRONMENT);
-    
     // PARSE
     [HCRAlert registerSubclass];
     [HCRSurveySubmission registerSubclass];
@@ -50,6 +48,9 @@
     HCRHomeViewController *homeView = [[HCRHomeViewController alloc] initWithCollectionViewLayout:[HCRHomeViewController preferredLayout]];
     UINavigationController *rootNavigationController = [[UINavigationController alloc] initWithRootViewController:homeView];
     rootNavigationController.interactivePopGestureRecognizer.enabled = NO;
+    
+    // finish up (currently must be after Parse initialization)
+    HCRLog(@"ENVIRONMENT: %@",[[HCRDataManager sharedManager] currentEnvironment]);
     
     self.window.rootViewController = rootNavigationController;
     self.window.backgroundColor = [UIColor whiteColor];
@@ -100,7 +101,8 @@
     [currentInstallation setDeviceTokenFromData:deviceToken];
     
     // set environment on load so you don't get pushes you don't want
-    currentInstallation.channels = @[HCRENVIRONMENT];
+    NSString *currentEnvironment = [[HCRDataManager sharedManager] currentEnvironment];
+    currentInstallation.channels = @[currentEnvironment];
     
     [currentInstallation saveInBackground];
     

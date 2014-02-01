@@ -63,7 +63,7 @@ NSString *const kCoderKeyRead = @"kCoderKeyRead";
     HCRAlert *alert = [HCRAlert new];
     
     // set environment so pushes can be sent to the proper channels
-    alert.environment = HCRENVIRONMENT;
+    alert.environment = [[HCRDataManager sharedManager] currentEnvironment];
     
     return alert;
     
