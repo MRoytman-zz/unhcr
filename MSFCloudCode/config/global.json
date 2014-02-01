@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "MSF Survey Tool": {
+            "applicationId": "CZX2WArPOqFH6kWTNG30JWPfYVGO1SjmA0j3dwTH", 
+            "masterKey": "ZylxN36ZHhVLH5gF0AlbE0gC1EzAqBayQwJnAt4f"
+        }, 
+        "_default": {
+            "link": "MSF Survey Tool"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.2.16"
+    }
+}

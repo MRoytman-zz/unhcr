@@ -12,7 +12,10 @@ build.h
 # OS X Noise
 *.DS_Store
 
-#Cocoa Pods
+# Cocoa Pods
 Pods/
 Podfile.lock
 *xcworkspace
+
+# Project Specific
+*build.h
