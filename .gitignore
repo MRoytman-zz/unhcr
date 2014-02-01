@@ -18,4 +18,5 @@ Podfile.lock
 *xcworkspace
 
 # Project Specific
-*build.h
+MSF/msf-build.h
+UNHCR/ris-build.h
