@@ -36,6 +36,7 @@ typedef NS_ENUM(NSInteger, HCRCollectionCellProcessingViewPosition) {
 
 + (CGSize)preferredSizeForCollectionView:(UICollectionView *)collectionView;
 + (CGSize)preferredSizeForAppDescriptionCollectionCellForCollectionView:(UICollectionView *)collectionView;
++ (CGSize)preferredSizeForString:(NSString *)string withFont:(UIFont *)font inContainingView:(UIView *)containingView;
 
 - (void)setBottomLineStatusForCollectionView:(UICollectionView *)collectionView atIndexPath:(NSIndexPath *)indexPath;
 

@@ -73,7 +73,8 @@ NSString *const kLayoutFooterLabelUnsubmitted = @"(tap to submit)";
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    self.title = @"Answer Sets";
+    HCRSurvey *survey = [[[HCRDataManager sharedManager] localSurveys] lastObject];
+    self.title = survey.title;
     
     self.highlightCells = YES;
     

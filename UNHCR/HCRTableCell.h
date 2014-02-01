@@ -11,7 +11,6 @@
 @interface HCRTableCell : HCRCollectionCell
 
 + (CGSize)sizeForCollectionView:(UICollectionView *)collectionView withAnswerString:(NSString *)answerString;
-+ (CGSize)preferredSizeForString:(NSString *)string inCollectionView:(UIView *)collectionView;
 + (CGFloat)preferredIndentForContentWithBadgeImage;
 + (UIFont *)preferredFontForTitleLabel;
 

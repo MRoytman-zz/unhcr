@@ -88,6 +88,7 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 - (NSArray *)unreadAlerts;
 - (HCRAlert *)alertWithID:(NSString *)objectID;
 - (void)refreshAlertsWithCompletion:(void (^)(NSError *error))completionBlock;
+- (void)markAllAlertsAsRead;
 
 // surveys
 - (NSArray *)localSurveys;

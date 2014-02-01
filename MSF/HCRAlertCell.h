@@ -6,10 +6,11 @@
 //  Copyright (c) 2014 Sean Conrad. All rights reserved.
 //
 
-#import "HCRTableCell.h"
+#import "HCRCollectionCell.h"
 
-@interface HCRAlertCell : HCRTableCell
+@interface HCRAlertCell : HCRCollectionCell
 
+@property (nonatomic) BOOL read;
 @property (nonatomic, strong) HCRAlert *alert;
 
 + (CGSize)sizeForCellInCollectionView:(UICollectionView *)collectionView withAlert:(HCRAlert *)alert;

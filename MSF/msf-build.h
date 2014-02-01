@@ -13,12 +13,15 @@
 
 #include "HCRDataManager.h"
 
+#ifdef DEBUG
+
+//#define HCR_WIPE_NSUD
+
+#endif
+
 
 
 //#define PRODUCTION
-//#define HCR_WIPE_NSUD
-
-
 
 #ifndef PRODUCTION
 #warning NOT USING PRODUCTION SETTINGS

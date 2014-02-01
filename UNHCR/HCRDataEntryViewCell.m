@@ -73,7 +73,7 @@ const CGFloat kFontSize = 16.0;
 + (CGSize)preferredSizeForCollectionView:(UICollectionView *)collectionView {
     
     return CGSizeMake(CGRectGetWidth(collectionView.bounds),
-                      0.25 * CGRectGetHeight(collectionView.bounds));
+                      0.35 * CGRectGetHeight(collectionView.bounds));
     
 }
 

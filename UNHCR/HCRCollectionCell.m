@@ -99,6 +99,19 @@ static const CGFloat kPreferredSpinnerPadding = 10.0;
                       kAppDescriptionHeight);
 }
 
++ (CGSize)preferredSizeForString:(NSString *)string withFont:(UIFont *)font inContainingView:(UIView *)containingView {
+    
+    NSParameterAssert(font);
+    
+    CGSize finalBounding = [HCRCollectionCell _boundingSizeForContainingView:containingView];
+    
+    // then add height of label
+    return [string sizeforMultiLineStringWithBoundingSize:finalBounding
+                                                 withFont:font
+                                                  rounded:YES];
+    
+}
+
 #pragma mark - Getters & Setters
 
 - (CGRect)bottomLineFrame {
@@ -155,6 +168,13 @@ static const CGFloat kPreferredSpinnerPadding = 10.0;
 }
 
 #pragma mark - Private Methods
+
++ (CGSize)_boundingSizeForContainingView:(UIView *)containingView {
+    
+    return CGSizeMake(CGRectGetWidth(containingView.bounds) - [HCRCollectionCell preferredIndentForContent] - [HCRCollectionCell preferredTrailingSpaceForContent],
+                      HUGE_VALF);
+    
+}
 
 - (CGPoint)_centerForProcessingView {
     

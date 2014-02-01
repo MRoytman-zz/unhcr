@@ -151,6 +151,8 @@
 		4FA716E618751CA300BCE0A6 /* HCREmergencyBroadcastController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F28B92E182769D20071DF37 /* HCREmergencyBroadcastController.m */; };
 		4FA716E718751CBD00BCE0A6 /* SCGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F71C0F018133D0B00672C6A /* SCGraphView.m */; };
 		4FB11FD1189078270067930C /* HCRAlertCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB11FD0189078270067930C /* HCRAlertCell.m */; };
+		4FB11FD41890A9E30067930C /* UIViewController+EAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB11FD31890A9E30067930C /* UIViewController+EAAdditions.m */; };
+		4FB11FD51890A9E30067930C /* UIViewController+EAAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB11FD31890A9E30067930C /* UIViewController+EAAdditions.m */; };
 		4FCBC00C1873577900D96D7F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC217F9E022000350E4 /* Foundation.framework */; };
 		4FCBC00D1873577900D96D7F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC417F9E022000350E4 /* CoreGraphics.framework */; };
 		4FCBC00E1873577900D96D7F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F866AC617F9E022000350E4 /* UIKit.framework */; };
@@ -331,6 +333,8 @@
 		4FA46E4F187F61EA00E775B7 /* HCRParticipantToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRParticipantToolbar.m; sourceTree = "<group>"; };
 		4FB11FCF189078270067930C /* HCRAlertCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCRAlertCell.h; sourceTree = "<group>"; };
 		4FB11FD0189078270067930C /* HCRAlertCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCRAlertCell.m; sourceTree = "<group>"; };
+		4FB11FD21890A9E30067930C /* UIViewController+EAAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+EAAdditions.h"; sourceTree = "<group>"; };
+		4FB11FD31890A9E30067930C /* UIViewController+EAAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+EAAdditions.m"; sourceTree = "<group>"; };
 		4FCBC00B1873577900D96D7F /* MSF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MSF.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FD838E61800D88200B49498 /* EAEmailUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAEmailUtilities.h; path = ../UNHCR/EAEmailUtilities.h; sourceTree = "<group>"; };
 		4FD838E71800D88200B49498 /* EAEmailUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EAEmailUtilities.m; path = ../UNHCR/EAEmailUtilities.m; sourceTree = "<group>"; };
@@ -791,6 +795,8 @@
 				4F2B2C94182238B500F0DDB2 /* NSString+HCRAdditions.m */,
 				4F419DDD1878C44C0000C7DA /* UIView+EAAdditions.h */,
 				4F419DDE1878C44C0000C7DA /* UIView+EAAdditions.m */,
+				4FB11FD21890A9E30067930C /* UIViewController+EAAdditions.h */,
+				4FB11FD31890A9E30067930C /* UIViewController+EAAdditions.m */,
 			);
 			name = Categories;
 			path = ../UNHCR;
@@ -1066,6 +1072,7 @@
 				4F0C701B17FF482B0081F201 /* AssertionCategories.m in Sources */,
 				4F3D962D181F36D9008128B6 /* HCRTableCell.m in Sources */,
 				4F263437188E07F000009BAA /* HCRUser.m in Sources */,
+				4FB11FD41890A9E30067930C /* UIViewController+EAAdditions.m in Sources */,
 				4FDD8A4318220E04002B717E /* HCRBulletinViewController.m in Sources */,
 				4FD9308D1819CE9D00B107ED /* NSDateFormatter+HCRAdditions.m in Sources */,
 				4FD838E81800D88200B49498 /* EAEmailUtilities.m in Sources */,
@@ -1186,6 +1193,7 @@
 				4F263435188E057400009BAA /* HCRAlertComposeViewController.m in Sources */,
 				4FF7CD4B187E7C3E00A2B8F2 /* HCRAnswerSetCell.m in Sources */,
 				4F419DDC1878C2360000C7DA /* HCRDataManager.m in Sources */,
+				4FB11FD51890A9E30067930C /* UIViewController+EAAdditions.m in Sources */,
 				4F49ABF5187B46D600A4B896 /* HCRSurveyCell.m in Sources */,
 				4FA1FB0D1875196500CB786B /* MKMapView+HCRMapView.m in Sources */,
 				4FA716E318751C2E00BCE0A6 /* HCRRequestDataViewController.m in Sources */,

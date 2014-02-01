@@ -15,31 +15,29 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kCoderKeyObjectID = @"kCoderKeyObjectID";
-NSString *const kCoderKeyCreatedAt = @"kCoderKeyCreatedAt";
-NSString *const kCoderKeyUpdatedAt = @"kCoderKeyUpdatedAt";
 NSString *const kCoderKeyAuthorName = @"kCoderKeyAuthorName";
 NSString *const kCoderKeyAuthorID = @"kCoderKeyAuthorID";
 NSString *const kCoderKeyMessage = @"kCoderKeyMessage";
 NSString *const kCoderKeyEnvironment = @"kCoderKeyEnvironment";
+NSString *const kCoderKeySubmittedTime = @"kCoderKeySubmittedTime";
 NSString *const kCoderKeyRead = @"kCoderKeyRead";
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @implementation HCRAlert
 
-@dynamic authorName, authorID, message, read, environment;
+@dynamic authorName, authorID, message, read, environment, submittedTime;
 
 - (id)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if (self) {
         self.objectId = [decoder decodeObjectForKey:kCoderKeyObjectID];
-//        self.createdAt = [decoder decodeObjectForKey:kCoderKeyCreatedAt];
-//        self.updatedAt = [decoder decodeObjectForKey:kCoderKeyUpdatedAt];
         self.authorName = [decoder decodeObjectForKey:kCoderKeyAuthorName];
         self.authorID = [decoder decodeObjectForKey:kCoderKeyAuthorID];
         self.message = [decoder decodeObjectForKey:kCoderKeyMessage];
         self.environment = [decoder decodeObjectForKey:kCoderKeyEnvironment];
         self.read = [[decoder decodeObjectForKey:kCoderKeyRead] boolValue];
+        self.submittedTime = [decoder decodeObjectForKey:kCoderKeySubmittedTime];
     }
     return self;
 }
@@ -51,6 +49,7 @@ NSString *const kCoderKeyRead = @"kCoderKeyRead";
     [encoder encodeObject:self.message forKey:kCoderKeyMessage];
     [encoder encodeObject:self.environment forKey:kCoderKeyEnvironment];
     [encoder encodeObject:@(self.read) forKey:kCoderKeyRead];
+    [encoder encodeObject:self.submittedTime forKey:kCoderKeySubmittedTime];
 }
 
 #pragma mark - Class Methods
@@ -83,8 +82,18 @@ NSString *const kCoderKeyRead = @"kCoderKeyRead";
 
 - (NSComparisonResult)compareUsingCreatedDate:(HCRAlert *)alert {
     
-    return [alert.updatedAt compare:self.updatedAt];
+    return [alert.submittedTime compare:self.submittedTime];
     
+}
+
+- (BOOL)isEqual:(id)object {
+    
+    if ([object isKindOfClass:[HCRAlert class]]) {
+        HCRAlert *alert = (HCRAlert *)object;
+        return [self.objectId isEqualToString:alert.objectId];
+    }
+    
+    return NO;
 }
 
 @end

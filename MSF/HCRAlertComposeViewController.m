@@ -353,6 +353,7 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
     newAlert.authorID = currentUser.objectId;
     newAlert.authorName = self.nameField.text;
     newAlert.message = self.messageView.text;
+    newAlert.submittedTime = [NSDate date];
     
     [newAlert saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         
@@ -375,7 +376,19 @@ NSString *const kAlertComposeSubmitCellLabel = @"Send Alert";
 
 - (void)_cancelButtonPressed {
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if (self.messageView.text.length > 0) {
+        [UIAlertView showConfirmationDialogWithTitle:@"Cancel Alert?"
+                                             message:@"Are you sure you want to cancel this alert? It will not be sent."
+                                             handler:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                                 
+                                                 if (buttonIndex != alertView.cancelButtonIndex) {
+                                                     [self dismissViewControllerAnimated:YES completion:nil];
+                                                 }
+                                                 
+                                             }];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
     
 }
 

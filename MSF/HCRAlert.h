@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSString *authorID;
 @property (nonatomic, strong) NSString *message;
 @property (nonatomic, strong) NSString *environment;
+@property (nonatomic, strong) NSDate *submittedTime;
 @property (nonatomic) BOOL read;
 
 + (NSString *)parseClassName;

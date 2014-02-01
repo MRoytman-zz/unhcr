@@ -10,7 +10,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-static const CGFloat kYLabelPadding = 10;
+static const CGFloat kYLabelLeadingPadding = 0;
+static const CGFloat kYLabelInterItemPadding = 10;
+static const CGFloat kYLabelTrailingPadding = 20;
+
+static const CGFloat kLabelHeight = 35;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -21,6 +25,7 @@ static const CGFloat kYLabelPadding = 10;
 @property UILabel *fromLabel;
 @property UILabel *timeLabel;
 @property UILabel *messageLabel;
+@property UIView *topLabelBackground;
 
 @end
 
@@ -35,31 +40,44 @@ static const CGFloat kYLabelPadding = 10;
         // Initialization code
         self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatSMSDatesWithTime forceEuropeanFormat:YES];
         
-        // top label
-        // other top label (clear, right aligned)
-        // message label
+        // BACKGROUND
+        self.topLabelBackground = [[UIView alloc] initWithFrame:CGRectZero];
+        [self.contentView addSubview:self.topLabelBackground];
         
+        // NAME LABEL
         self.fromLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         [self.contentView addSubview:self.fromLabel];
         
-        self.fromLabel.backgroundColor = [[UIColor flatBlueColor] colorWithAlphaComponent:0.2];
+        self.fromLabel.backgroundColor = [UIColor clearColor];
+        
+        self.fromLabel.font = [HCRAlertCell preferredFontForName];
+        self.fromLabel.textColor = [UIColor whiteColor];
         
         self.fromLabel.numberOfLines = 1;
         
+        // TIME LABEL
         self.timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         [self.contentView addSubview:self.timeLabel];
         
         self.timeLabel.backgroundColor = [UIColor clearColor];
         
+        self.timeLabel.font = [HCRAlertCell preferredFontForTime];
+        self.timeLabel.textColor = [UIColor whiteColor];
+        
         self.timeLabel.numberOfLines = 1;
         self.timeLabel.textAlignment = NSTextAlignmentRight;
         
+        // MESSAGE LABEL
         self.messageLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         [self.contentView addSubview:self.messageLabel];
         
-        self.timeLabel.backgroundColor = [[UIColor flatYellowColor] colorWithAlphaComponent:0.2];
+        self.messageLabel.backgroundColor = [UIColor whiteColor];
+        
+        self.messageLabel.font = [HCRAlertCell preferredFontForMessage];
         
         self.messageLabel.numberOfLines = 0;
+        
+        self.bottomLineView.hidden = YES;
         
     }
     return self;
@@ -67,26 +85,43 @@ static const CGFloat kYLabelPadding = 10;
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    
+    self.read = NO;
+    self.bottomLineView.hidden = YES;
+    
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    
     NSString *fromString = self.alert.authorName;
-    NSString *dateString = [self.dateFormatter stringFromDate:self.alert.updatedAt];
+    NSString *dateString = [self.dateFormatter stringFromDate:self.alert.submittedTime];
     NSString *messageString = self.alert.message;
     
     self.fromLabel.text = fromString;
     self.timeLabel.text = dateString;
     self.messageLabel.text = messageString;
     
-    CGSize topSize = [HCRTableCell preferredSizeForString:fromString inCollectionView:self.superview];
-    CGSize messageSize = [HCRTableCell preferredSizeForString:messageString inCollectionView:self.superview];
+    CGSize messageSize = [HCRCollectionCell preferredSizeForString:messageString
+                                                          withFont:[HCRAlertCell preferredFontForMessage]
+                                                  inContainingView:self.superview];
     
-    self.fromLabel.frame = CGRectMake(0, 0, topSize.width, topSize.height);
+    CGFloat maxWidth = CGRectGetWidth(self.contentView.bounds) - self.indentForContent - self.trailingSpaceForContent;
+    self.fromLabel.frame = CGRectMake(self.indentForContent,
+                                      kYLabelLeadingPadding,
+                                      maxWidth,
+                                      kLabelHeight);
     self.timeLabel.frame = self.fromLabel.frame;
-    self.messageLabel.frame = CGRectMake(0, 50, messageSize.width, messageSize.height);
+    
+    self.topLabelBackground.frame = CGRectMake(0,
+                                               CGRectGetMinY(self.fromLabel.frame),
+                                               CGRectGetWidth(self.contentView.bounds),
+                                               CGRectGetHeight(self.fromLabel.bounds));
+    
+    self.messageLabel.frame = CGRectMake(self.indentForContent,
+                                         CGRectGetMaxY(self.fromLabel.frame) + kYLabelInterItemPadding,
+                                         maxWidth,
+                                         messageSize.height);
     
 }
 
@@ -94,17 +129,16 @@ static const CGFloat kYLabelPadding = 10;
 
 + (CGSize)sizeForCellInCollectionView:(UICollectionView *)collectionView withAlert:(HCRAlert *)alert {
     
-    // vars we need
-    NSString *fromString = alert.authorName;
     NSString *messageString = alert.message;
     
-    NSString *approximateString = [NSString stringWithFormat:@"%@\n%@",
-                                   fromString,
-                                   messageString];
+    CGSize messageSize = [HCRCollectionCell preferredSizeForString:messageString
+                                                          withFont:[HCRAlertCell preferredFontForMessage]
+                                                  inContainingView:collectionView];
     
-    CGSize defaultSize = [HCRTableCell sizeForCollectionView:collectionView withAnswerString:approximateString];
-    return CGSizeMake(defaultSize.width,
-                      defaultSize.height + kYLabelPadding);
+    CGFloat height = kYLabelLeadingPadding + kLabelHeight + kYLabelInterItemPadding + messageSize.height + kYLabelTrailingPadding;
+    
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds),
+                      height);
     
 }
 
@@ -116,6 +150,29 @@ static const CGFloat kYLabelPadding = 10;
     
     [self setNeedsLayout];
     
+}
+
+- (void)setRead:(BOOL)read {
+    
+    _read = read;
+    
+    UIColor *sharedColor = [UIColor flatBlueColor];
+    self.topLabelBackground.backgroundColor = (self.read) ? [sharedColor colorWithAlphaComponent:0.5] : sharedColor;
+    
+}
+
+#pragma mark - Private Methods
+
++ (UIFont *)preferredFontForName {
+    return [UIFont boldSystemFontOfSize:18];
+}
+
++ (UIFont *)preferredFontForTime {
+    return [UIFont systemFontOfSize:15];
+}
+
++ (UIFont *)preferredFontForMessage {
+    return [UIFont systemFontOfSize:15];
 }
 
 @end

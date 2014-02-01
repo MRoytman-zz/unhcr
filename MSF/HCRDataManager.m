@@ -205,19 +205,34 @@ NSString *const kSurveyIDField = @"testId";
     
     [questionsQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         
-        if (error) {
-            [[SCErrorManager sharedManager] showAlertForError:error withErrorSource:SCErrorSourceParse withCompletion:nil];
-        } else {
+        if (!error) {
             
             HCRDebug(@"Alerts found: %d",objects.count);
             
-            self.localAlerts = @[].mutableCopy;
+            // check each object..
+            // if something in the local array is no longer in the new list, kill it!
+            // OR if duplicate, also delete it
+            NSMutableArray *duplicateArray = @[].mutableCopy;
+            NSArray *safeIterator = [NSArray arrayWithArray:self.localAlertsArray];
+            for (HCRAlert *alert in safeIterator) {
+                if ([duplicateArray containsObject:alert]) {
+                    HCRDebug(@"Deleting duplicate Alert!");
+                    [self.localAlerts removeObject:alert];
+                } else if (![objects containsObject:alert]) {
+                    HCRDebug(@"Deleting legacy Alert!");
+                    [self.localAlerts removeObject:alert];
+                } else {
+                    [duplicateArray addObject:alert];
+                }
+            }
             
+            // if it's not in the local array, add it
             for (PFObject *object in objects) {
-                
-                HCRAlert *newAlert = [HCRAlert localAlertCopyFromPFObject:object];
-                [self.localAlerts addObject:newAlert];
-                
+                if (![self.localAlerts containsObject:object]) {
+                    HCRDebug(@"Adding new Alert!");
+                    HCRAlert *newAlert = [HCRAlert localAlertCopyFromPFObject:object];
+                    [self.localAlerts addObject:newAlert];
+                }
             }
             
             [self.localAlerts sortUsingSelector:@selector(compareUsingCreatedDate:)];
@@ -229,6 +244,16 @@ NSString *const kSurveyIDField = @"testId";
         completionBlock(error);
         
     }];
+    
+}
+
+- (void)markAllAlertsAsRead {
+    
+    for (HCRAlert *alert in self.localAlerts) {
+        alert.read = YES;
+    }
+    
+    [self _sync];
     
 }
 

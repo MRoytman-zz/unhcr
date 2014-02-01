@@ -280,6 +280,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)viewWillAppear:(BOOL)animated {
     
+    [super viewWillAppear:animated];
+    
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     
     if (self.authorized) {
@@ -1246,21 +1248,25 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 
 - (void)_refreshAlertsWithDataReload:(BOOL)reloadData withCompletion:(void (^)(NSError *error))completionBlock {
     
-    self.refreshingAlerts = YES;
-    
-    [[HCRDataManager sharedManager] refreshAlertsWithCompletion:^(NSError *error) {
+    if (!self.refreshingAlerts) {
         
-        self.refreshingAlerts = NO;
+        self.refreshingAlerts = YES;
         
-        if (reloadData) {
-            [self.collectionView reloadData];
-        }
+        [[HCRDataManager sharedManager] refreshAlertsWithCompletion:^(NSError *error) {
+            
+            self.refreshingAlerts = NO;
+            
+            if (reloadData) {
+                [self _reloadSectionsAnimated];
+            }
+            
+            if (completionBlock) {
+                completionBlock(error);
+            }
+            
+        }];
         
-        if (completionBlock) {
-            completionBlock(error);
-        }
-        
-    }];
+    }
     
 }
 
