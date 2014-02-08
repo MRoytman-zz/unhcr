@@ -375,6 +375,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
                 PFQuery *everyone = [PFInstallation query];
                 [everyone whereKey:@"deviceType" equalTo:@"ios"];
                 
+                everyone.limit = 1000;
+                
                 PFPush *push = [PFPush new];
                 [push setQuery:everyone];
                 

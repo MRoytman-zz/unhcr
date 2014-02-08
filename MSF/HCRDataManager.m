@@ -220,7 +220,10 @@ NSString *const kSurveyIDField = @"testId";
 - (void)refreshAlertsWithCompletion:(void (^)(NSError *))completionBlock {
     
     PFQuery *questionsQuery = [HCRAlert query];
+    
     [questionsQuery whereKey:@"environment" containsString:[[HCRDataManager sharedManager] currentEnvironment]];
+    
+    questionsQuery.limit = 1000;
     
     [questionsQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         
@@ -326,6 +329,9 @@ NSString *const kSurveyIDField = @"testId";
     // create new Parse object for proper class (e.g. Test or Result)
     // fill in answer set details in new parse object in CSV columns
     PFQuery *householdIDQuery = [PFQuery queryWithClassName:@"Survey"];
+    
+    householdIDQuery.limit = 1000;
+    
     [householdIDQuery getObjectInBackgroundWithId:self.localSurvey.localID block:^(PFObject *object, NSError *error) {
         
         if (error) {
@@ -497,6 +503,8 @@ NSString *const kSurveyIDField = @"testId";
     
     PFQuery *surveysQuery = [PFQuery queryWithClassName:@"Survey"];
     
+    surveysQuery.limit = 1000;
+    
     [surveysQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         
         if (error) {
@@ -544,6 +552,8 @@ NSString *const kSurveyIDField = @"testId";
 - (void)refreshSurveyQuestionsWithCompletion:(void (^)(NSError *error))completionBlock {
     
     PFQuery *questionsQuery = [PFQuery queryWithClassName:@"Question"];
+    
+    questionsQuery.limit = 1000;
     
     [questionsQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         
