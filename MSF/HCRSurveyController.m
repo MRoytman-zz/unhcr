@@ -259,7 +259,7 @@
             HCRSurveyQuestion *surveyQuestion = [self _surveyQuestionForSection:indexPath.section inCollectionView:collectionView];
             
             [header setSurveyQuestion:surveyQuestion
-                      withParticipant:self.currentParticipant];
+                      withParticipant:[self.answerSet participantWithID:[self _participantIDForSurveyView:collectionView]]];
             
             header.questionAnswered = (question.answer != nil || question.answerString != nil);
             
@@ -320,7 +320,7 @@
         HCRSurveyQuestion *question = [self _surveyQuestionForSection:section inCollectionView:collectionView];
         return [HCRSurveyQuestionHeader sizeForHeaderInCollectionView:(HCRSurveyParticipantView *)collectionView
                                                      withQuestionData:question
-                                                      withParticipant:self.currentParticipant];
+                                                      withParticipant:[self.answerSet participantWithID:[self _participantIDForSurveyView:collectionView]]];
         
     } else {
         NSAssert(NO, @"Unhandled collectionView type..");
@@ -686,7 +686,6 @@
                   
               }];
         
-        // TODO: participant surveys are disappearing! nooo!
         self.currentParticipant = newParticipant;
         
     }
