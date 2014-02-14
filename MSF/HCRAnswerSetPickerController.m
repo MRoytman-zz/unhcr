@@ -643,11 +643,12 @@ NSString *const kLayoutFooterLabelUnsubmitted = @"(tap to submit)";
 
 - (void)_submitAllCompletedAnswerSetsWithCompletion:(void (^)(NSError *error))completionBlock {
     
-    self.submitButtonCell.tableButton.enabled = NO;
-    self.submitButtonCell.processingAction = YES;
-    
     // loop through all unsubmitted answer
     if (self.answerSetsUnsubmitted.count > 0) {
+        
+        self.submitButtonCell.tableButton.enabled = NO;
+        self.submitButtonCell.processingAction = YES;
+        
         HCRSurveyAnswerSet *answerSet = [self.answerSetsUnsubmitted firstObject];
         
         [self _submitAnswerSet:answerSet withCompletion:^(NSError *error) {
