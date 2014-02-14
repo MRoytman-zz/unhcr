@@ -21,7 +21,7 @@
 
 
 
-//#define PRODUCTION
+#define PRODUCTION
 
 #ifndef PRODUCTION
 #warning NOT USING PRODUCTION SETTINGS

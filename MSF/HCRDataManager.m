@@ -69,13 +69,6 @@ NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString = @"HCRPre
 NSString *const HCRPrefKeyAnswerSetsDurationStart = @"HCRPrefKeyAnswerSetsDurationStart";
 NSString *const HCRPrefKeyAnswerSetsDurationEnd = @"HCRPrefKeyAnswerSetsDurationEnd";
 
-// INCREMENTOR
-#ifdef PRODUCTION
-NSString *const kSurveyIDField = @"householdId";
-#else
-NSString *const kSurveyIDField = @"testId";
-#endif
-
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRDataManager ()
@@ -338,7 +331,7 @@ NSString *const kSurveyIDField = @"testId";
             completionBlock(error);
         } else {
             
-            NSNumber *surveyID = object[kSurveyIDField];
+            NSNumber *surveyID = object[[self _surveyIDField]];
             NSInteger participantCount = answerSet.participants.count;
             
             __block BOOL failed = NO;
@@ -402,7 +395,7 @@ NSString *const kSurveyIDField = @"testId";
                             answerSet.householdID = surveyID;
                             [self _sync];
                             
-                            [object incrementKey:kSurveyIDField];
+                            [object incrementKey:[self _surveyIDField]];
                             [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                 
                                 completionBlock(error);
@@ -738,6 +731,21 @@ NSString *const kSurveyIDField = @"testId";
     [defaults setObject:self.encodedAlerts forKey:HCRPrefKeyAlerts];
     
     [defaults synchronize];
+    
+}
+
+- (NSString *)_surveyIDField {
+    
+    // INCREMENTOR
+#ifdef PRODUCTION
+    if ([HCRUser currentUser].testUser) {
+        return @"testId";
+    } else {
+        return @"householdId";
+    }
+#else
+    return @"testId";
+#endif
     
 }
 

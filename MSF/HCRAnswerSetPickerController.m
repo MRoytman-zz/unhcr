@@ -646,23 +646,32 @@ NSString *const kLayoutFooterLabelUnsubmitted = @"(tap to submit)";
     self.submitButtonCell.tableButton.enabled = NO;
     self.submitButtonCell.processingAction = YES;
     
-    for (HCRSurveyAnswerSet *answerSet in self.answerSetsUnsubmitted) {
+    // loop through all unsubmitted answer
+    if (self.answerSetsUnsubmitted.count > 0) {
+        HCRSurveyAnswerSet *answerSet = [self.answerSetsUnsubmitted firstObject];
         
-        // get cell for answer set
-        // if no cell, just upload directly
         [self _submitAnswerSet:answerSet withCompletion:^(NSError *error) {
-            
-            self.submitButtonCell.tableButton.enabled = YES;
-            self.submitButtonCell.processingAction = NO;
             
             [self _reloadData];
             
-            if (completionBlock) {
-                completionBlock(error);
+            if (!error &&
+                self.answerSetsUnsubmitted.count > 0) {
+                // call back to itself to handle "asynchronous" loop through unsubmitted answer sets
+                [self _submitAllCompletedAnswerSetsWithCompletion:completionBlock];
+            } else {
+                self.submitButtonCell.tableButton.enabled = YES;
+                self.submitButtonCell.processingAction = NO;
+                
+                if (completionBlock) {
+                    completionBlock(error);
+                }
             }
             
         }];
-        
+    } else {
+        if (completionBlock) {
+            completionBlock(nil);
+        }
     }
     
 }

@@ -100,11 +100,7 @@
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
     
-    // set environment on load so you don't get pushes you don't want
-    NSString *currentEnvironment = [[HCRDataManager sharedManager] currentEnvironment];
-    currentInstallation.channels = @[currentEnvironment];
-    
-    [currentInstallation saveInBackground];
+    [self registerParseChannelsWithCurrentUser];
     
 }
 
@@ -118,6 +114,20 @@
     
     // if app is open, reset remote push info
     [self _resetBadgeNumber];
+    
+}
+
+#pragma mark - Public Methods
+
+- (void)registerParseChannelsWithCurrentUser {
+    
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    
+    // set environment on load and sign in so you don't get pushes you don't want
+    NSString *currentEnvironment = [[HCRDataManager sharedManager] currentEnvironment];
+    currentInstallation.channels = @[currentEnvironment];
+    
+    [currentInstallation saveInBackground];
     
 }
 

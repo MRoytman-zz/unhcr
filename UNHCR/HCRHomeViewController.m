@@ -22,6 +22,7 @@
 #import "HCRUser.h"
 #import "HCRSurveyPickerController.h"
 #import "HCRAlertListViewController.h"
+#import "HCRAppDelegate.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1114,6 +1115,11 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
         
         if (error) {
             [[SCErrorManager sharedManager] showAlertForError:error withErrorSource:SCErrorSourceParse withCompletion:nil];
+        } else {
+            HCRAppDelegate *appDelegate = (HCRAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if ([appDelegate respondsToSelector:@selector(registerParseChannelsWithCurrentUser)]) {
+                [appDelegate performSelector:@selector(registerParseChannelsWithCurrentUser)];
+            }
         }
         
         if (completionBlock) {
