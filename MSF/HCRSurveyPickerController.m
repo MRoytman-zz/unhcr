@@ -48,6 +48,7 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
         // Custom initialization
         self.surveyCells = @[].mutableCopy;
         self.dateFormatter = [NSDateFormatter dateFormatterWithFormat:HCRDateFormatddMMMHHmm forceEuropeanFormat:YES];
+        self.dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
     }
     return self;
 }
