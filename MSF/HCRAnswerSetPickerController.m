@@ -655,18 +655,22 @@ NSString *const kLayoutFooterLabelUnsubmitted = @"(tap to submit)";
             
             [self _reloadData];
             
-            if (!error &&
-                self.answerSetsUnsubmitted.count > 0) {
-                // call back to itself to handle "asynchronous" loop through unsubmitted answer sets
-                [self _submitAllCompletedAnswerSetsWithCompletion:completionBlock];
-            } else {
-                self.submitButtonCell.tableButton.enabled = YES;
-                self.submitButtonCell.processingAction = NO;
-                
-                if (completionBlock) {
-                    completionBlock(error);
+            // add arbitrary delay so UI can recycle from tableview reload
+            double delayInSeconds = 0.2;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                if (!error &&
+                    self.answerSetsUnsubmitted.count > 0) {
+                    // call back to itself to handle "asynchronous" loop through unsubmitted answer sets
+                    [self _submitAllCompletedAnswerSetsWithCompletion:completionBlock];
+                } else {
+                    self.submitButtonCell.tableButton.enabled = YES;
+                    self.submitButtonCell.processingAction = NO;
+                    if (completionBlock) {
+                        completionBlock(error);
+                    }
                 }
-            }
+            });
             
         }];
     } else {
