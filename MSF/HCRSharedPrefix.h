@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "build.h"
 
 #import "HCRConstants.h"
 

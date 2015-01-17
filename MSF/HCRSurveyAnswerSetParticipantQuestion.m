@@ -13,6 +13,7 @@
 - (id)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if (self) {
+	
         self.question = [decoder decodeObjectForKey:HCRPrefKeyAnswerSetsParticipantsResponsesQuestion];
         self.answer = [decoder decodeObjectForKey:HCRPrefKeyAnswerSetsParticipantsResponsesAnswer];
         self.answerString = [decoder decodeObjectForKey:HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString];

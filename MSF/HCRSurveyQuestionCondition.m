@@ -8,6 +8,12 @@
 
 #import "HCRSurveyQuestionCondition.h"
 
+
+#define HCRLog
+#define HCRDebug
+#define HCRError
+#define HCRWarning
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRSurveyQuestionCondition ()

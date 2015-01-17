@@ -15,6 +15,11 @@
 @property (nonatomic, strong) NSString *teamID;
 @property (nonatomic, strong) NSString *userID;
 @property (nonatomic, strong) NSNumber *consent;
+// survey metadata
+@property (nonatomic, strong) NSNumber *surveyGroup;
+@property (nonatomic, strong) NSString *surveyTeam;
+@property (nonatomic, strong) NSString *surveyLocation;
+
 @property (nonatomic, strong) NSNumber *householdID;
 @property (nonatomic, strong) NSNumber *participantID;
 @property (nonatomic, strong) NSNumber *age;

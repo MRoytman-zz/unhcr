@@ -182,7 +182,7 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     
-    NSInteger numberOfItemsInSection;
+    NSInteger numberOfItemsInSection = -1;
     
     if (collectionView == self.collectionView) {
         
@@ -206,6 +206,7 @@
             numberOfItemsInSection = surveyQuestion.answers.count; // normal :)
             
         }
+		//NSLog (@"Code %@ - Section %d - Items: %d", question.question, section, numberOfItemsInSection);
 
     } else {
         
@@ -895,17 +896,31 @@
 - (void)_surveyAnswerCellPressedInCollectionView:(UICollectionView *)collectionView AtIndexPath:(NSIndexPath *)indexPath withFreeformAnswer:(NSString *)freeformString {
     
     if (!self.selectingCell) {
-        
-        // set UI
-        self.selectingCell = YES;
-        
+		// get question values from our model
         HCRCollectionCell *answerCell = (HCRCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
         NSParameterAssert([answerCell isKindOfClass:[HCRCollectionCell class]]);
-        answerCell.processingAction = YES;
         
         // get question and answer codes
         HCRSurveyQuestion *questionAnswered = [self _surveyQuestionForSection:indexPath.section inCollectionView:collectionView];
         NSString *questionCode = questionAnswered.questionCode;
+		
+		/*
+			Hacky sanity check here so we disallow submissions when the groupmetadata has not been populated
+			(since this breaks the UICollectionView's animations and causes a crash
+		*/
+		if ([questionAnswered.questionCode  isEqual: @"0"])
+		{
+			bool isMetaDataPopulated = [[HCRDataManager sharedManager] isSurveyMetaDataPopulatedForAnswerSetID:self.answerSetID];
+			if (!isMetaDataPopulated)
+			{
+				[UIAlertView showWithTitle:@"Metadata missing!" message:@"Please complete questions _0, _1, _2 (survey group, team and location), before filling in the consent form." handler:nil];
+				return;
+			}
+		}
+		
+        // set UI
+        self.selectingCell = YES;
+        answerCell.processingAction = YES;
         
         NSInteger participantID = [self _participantIDForSurveyView:collectionView];
         NSArray *oldQuestions = [[self.answerSet participantWithID:participantID].questions copy];
@@ -915,26 +930,20 @@
         
         // get answer - by code if it's an existing answer, or by index if it's fresh
         HCRSurveyQuestionAnswer *answer = (question.answer) ? [questionAnswered answerForAnswerCode:question.answer] : [questionAnswered.answers objectAtIndex:indexPath.row];
-        
-        // TODO: resurrect this
-        // if there is no freeform string AND there is no answer of any sort, remove it
-//        if (questionAnswered.numberOfAnswersRequired) {
-//            
-//            // apply custom logic for multi-select..
-//            [[HCRDataManager sharedManager] setAnswerCode:answer.code withFreeformString:freeformString forQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
-//            
-//            [self _refreshModelDataForCollectionView:collectionView];
-//            
-//            [collectionView reloadData];
-//            
-//            answerCell.processingAction = NO;
-//            self.selectingCell = NO;
-//            
-//        } else
-        
+		
+//#define __MSF_SURVEY_VIEW_MT
+
         if (!freeformString &&
             (question.answer || question.answerString || answer.freeform.boolValue)) {
-            
+
+#ifndef __MSF_SURVEY_VIEW_MT
+			[[HCRDataManager sharedManager] removeAnswerForQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
+			[self _refreshModelDataForCollectionView:collectionView];
+			[collectionView reloadData];
+			self.selectingCell = NO;
+			answerCell.processingAction = NO;
+#else
+			
             dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             
             dispatch_async(queue, ^{
@@ -950,10 +959,11 @@
                                                                atSection:indexPath.section];
                     
                 }
-                
-                // reload data
-                [[HCRDataManager sharedManager] removeAnswerForQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
-                [self _refreshModelDataForCollectionView:collectionView];
+				
+				/*
+					Harris:
+					This section of the code is pretty bad. The number of index paths (answer views) to add is calculated first. Then, in the original version, the model for the view is updated, increasing the corresponding number of paths to its intended target (e.g. a question has 4 answers. At this point, indextPathsToAdd = 3 and the call to removeAnswerToQuestion would result in further calls to numberOfItemsInSection for the collectionView to return 4. Consequently, this would result in an internal consistency error for the view crashing. In order to fix this as a workaround, I've moved the model updating code to the end of the layout operation.
+				*/
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
@@ -961,23 +971,28 @@
                     [self _reloadLayoutData:YES
                                  inSections:[NSIndexSet indexSetWithIndex:indexPath.section]
                          withCollectionView:collectionView
-                                   animated:YES
+                                   animated:NO
                           withLayoutChanges:^{
-                              
-                              [collectionView insertItemsAtIndexPaths:indexPathsToAdd];
-                              
-                              if ([collectionView numberOfSections] != [self.answerSet participantWithID:participantID].questions.count) {
-                                  [self _updateCollectionView:collectionView withOldQuestions:oldQuestions];
-                              }
-                              
-                              self.selectingCell = NO;
-                              answerCell.processingAction = NO;
-                              
+							  
+						  //NSLog(@"%d",[collectionView numberOfItemsInSection:indexPath.section]);
+						  [collectionView insertItemsAtIndexPaths:indexPathsToAdd];
+						  
+						  if ([collectionView numberOfSections] != [self.answerSet participantWithID:participantID].questions.count) {
+							  [self _updateCollectionView:collectionView withOldQuestions:oldQuestions];
+						  }
+						  
+						  self.selectingCell = NO;
+						  answerCell.processingAction = NO;
+							  
+						// see comment right above about why this is implemented in this particular way
+						[[HCRDataManager sharedManager] removeAnswerForQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
+						[self _refreshModelDataForCollectionView:collectionView];
                           }];
                     
                 });
                 
             });
+#endif
             
         } else {
             
@@ -987,24 +1002,43 @@
                 
                 // background code
                 [[HCRDataManager sharedManager] setAnswerCode:answer.code withFreeformString:freeformString forQuestion:questionCode withAnswerSetID:self.answerSetID withParticipantID:participantID];
-                
+                //NSLog([NSString stringWithFormat:@"%d-%d",indexPath.section,indexPath.row]);
                 [self _refreshModelDataForCollectionView:collectionView];
-                
+				
+				/*
+					Kludge fix
+					When submitting the consent question, the metadata questions get removed from the model by the _refreshModelDataForCollectionview
+					call above. Consequently, the index path for the selection operation no longer corresponds with the state of the mdoel which is
+					used during animations (the section is offset by 3 since the three metadata questions have been removed). We compensate for this
+					by checking the question type and re-offseting the section.
+				*/
+				NSIndexPath* newIndexPath = indexPath;
+				if ([questionCode isEqual:@"0"])
+				{
+#ifdef BEEKA_SURVEY
+					NSInteger numMetadataQuestions = 3;
+#else
+					// Tripoli Survey
+					NSInteger numMetadataQuestions = 2;
+#endif
+					newIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section - (numMetadataQuestions + 1)];
+				}
+				
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
                     // completion code (update UI, etc)
                     [self _reloadLayoutData:YES
-                                 inSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                                 inSections:[NSIndexSet indexSetWithIndex:newIndexPath.section]
                          withCollectionView:collectionView
-                                   animated:YES
+                                   animated:NO
                           withLayoutChanges:^{
                               
                               // if the cells appear normal, remove some
-                              if ([collectionView numberOfItemsInSection:indexPath.section] == questionAnswered.answers.count) {
+                              if ([collectionView numberOfItemsInSection:newIndexPath.section] == questionAnswered.answers.count) {
                                   
                                   NSArray *indexPathsToDelete = [self _answerIndexPathsForQuestion:questionAnswered
                                                                            withParticipantResponse:question
-                                                                                         atSection:indexPath.section];
+                                                                                         atSection:newIndexPath.section];
                                   
                                   [collectionView deleteItemsAtIndexPaths:indexPathsToDelete];
                                   
@@ -1016,11 +1050,14 @@
                               
                               if ([questionCode isEqualToString:@"0"]) {
                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                      
-                                      [collectionView scrollToItemAtIndexPath:[self _indexPathForCurrentParticipantFirstUnansweredQuestion]
-                                                             atScrollPosition:UICollectionViewScrollPositionCenteredVertically
-                                                                     animated:YES];
-                                      
+                                      NSIndexPath* targetIndexPath = [self _indexPathForCurrentParticipantFirstUnansweredQuestion];
+									  
+									  if (targetIndexPath)
+									  {
+										  [collectionView scrollToItemAtIndexPath:targetIndexPath
+																 atScrollPosition:UICollectionViewScrollPositionCenteredVertically
+																		 animated:YES];
+                                      }
                                       [self _refreshToolbarData];
                                       
                                   });
@@ -1055,9 +1092,7 @@
     }
     
     if (!self.closeBarButton) {
-        self.closeBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                            target:self
-                                                                            action:@selector(_closeButtonPressed)];
+		self.closeBarButton = [[UIBarButtonItem alloc] initWithTitle:@"Exit" style:UIBarButtonItemStylePlain target:self action:@selector(_closeButtonPressed)];
     }
     
     UIBarButtonItem *rightItem = (allAnswersComplete) ? self.doneBarButton : nil;

@@ -22,6 +22,9 @@
         self.durationStart = [decoder decodeObjectForKey:HCRPrefKeyAnswerSetsDurationStart];
         self.durationEnd = [decoder decodeObjectForKey:HCRPrefKeyAnswerSetsDurationEnd];
         self.participants = [decoder decodeObjectForKey:HCRPrefKeyAnswerSetsParticipants];
+		self.surveyGroup = [decoder decodeObjectForKey:HCRPrefKeyAnswerSetSurveyGroup];
+		self.surveyTeam = [decoder decodeObjectForKey:HCRPrefKeyAnswerSetSurveyTeam];
+		self.surveyLocation = [decoder decodeObjectForKey:HCRPrefKeyAnswerSetSurveyLocation];
     }
     return self;
 }
@@ -36,6 +39,9 @@
     [encoder encodeObject:self.durationStart forKey:HCRPrefKeyAnswerSetsDurationStart];
     [encoder encodeObject:self.durationEnd forKey:HCRPrefKeyAnswerSetsDurationEnd];
     [encoder encodeObject:self.participants forKey:HCRPrefKeyAnswerSetsParticipants];
+	[encoder encodeObject:self.surveyGroup forKey:HCRPrefKeyAnswerSetSurveyGroup];
+	[encoder encodeObject:self.surveyTeam forKey:HCRPrefKeyAnswerSetSurveyTeam];
+	[encoder encodeObject:self.surveyLocation forKey:HCRPrefKeyAnswerSetSurveyLocation];
 }
 
 #pragma mark - Class Methods

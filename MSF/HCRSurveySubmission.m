@@ -18,18 +18,14 @@
 #ifdef DEBUG
 NSString *const kSurveyResultClass = @"Test";
 #else
-#ifdef PRODUCTION
 NSString *const kSurveyResultClass = @"Result";
-#else
-NSString *const kSurveyResultClass = @"TestFlight";
-#endif
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
 
 @implementation HCRSurveySubmission
 
-@dynamic teamID,userID,consent,householdID,participantID,age,gender,answerCodes,answerStrings,duration;
+@dynamic teamID,userID,consent,surveyGroup,surveyTeam,surveyLocation,householdID,participantID,age,gender,answerCodes,answerStrings,duration;
 
 #pragma mark - Class Methods
 

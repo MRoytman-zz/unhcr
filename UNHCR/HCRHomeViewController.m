@@ -23,6 +23,10 @@
 #import "HCRSurveyPickerController.h"
 #import "HCRAlertListViewController.h"
 #import "HCRAppDelegate.h"
+#import "HCRDataManager.h"
+
+#define HCRDebug
+#define HCRError
 
 ////////////////////////////////////////////////////////////////////////////////
 

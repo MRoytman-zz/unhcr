@@ -22,6 +22,11 @@
 @property (nonatomic, strong) NSDate *durationEnd;
 @property (nonatomic, strong) NSMutableArray *participants;
 
+// survey metadata
+@property (nonatomic, strong) NSNumber *surveyGroup;
+@property (nonatomic, strong) NSString *surveyTeam;
+@property (nonatomic, strong) NSString *surveyLocation;
+
 + (HCRSurveyAnswerSet *)newAnswerSet;
 
 - (HCRSurveyAnswerSetParticipant *)participantWithID:(NSInteger)participantID;

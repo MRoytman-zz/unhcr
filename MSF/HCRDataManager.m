@@ -11,6 +11,9 @@
 
 #import <Parse/Parse.h>
 
+#define HCRDebug
+#define HCRError
+
 ////////////////////////////////////////////////////////////////////////////////
 
 // NSUD KEYS
@@ -65,6 +68,12 @@ NSString *const HCRPrefKeyAnswerSetsParticipantsResponses = @"HCRPrefKeyAnswerSe
 NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesQuestion = @"HCRPrefKeyAnswerSetsParticipantsResponsesQuestion";
 NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesAnswer = @"HCRPrefKeyAnswerSetsParticipantsResponsesAnswer";
 NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString = @"HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString";
+// keys for answerset survey metadata
+NSString *const HCRPrefKeyAnswerSetSurveyGroup = @"surveyGroup";
+NSString *const HCRPrefKeyAnswerSetSurveyTeam = @"surveyTeam";
+NSString *const HCRPrefKeyAnswerSetSurveyLocation = @"surveyLocation";
+
+
 
 NSString *const HCRPrefKeyAnswerSetsDurationStart = @"HCRPrefKeyAnswerSetsDurationStart";
 NSString *const HCRPrefKeyAnswerSetsDurationEnd = @"HCRPrefKeyAnswerSetsDurationEnd";
@@ -153,11 +162,11 @@ NSString *const HCRPrefKeyAnswerSetsDurationEnd = @"HCRPrefKeyAnswerSetsDuration
 #ifdef DEBUG
     return HCREnvironmentDebug;
 #else
-#ifdef PRODUCTION
+//#ifdef PRODUCTION
     return HCREnvironmentProduction;
-#else
-    return HCREnvironmentTestFlight;
-#endif
+//#else
+//    return HCREnvironmentTestFlight;
+//#endif
 #endif
     
 }
@@ -351,6 +360,9 @@ NSString *const HCRPrefKeyAnswerSetsDurationEnd = @"HCRPrefKeyAnswerSetsDuration
                 surveySubmission.age = participant.age;
                 surveySubmission.gender = participant.gender;
                 surveySubmission.duration = answerSet.duration;
+				surveySubmission.surveyGroup = answerSet.surveyGroup;
+				surveySubmission.surveyLocation = answerSet.surveyLocation;
+				surveySubmission.surveyTeam = answerSet.surveyTeam;
                 
                 // answer codes & strings
                 NSMutableDictionary *codeDictionary = @{}.mutableCopy;
@@ -737,14 +749,14 @@ NSString *const HCRPrefKeyAnswerSetsDurationEnd = @"HCRPrefKeyAnswerSetsDuration
 - (NSString *)_surveyIDField {
     
     // INCREMENTOR
-#ifdef PRODUCTION
+#ifndef DEBUG
     if ([HCRUser currentUser].testUser) {
         return @"testId";
     } else {
         return @"householdId";
     }
 #else
-    return @"testId";
+    return @"householdId";
 #endif
     
 }
@@ -958,7 +970,23 @@ NSString *const HCRPrefKeyAnswerSetsDurationEnd = @"HCRPrefKeyAnswerSetsDuration
     // TODO: get this dynamic from the server somehow
     if ([questionCode isEqualToString:@"0"]) {
         answerSet.consent = (questionData.answer) ? @(questionData.answer && questionData.answer.integerValue == 1) : nil;
-    } else if ([questionCode isEqualToString:self.localSurvey.ageQuestion]) {
+    }
+	// the following three special case clauses are used in order to insert survey metadata into the answer set
+	else if ([questionCode isEqualToString:@"_0"])
+	{
+		// survey group / color
+		answerSet.surveyGroup = questionData.answer;
+	} else if ([questionCode isEqualToString:@"_1"])
+	{
+		// team number
+		answerSet.surveyTeam = questionData.answerString;
+	
+	} else if ([questionCode isEqualToString:@"_2"])
+	{
+		// location
+		answerSet.surveyLocation = questionData.answerString;
+	}
+	else if ([questionCode isEqualToString:self.localSurvey.ageQuestion]) {
         targetParticipant.age = (questionData.answerString) ? @(questionData.answerString.integerValue) : nil;
     } else if ([questionCode isEqualToString:self.localSurvey.genderQuestion]) {
         targetParticipant.gender = questionData.answer;
@@ -1016,4 +1044,13 @@ NSString *const HCRPrefKeyAnswerSetsDurationEnd = @"HCRPrefKeyAnswerSetsDuration
     
 }
 
+- (bool)isSurveyMetaDataPopulatedForAnswerSetID:(NSString*)answerSetID {
+	HCRSurveyAnswerSet *targetAnswerSet = [self.localSurvey.answerSetDictionary objectForKey:answerSetID ofClass:@"HCRSurveyAnswerSet"];
+	
+	if ((targetAnswerSet.surveyGroup == nil) || (targetAnswerSet.surveyLocation == nil) || (targetAnswerSet.surveyTeam == nil)) {
+		return false;
+	}
+	
+	return true;
+}
 @end

@@ -16,6 +16,12 @@
 
 #import <Reachability/Reachability.h>
 
+
+#define HCRLog
+#define HCRDebug
+#define HCRError
+#define HCRWarning
+
 ////////////////////////////////////////////////////////////////////////////////
 
 NSString *const kAnswerSetPickerHeaderIdentifier = @"kAnswerSetPickerHeaderIdentifier";

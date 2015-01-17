@@ -14,6 +14,9 @@
 
 #import <Parse/Parse.h>
 
+#define HCRLog
+#define HCRDebug
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @implementation HCRAppDelegate
@@ -34,9 +37,20 @@
     [HCRAlert registerSubclass];
     [HCRSurveySubmission registerSubclass];
     [HCRUser registerSubclass];
+	/*
+	// original Parse.com credentials
     [Parse setApplicationId:@"CZX2WArPOqFH6kWTNG30JWPfYVGO1SjmA0j3dwTH"
                   clientKey:@"l88Td8IxqYphPYso4Z8tbtonEH49aJpKOcuXSUfE"];
-    
+	*/
+#ifdef DEBUG
+	// test parse.com application
+	[Parse setApplicationId:@"APPID"
+                  clientKey:@"CLIENTKEY"];
+#else
+	// production parse.com application - ownership to M Roytman
+	[Parse setApplicationId:@"FzJimtoIuSRfFplz1TrsSa1ws1PPOe8GxkH5KpUM"
+					clientKey:@"cu0j1oN31bGE2gDsWSzX75vmgh0croCVInoVgEzG"];
+#endif
     [[HCRUser currentUser] refreshInBackgroundWithBlock:nil]; // in case user data has changed
     
     // PUSH

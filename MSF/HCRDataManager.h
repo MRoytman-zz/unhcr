@@ -77,6 +77,11 @@ extern NSString *const HCRPrefKeyAnswerSetsParticipantsResponsesAnswerString;
 extern NSString *const HCRPrefKeyAnswerSetsDurationStart;
 extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 
+
+extern NSString *const HCRPrefKeyAnswerSetSurveyGroup;
+extern NSString *const HCRPrefKeyAnswerSetSurveyTeam;
+extern NSString *const HCRPrefKeyAnswerSetSurveyLocation;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @interface HCRDataManager : NSObject
@@ -120,6 +125,7 @@ extern NSString *const HCRPrefKeyAnswerSetsDurationEnd;
 - (void)removeAnswerSetWithID:(NSString *)answerSetID;
 - (void)refreshSurveyResponsesForAllParticipantsWithAnswerSet:(HCRSurveyAnswerSet *)answerSet;
 - (void)refreshSurveyResponsesForParticipantID:(NSInteger)participantID withAnswerSet:(HCRSurveyAnswerSet *)answerSet;
+- (bool)isSurveyMetaDataPopulatedForAnswerSetID:(NSString*)answerSetID;
 
 // answer set answers
 - (void)setAnswerCode:(NSNumber *)answerCode withFreeformString:(NSString *)answerString forQuestion:(NSString *)questionCode withAnswerSetID:(NSString *)answerSetID withParticipantID:(NSInteger)participantID;
