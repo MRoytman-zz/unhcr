@@ -942,10 +942,10 @@
 				ORGANIZATIONNAME = "Sean Conrad";
 				TargetAttributes = {
 					4F866ABE17F9E022000350E4 = {
-						DevelopmentTeam = ZBR4CWAWXC;
+						DevelopmentTeam = 38BKZA758G;
 					};
 					4FCBC00A1873577900D96D7F = {
-						DevelopmentTeam = 3J6WV284N4;
+						DevelopmentTeam = 38BKZA758G;
 					};
 				};
 			};
@@ -1320,8 +1320,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9107F06F4BEA9A9972CB115D /* Pods.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "ris-icon";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "ris-launch";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "hms-icon";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "hms-launch";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1329,7 +1329,7 @@
 				INFOPLIST_FILE = "UNHCR/UNHCR-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ECE05FE8-21CB-4ADF-B4F8-56D4423410F3";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1339,16 +1339,16 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0FF2FE8FA6F0C8CC7F3E16E7 /* Pods.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "ris-icon";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "ris-launch";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "hms-icon";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "hms-launch";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UNHCR/UNHCR-Prefix.pch";
 				INFOPLIST_FILE = "UNHCR/UNHCR-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "F2DA1E14-17A8-4D4E-B726-12B13C657A37";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
