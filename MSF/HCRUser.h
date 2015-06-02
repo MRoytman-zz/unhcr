@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Sean Conrad. All rights reserved.
 //
 // https://parse.com/docs/ios_guide#subclasses/iOS
-//
 
 #import <Parse/Parse.h>
 
