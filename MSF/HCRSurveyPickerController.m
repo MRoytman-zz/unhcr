@@ -247,7 +247,7 @@ NSString *const kLayoutCellLabelRequestNew = @"Request New Survey";
     buttonCell.processingAction = YES;
     
     [[EAEmailUtilities sharedUtilities] emailFromViewController:self
-                                               withToRecipients:@[@"studies@hms.io"]
+                                               withToRecipients:@[@"jesse@dharmahs.io"]
                                                 withSubjectText:@"Request for new Study or Survey"
                                                    withBodyText:nil
                                                  withCompletion:^(EAEmailStatus emailStatus) {

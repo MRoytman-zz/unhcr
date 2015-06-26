@@ -1002,7 +1002,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 #ifdef TARGET_RIS
     bodyString = @"The Camp Services App system allows Humanitarian Aid Providers to view realtime and aggregated Refugee request information directly on their mobile phones, as well as view contact information for all camp-affiliated NGO and UN actors working in the camp to better coordinate and maximize the impact of any intervention. Centralizing this information opens up a new level of cross-Cluster collaboration and maximizes the effect of all interventions throughout the camp.";
 #elif defined(TARGET_MSF)
-    bodyString = @"The Field Survey Tool enables field staff to record survey results directly in digital form on their mobile device. Entered results are uploaded to a central database - either immedaitely or as soon as a data connection is available. Authorized users may then review the data in real-time as it enters the system.\n\nFor more information, or to request survey data access, contact Humanitarian Mobile Solutions at: help@hms.io";
+    bodyString = @"Dharma Mobile enables field staff to record survey results directly in digital form on their mobile device. Entered results are uploaded to a central database - either immedaitely or as soon as a data connection is available. Authorized users may then review the data in real-time as it enters the system.\n\nFor more information, or to request survey data access, contact Dharma Humanitarian Solutions at: help@dharmahs.io";
 #endif
     
     NSMutableAttributedString *attributedBodyString = [[NSMutableAttributedString alloc] initWithString:bodyString
@@ -1011,8 +1011,8 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 #ifdef TARGET_RIS
     [attributedBodyString setAttributes:boldAttributes range:[bodyString rangeOfString:@"Camp Services App"]];
 #elif defined(TARGET_MSF)
-    [attributedBodyString setAttributes:boldAttributes range:[bodyString rangeOfString:@"Field Survey Tool"]];
-    [attributedBodyString setAttributes:boldAttributes range:[bodyString rangeOfString:@"help@hms.io"]];
+    [attributedBodyString setAttributes:boldAttributes range:[bodyString rangeOfString:@"Dharma Mobile"]];
+    [attributedBodyString setAttributes:boldAttributes range:[bodyString rangeOfString:@"help@dharmahs.io"]];
 #endif
     
     bodyLabel.attributedText = attributedBodyString;
