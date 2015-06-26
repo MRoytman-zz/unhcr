@@ -1402,7 +1402,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9107F06F4BEA9A9972CB115D /* Pods.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "hms-icon";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "hms-launch";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Mike Roytman (AZAGTT4QNM)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Mike Roytman (AZAGTT4QNM)";
@@ -1435,7 +1435,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0FF2FE8FA6F0C8CC7F3E16E7 /* Pods.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "hms-icon";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "hms-launch";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Mike Roytman (AZAGTT4QNM)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Mike Roytman (AZAGTT4QNM)";
