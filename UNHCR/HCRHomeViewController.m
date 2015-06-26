@@ -967,7 +967,7 @@ static const UIViewAnimationOptions kKeyboardAnimationOptions = UIViewAnimationC
 #ifdef TARGET_RIS
     subtitleString = @"Camp Services App\nfor Humanitarian Aid Providers";
 #elif defined(TARGET_MSF)
-    subtitleString = @"Mobile Data Collection\nby Humanitarian Mobile Solutions";
+    subtitleString = @"Mobile Data Collection\nby Dharma Humanitarian Solutions";
 #endif
     
     NSAttributedString *attributedSubtitleString = [[NSAttributedString alloc] initWithString:subtitleString
