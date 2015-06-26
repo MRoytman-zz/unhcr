@@ -169,6 +169,11 @@
 		5B11CA2B1B1D56EF003DDD46 /* Pods.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 9107F06F4BEA9A9972CB115D /* Pods.debug.xcconfig */; };
 		5B11CA2C1B1D56F2003DDD46 /* Pods.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0FF2FE8FA6F0C8CC7F3E16E7 /* Pods.release.xcconfig */; };
 		5B11CA2D1B1D56F2003DDD46 /* Pods.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0FF2FE8FA6F0C8CC7F3E16E7 /* Pods.release.xcconfig */; };
+		5BCF9D641B3DF97E0092C89A /* libPods-Bolts.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCF9D5F1B3DF97E0092C89A /* libPods-Bolts.a */; };
+		5BCF9D651B3DF97E0092C89A /* libPods-HockeySDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCF9D601B3DF97E0092C89A /* libPods-HockeySDK.a */; };
+		5BCF9D661B3DF97E0092C89A /* libPods-MBProgressHUD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCF9D611B3DF97E0092C89A /* libPods-MBProgressHUD.a */; };
+		5BCF9D671B3DF97E0092C89A /* libPods-Reachability.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCF9D621B3DF97E0092C89A /* libPods-Reachability.a */; };
+		5BCF9D681B3DF97E0092C89A /* libPods-UIColor+MLPFlatColors.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCF9D631B3DF97E0092C89A /* libPods-UIColor+MLPFlatColors.a */; };
 		5BF081DE1B1D52B40095B917 /* HCRDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1C93F517FBF6EB0003AA21 /* HCRDataSource.m */; };
 		C1FCCA2A37DE44BABAAEC9EC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04773A9AD17C462187CA1561 /* libPods.a */; };
 		FB494FD2675AAC873772FD5F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04773A9AD17C462187CA1561 /* libPods.a */; };
@@ -386,6 +391,11 @@
 		5B11CA331B1D5824003DDD46 /* libPods-MBProgressHUD.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-MBProgressHUD.a"; path = "Pods/../build/Debug-iphoneos/libPods-MBProgressHUD.a"; sourceTree = "<group>"; };
 		5B11CA341B1D5824003DDD46 /* libPods-Reachability.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Reachability.a"; path = "Pods/../build/Debug-iphoneos/libPods-Reachability.a"; sourceTree = "<group>"; };
 		5B11CA351B1D5824003DDD46 /* libPods-UIColor+MLPFlatColors.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-UIColor+MLPFlatColors.a"; path = "Pods/../build/Debug-iphoneos/libPods-UIColor+MLPFlatColors.a"; sourceTree = "<group>"; };
+		5BCF9D5F1B3DF97E0092C89A /* libPods-Bolts.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Bolts.a"; path = "Pods/../build/Debug-iphoneos/libPods-Bolts.a"; sourceTree = "<group>"; };
+		5BCF9D601B3DF97E0092C89A /* libPods-HockeySDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-HockeySDK.a"; path = "Pods/../build/Debug-iphoneos/libPods-HockeySDK.a"; sourceTree = "<group>"; };
+		5BCF9D611B3DF97E0092C89A /* libPods-MBProgressHUD.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-MBProgressHUD.a"; path = "Pods/../build/Debug-iphoneos/libPods-MBProgressHUD.a"; sourceTree = "<group>"; };
+		5BCF9D621B3DF97E0092C89A /* libPods-Reachability.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Reachability.a"; path = "Pods/../build/Debug-iphoneos/libPods-Reachability.a"; sourceTree = "<group>"; };
+		5BCF9D631B3DF97E0092C89A /* libPods-UIColor+MLPFlatColors.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-UIColor+MLPFlatColors.a"; path = "Pods/../build/Debug-iphoneos/libPods-UIColor+MLPFlatColors.a"; sourceTree = "<group>"; };
 		5BF081CF1B1D125A0095B917 /* Bolts.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Bolts.m; path = Pods/Bolts/Bolts/Common/Bolts.m; sourceTree = "<group>"; };
 		5BF081D11B1D13310095B917 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "../../../Downloads/parse-library-1.7.4/Bolts.framework"; sourceTree = "<group>"; };
 		5BF081D21B1D13310095B917 /* ParseCrashReporting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseCrashReporting.framework; path = "../../../Downloads/parse-library-1.7.4/ParseCrashReporting.framework"; sourceTree = "<group>"; };
@@ -412,6 +422,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BCF9D641B3DF97E0092C89A /* libPods-Bolts.a in Frameworks */,
+				5BCF9D651B3DF97E0092C89A /* libPods-HockeySDK.a in Frameworks */,
+				5BCF9D661B3DF97E0092C89A /* libPods-MBProgressHUD.a in Frameworks */,
+				5BCF9D671B3DF97E0092C89A /* libPods-Reachability.a in Frameworks */,
+				5BCF9D681B3DF97E0092C89A /* libPods-UIColor+MLPFlatColors.a in Frameworks */,
 				FB494FD2675AAC873772FD5F /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -716,6 +731,11 @@
 		4F866AC117F9E022000350E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5BCF9D5F1B3DF97E0092C89A /* libPods-Bolts.a */,
+				5BCF9D601B3DF97E0092C89A /* libPods-HockeySDK.a */,
+				5BCF9D611B3DF97E0092C89A /* libPods-MBProgressHUD.a */,
+				5BCF9D621B3DF97E0092C89A /* libPods-Reachability.a */,
+				5BCF9D631B3DF97E0092C89A /* libPods-UIColor+MLPFlatColors.a */,
 				5B11CA311B1D5824003DDD46 /* libPods-Bolts.a */,
 				5B11CA321B1D5824003DDD46 /* libPods-HockeySDK.a */,
 				5B11CA331B1D5824003DDD46 /* libPods-MBProgressHUD.a */,
