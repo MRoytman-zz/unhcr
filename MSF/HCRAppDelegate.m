@@ -44,8 +44,8 @@
 	*/
 #ifdef DEBUG
 	// test parse.com application
-	[Parse setApplicationId:@"APPID"
-                  clientKey:@"CLIENTKEY"];
+    [Parse setApplicationId:@"FzJimtoIuSRfFplz1TrsSa1ws1PPOe8GxkH5KpUM"
+                  clientKey:@"cu0j1oN31bGE2gDsWSzX75vmgh0croCVInoVgEzG"];
 #else
 	// production parse.com application - ownership to M Roytman
 	[Parse setApplicationId:@"FzJimtoIuSRfFplz1TrsSa1ws1PPOe8GxkH5KpUM"
